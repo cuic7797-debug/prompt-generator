@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提示词生成器</title>
+    <style>
+        :root {
+            --primary: #0070f3;
+            --primary-dark: #0051a2;
+            --bg: #f0f2f5;
+            --card-bg: white;
+            --text: #1a1a2e;
+            --text-secondary: #666;
+            --border: #e0e0e0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --code-bg: #1e1e2e;
+            --code-text: #a6e22e;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f0f1a;
+            --card-bg: #1a1a2e;
+            --text: #e0e0e0;
+            --text-secondary: #999;
+            --border: #333;
+            --code-bg: #0d0d1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg); 
+            padding: 16px; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            line-height: 1.6;
+            color: var(--text);
+            transition: background 0.3s;
+        }
+
+        h1 { 
+            font-size: 26px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .theme-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 16px; 
+            padding: 24px; 
+            margin-bottom: 16px; 
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08); 
+            animation: fadeIn 0.3s ease;
+        }
+
+        label { 
+            display: block; 
+            font-weight: 600; 
+            margin-bottom: 8px; 
+            color: var(--text-secondary); 
+            font-size: 14px;
+        }
+
+        input, select, textarea { 
+            width: 100%; 
+            padding: 14px; 
+            border: 1px solid var(--border); 
+            border-radius: 10px; 
+            font-size: 15px; 
+            margin-bottom: 20px; 
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        textarea { 
+            min-height: 100px; 
+            resize: vertical; 
+            font-family: inherit;
+        }
+
+        select { 
+            appearance: none; 
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+
+        button { 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            padding: 16px 24px; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        button:active { 
+            transform: scale(0.98); 
+            background: var(--primary-dark); 
+        }
+
+        .btn-secondary {
+            background: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            padding: 8px 16px;
+            font-size: 13px;
+            width: auto;
+        }
+
+        #outputCard { 
+            display: none; 
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #output { 
+            background: var(--code-bg); 
+            color: var(--code-text); 
+            font-family: 'Courier New', monospace; 
+            white-space: pre-wrap; 
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+
+        .copy-btn { 
+            background: #333; 
+            margin-top: 12px; 
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+        }
+
+        .export-btns {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .export-btns button {
+            flex: 1;
+            font-size: 14px;
+            padding: 12px;
+        }
+
+        .error {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        /* 评分系统 */
+        .score-card {
+            display: none;
+            margin-top: 16px;
+            padding: 16px;
+            background: var(--bg);
+            border-radius: 12px;
+        }
+
+        .score-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .score-bar {
+            width: 100px;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .score-total {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 12px;
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .badge-excellent { background: #d1fae5; color: #065f46; }
+        .badge-good { background: #fef3c7; color: #92400e; }
+        .badge-needswork { background: #fee2e2; color: #991b1b; }
+
+        /* 历史记录 */
+        .history-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .history-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .history-domain {
+            font-size: 12px;
+            color: var(--primary);
+            background: rgba(0,112,243,0.1);
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        .history-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .history-task {
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-preview {
+            font-size: 13px;
+            color: var(--text-secondary);
+            max-height: 60px;
+            overflow: hidden;
+            background: var(--bg);
+            padding: 8px;
+            border-radius: 6px;
+            font-family: monospace;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .history-actions button {
+            flex: 1;
+            padding: 8px;
+            font-size: 13px;
+        }
+
+        .clear-history {
+            background: var(--danger);
+            margin-bottom: 16px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 提示词生成器</h1>
+        <button class="theme-btn" onclick="toggleTheme()">🌙 切换主题</button>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('generate')">生成</div>
+        <div class="tab" onclick="switchTab('history')">历史记录</div>
+    </div>
+
+    <div id="generateTab" class="tab-content active">
+        <div class="card">
+            <label>任务描述</label>
+            <textarea id="task" placeholder="例如：帮我写小红书种草文案，产品是美白精华，目标人群是25-30岁职场女性"></textarea>
+            <div class="error" id="taskError">请输入任务描述</div>
+            
+            <label>领域</label>
+            <select id="domain">
+                <option value="general">🌐 通用</option>
+                <option value="writing">✍️ 创意写作</option>
+                <option value="coding">💻 编程开发</option>
+                <option value="data">📊 数据分析</option>
+                <option value="marketing">🛒 电商营销</option>
+                <option value="customer">🎧 客服支持</option>
+                <option value="legal">⚖️ 法律文档</option>
+                <option value="education">📚 教育培训</option>
+            </select>
+            
+            <label>复杂度</label>
+            <select id="complexity">
+                <option value="basic">⚡ 基础版（快速使用）</option>
+                <option value="advanced">🔥 进阶版（完整流程）</option>
+            </select>
+            
+            <button onclick="generate()">生成提示词</button>
+        </div>
+        
+        <div class="card" id="outputCard">
+            <label>生成的提示词</label>
+            <pre id="output"></pre>
+            
+            <div class="export-btns">
+                <button class="copy-btn" id="copyBtn" onclick="copyText()">📋 复制</button>
+                <button class="btn-secondary" onclick="exportMarkdown()">📝 导出MD</button>
+                <button class="btn-secondary" onclick="exportTxt()">📄 导出TXT</button>
+            </div>
+
+            <div class="score-card" id="scoreCard">
+                <div class="score-title">
+                    📊 质量评分
+                    <span class="score-badge" id="scoreBadge"></span>
+                </div>
+                <div class="score-item">
+                    <span>角色清晰度</span>
+                    <div class="score-bar"><div class="score-fill" id="score1"></div></div>
+                </div>
+                <div class="score-item">
+                    <span>任务可执行性</span>
+                    <div class="score-bar"><div class="score-fill" id="score2"></div></div>
+                </div>
+                <div class="score-item">
+                    <span>输入/输出规范</span>
+                    <div class="score-bar"><div class="score-fill" id="score3"></div></div>
+                </div>
+                <div class="score-item">
+                    <span>约束完整性</span>
+                    <div class="score-bar"><div class="score-fill" id="score4"></div></div>
+                </div>
+                <div class="score-item">
+                    <span>质量控制机制</span>
+                    <div class="score-bar"><div class="score-fill" id="score5"></div></div>
+                </div>
+                <div class="score-item">
+                    <span>可扩展性</span>
+                    <div class="score-bar"><div class="score-fill" id="score6"></div></div>
+                </div>
+                <div class="score-total" id="scoreTotal"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="historyTab" class="tab-content">
+        <div class="card">
+            <h3>📜 历史记录</h3>
+            <button class="clear-history" onclick="clearHistory()">🗑️ 清空全部</button>
+            <div id="historyList"></div>
+        </div>
+    </div>
+
+    <script>
+        // ========== 主题切换 ==========
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+            localStorage.setItem('theme', current === 'dark' ? 'light' : 'dark');
+        }
+
+        // 加载保存的主题
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // ========== Tab切换 ==========
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
+            
+            if (tab === 'history') loadHistory();
+        }
+
+        // ========== 全部模板 ==========
+        const templates = {
+            general: {
+                basic: (task) => `你是一位专业助手，擅长完成各类任务。
+
+任务：${task}
+
+要求：
+- 输出结构清晰，分点说明
+- 语言简洁，避免冗余
+- 如有不确定之处，明确标注
+
+请直接开始。`,
+                advanced: (task) => `你是一位顶级领域专家，拥有10年以上实战经验。
+
+【任务分析】
+用户核心需求：${task}
+预期输出类型：[请根据任务判断并说明]
+
+【执行框架】
+步骤1：需求拆解
+- 识别显式要求（用户明确说的）
+- 挖掘隐式要求（用户没明说但需要的）
+
+步骤2：方案设计
+- 提供2种解决思路
+- 对比优劣，推荐最优方案
+
+步骤3：执行与输出
+- 按推荐方案详细执行
+- 关键决策点说明理由
+
+【质量控制】
+- 自检：输出是否符合用户原始意图？
+- 边界：是否遗漏了重要约束？
+- 扩展：如果需求变更，方案是否可调整？
+
+请按以上框架执行。`
+            },
+            marketing: {
+                basic: (task) => `你是一位资深电商文案专家。
+
+任务：${task}
+
+要求：
+- 突出核心卖点，避免泛泛而谈
+- 每版文案不超过50字
+- 包含至少1个emoji
+- 使用目标人群的语言风格
+
+输出3版：
+1. 功能卖点版
+2. 情感共鸣版
+3. 限时促销版`,
+                advanced: (task) => `你是一位小红书TOP级种草文案策略师。
+
+【角色设定】
+5年平台运营经验，擅长"真实感构建"实现高转化。
+
+【任务】${task}
+
+【执行流程】
+步骤1：产品分析
+- 识别"反直觉卖点"（用户没想到但用了回不去的功能）
+- 确定与竞品的差异化
+
+步骤2：叙事构建（SCQA-R）
+- S（场景）：具体画面描写
+- C（冲突）：用户真实痛点
+- Q（疑问）："难道没有更好办法？"
+- A（答案）：产品出现
+- R（结果）：使用前后对比
+
+步骤3：可信度增强
+- 1个小吐槽（如"包装难撕"）
+- 1个时间锚点（"第7天的时候..."）
+- 1个感官细节（"质地像融化的冰淇淋"）
+
+【输出规范】
+- 字数：350-450字
+- 结构：标题（含emoji）+ 正文 + 标签5-8个
+- 合规：避免"最好""第一"，用"我觉得""个人体验"
+
+【自检】
+□ 像分享还是像广告？（目标：分享）
+□ 有具体细节而非泛泛而谈？
+□ 前3句能否留住读者？`
+            },
+            writing: {
+                basic: (task) => `你是一位资深创意写作专家。
+
+任务：${task}
+
+要求：
+- 结构完整：开头吸引人、中间有起伏、结尾有余韵
+- 语言生动，避免陈词滥调
+- 根据目标读者调整语气和用词
+
+请直接输出完整内容。`,
+                advanced: (task) => `你是一位顶级创意写作教练，擅长叙事架构与人物塑造。
+
+【任务】${task}
+
+【结构设计】
+采用"三幕式+钩子"：
+- 第一幕（20%）：建立共情后立即打破平衡
+- 第二幕（60%）：包含至少2次方向逆转
+- 第三幕（20%）：解决主冲突但保留开放感
+
+【人物弧光】
+- 主角：初始状态→催化剂→内在冲突→抉择→转变
+- 反派：与主角形成镜像，非单纯邪恶
+- 配角：每人至少1个记忆点
+
+【语言风格】
+- 对话：每人有独特句式特征
+- 描写：5感交替，每500字至少1个通感修辞
+- 节奏：紧张用短句，抒情用长句
+
+【自检】
+□ 前3段是否有足够强的钩子？
+□ 人物动机是否充分且一致？
+□ 是否存在信息倾倒（大段背景介绍）？
+□ 结尾是否留有回味空间？`
+            },
+            coding: {
+                basic: (task) => `你是一位资深开发工程师。
+
+任务：${task}
+
+要求：
+- 代码可直接运行，无伪代码
+- 包含必要的注释说明关键逻辑
+- 处理常见边界情况
+- 提供1-2个使用示例
+
+请输出完整代码。`,
+                advanced: (task) => `你是一位拥有10年经验的技术专家，擅长生产级代码设计。
+
+【任务】${task}
+
+【方案设计】
+提供2种实现方案：
+1. 简洁版：快速实现，适合原型
+2. 健壮版：含完整错误处理、日志、单元测试
+
+【代码规范】
+- 遵循行业标准命名
+- 关键逻辑添加行内注释
+- 复杂度高的部分附算法说明
+- 包含完整的错误处理
+
+【安全审查】
+- 检查常见漏洞（注入/越权/空指针）
+- 标注时间/空间复杂度
+- 指出可能的边界情况
+
+【输出】
+- 推荐方案代码（完整可运行）
+- 3个以上测试用例（含异常输入）
+- 简要的使用文档`
+            },
+            data: {
+                basic: (task) => `你是一位数据分析师。
+
+任务：${task}
+
+要求：
+- 明确分析目标和核心指标
+- 数据呈现清晰（表格/关键数字）
+- 结论有数据支撑，避免主观臆断
+- 提供至少1条可落地的建议
+
+请输出分析报告。`,
+                advanced: (task) => `你是一位资深数据分析师，擅长从数据中提取商业洞察。
+
+【任务】${task}
+
+【分析框架】
+步骤1：问题解构
+- 明确分析类型（描述性/诊断性/预测性/规范性）
+- 确定北极星指标和辅助指标
+
+步骤2：数据探索
+- 说明数据清洗方式（异常值/缺失值处理）
+- 分析方法及前提假设
+- 结果呈现：表格优先，关键数据加粗
+
+步骤3：洞察与建议
+- 区分"事实"与"观点"
+- 提供2条以上可落地的业务建议，含优先级
+- 指出数据局限性（样本偏差/时间窗口等）
+
+【输出规范】
+- 执行摘要（3点核心结论）
+- 分析过程与数据表格
+- 建议清单（含预期效果）
+- 局限性说明
+
+【自检】
+□ 结论是否有数据支撑？
+□ 是否区分了相关性与因果性？
+□ 建议是否具体（含责任方/时间）？
+□ 非专业读者能否理解核心结论？`
+            },
+            customer: {
+                basic: (task) => `你是一位专业客服代表。
+
+任务：${task}
+
+要求：
+- 语气友好、耐心、专业
+- 先确认理解用户问题，再给出解决方案
+- 提供具体步骤，避免模糊表述
+- 如无法解决，明确告知升级路径
+
+请直接回复。`,
+                advanced: (task) => `你是一位金牌客服培训师，擅长处理复杂客诉和VIP客户维护。
+
+【任务】${task}
+
+【服务框架】
+步骤1：情绪识别
+- 判断客户情绪状态（平静/焦虑/愤怒）
+- 采用匹配的语调（共情/安抚/坚定）
+
+步骤2：问题诊断
+- 澄清事实：确认时间、订单号、具体问题
+- 分类优先级：紧急/一般/咨询
+
+步骤3：解决方案
+- 提供2种选项（即时解决/补偿方案）
+- 说明每种方案的处理时效
+- 设置客户预期（明确告知时间节点）
+
+步骤4：闭环确认
+- 复述客户确认的问题和解决方案
+- 询问是否还有其他需要帮助
+- 提供后续联系渠道
+
+【话术规范】
+- 禁用："不知道""没办法""这是规定"
+- 多用："我理解""让我帮您""我们可以"
+- 每100字至少1个安抚性表达
+
+【自检】
+□ 客户情绪是否被充分认可？
+□ 解决方案是否具体可执行？
+□ 是否设置了明确的预期？
+□ 结尾是否留有余地（再次联系）？`
+            },
+            legal: {
+                basic: (task) => `你是一位专业法律助理。
+
+任务：${task}
+
+要求：
+- 使用准确的法律术语，但需解释生僻词汇
+- 引用相关法规时注明条文号
+- 区分"法律意见"和"一般建议"
+- 提醒用户必要时咨询执业律师
+
+请输出法律分析。`,
+                advanced: (task) => `你是一位资深法律顾问，擅长合同审查和法律风险评估。
+
+【任务】${task}
+
+【分析框架】
+步骤1：事实梳理
+- 提取关键时间、主体、金额、标的
+- 识别法律关系（买卖/租赁/劳动/侵权等）
+- 标注存疑事实（需补充证据）
+
+步骤2：法律适用
+- 识别适用的法律层级（法律/行政法规/地方性法规）
+- 检索相关司法解释和判例倾向
+- 注意法律时效（诉讼时效/除斥期间）
+
+步骤3：风险分析
+- 列出法律风险点（高/中/低）
+- 评估胜诉概率和可能的裁判结果
+- 计算经济成本（诉讼费/律师费/时间成本）
+
+步骤4：建议方案
+- 首选方案：最优法律效果
+- 备选方案：平衡成本与效果
+- 和解方案：快速解决路径
+
+【输出规范】
+- 免责声明：本分析仅供参考，不构成正式法律意见
+- 引用格式：《法律名称》第X条第X款
+- 关键结论加粗，风险提示用红色标注
+
+【自检】
+□ 法律引用是否准确且现行有效？
+□ 是否遗漏了关键证据要求？
+□ 风险等级评估是否合理？
+□ 是否包含必要的免责声明？`
+            },
+            education: {
+                basic: (task) => `你是一位资深教育工作者。
+
+任务：${task}
+
+要求：
+- 目标明确，符合学习者认知水平
+- 内容结构化，由浅入深
+- 包含互动环节或练习
+- 提供学习资源推荐
+
+请输出教学方案。`,
+                advanced: (task) => `你是一位教育设计专家，擅长课程开发和教学设计。
+
+【任务】${task}
+
+【学习者分析】
+- 目标人群：[年龄/学历/基础水平]
+- 先备知识：[需要提前掌握的内容]
+- 学习风格：视觉型/听觉型/动手型
+
+【教学设计】
+采用BOPPPS模型：
+- B（导入）：用问题/案例/故事引起兴趣（2分钟）
+- O（目标）：明确本节课3个学习目标
+- P（前测）：通过提问了解基础（3分钟）
+- P（参与）：设计至少3个互动环节
+- P（练习）：提供分层练习（基础/进阶/挑战）
+- S（总结）：学生自我总结+教师补充
+- S（后测）：5分钟快速检测掌握度
+
+【内容设计】
+- 每15分钟切换一种教学形式
+- 关键概念配图示或类比
+- 常见误区提前预警
+- 提供记忆口诀或思维导图
+
+【评估方案】
+- 形成性评估：课堂观察+练习反馈
+- 总结性评估：项目作品+测试
+- 学习数据：预期掌握率80%以上
+
+【自检】
+□ 目标是否符合SMART原则？
+□ 互动设计是否覆盖不同学习风格？
+□ 练习难度是否呈阶梯分布？
+□ 评估方式是否多元化？`
+            }
+        };
+
+        // 领域名称映射
+        const domainNames = {
+            general: '通用',
+            writing: '创意写作',
+            coding: '编程开发',
+            data: '数据分析',
+            marketing: '电商营销',
+            customer: '客服支持',
+            legal: '法律文档',
+            education: '教育培训'
+        };
+
+        // ========== 生成提示词 ==========
+        function generate() {
+            try {
+                const task = document.getElementById('task').value.trim();
+                const domain = document.getElementById('domain').value;
+                const complexity = document.getElementById('complexity').value;
+                
+                if (!task) {
+                    document.getElementById('taskError').style.display = 'block';
+                    document.getElementById('task').focus();
+                    return;
+                } else {
+                    document.getElementById('taskError').style.display = 'none';
+                }
+                
+                const domainTemplates = templates[domain] || templates.general;
+                const templateFn = domainTemplates[complexity] || domainTemplates.basic;
+                
+                const result = templateFn(task);
+                
+                document.getElementById('output').textContent = result;
+                const outputCard = document.getElementById('outputCard');
+                outputCard.style.display = 'block';
+                
+                const copyBtn = document.getElementById('copyBtn');
+                copyBtn.textContent = '📋 复制';
+                copyBtn.classList.remove('copied');
+                
+                // 显示评分
+                showScore(complexity);
+                
+                // 保存历史
+                saveHistory(task, domain, complexity, result);
+                
+                setTimeout(() => {
+                    outputCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+                
+            } catch (err) {
+                alert('生成出错：' + err.message);
+                console.error(err);
+            }
+        }
+
+        // ========== 评分系统 ==========
+        function showScore(complexity) {
+            const scoreCard = document.getElementById('scoreCard');
+            scoreCard.style.display = 'block';
+            
+            // 基础版和进阶版评分不同
+            const scores = complexity === 'advanced' 
+                ? [5, 5, 5, 5, 5, 4]  // 进阶版高分
+                : [4, 4, 4, 3, 2, 3]; // 基础版中等
+                
+            const weights = [0.15, 0.20, 0.15, 0.15, 0.20, 0.15];
+            let total = 0;
+            
+            scores.forEach((score, i) => {
+                const fill = document.getElementById('score' + (i + 1));
+                const percentage = (score / 5) * 100;
+                fill.style.width = percentage + '%';
+                fill.style.background = score >= 4 ? '#10b981' : score >= 3 ? '#f59e0b' : '#ef4444';
+                total += score * weights[i];
+            });
+            
+            const totalEl = document.getElementById('scoreTotal');
+            totalEl.textContent = total.toFixed(1) + ' / 5.0';
+            
+            const badge = document.getElementById('scoreBadge');
+            if (total >= 4.5) {
+                badge.textContent = '优秀';
+                badge.className = 'score-badge badge-excellent';
+            } else if (total >= 3.5) {
+                badge.textContent = '合格';
+                badge.className = 'score-badge badge-good';
+            } else {
+                badge.textContent = '需改进';
+                badge.className = 'score-badge badge-needswork';
+            }
+        }
+
+        // ========== 复制功能 ==========
+        function copyText() {
+            try {
+                const text = document.getElementById('output').textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const btn = document.getElementById('copyBtn');
+                    btn.textContent = '✅ 已复制';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = '📋 复制';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                });
+            } catch (err) {
+                alert('复制失败');
+            }
+        }
+
+        // ========== 导出功能 ==========
+        function exportMarkdown() {
+            const text = document.getElementById('output').textContent;
+            const blob = new Blob(['```markdown\n' + text + '\n```'], { type: 'text/markdown' });
+            downloadFile(blob, 'prompt.md');
+        }
+
+        function exportTxt() {
+            const text = document.getElementById('output').textContent;
+            const blob = new Blob([text], { type: 'text/plain' });
+            downloadFile(blob, 'prompt.txt');
+        }
+
+        function downloadFile(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // ========== 历史记录 ==========
+        function saveHistory(task, domain, complexity, result) {
+            let history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
+            history.unshift({
+                id: Date.now(),
+                task: task,
+                domain: domain,
+                domainName: domainNames[domain],
+                complexity: complexity,
+                result: result,
+                time: new Date().toLocaleString('zh-CN')
+            });
+            // 最多保存20条
+            if (history.length > 20) history = history.slice(0, 20);
+            localStorage.setItem('promptHistory', JSON.stringify(history));
+        }
+
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
+            const list = document.getElementById('historyList');
+            
+            if (history.length === 0) {
+                list.innerHTML = '<p style="text-align:center;color:#999;padding:40px;">暂无历史记录</p>';
+                return;
+            }
+            
+            list.innerHTML = history.map(item => `
+                <div class="history-item">
+                    <div class="history-header">
+                        <span class="history-domain">${item.domainName} · ${item.complexity === 'advanced' ? '进阶' : '基础'}</span>
+                        <span class="history-time">${item.time}</span>
+                    </div>
+                    <div class="history-task">${item.task}</div>
+                    <div class="history-preview">${item.result.substring(0, 100)}...</div>
+                    <div class="history-actions">
+                        <button onclick="loadFromHistory(${item.id})">📋 加载</button>
+                        <button class="btn-danger" onclick="deleteHistory(${item.id})">🗑️ 删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadFromHistory(id) {
+            const history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
+            const item = history.find(h => h.id === id);
+            if (item) {
+                document.getElementById('task').value = item.task;
+                document.getElementById('domain').value = item.domain;
+                document.getElementById('complexity').value = item.complexity;
+                document.getElementById('output').textContent = item.result;
+                document.getElementById('outputCard').style.display = 'block';
+                showScore(item.complexity);
+                switchTab('generate');
+            }
+        }
+
+        function deleteHistory(id) {
+            let history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
+            history = history.filter(h => h.id !== id);
+            localStorage.setItem('promptHistory', JSON.stringify(history));
+            loadHistory();
+        }
+
+        function clearHistory() {
+            if (confirm('确定清空所有历史记录？')) {
+                localStorage.removeItem('promptHistory');
+                loadHistory();
+            }
+        }
+    </script>
+</body>
+</html>
