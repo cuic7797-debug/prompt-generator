@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提示词生成器</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f0f2f5; 
+            padding: 16px; 
+            max-width: 720px; 
+            margin: 0 auto; 
+            line-height: 1.6;
+        }
+        h1 { 
+            color: #1a1a2e; 
+            margin: 20px 0; 
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card { 
+            background: white; 
+            border-radius: 16px; 
+            padding: 24px; 
+            margin-bottom: 16px; 
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08); 
+        }
+        label { 
+            display: block; 
+            font-weight: 600; 
+            margin-bottom: 8px; 
+            color: #444; 
+            font-size: 15px;
+        }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 14px; 
+            border: 1px solid #e0e0e0; 
+            border-radius: 10px; 
+            font-size: 15px; 
+            margin-bottom: 20px; 
+            background: #fafafa;
+        }
+        textarea { 
+            min-height: 100px; 
+            resize: vertical; 
+            font-family: inherit;
+        }
+        select { 
+            appearance: none; 
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+        button { 
+            background: #0070f3; 
+            color: white; 
+            border: none; 
+            padding: 16px 24px; 
+            border-radius: 12px; 
+            font-size: 17px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        button:active { 
+            transform: scale(0.98); 
+            background: #0051a2; 
+        }
+        #outputCard { 
+            display: none; 
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #output { 
+            background: #1e1e2e; 
+            color: #a6e22e; 
+            font-family: 'Courier New', monospace; 
+            white-space: pre-wrap; 
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+        .copy-btn { 
+            background: #333; 
+            margin-top: 12px; 
+            font-size: 15px;
+        }
+        .copy-btn.copied {
+            background: #10b981;
+        }
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 提示词生成器</h1>
+    
+    <div class="card">
+        <label>任务描述</label>
+        <textarea id="task" placeholder="例如：帮我写小红书种草文案，产品是美白精华，目标人群是25-30岁职场女性"></textarea>
+        <div class="error" id="taskError">请输入任务描述</div>
+        
+        <label>领域</label>
+        <select id="domain">
+            <option value="general">通用</option>
+            <option value="writing">创意写作</option>
+            <option value="coding">编程开发</option>
+            <option value="data">数据分析</option>
+            <option value="marketing">电商营销</option>
+        </select>
+        
+        <label>复杂度</label>
+        <select id="complexity">
+            <option value="basic">基础版（快速使用）</option>
+            <option value="advanced">进阶版（完整流程）</option>
+        </select>
+        
+        <button onclick="generate()">生成提示词</button>
+    </div>
+    
+    <div class="card" id="outputCard">
+        <label>生成的提示词</label>
+        <pre id="output"></pre>
+        <button class="copy-btn" id="copyBtn" onclick="copyText()">📋 复制到剪贴板</button>
+    </div>
+
+    <script>
+        // 通用基础模板
+        function generalBasic(task) {
+            return `你是一位专业助手，擅长完成各类任务。
+
+任务：${task}
+
+要求：
+- 输出结构清晰，分点说明
+- 语言简洁，避免冗余
+- 如有不确定之处，明确标注
+
+请直接开始。`;
+        }
+
+        // 通用进阶模板
+        function generalAdvanced(task) {
+            return `你是一位顶级领域专家，拥有10年以上实战经验。
+
+【任务分析】
+用户核心需求：${task}
+预期输出类型：[请根据任务判断并说明]
+
+【执行框架】
+步骤1：需求拆解
+- 识别显式要求（用户明确说的）
+- 挖掘隐式要求（用户没明说但需要的）
+
+步骤2：方案设计
+- 提供2种解决思路
+- 对比优劣，推荐最优方案
+
+步骤3：执行与输出
+- 按推荐方案详细执行
+- 关键决策点说明理由
+
+【质量控制】
+- 自检：输出是否符合用户原始意图？
+- 边界：是否遗漏了重要约束？
+- 扩展：如果需求变更，方案是否可调整？
+
+请按以上框架执行。`;
+        }
+
+        // 电商营销基础
+        function marketingBasic(task) {
+            return `你是一位资深电商文案专家。
+
+任务：${task}
+
+要求：
+- 突出核心卖点，避免泛泛而谈
+- 每版文案不超过50字
+- 包含至少1个emoji
+- 使用目标人群的语言风格
+
+输出3版：
+1. 功能卖点版
+2. 情感共鸣版
+3. 限时促销版`;
+        }
+
+        // 电商营销进阶
+        function marketingAdvanced(task) {
+            return `你是一位小红书TOP级种草文案策略师。
+
+【角色设定】
+5年平台运营经验，擅长"真实感构建"实现高转化。
+
+【任务】${task}
+
+【执行流程】
+步骤1：产品分析
+- 识别"反直觉卖点"（用户没想到但用了回不去的功能）
+- 确定与竞品的差异化
+
+步骤2：叙事构建（SCQA-R）
+- S（场景）：具体画面描写
+- C（冲突）：用户真实痛点
+- Q（疑问）："难道没有更好办法？"
+- A（答案）：产品出现
+- R（结果）：使用前后对比
+
+步骤3：可信度增强
+- 1个小吐槽（如"包装难撕"）
+- 1个时间锚点（"第7天的时候..."）
+- 1个感官细节（"质地像融化的冰淇淋"）
+
+【输出规范】
+- 字数：350-450字
+- 结构：标题（含emoji）+ 正文 + 标签5-8个
+- 合规：避免"最好""第一"，用"我觉得""个人体验"
+
+【自检】
+□ 像分享还是像广告？（目标：分享）
+□ 有具体细节而非泛泛而谈？
+□ 前3句能否留住读者？`;
+        }
+
+        // 创意写作基础
+        function writingBasic(task) {
+            return `你是一位资深创意写作专家。
+
+任务：${task}
+
+要求：
+- 结构完整：开头吸引人、中间有起伏、结尾有余韵
+- 语言生动，避免陈词滥调
+- 根据目标读者调整语气和用词
+
+请直接输出完整内容。`;
+        }
+
+        // 创意写作进阶
+        function writingAdvanced(task) {
+            return `你是一位顶级创意写作教练，擅长叙事架构与人物塑造。
+
+【任务】${task}
+
+【结构设计】
+采用"三幕式+钩子"：
+- 第一幕（20%）：建立共情后立即打破平衡
+- 第二幕（60%）：包含至少2次方向逆转
+- 第三幕（20%）：解决主冲突但保留开放感
+
+【人物弧光】
+- 主角：初始状态→催化剂→内在冲突→抉择→转变
+- 反派：与主角形成镜像，非单纯邪恶
+- 配角：每人至少1个记忆点
+
+【语言风格】
+- 对话：每人有独特句式特征
+- 描写：5感交替，每500字至少1个通感修辞
+- 节奏：紧张用短句，抒情用长句
+
+【自检】
+□ 前3段是否有足够强的钩子？
+□ 人物动机是否充分且一致？
+□ 是否存在信息倾倒（大段背景介绍）？
+□ 结尾是否留有回味空间？`;
+        }
+
+        // 编程开发基础
+        function codingBasic(task) {
+            return `你是一位资深${task.includes('Python') ? 'Python' : '全栈'}开发工程师。
+
+任务：${task}
+
+要求：
+- 代码可直接运行，无伪代码
+- 包含必要的注释说明关键逻辑
+- 处理常见边界情况
+- 提供1-2个使用示例
+
+请输出完整代码。`;
+        }
+
+        // 编程开发进阶
+        function codingAdvanced(task) {
+            return `你是一位拥有10年经验的技术专家，擅长生产级代码设计。
+
+【任务】${task}
+
+【方案设计】
+提供2种实现方案：
+1. 简洁版：快速实现，适合原型
+2. 健壮版：含完整错误处理、日志、单元测试
+
+【代码规范】
+- 遵循行业标准命名
+- 关键逻辑添加行内注释
+- 复杂度高的部分附算法说明
+- 包含完整的错误处理
+
+【安全审查】
+- 检查常见漏洞（注入/越权/空指针）
+- 标注时间/空间复杂度
+- 指出可能的边界情况
+
+【输出】
+- 推荐方案代码（完整可运行）
+- 3个以上测试用例（含异常输入）
+- 简要的使用文档`;
+        }
+
+        // 数据分析基础
+        function dataBasic(task) {
+            return `你是一位数据分析师。
+
+任务：${task}
+
+要求：
+- 明确分析目标和核心指标
+- 数据呈现清晰（表格/关键数字）
+- 结论有数据支撑，避免主观臆断
+- 提供至少1条可落地的建议
+
+请输出分析报告。`;
+        }
+
+        // 数据分析进阶
+        function dataAdvanced(task) {
+            return `你是一位资深数据分析师，擅长从数据中提取商业洞察。
+
+【任务】${task}
+
+【分析框架】
+步骤1：问题解构
+- 明确分析类型（描述性/诊断性/预测性/规范性）
+- 确定北极星指标和辅助指标
+
+步骤2：数据探索
+- 说明数据清洗方式（异常值/缺失值处理）
+- 分析方法及前提假设
+- 结果呈现：表格优先，关键数据加粗
+
+步骤3：洞察与建议
+- 区分"事实"与"观点"
+- 提供2条以上可落地的业务建议，含优先级
+- 指出数据局限性（样本偏差/时间窗口等）
+
+【输出规范】
+- 执行摘要（3点核心结论）
+- 分析过程与数据表格
+- 建议清单（含预期效果）
+- 局限性说明
+
+【自检】
+□ 结论是否有数据支撑？
+□ 是否区分了相关性与因果性？
+□ 建议是否具体（含责任方/时间）？
+□ 非专业读者能否理解核心结论？`;
+        }
+
+        // 模板路由表
+        const templates = {
+            general: { basic: generalBasic, advanced: generalAdvanced },
+            marketing: { basic: marketingBasic, advanced: marketingAdvanced },
+            writing: { basic: writingBasic, advanced: writingAdvanced },
+            coding: { basic: codingBasic, advanced: codingAdvanced },
+            data: { basic: dataBasic, advanced: dataAdvanced }
+        };
+
+        function generate() {
+            try {
+                const task = document.getElementById('task').value.trim();
+                const domain = document.getElementById('domain').value;
+                const complexity = document.getElementById('complexity').value;
+                
+                // 验证输入
+                if (!task) {
+                    document.getElementById('taskError').style.display = 'block';
+                    document.getElementById('task').focus();
+                    return;
+                } else {
+                    document.getElementById('taskError').style.display = 'none';
+                }
+                
+                // 获取模板
+                const domainTemplates = templates[domain] || templates.general;
+                const templateFn = domainTemplates[complexity] || domainTemplates.basic;
+                
+                // 生成结果
+                const result = templateFn(task);
+                
+                // 显示结果
+                document.getElementById('output').textContent = result;
+                const outputCard = document.getElementById('outputCard');
+                outputCard.style.display = 'block';
+                
+                // 重置复制按钮
+                const copyBtn = document.getElementById('copyBtn');
+                copyBtn.textContent = '📋 复制到剪贴板';
+                copyBtn.classList.remove('copied');
+                
+                // 平滑滚动到结果
+                setTimeout(() => {
+                    outputCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+                
+            } catch (err) {
+                alert('生成出错：' + err.message);
+                console.error(err);
+            }
+        }
+        
+        function copyText() {
+            try {
+                const text = document.getElementById('output').textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const btn = document.getElementById('copyBtn');
+                    btn.textContent = '✅ 已复制';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = '📋 复制到剪贴板';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(() => {
+                    // 降级方案
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    
+                    const btn = document.getElementById('copyBtn');
+                    btn.textContent = '✅ 已复制';
+                    btn.classList.add('copied');
+                });
+            } catch (err) {
+                alert('复制失败，请手动选择复制');
+            }
+        }
+    </script>
+</body>
+</html>
