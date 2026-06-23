@@ -913,17 +913,45 @@
 
     <div class="modal-overlay" id="pwdLimitModal">
         <div class="modal">
-            <div class="modal-title">⚠️ 该密码使用次数已达上限</div>
+            <div class="modal-title">⚠️ 该密码次数已用完</div>
             <div class="modal-desc">
-                该密码今日已被使用 <strong>50 次</strong>，达到每日上限。<br><br>
-                可能原因：<br>
-                • 该密码被多人分享使用<br>
-                • 今日使用过于频繁<br><br>
-                如需继续使用，请联系作者 <strong>Q704451222</strong> 获取新密码。
+                该密码剩余使用次数为 <strong>0 次</strong>。<br><br>
+                如需继续使用，请联系作者 <strong>Q704451222</strong> 续费获取新密码。<br><br>
+                💡 提示：每个密码对应固定次数，用完即止，不会自动续期。
             </div>
             <div class="modal-buttons">
                 <button class="modal-btn secondary" onclick="closePwdLimitModal()">知道了</button>
                 <button class="modal-btn primary" onclick="copyQQ()">📋 复制QQ号</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理面板 -->
+    <div id="adminPanel" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center;">
+        <div style="background:var(--card); border-radius:16px; padding:24px; width:90%; max-width:500px; max-height:90vh; overflow-y:auto; box-shadow:var(--shadow-lg);">
+            <div style="font-size:18px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+                🔐 密码管理面板
+                <span style="font-size:12px; color:var(--text-secondary); font-weight:400;">仅管理员可见</span>
+            </div>
+
+            <div style="margin-bottom:16px;">
+                <div style="font-size:13px; font-weight:600; margin-bottom:8px;">🔥 进阶版密码池（每个密码 = 100次）</div>
+                <div id="adminAdvPool" style="display:flex; flex-direction:column; gap:6px;"></div>
+            </div>
+
+            <div style="margin-bottom:16px;">
+                <div style="font-size:13px; font-weight:600; margin-bottom:8px;">👑 专家版密码池（每个密码 = 100次）</div>
+                <div id="adminExpPool" style="display:flex; flex-direction:column; gap:6px;"></div>
+            </div>
+
+            <div style="margin-bottom:16px; padding:12px; background:rgba(99,102,241,0.06); border-radius:10px;">
+                <div style="font-size:12px; font-weight:600; margin-bottom:6px;">📊 使用统计</div>
+                <div id="adminStats" style="font-size:12px; color:var(--text-secondary); line-height:1.8;"></div>
+            </div>
+
+            <div style="display:flex; gap:8px;">
+                <button onclick="closeAdminPanel()" style="flex:1; padding:10px; border:1px solid var(--border); border-radius:10px; background:var(--bg); cursor:pointer; font-size:14px;">关闭</button>
+                <button onclick="refreshAdminStats()" style="flex:1; padding:10px; border:none; border-radius:10px; background:var(--primary); color:white; cursor:pointer; font-size:14px;">🔄 刷新统计</button>
             </div>
         </div>
     </div>
@@ -941,14 +969,18 @@
         }
 
         // ========== 配置 ==========
-        const PASSWORDS = { advanced: 'PRO662026', expert: '662026PRO' };
+        // 密码池：每个密码对应固定使用次数（100次）
+        const PASSWORD_POOL = {
+            advanced: ['PRO662026', 'ADV2024A', 'ADV2024B', 'ADV2024C', 'ADV2024D'],
+            expert: ['662026PRO', 'EXP2024A', 'EXP2024B', 'EXP2024C', 'EXP2024D']
+        };
+        const PWD_TOTAL_LIMIT = 100; // 每个密码总次数
         const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdib9LvrZEpU2zrcoibYBuA6l11M6UUsXi2_TOwN2JweG1FZQ/formResponse';
         const GOOGLE_FORM_FIELDS = {
             task: 'entry.693672273', domain: 'entry.528075606',
             complexity: 'entry.607505779', score: 'entry.2070225006', device: 'entry.303138273'
         };
-        const DAILY_LIMIT = 5;
-        const PASSWORD_DAILY_LIMIT = 50;
+        const DAILY_LIMIT = 5; // 基础版每日限制
 
         // ========== 状态 ==========
         let currentComplexity = 'basic';
@@ -980,6 +1012,7 @@
             checkSavedPasswords();
             updateUsageBar();
             loadFavorites();
+            setTimeout(checkAdminAccess, 500);
 
             if (window.innerWidth <= 768) {
                 document.getElementById('qualityPanel').classList.add('collapsed');
@@ -1030,9 +1063,11 @@
             const text = document.getElementById('usageText');
 
             if (hasAdvanced || hasExpert) {
+                // 已解锁用户显示剩余次数
+                const remaining = getRemainingUses();
                 fill.style.width = '100%';
                 fill.className = 'usage-fill safe';
-                text.textContent = '✅ 已解锁 · 无限次';
+                text.textContent = '✅ 已解锁 · 剩余 ' + remaining + ' 次';
                 text.className = 'usage-text unlimited';
                 return;
             }
@@ -1045,11 +1080,51 @@
             text.className = 'usage-text ' + (used >= DAILY_LIMIT ? 'limit' : '');
         }
 
+        // ========== 密码剩余次数 ==========
+        function getPwdUsedKey(password) {
+            return 'pwd_used_' + password;
+        }
+        function getPwdUsedCount(password) {
+            return parseInt(safeStorageGet(getPwdUsedKey(password)) || '0');
+        }
+        function incrementPwdUsed(password) {
+            safeStorageSet(getPwdUsedKey(password), (getPwdUsedCount(password) + 1).toString());
+        }
+        function getRemainingUses() {
+            // 找到当前解锁的密码，返回剩余次数
+            const levels = ['advanced', 'expert'];
+            for (let level of levels) {
+                if (safeStorageGet('password_' + level)) {
+                    const idx = parseInt(safeStorageGet('password_' + level + '_idx') || '0');
+                    const pwd = PASSWORD_POOL[level][idx];
+                    if (pwd) {
+                        const used = getPwdUsedCount(pwd);
+                        return Math.max(0, PWD_TOTAL_LIMIT - used);
+                    }
+                }
+            }
+            return 0;
+        }
+
         // ========== 次数限制检查 ==========
         function checkLimit() {
-            if (currentComplexity !== 'basic' && safeStorageGet('password_' + currentComplexity)) {
-                return true;
+            // 已解锁用户检查密码剩余次数
+            if (currentComplexity !== 'basic') {
+                const saved = safeStorageGet('password_' + currentComplexity);
+                if (saved) {
+                    const idx = parseInt(safeStorageGet('password_' + currentComplexity + '_idx') || '0');
+                    const pwd = PASSWORD_POOL[currentComplexity][idx];
+                    const used = getPwdUsedCount(pwd);
+                    if (used >= PWD_TOTAL_LIMIT) {
+                        document.getElementById('pwdLimitModal').classList.add('show');
+                        return false;
+                    }
+                    incrementPwdUsed(pwd);
+                    updateUsageBar();
+                    return true;
+                }
             }
+            // 基础版每日5次限制
             if (getTodayUsage() >= DAILY_LIMIT) {
                 document.getElementById('limitModal').classList.add('show');
                 return false;
@@ -1057,36 +1132,23 @@
             return true;
         }
         function closeLimitModal() { document.getElementById('limitModal').classList.remove('show'); }
+        function closePwdLimitModal() { document.getElementById('pwdLimitModal').classList.remove('show'); }
         function copyQQ() {
             fallbackCopy('704451222');
             showToast('✅ QQ号已复制：704451222');
         }
-
-        // ========== 密码使用次数限制（防分享） ==========
-        function getPasswordUsageKey(password) {
-            return 'pwd_usage_' + password + '_' + new Date().toISOString().slice(0, 10);
-        }
-        function getPasswordUsage(password) {
-            return parseInt(safeStorageGet(getPasswordUsageKey(password)) || '0');
-        }
-        function incrementPasswordUsage(password) {
-            safeStorageSet(getPasswordUsageKey(password), (getPasswordUsage(password) + 1).toString());
-        }
-        function checkPasswordLimit(password) {
-            const used = getPasswordUsage(password);
-            if (used >= PASSWORD_DAILY_LIMIT) {
-                document.getElementById('pwdLimitModal').classList.add('show');
-                return false;
-            }
-            return true;
-        }
-        function closePwdLimitModal() { document.getElementById('pwdLimitModal').classList.remove('show'); }
 
         // ========== 付费功能权限检查 ==========
         function checkPremiumFeature(featureName) {
             const hasAdvanced = safeStorageGet('password_advanced');
             const hasExpert = safeStorageGet('password_expert');
             if (hasAdvanced || hasExpert) {
+                // 再检查剩余次数
+                const remaining = getRemainingUses();
+                if (remaining <= 0) {
+                    document.getElementById('pwdLimitModal').classList.add('show');
+                    return false;
+                }
                 return true;
             }
             showToast('🔒 ' + featureName + ' 需解锁进阶/专家版');
@@ -1124,17 +1186,25 @@
             const input = document.getElementById('passwordInput').value.trim();
             const level = pendingComplexity;
             if (!level) return;
-            if (input === PASSWORDS[level]) {
-                if (!checkPasswordLimit(input)) {
-                    document.getElementById('passwordInput').value = '';
+
+            // 检查密码是否在池中
+            const pool = PASSWORD_POOL[level];
+            const pwdIndex = pool.indexOf(input);
+            if (pwdIndex !== -1) {
+                // 检查该密码是否已用完
+                const used = getPwdUsedCount(input);
+                if (used >= PWD_TOTAL_LIMIT) {
+                    document.getElementById('passwordModal').classList.remove('show');
+                    document.getElementById('pwdLimitModal').classList.add('show');
                     return;
                 }
-                incrementPasswordUsage(input);
+
                 safeStorageSet('password_' + level, 'true');
+                safeStorageSet('password_' + level + '_idx', pwdIndex.toString());
                 closePasswordModal();
                 applyComplexity(level);
                 document.getElementById('btn-' + level).querySelector('.tag').textContent = '已解锁';
-                showToast('✅ 解锁成功！');
+                showToast('✅ 解锁成功！剩余 ' + (PWD_TOTAL_LIMIT - used) + ' 次');
             } else {
                 showToast('❌ 密码错误');
                 document.getElementById('passwordInput').value = '';
@@ -1195,7 +1265,9 @@
             btn.disabled = true;
             btn.innerHTML = '<span>⏳</span><span>生成中...</span>';
 
-            incrementUsage();
+            if (currentComplexity === 'basic') {
+                incrementUsage();
+            }
 
             setTimeout(() => {
                 const result = generatePrompt(task, domain, currentComplexity);
@@ -1696,40 +1768,119 @@
             document.getElementById('taskInput').value = '请生成一个关于' + title + '的提示词';
             updateCharCount();
             switchTab('generate');
-            showToast('✅ 已加载模板：' + 标题);
+            showToast('✅ 已加载模板：' + title);
         }
 
         // ========== 折叠 ==========
         function toggleCollapse(id) {
-            const content = 文档.getElementById(id);
-            const 图标 = 文档.getElementById(id + '-icon');
-            content.classList.切换('已折叠');
-            图标.classList.切换('rotated');
+            const content = document.getElementById(id);
+            const icon = document.getElementById(id + '-icon');
+            content.classList.toggle('collapsed');
+            icon.classList.toggle('rotated');
         }
 
         // ========== Toast ==========
         function showToast(message) {
-            const toast = 文档.getElementById('toast');
+            const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
         // ========== 键盘事件 ==========
-        文档.getElementById('passwordInput').addEventListener('keypress', function(e) {
-            如果 (e.key === 'Enter') verifyPassword();
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verifyPassword();
         });
-        文档.getElementById('taskInput').addEventListener('keydown', function(e) {
-            如果 (e.ctrlKey && e.key === 'Enter') generate();
+        document.getElementById('taskInput').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') generate();
         });
-        文档.addEventListener('keydown', function(e) {
-            如果 (e.key === “逃脱”) {
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
                 closePasswordModal();
                 closeExportModal();
                 closeLimitModal();
                 closePwdLimitModal();
             }
         });
-    </脚本>
-</主体>
-      </html>
+
+        // ========== 管理面板 ==========
+        const ADMIN_KEY = 'admin2024';
+
+        function checkAdminAccess() {
+            const url = new URL(window.location.href);
+            const adminParam = url.searchParams.get('admin');
+            if (adminParam === ADMIN_KEY) {
+                showAdminPanel();
+            }
+        }
+
+        function showAdminPanel() {
+            const panel = document.getElementById('adminPanel');
+            panel.style.display = 'flex';
+            renderAdminPool();
+            refreshAdminStats();
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        function renderAdminPool() {
+            const advContainer = document.getElementById('adminAdvPool');
+            advContainer.innerHTML = PASSWORD_POOL.advanced.map((pwd, idx) => {
+                const used = getPwdUsedCount(pwd);
+                const percent = Math.round((used / PWD_TOTAL_LIMIT) * 100);
+                const color = percent >= 80 ? 'var(--danger)' : percent >= 50 ? 'var(--warning)' : 'var(--success)';
+                return `
+                    <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; background:var(--bg); border-radius:8px; font-size:12px;">
+                        <span style="font-family:monospace; font-weight:600; flex:1;">${pwd}</span>
+                        <span style="color:${color}; font-weight:600;">${used}/${PWD_TOTAL_LIMIT}</span>
+                        <div style="width:60px; height:4px; background:var(--border); border-radius:2px; overflow:hidden;">
+                            <div style="width:${percent}%; height:100%; background:${color}; border-radius:2px;"></div>
+                        </div>
+                        <button onclick="copyToClipboard('${pwd}')" style="padding:2px 8px; border:1px solid var(--border); border-radius:4px; background:var(--card); cursor:pointer; font-size:11px;">📋</button>
+                    </div>
+                `;
+            }).join('');
+
+            const expContainer = document.getElementById('adminExpPool');
+            expContainer.innerHTML = PASSWORD_POOL.expert.map((pwd, idx) => {
+                const used = getPwdUsedCount(pwd);
+                const percent = Math.round((used / PWD_TOTAL_LIMIT) * 100);
+                const color = percent >= 80 ? 'var(--danger)' : percent >= 50 ? 'var(--warning)' : 'var(--success)';
+                return `
+                    <div style="display:flex; align-items:center; gap:8px; padding:8px 10px; background:var(--bg); border-radius:8px; font-size:12px;">
+                        <span style="font-family:monospace; font-weight:600; flex:1;">${pwd}</span>
+                        <span style="color:${color}; font-weight:600;">${used}/${PWD_TOTAL_LIMIT}</span>
+                        <div style="width:60px; height:4px; background:var(--border); border-radius:2px; overflow:hidden;">
+                            <div style="width:${percent}%; height:100%; background:${color}; border-radius:2px;"></div>
+                        </div>
+                        <button onclick="copyToClipboard('${pwd}')" style="padding:2px 8px; border:1px solid var(--border); border-radius:4px; background:var(--card); cursor:pointer; font-size:11px;">📋</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function refreshAdminStats() {
+            let stats = '';
+            stats += '<strong>进阶版：</strong><br>';
+            PASSWORD_POOL.advanced.forEach(pwd => {
+                const used = getPwdUsedCount(pwd);
+                stats += `• ${pwd}: ${used}/${PWD_TOTAL_LIMIT} 次<br>`;
+            });
+            stats += '<br><strong>专家版：</strong><br>';
+            PASSWORD_POOL.expert.forEach(pwd => {
+                const used = getPwdUsedCount(pwd);
+                stats += `• ${pwd}: ${used}/${PWD_TOTAL_LIMIT} 次<br>`;
+            });
+            document.getElementById('adminStats').innerHTML = stats;
+            renderAdminPool();
+        }
+
+        function copyToClipboard(text) {
+            fallbackCopy(text);
+            showToast('✅ 已复制: ' + text);
+        }
+    </script>
+</body>
+</html>
