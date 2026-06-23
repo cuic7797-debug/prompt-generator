@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI提示词生成器 - 专业版</title>
+<title>AI提示词生成器 - 专业版</title><标题>AI提示词生成器 - 专业版</标题>
 <meta name="description" content="专业AI提示词生成工具，支持基础/进阶/专家三档，50+精品模板">
 <style>
 :root {
@@ -11,8 +11,8 @@
   --primary-dark: #2d5ce0;
   --secondary: #8b5cf6;
   --success: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
+  --warning: #f59e0b;--警告：#f59e0b；
+  --danger—危险--危险—危险: #ef4444;--危险: #ef4444;
   --bg: #f8fafc;
   --card: #ffffff;
   --text: #1e293b;
@@ -23,7 +23,7 @@
 }
 [data-theme="dark"] {
   --bg: #0f172a;
-  --card: #1e293b;
+  --card: #1e293b;--卡片: #1e293b;
   --text: #f1f5f9;
   --text-secondary: #94a3b8;
   --border: #334155;
@@ -32,7 +32,7 @@
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;字体族: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, 无衬线字体;
   background: var(--bg); color: var(--text); line-height: 1.6;
   transition: background 0.3s, color 0.3s; min-height: 100vh;
 }
@@ -493,8 +493,8 @@ body {
     <div class="modal-text" id="passwordModalText">进阶版需要密码解锁，请联系 Q704451222 购买</div>
     <input type="password" id="passwordInput" class="modal-input" placeholder="请输入密码">
     <div class="modal-actions">
-      <button class="modal-btn modal-btn-secondary" onclick="closePasswordModal()">取消</button>
-      <button class="modal-btn modal-btn-primary" onclick="verifyPassword()">确认</button>
+      <button class="modal-btn modal-btn-secondary" onclick="closePasswordModal()">取消</button><按钮 类="modal-btn modal-btn-secondary" 点击事件="closePasswordModal()">取消</按钮>
+      <button class="modal-btn modal-btn-primary" onclick="verifyPassword()">确认</button><按钮 类="modal-btn modal-btn-primary" 点击事件="verifyPassword()">确认</按钮>
     </div>
   </div>
 </div>
@@ -508,8 +508,8 @@ body {
       <div class="card-preview-footer">扫码获取同款工具 · Q704451222</div>
     </div>
     <div class="modal-actions" style="margin-top:16px;">
-      <button class="modal-btn modal-btn-secondary" onclick="closeExportModal()">关闭</button>
-      <button class="modal-btn modal-btn-primary" onclick="downloadCard()">下载图片</button>
+      <button class="modal-btn modal-btn-secondary" onclick="closeExportModal()">关闭</button><按钮 类="modal-btn modal-btn-secondary" 点击事件="closeExportModal()">关闭</按钮>
+      <button class="modal-btn modal-btn-primary" onclick="downloadCard()">下载图片</button><按钮 类="modal-btn modal-btn-primary" 点击事件="downloadCard()">下载图片</按钮>
     </div>
   </div>
 </div>
@@ -519,16 +519,16 @@ body {
 <script>
 
 const PASSWORD_POOL = {
-  advanced: ['PRO662026','ADVR1BEF0','ADVSW1YK7','ADVW9D2O2','ADV9SA9H7','ADVNTEKIW','ADVAKCQIO','ADVI32OYD','ADV6T14GD','ADVUPZBJR','ADV4PF8MR','ADV7K3L9M','ADV2Q8W4E','ADV5T6Y7U','ADV0I9O2P','ADV3A4S5D','ADV8F7G6H','ADV1J2K3L','ADV4Z5X6C','ADV7V8B9N','ADV0M1Q2W','ADV3E4R5T','ADV6Y7U8I','ADV9O0P1A','ADV2S3D4F','ADV5G6H7J','ADV8K9L0Z','ADV1X2C3V','ADV4B5N6M','ADV7Q8W9E','ADV0R1T2Y','ADV3U4I5O','ADV6P7A8S','ADV9D0F1G','ADV2H3J4K','ADV5L6Z7X','ADV8C9V0B','ADV1N2M3Q','ADV4W5E6R','ADV7T8Y9U','ADV0I1O2P','ADV3A4S5D2','ADV6F7G8H9','ADV9J0K1L2','ADV2Z3X4C5','ADV5V6B7N8','ADV8M9Q0W1','ADV1E2R3T4','ADV4Y5U6I7','ADV7O8P9A0','ADV0S1D2F3'],
-  expert: ['662026PRO','EXPAU5K41','EXP5IRKQJ','EXPQGUVU7','EXPS0THV7','EXP6GHW1D','EXPQEU6DO','EXP05WI2O','EXPXHWNOM','EXPEDR12V','EXPSN9XZQ','EXP7A8B9C0','EXP0D1E2F3','EXP3G4H5I6','EXP6J7K8L9','EXP9M0N1O2','EXP2P3Q4R5','EXP5S6T7U8','EXP8V9W0X1','EXP1Y2Z3A4','EXP4B5C6D7','EXP7E8F9G0','EXP0H1I2J3','EXP3K4L5M6','EXP6N7O8P9','EXP9Q0R1S2','EXP2T3U4V5','EXP5W6X7Y8','EXP8Z9A0B1','EXP1C2D3E4','EXP4F5G6H7','EXP7I8J9K0','EXP0L1M2N3','EXP3O4P5Q6','EXP6R7S8T9','EXP9U0V1W2','EXP2X3Y4Z5','EXP5A6B7C8','EXP8D9E0F1','EXP1G2H3I4','EXP4J5K6L7','EXP7M8N9O0','EXP0P1Q2R3','EXP3S4T5U6','EXP6V7W8X9','EXP9Y0Z1A2','EXP2B3C4D5','EXP5E6F7G8','EXP8H9I0J1','EXP1K2L3M4','EXP4N5O6P7']
+  advanced: ['PRO662026','ADVR1BEF0','ADVSW1YK7','ADVW9D2O2','ADV9SA9H7','ADVNTEKIW','ADVAKCQIO','ADVI32OYD','ADV6T14GD','ADVUPZBJR','ADV4PF8MR','ADV7K3L9M','ADV2Q8W4E','ADV5T6Y7U','ADV0I9O2P','ADV3A4S5D','ADV8F7G6H','ADV1J2K3L','ADV4Z5X6C','ADV7V8B9N','ADV0M1Q2W','ADV3E4R5T','ADV6Y7U8I','ADV9O0P1A','ADV2S3D4F','ADV5G6H7J','ADV8K9L0Z','ADV1X2C3V','ADV4B5N6M','ADV7Q8W9E','ADV0R1T2Y','ADV3U4I5O','ADV6P7A8S','ADV9D0F1G','ADV2H3J4K','ADV5L6Z7X','ADV8C9V0B','ADV1N2M3Q','ADV4W5E6R','ADV7T8Y9U','ADV0I1O2P','ADV3A4S5D2','ADV6F7G8H9','ADV9J0K1L2','ADV2Z3X4C5','ADV5V6B7N8','ADV8M9Q0W1','ADV1E2R3T4','ADV4Y5U6I7','ADV7O8P9A0','ADV0S1D2F3'],高级: ['PRO662026','ADVR1BEF0','ADVSW1YK7','ADVW9D2O2','ADV9SA9H7','ADVNTEKIW','ADVAKCQIO','ADVI32OYD','ADV6T14GD','ADVUPZBJR','ADV4PF8MR','ADV7K3L9M','ADV2Q8W4E','ADV5T6Y7U','ADV0I9O2P','ADV3A4S5D','ADV8F7G6H','ADV1J2K3L','ADV4Z5X6C','ADV7V8B9N','ADV0M1Q2W','ADV3E4R5T','ADV6Y7U8I','ADV9O0P1A','ADV2S3D4F','ADV5G6H7J','ADV8K9L0Z','ADV1X2C3V','ADV4B5N6M','ADV7Q8W9E','ADV0R1T2Y','ADV3U4I5O','ADV6P7A8S','ADV9D0F1G','ADV2H3J4K','ADV5L6Z7X','ADV8C9V0B','ADV1N2M3Q','ADV4W5E6R','ADV7T8Y9U','ADV0I1O2P','ADV3A4S5D2','ADV6F7G8H9','ADV9J0K1L2','ADV2Z3X4C5','ADV5V6B7N8','ADV8M9Q0W1','ADV1E2R3T4','ADV4Y5U6I7','ADV7O8P9A0','ADV0S1D2F3'],
+  expert: ['662026PRO','EXPAU5K41','EXP5IRKQJ','EXPQGUVU7','EXPS0THV7','EXP6GHW1D','EXPQEU6DO','EXP05WI2O','EXPXHWNOM','EXPEDR12V','EXPSN9XZQ','EXP7A8B9C0','EXP0D1E2F3','EXP3G4H5I6','EXP6J7K8L9','EXP9M0N1O2','EXP2P3Q4R5','EXP5S6T7U8','EXP8V9W0X1','EXP1Y2Z3A4','EXP4B5C6D7','EXP7E8F9G0','EXP0H1I2J3','EXP3K4L5M6','EXP6N7O8P9','EXP9Q0R1S2','EXP2T3U4V5','EXP5W6X7Y8','EXP8Z9A0B1','EXP1C2D3E4','EXP4F5G6H7','EXP7I8J9K0','EXP0L1M2N3','EXP3O4P5Q6','EXP6R7S8T9','EXP9U0V1W2','EXP2X3Y4Z5','EXP5A6B7C8','EXP8D9E0F1','EXP1G2H3I4','EXP4J5K6L7','EXP7M8N9O0','EXP0P1Q2R3','EXP3S4T5U6','EXP6V7W8X9','EXP9Y0Z1A2','EXP2B3C4D5','EXP5E6F7G8','EXP8H9I0J1','EXP1K2L3M4','EXP4N5O6P7']专家: ['662026PRO','EXPAU5K41','EXP5IRKQJ','EXPQGUVU7','EXPS0THV7','EXP6GHW1D','EXPQEU6DO','EXP05WI2O','EXPXHWNOM','EXPEDR12V','EXPSN9XZQ','EXP7A8B9C0','EXP0D1E2F3','EXP3G4H5I6','EXP6J7K8L9','EXP9M0N1O2','EXP2P3Q4R5','EXP5S6T7U8','EXP8V9W0X1','EXP1Y2Z3A4','EXP4B5C6D7','EXP7E8F9G0','EXP0H1I2J3','EXP3K4L5M6','EXP6N7O8P9','EXP9Q0R1S2','EXP2T3U4V5','EXP5W6X7Y8','EXP8Z9A0B1','EXP1C2D3E4','EXP4F5G6H7','EXP7I8J9K0','EXP0L1M2N3','EXP3O4P5Q6','EXP6R7S8T9','EXP9U0V1W2','EXP2X3Y4Z5','EXP5A6B7C8','EXP8D9E0F1','EXP1G2H3I4','EXP4J5K6L7','EXP7M8N9O0','EXP0P1Q2R3','EXP3S4T5U6','EXP6V7W8X9','EXP9Y0Z1A2','EXP2B3C4D5','EXP5E6F7G8','EXP8H9I0J1','EXP1K2L3M4','EXP4N5O6P7']
 };
 
-const ADMIN_PASSWORD = 'admin2024';
-const DAILY_LIMIT = 5;
+const ADMIN_PASSWORD = 'c123456888';
+const DAILY_LIMIT = 5;常量 每日限额 = 5;
 const PWD_TOTAL_LIMIT = 100;
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc7xKc7vK7xK7xK7xK7xK7xK7xK7xK7xK7xK7xK7xK7xK7xK7x/formResponse';
-const SHEET_ID = '';
-const SHEET_GID = '0';
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc7xKc7vK7xK7xK7xK7xK7xK7xK7xK7xK7xK7xK7xK7xK7xK7x/formResponse';const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc7xKc7vK7xK7xK7xK7xK7xK7xK7xK7xK7xK7xK7xK7xK7x/formResponse';
+const常量 SHEET_ID工作表ID = '';常量 SHEET_ID工作表ID = '';
+const SHEET_GID = '0';常量 SHEET_GID工作表_GID = '0';常量 SHEET_GID = '0';常量 SHEET_GID工作表_GID = '0';
 
 let currentComplexity = 'basic';
 let currentResult = '';
@@ -537,26 +537,26 @@ let currentTask = '';
 let isUnlocked = { advanced: false, expert: false };
 let unlockedPassword = '';
 let currentSection = 'home';
-let typingInterval = null;
+let让 让typingInterval = null;
 let remoteDisabledCache = [];
 let remoteDisabledLastFetch = 0;
 
-document.addEventListener('DOMContentLoaded', function() {
-  loadTheme();
-  loadUnlockState();
-  loadHistory();
-  loadFavorites();
-  updateLimitDisplay();
-  initCharCount();
-  initTemplates();
+document文档文档.addEventListener('DOMContentLoaded', function() {
+  loadTheme();加载主题();
+  loadUnlockState加载解锁状态();加载解锁状态();
+  loadHistory();加载历史();
+  loadFavorites();加载收藏();
+  updateLimitDisplay();更新限制显示();
+  initCharCount();初始化字符数();
+  initTemplates();初始化模板();
   checkAdminAccess();
   loadRemoteDisabled();
-  document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && e.key === 'Enter') generate();
+  document.addEventListener('keydown', function(e) {文档.addEventListener('keydown', 函数(e) {
+    if (e.ctrlKey && e.key === 'Enter') generate();如果 (e.ctrlKey && e.键 === 'Enter') 生成();
   });
 });
 
-function toggleTheme() {
+function toggleTheme() {函数 切换主题() {
   const html = document.documentElement;
   const current = html.getAttribute('data-theme');
   const next = current === 'dark' ? 'light' : 'dark';
@@ -651,14 +651,14 @@ function verifyPassword() {
     closePasswordModal();
     setComplexity(target);
     showToast('解锁成功！');
-    updateLimitDisplay();
+    updateLimitDisplay();更新限制显示();
     updateLockedButtons();
-  } else {
+  } else {} 否则 {
     showToast('密码错误');
   }
 }
 
-function loadUnlockState() {
+function loadUnlockState() {函数 loadUnlockState() {
   ['advanced','expert'].forEach(level => {
     if (safeGetItem('unlocked_' + level) === 'true') {
       const pwd = safeGetItem('unlocked_pwd_' + level);
@@ -673,7 +673,7 @@ function loadUnlockState() {
             safeRemoveItem('unlocked_' + level);
             safeRemoveItem('unlocked_pwd_' + level);
           }
-        } else {
+        } else {} 否则 {
           safeRemoveItem('unlocked_' + level);
           safeRemoveItem('unlocked_pwd_' + level);
         }
@@ -683,11 +683,11 @@ function loadUnlockState() {
 }
 
 function getRemoteDisabled() {
-  return remoteDisabledCache;
+  return remoteDisabledCache;返回 远程禁用缓存;
 }
 
-async function loadRemoteDisabled() {
-  if (!SHEET_ID) return;
+async异步 function loadRemoteDisabled() {异步 函数 加载远程禁用() {
+  if (!SHEET_ID) return;如果 (!工作表ID) 返回;如果 (!SHEET_ID) 返回;如果 (!工作表ID) 返回;
   const now = Date.now();
   if (now - remoteDisabledLastFetch < 300000) return;
   try {
@@ -906,7 +906,7 @@ function condenseResult() {
 
 function expandResult() {
   if (!checkPremiumFeature('扩写')) return;
-  if (!currentResult) return;
+  if (!currentResult) return;如果 (!当前结果) 返回;
   const expanded = currentResult + '\n\n---\n### 补充：行业对标与工具推荐\n\n**行业标杆案例：**\n1. **案例A**：某头部企业通过类似方案实现200%增长\n2. **案例B**：某新锐品牌用此方法3个月破圈\n\n**推荐工具清单：**\n| 工具名称 | 用途 | 价格 |\n|---------|------|------|\n| 工具A | 数据分析 | 免费 |\n| 工具B | 内容创作 | 付费 |\n| 工具C | 项目管理 | 免费 |\n\n**常见误区提醒：**\n- 误区1：忽视数据验证\n- 误区2：过度追求完美\n- 误区3：忽略用户反馈\n\n*（扩写内容已追加）*';
   currentResult = expanded;
   document.getElementById('resultContent').innerHTML = renderMarkdown(expanded);
@@ -915,7 +915,7 @@ function expandResult() {
 
 function exportCard() {
   if (!checkPremiumFeature('导出卡片')) return;
-  if (!currentResult) return;
+  if (!currentResult) return;如果 (!当前结果) 返回;
   const preview = document.getElementById('cardPreviewContent');
   preview.textContent = currentResult.substring(0, 200) + (currentResult.length > 200 ? '...' : '');
   document.getElementById('exportModal').classList.add('active');
@@ -929,13 +929,13 @@ function downloadCard() {
   showToast('请截图保存卡片，或长按保存图片');
 }
 
-function optimizeResult() {
-  if (!checkPremiumFeature('继续优化')) return;
+function optimizeResult() {函数 optimizeResult() {
+  if (!checkPremiumFeature('继续优化')) return;如果 (!checkPremiumFeature('继续优化')) 返回;
   const input = document.getElementById('optimizeInput').value.trim();
-  if (!input) { showToast('请输入优化指令'); return; }
-  if (!currentResult) return;
+  if (!input) { showToast('请输入优化指令'); return; }如果 (!输入) { 显示Toast('请输入优化指令'); 返回; }
+  if (!currentResult) return;如果 (!当前结果) 返回;
   const history = document.getElementById('optimizeHistory');
-  history.innerHTML += '<div class="optimize-msg user">' + escapeHtml(input) + '</div>';
+  history.innerHTML += '<div class="optimize-msg user">' + escapeHtml(input) + '</div>';历史.innerHTML += '<div class="optimize-msg user">' + escapeHtml(input) + '</div>';
   const btn = document.getElementById('optimizeBtn');
   btn.disabled = true;
   btn.textContent = '优化中...';
