@@ -1,1122 +1,1407 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>提示词生成器</title>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?你的百度统计ID";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
     <style>
         :root {
-            --primary: #6366f1; --primary-light: #818cf8; --primary-dark: #4f46e5;
-            --secondary: #06b6d4; --accent: #f59e0b; --success: #10b981;
-            --warning: #f59e0b; --danger: #ef4444; --info: #3b82f6;
-            --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-            --text: #0f172a; --text-secondary: #64748b; --text-muted: #94a3b8;
-            --border: #e2e8f0; --border-light: #f1f5f9;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-            --radius: 12px; --radius-sm: 8px;
-            --code-bg: #1e293b; --code-text: #e2e8f0;
-            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --bg: #f5f7fa;
+            --card: #ffffff;
+            --text: #1a1a2e;
+            --text-secondary: #666;
+            --border: #e0e0e0;
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
         }
         [data-theme="dark"] {
-            --bg: #0f172a; --surface: #1e293b; --surface-hover: #334155;
-            --text: #f8fafc; --text-secondary: #94a3b8; --text-muted: #64748b;
-            --border: #334155; --border-light: #1e293b;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3);
-            --code-bg: #0f172a;
+            --bg: #0f0f1a;
+            --card: #1a1a2e;
+            --text: #e0e0e0;
+            --text-secondary: #999;
+            --border: #2a2a3e;
+            --primary: #818cf8;
+            --primary-light: #a5b4fc;
+            --primary-dark: #6366f1;
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.4);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
+        body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition: all 0.3s;
         }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
 
-        /* ===== 顶部导航 ===== */
-        .top-nav {
-            background: var(--surface); border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 100;
-        }
-        .nav-inner {
-            max-width: 1400px; margin: 0 auto; padding: 0 16px; height: 56px;
-            display: flex; align-items: center; justify-content: space-between;
+        /* 导航栏 */
+        .navbar {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 16px 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
         }
         .brand {
-            display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px;
-            background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .brand-icon {
-            width: 32px; height: 32px; background: var(--gradient-1); border-radius: 8px;
-            display: flex; align-items: center; justify-content: center; font-size: 16px;
-            -webkit-text-fill-color: white;
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
-        .nav-actions { display: flex; gap: 6px; align-items: center; }
         .nav-btn {
-            padding: 6px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);
-            background: var(--surface); color: var(--text-secondary); cursor: pointer;
-            font-size: 13px; transition: all 0.2s; white-space: nowrap;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
         }
-        .nav-btn:hover { background: var(--surface-hover); color: var(--text); }
-        .nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-        .nav-btn.icon-only { padding: 6px 10px; }
+        .nav-btn:hover, .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+        .nav-btn small { font-size: 12px; opacity: 0.8; }
 
-        /* ===== 主布局 - 电脑三栏 ===== */
+        /* 三栏布局 */
         .main-layout {
-            max-width: 1400px; margin: 0 auto; padding: 20px;
-            display: grid; grid-template-columns: 300px 1fr 320px; gap: 20px;
+            display: grid;
+            grid-template-columns: 320px 1fr 320px;
+            gap: 20px;
         }
 
-        /* ===== 面板通用 ===== */
+        /* 面板通用 */
         .panel {
-            background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border);
-            overflow: hidden; margin-bottom: 16px;
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            height: fit-content;
         }
-        .panel-header {
-            padding: 14px 18px; border-bottom: 1px solid var(--border); font-weight: 600;
-            font-size: 13px; display: flex; align-items: center; gap: 8px;
-            color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text);
         }
-        .panel-body { padding: 18px; }
 
-        /* ===== 表单 ===== */
-        .form-group { margin-bottom: 18px; }
+        /* 左侧配置 */
+        .form-group { margin-bottom: 16px; }
         .form-label {
-            display: block; font-weight: 600; margin-bottom: 6px; font-size: 12px;
-            color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            display: block;
         }
+        .input-wrapper { position: relative; }
         .form-input, .form-select, .form-textarea {
-            width: 100%; padding: 10px 14px; border: 1px solid var(--border);
-            border-radius: var(--radius-sm); font-size: 14px; background: var(--bg);
-            color: var(--text); transition: all 0.2s; font-family: inherit;
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            transition: all 0.2s;
+            font-family: inherit;
         }
+        .form-textarea { min-height: 100px; resize: vertical; }
         .form-input:focus, .form-select:focus, .form-textarea:focus {
-            outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
         }
-        .form-textarea { min-height: 120px; resize: vertical; line-height: 1.7; }
-        .form-select {
-            appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
+        .clear-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
         }
+        .clear-btn:hover { color: var(--danger); }
 
         /* 复杂度选择 */
-        .complexity-selector { display: flex; gap: 6px; background: var(--bg); padding: 4px; border-radius: var(--radius-sm); }
-        .complexity-option {
-            flex: 1; padding: 8px 6px; border-radius: 6px; border: none; background: transparent;
-            color: var(--text); font-size: 12px; cursor: pointer; transition: all 0.2s;
-            text-align: center; font-weight: 500;
+        .complexity-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
-        .complexity-option.active { background: var(--surface); color: var(--primary); box-shadow: var(--shadow-sm); font-weight: 600; }
-
-        /* 生成按钮 */
-        .generate-btn {
-            width: 100%; padding: 12px; background: var(--gradient-1); color: white; border: none;
-            border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer;
-            transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;
-        }
-        .generate-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px -5px rgba(99,102,241,0.4); }
-        .generate-btn:active { transform: translateY(0); }
-
-        /* ===== 输出区域 ===== */
-        .code-block {
-            background: var(--code-bg); color: var(--code-text); padding: 20px;
-            border-radius: var(--radius-sm); font-family: 'JetBrains Mono', 'Courier New', monospace;
-            font-size: 13px; line-height: 1.9; white-space: pre-wrap; overflow-x: auto;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .code-header {
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
-            margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-        .code-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-        .code-badge {
-            padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 600;
-            text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .badge-domain { background: rgba(99,102,241,0.2); color: #a5b4fc; }
-        .badge-complexity { background: rgba(6,182,212,0.2); color: #67e8f9; }
-        .badge-score { background: rgba(16,185,129,0.2); color: #6ee7b7; }
-        .code-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-        .code-action {
-            padding: 5px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.05); color: #94a3b8; font-size: 11px; cursor: pointer;
+        .complexity-btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 10px 8px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 13px;
+            text-align: center;
             transition: all 0.2s;
         }
-        .code-action:hover { background: rgba(255,255,255,0.1); color: white; }
-
-        /* 结构图谱 */
-        .structure-map { margin-top: 16px; }
-        .structure-node {
-            display: flex; align-items: flex-start; gap: 10px; padding: 10px;
-            border-radius: var(--radius-sm); margin-bottom: 6px;
-            border: 1px solid transparent; transition: all 0.2s;
+        .complexity-btn:hover {
+            border-color: var(--primary-light);
+            background: rgba(99,102,241,0.05);
         }
-        .structure-node:hover { background: var(--surface-hover); border-color: var(--border); }
-        .node-icon {
-            width: 28px; height: 28px; border-radius: 6px; display: flex;
-            align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0;
+        .complexity-btn.active {
+            border-color: var(--primary);
+            background: rgba(99,102,241,0.1);
+            color: var(--primary);
+            font-weight: 600;
         }
-        .node-role { background: rgba(99,102,241,0.1); }
-        .node-task { background: rgba(6,182,212,0.1); }
-        .node-framework { background: rgba(245,158,11,0.1); }
-        .node-quality { background: rgba(16,185,129,0.1); }
-        .node-examples { background: rgba(236,72,153,0.1); }
-        .node-iteration { background: rgba(139,92,246,0.1); }
-        .node-output { background: rgba(59,130,246,0.1); }
-        .node-content { flex: 1; min-width: 0; }
-        .node-title { font-weight: 600; font-size: 12px; }
-        .node-desc { font-size: 11px; color: var(--text-muted); }
-        .node-status { padding: 2px 6px; border-radius: 10px; font-size: 10px; font-weight: 600; flex-shrink: 0; }
-        .status-present { background: #d1fae5; color: #065f46; }
-        .status-absent { background: #fee2e2; color: #991b1b; }
-
-        /* 评分 */
-        .score-ring { width: 100px; height: 100px; margin: 0 auto 12px; position: relative; }
-        .score-ring svg { transform: rotate(-90deg); }
-        .score-ring-bg { fill: none; stroke: var(--border); stroke-width: 8; }
-        .score-ring-fill { fill: none; stroke: url(#scoreGradient); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
-        .score-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
-        .score-number { font-size: 24px; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .score-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
-        .metric-list { display: flex; flex-direction: column; gap: 10px; }
-        .metric-item { display: flex; align-items: center; gap: 10px; }
-        .metric-name { flex: 1; font-size: 12px; color: var(--text-secondary); }
-        .metric-bar { width: 60px; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
-        .metric-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
-        .metric-value { width: 24px; text-align: right; font-size: 12px; font-weight: 600; }
-
-        /* 建议 */
-        .suggestion-card {
-            padding: 12px; border-radius: var(--radius-sm); margin-bottom: 8px;
-            border-left: 3px solid var(--warning); background: var(--bg); font-size: 12px; line-height: 1.6;
+        .complexity-btn .emoji { font-size: 18px; display: block; margin-bottom: 2px; }
+        .complexity-btn .label { font-size: 12px; }
+        .complexity-btn .tag {
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 2px;
         }
-        .suggestion-card.critical { border-left-color: var(--danger); background: rgba(239,68,68,0.05); }
-        .suggestion-card.good { border-left-color: var(--success); background: rgba(16,185,129,0.05); }
-        .suggestion-card.info { border-left-color: var(--primary); background: rgba(99,102,241,0.05); }
-
-        /* 历史 */
-        .history-item-compact {
-            padding: 12px; border-radius: var(--radius-sm); margin-bottom: 8px;
-            border: 1px solid var(--border); cursor: pointer; transition: all 0.2s;
-        }
-        .history-item-compact:hover { border-color: var(--primary); background: var(--surface-hover); }
-        .history-task-text { font-size: 12px; font-weight: 500; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .history-meta-row { display: flex; justify-content: space-between; align-items: center; }
-        .history-tag-sm { padding: 2px 6px; border-radius: 10px; font-size: 10px; background: rgba(99,102,241,0.1); color: var(--primary); }
-        .history-time-sm { font-size: 10px; color: var(--text-muted); }
-
-        /* 对比 */
-        .compare-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        .compare-card { border: 2px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-        .compare-card.recommended { border-color: var(--primary); }
-        .compare-header { padding: 12px; background: var(--bg); border-bottom: 1px solid var(--border); font-weight: 600; font-size: 13px; display: flex; justify-content: space-between; }
-        .compare-body { padding: 12px; }
-        .compare-features { margin-bottom: 12px; }
-        .feature-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
-        .feature-check { color: var(--success); }
-        .feature-cross { color: var(--text-muted); }
-        .compare-code { background: var(--code-bg); color: var(--code-text); padding: 10px; border-radius: var(--radius-sm); font-family: monospace; font-size: 10px; line-height: 1.7; max-height: 200px; overflow-y: auto; white-space: pre-wrap; }
-
-        /* 市场 */
-        .market-item {
-            padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border);
-            margin-bottom: 10px; cursor: pointer; transition: all 0.2s;
-        }
-        .market-item:hover { border-color: var(--primary); background: var(--surface-hover); }
-        .market-title { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
-        .market-desc { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
-        .market-meta { display: flex; gap: 8px; font-size: 11px; color: var(--text-secondary); }
-
-        /* Tab */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* 空状态 */
-        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
-        .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
-
-        /* Toast */
-        .toast {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
-            background: var(--text); color: white; padding: 12px 20px; border-radius: var(--radius-sm);
-            font-size: 13px; z-index: 1000; opacity: 0; transition: all 0.3s ease;
-            box-shadow: var(--shadow-lg);
-        }
-        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
-        /* 移动端折叠面板 */
-        .mobile-section { margin-bottom: 16px; }
-        .mobile-section-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 18px; background: var(--surface); border-radius: var(--radius);
-            border: 1px solid var(--border); cursor: pointer; font-weight: 600; font-size: 14px;
-        }
-        .mobile-section-body {
-            display: none; padding: 16px; background: var(--surface);
-            border: 1px solid var(--border); border-top: none;
-            border-radius: 0 0 var(--radius) var(--radius);
-        }
-        .mobile-section-body.open { display: block; }
-        .mobile-toggle-icon { transition: transform 0.2s; }
-        .mobile-toggle-icon.open { transform: rotate(180deg); }
-
-        /* ===== 响应式：手机端 ===== */
-        @media (max-width: 768px) {
-            .main-layout { grid-template-columns: 1fr; padding: 12px; gap: 12px; }
-            .nav-inner { padding: 0 12px; height: 52px; }
-            .brand { font-size: 16px; }
-            .brand-icon { width: 28px; height: 28px; font-size: 14px; }
-            .nav-btn { padding: 5px 6px; font-size: 11px; }
-            /* nav-text always visible */
-            .right-panel { display: none; }
-            .panel { margin-bottom: 12px; }
-            .panel-header { padding: 12px 14px; font-size: 12px; }
-            .panel-body { padding: 14px; }
-            .form-textarea { min-height: 100px; }
-            .code-block { padding: 14px; font-size: 12px; }
-            .code-header { margin-bottom: 10px; padding-bottom: 8px; }
-            .compare-grid { grid-template-columns: 1fr; }
-            .structure-node { padding: 8px; }
-        }
-
-        /* 手机端显示折叠面板 */
-        @media (min-width: 769px) {
-            .mobile-only { display: none !important; }
-        }
-        @media (max-width: 768px) {
-            .desktop-only { display: none !important; }
-        }
-
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
         .password-hint {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--warning);
             margin-top: 6px;
             padding: 6px 10px;
-            background: rgba(245,158,11,0.08);
-            border-radius: 6px;
+            background: rgba(245,158,11,0.1);
+            border-radius: 8px;
             display: none;
         }
-        .password-hint.show { display: block; }
+        .password-hint.visible { display: block; }
 
-        .locked-badge {
-            font-size: 10px;
-            color: var(--warning);
-            margin-left: 4px;
+        /* 生成按钮 */
+        .generate-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
         }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99,102,241,0.3);
+        }
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 中间输出 */
+        .output-area {
+            min-height: 400px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+        .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+        .result-box {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+            position: relative;
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .result-title { font-weight: 600; font-size: 14px; }
+        .copy-btn {
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .copy-btn.copied { background: var(--success); color: white; border-color: var(--success); }
+        .result-content {
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* 右侧分析 */
+        .score-ring {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+        .score-ring svg { transform: rotate(-90deg); }
+        .score-ring circle { fill: none; stroke-width: 8; }
+        .score-ring .bg { stroke: var(--border); }
+        .score-ring .progress { stroke: var(--primary); stroke-linecap: round; transition: stroke-dashoffset 0.5s; }
+        .score-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .score-label {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        .dimension-bar {
+            margin-bottom: 10px;
+        }
+        .dimension-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+        .dimension-track {
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .dimension-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 3px;
+            transition: width 0.5s;
+        }
+
+        /* 历史记录 */
+        .history-item {
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: var(--bg);
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .history-item:hover {
+            background: rgba(99,102,241,0.08);
+            border-left-color: var(--primary);
+        }
+        .history-item .time { font-size: 11px; color: var(--text-secondary); }
+        .history-item .task { font-weight: 500; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* 模板市场 */
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .template-card {
+            padding: 14px;
+            border-radius: 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .template-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        .template-card .icon { font-size: 24px; margin-bottom: 6px; }
+        .template-card .title { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+        .template-card .desc { font-size: 12px; color: var(--text-secondary); }
+        .template-card .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            background: rgba(99,102,241,0.1);
+            color: var(--primary);
+            margin-top: 6px;
+        }
+
+        /* 对比视图 */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .compare-card {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 16px;
+            border: 2px solid transparent;
+        }
+        .compare-card.basic { border-color: var(--success); }
+        .compare-card.advanced { border-color: var(--warning); }
+        .compare-card.expert { border-color: var(--danger); }
+        .compare-card .level {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .compare-card .content {
+            font-size: 13px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        /* 优化视图 */
+        .optimize-section {
+            margin-bottom: 16px;
+        }
+        .optimize-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .optimize-content {
+            background: var(--bg);
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+        .issue-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            margin-right: 6px;
+            margin-bottom: 4px;
+        }
+        .issue-tag.warning { background: rgba(245,158,11,0.15); color: var(--warning); }
+        .issue-tag.danger { background: rgba(239,68,68,0.15); color: var(--danger); }
+
+        /* 结构图谱 */
+        .structure-map {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 12px;
+        }
+        .module-tag {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: rgba(99,102,241,0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .module-tag.inactive {
+            background: var(--bg);
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        /* Toast提示 */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-lg);
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* 密码弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--shadow-lg);
+        }
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .modal-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .modal-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+        .modal-btn.secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 1024px) {
+            .main-layout { grid-template-columns: 280px 1fr 280px; }
+        }
+        @media (max-width: 768px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .navbar { padding: 12px 16px; }
+            .brand { font-size: 16px; }
+            .nav-btn { padding: 6px 10px; font-size: 12px; }
+            .compare-grid { grid-template-columns: 1fr; }
+            .market-grid { grid-template-columns: 1fr; }
+            .container { padding: 12px; }
+            .panel { padding: 16px; }
+        }
+
+        /* 隐藏 */
+        .hidden { display: none !important; }
+
+        /* 折叠面板 */
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+        .collapsible-content {
+            max-height: 500px;
+            overflow: hidden;
+            transition: max-height 0.3s;
+        }
+        .collapsible-content.collapsed { max-height: 0; }
+        .toggle-icon { transition: transform 0.3s; }
+        .toggle-icon.rotated { transform: rotate(180deg); }
     </style>
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?aa3039cee460aff3fbd8a0f64646bd32";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
 <base target="_blank">
 </head>
 <body>
-    <svg width="0" height="0" style="position:absolute;">
-        <defs>
-            <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#6366f1"/>
-                <stop offset="100%" style="stop-color:#8b5cf6"/>
-            </linearGradient>
-        </defs>
-    </svg>
-
-    <nav class="top-nav">
-        <div class="nav-inner">
-            <div class="brand">
-                <div class="brand-icon">🎯</div>
-                提示词生成器
-            </div>
-            <div class="nav-actions">
-                <button class="nav-btn active" onclick="switchTab('generate')" data-tab="generate">
-                    🚀<span class="nav-text">生成</span>
-                </button>
-                <button class="nav-btn" onclick="switchTab('compare')" data-tab="compare">
-                    ⚖️<span class="nav-text">对比</span>
-                </button>
-                <button class="nav-btn" onclick="switchTab('optimize')" data-tab="optimize">
-                    🔧<span class="nav-text">优化</span>
-                </button>
-                <button class="nav-btn" onclick="switchTab('market')" data-tab="market">
-                    🏪<span class="nav-text">市场</span>
-                </button>
-                <button class="nav-btn icon-only" onclick="toggleTheme()" id="themeBtn">🌙</button>
-            </div>
-        </div>
-    </nav>
-
-    <div class="main-layout">
-        <!-- 左侧：配置 -->
-        <div class="left-panel">
-            <div class="panel">
-                <div class="panel-header">⚙️ 配置</div>
-                <div class="panel-body">
-                    <div class="form-group">
-                        <label class="form-label">任务描述 <span style="float:right;cursor:pointer;color:var(--text-muted);font-size:12px;font-weight:normal;" onclick="clearTask()" title="清空">❌ 清空</span></label>
-                        <textarea class="form-textarea" id="taskInput" placeholder="描述你的任务需求...
-
-例如：帮我写小红书种草文案，产品是美白精华"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">领域</label>
-                        <select class="form-select" id="domainSelect">
-                            <optgroup label="基础"><option value="general">🌐 通用</option></optgroup>
-                            <optgroup label="内容"><option value="marketing">🛒 电商营销</option><option value="writing">✍️ 创意写作</option><option value="social">📱 社交媒体</option><option value="seo">🔍 SEO优化</option><option value="speech">🎤 演讲口才</option></optgroup>
-                            <optgroup label="技术"><option value="coding">💻 编程开发</option><option value="architecture">🏗️ 系统架构</option><option value="security">🔒 网络安全</option><option value="blockchain">⛓️ 区块链</option><option value="data">📊 数据分析</option></optgroup>
-                            <optgroup label="商业"><option value="product">📱 产品经理</option><option value="consulting">💼 管理咨询</option><option value="project">📋 项目管理</option><option value="hr">👥 人力资源</option><option value="email">📧 邮件沟通</option><option value="meeting">🤝 会议管理</option></optgroup>
-                            <optgroup label="专业"><option value="legal">⚖️ 法律文档</option><option value="medical">🏥 医疗健康</option><option value="finance">💰 金融投资</option><option value="education">📚 教育培训</option><option value="customer">🎧 客服支持</option></optgroup>
-                            <optgroup label="科研"><option value="research">🔬 科研学术</option><option value="game">🎮 游戏开发</option><option value="design">🎨 设计创意</option><option value="translation">🌏 翻译本地化</option><option value="biotech">🧬 生物科技</option><option value="energy">⚡ 新能源</option><option value="realestate">🏘️ 房地产</option><option value="manufacturing">🏭 智能制造</option></optgroup>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">复杂度</label>
-                        <div class="complexity-selector">
-                            <button class="complexity-option active" data-value="basic" onclick="selectComplexity('basic')">⚡ 基础</button>
-                            <button class="complexity-option" data-value="advanced" onclick="selectComplexity('advanced')">🔥 进阶<span class="locked-badge">🔒</span></button>
-                            <button class="complexity-option" data-value="expert" onclick="selectComplexity('expert')">👑 专家<span class="locked-badge">🔒</span></button>
-                        </div>
-                        <div class="password-hint" id="passwordHint">
-                            🔒 进阶/专家版需联系作者 <strong>Q704451222</strong> 获取密码
-                        </div>
-                    </div>
-                    <button class="generate-btn" onclick="generateWithTracking()">✨ 智能生成</button>
-                </div>
+    <div class="container">
+        <!-- 导航栏 -->
+        <div class="navbar">
+            <div class="brand">🎯 提示词生成器</div>
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="switchTab('generate')" id="nav-generate">🚀 生成</button>
+                <button class="nav-btn" onclick="switchTab('compare')" id="nav-compare">⚖️ 对比</button>
+                <button class="nav-btn" onclick="switchTab('optimize')" id="nav-optimize">🔧 优化</button>
+                <button class="nav-btn" onclick="switchTab('market')" id="nav-market">🏪 市场</button>
+                <button class="nav-btn" onclick="toggleTheme()" id="nav-theme">🌙 主题</button>
             </div>
         </div>
 
-        <!-- 中间：输出 -->
-        <div class="center-panel">
-            <div id="generateTab" class="tab-content active">
-                <div id="outputArea" style="display: none;">
-                    <div class="panel">
-                        <div class="code-block" id="outputBlock">
-                            <div class="code-header">
-                                <div class="code-meta">
-                                    <span class="code-badge badge-domain" id="outputDomain">通用</span>
-                                    <span class="code-badge badge-complexity" id="outputComplexity">基础版</span>
-                                    <span class="code-badge badge-score" id="outputScore">--</span>
-                                </div>
-                                <div class="code-actions">
-                                    <button class="code-action" onclick="copyOutput()">📋 复制</button>
-                                    <button class="code-action" onclick="exportMD()">📝 MD</button>
-                                    <button class="code-action" onclick="exportTXT()">📄 TXT</button>
-                                    <button class="code-action" onclick="optimizeCurrent()">🔧 优化</button>
-                                </div>
-                            </div>
-                            <pre id="outputContent"></pre>
-                        </div>
-                    </div>
-                    <div class="panel" style="margin-top: 16px;">
-                        <div class="panel-header">🗺️ 结构图谱</div>
-                        <div class="panel-body"><div class="structure-map" id="structureMap"></div></div>
-                    </div>
+        <!-- 主布局 -->
+        <div class="main-layout">
+            <!-- 左侧：配置 -->
+            <div class="panel" id="left-panel">
+                <div class="panel-title">⚙️ 配置</div>
 
-                    <!-- 手机端：折叠的质量分析 -->
-                    <div class="mobile-only" style="margin-top: 16px;">
-                        <div class="mobile-section">
-                            <div class="mobile-section-header" onclick="toggleMobileSection(this)">
-                                <span>📊 质量分析</span>
-                                <span class="mobile-toggle-icon">▼</span>
-                            </div>
-                            <div class="mobile-section-body" id="mobileAnalysisBody">
-                                <div id="mobileAnalysisContent"></div>
-                            </div>
+                <div class="form-group">
+                    <label class="form-label">任务描述</label>
+                    <div class="input-wrapper">
+                        <textarea class="form-textarea" id="taskInput" placeholder="请输入你的任务描述，例如：帮我写一篇小红书文案..."></textarea>
+                        <button class="clear-btn" onclick="clearTask()" title="清空">❌</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">选择领域</label>
+                    <select class="form-select" id="domainSelect">
+                        <optgroup label="内容创作">
+                            <option value="social_media">📱 社交媒体</option>
+                            <option value="copywriting">✍️ 文案创作</option>
+                            <option value="video_script">🎬 视频脚本</option>
+                            <option value="seo">🔍 SEO优化</option>
+                            <option value="email">📧 邮件写作</option>
+                            <option value="live_stream">📺 直播话术</option>
+                            <option value="news">📰 新闻稿</option>
+                            <option value="novel">📖 小说创作</option>
+                            <option value="poetry">🎭 诗词创作</option>
+                            <option value="translation">🌐 翻译润色</option>
+                        </optgroup>
+                        <optgroup label="技术开发">
+                            <option value="python">🐍 Python开发</option>
+                            <option value="frontend">💻 前端开发</option>
+                            <option value="backend">⚙️ 后端开发</option>
+                            <option value="api">🔌 API设计</option>
+                            <option value="database">🗄️ 数据库</option>
+                            <option value="devops">🚀 DevOps</option>
+                            <option value="security">🔒 安全审计</option>
+                            <option value="testing">🧪 测试用例</option>
+                            <option value="algorithm">📐 算法设计</option>
+                            <option value="architecture">🏗️ 架构设计</option>
+                        </optgroup>
+                        <optgroup label="商业管理">
+                            <option value="prd">📋 PRD文档</option>
+                            <option value="competitive">🔍 竞品分析</option>
+                            <option value="consulting">💼 咨询报告</option>
+                            <option value="okr">🎯 OKR制定</option>
+                            <option value="interview">🎤 面试准备</option>
+                            <option value="presentation">📊 演讲PPT</option>
+                            <option value="business_plan">💡 商业计划</option>
+                            <option value="user_research">👥 用户研究</option>
+                            <option value="data_analysis">📈 数据分析</option>
+                            <option value="project_mgmt">📁 项目管理</option>
+                        </optgroup>
+                        <optgroup label="专业服务">
+                            <option value="legal">⚖️ 法律文书</option>
+                            <option value="medical">🏥 医疗咨询</option>
+                            <option value="finance">💰 金融分析</option>
+                            <option value="education">📚 教育辅导</option>
+                            <option value="customer_service">🎧 客服话术</option>
+                            <option value="hr">👔 HR招聘</option>
+                            <option value="real_estate">🏠 房产文案</option>
+                            <option value="travel">✈️ 旅游攻略</option>
+                            <option value="food">🍜 美食点评</option>
+                            <option value="fitness">💪 健身计划</option>
+                        </optgroup>
+                        <optgroup label="科研创意">
+                            <option value="game_design">🎮 游戏设计</option>
+                            <option value="ui_design">🎨 UI设计</option>
+                            <option value="research">🔬 科研论文</option>
+                            <option value="patent">📜 专利申请</option>
+                            <option value="biotech">🧬 生物科技</option>
+                            <option value="new_energy">⚡ 新能源</option>
+                            <option value="math">📐 数学推导</option>
+                            <option value="chemistry">⚗️ 化学实验</option>
+                            <option value="physics">🔭 物理分析</option>
+                            <option value="philosophy">🤔 哲学思辨</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">复杂度</label>
+                    <div class="complexity-group">
+                        <button class="complexity-btn active" onclick="setComplexity('basic')" id="btn-basic">
+                            <span class="emoji">⚡</span>
+                            <span class="label">基础</span>
+                            <span class="tag">免费</span>
+                        </button>
+                        <button class="complexity-btn" onclick="setComplexity('advanced')" id="btn-advanced">
+                            <span class="emoji">🔥</span>
+                            <span class="label">进阶</span>
+                            <span class="tag">需密码</span>
+                        </button>
+                        <button class="complexity-btn" onclick="setComplexity('expert')" id="btn-expert">
+                            <span class="emoji">👑</span>
+                            <span class="label">专家</span>
+                            <span class="tag">需密码</span>
+                        </button>
+                    </div>
+                    <div class="password-hint" id="passwordHint">
+                        🔒 该版本需联系作者 Q704451222 获取密码解锁
+                    </div>
+                </div>
+
+                <button class="generate-btn" id="generateBtn" onclick="generate()">
+                    <span>✨</span>
+                    <span>智能生成</span>
+                </button>
+            </div>
+
+            <!-- 中间：输出 -->
+            <div class="panel output-area" id="center-panel">
+                <div id="generate-view">
+                    <div class="empty-state" id="emptyState">
+                        <div class="emoji">🎯</div>
+                        <div>输入任务描述，选择领域和复杂度</div>
+                        <div style="font-size: 13px; margin-top: 8px; opacity: 0.7;">点击「智能生成」获取你的专属提示词</div>
+                    </div>
+                    <div id="resultContainer" class="hidden">
+                        <div class="result-header">
+                            <span class="result-title">📝 生成结果</span>
+                            <button class="copy-btn" id="copyBtn" onclick="copyResult()">📋 复制</button>
                         </div>
-                        <div class="mobile-section">
-                            <div class="mobile-section-header" onclick="toggleMobileSection(this)">
-                                <span>📜 历史记录</span>
-                                <span class="mobile-toggle-icon">▼</span>
-                            </div>
-                            <div class="mobile-section-body" id="mobileHistoryBody">
-                                <div id="mobileHistoryContent"></div>
-                            </div>
+                        <div class="structure-map" id="structureMap"></div>
+                        <div class="result-box">
+                            <div class="result-content" id="resultContent"></div>
                         </div>
                     </div>
                 </div>
-                <div id="emptyState" class="empty-state">
-                    <div class="empty-icon">🎯</div>
-                    <p style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">准备生成你的专属提示词</p>
-                    <p style="font-size: 14px;">配置任务后点击"智能生成"</p>
+
+                <div id="compare-view" class="hidden">
+                    <div class="panel-title">⚖️ 版本对比</div>
+                    <div class="compare-grid" id="compareGrid"></div>
+                </div>
+
+                <div id="optimize-view" class="hidden">
+                    <div class="panel-title">🔧 AI优化</div>
+                    <div id="optimizeContent"></div>
+                </div>
+
+                <div id="market-view" class="hidden">
+                    <div class="panel-title">🏪 模板市场</div>
+                    <div class="market-grid" id="marketGrid"></div>
                 </div>
             </div>
 
-            <div id="compareTab" class="tab-content">
-                <div id="compareContainer"></div>
-            </div>
-
-            <div id="optimizeTab" class="tab-content">
-                <div id="optimizeContainer"></div>
-            </div>
-
-            <div id="marketTab" class="tab-content">
-                <div class="panel">
-                    <div class="panel-header">🏪 模板市场</div>
-                    <div class="panel-body"><div id="marketList"></div></div>
+            <!-- 右侧：分析 -->
+            <div class="panel" id="right-panel">
+                <div class="collapsible-header" onclick="toggleCollapse('qualityPanel')">
+                    <div class="panel-title" style="margin:0">📊 质量分析</div>
+                    <span class="toggle-icon" id="qualityPanel-icon">▼</span>
                 </div>
-            </div>
-        </div>
-
-        <!-- 右侧：分析（仅桌面端） -->
-        <div class="right-panel desktop-only">
-            <div class="panel">
-                <div class="panel-header">📊 质量分析</div>
-                <div class="panel-body">
-                    <div id="analysisEmpty" style="text-align: center; padding: 30px 10px; color: var(--text-muted);">
-                        <div style="font-size: 28px; margin-bottom: 8px;">📈</div>
-                        <p style="font-size: 12px;">生成后查看分析</p>
+                <div class="collapsible-content" id="qualityPanel">
+                    <div class="score-ring">
+                        <svg width="100" height="100">
+                            <circle class="bg" cx="50" cy="50" r="42"/>
+                            <circle class="progress" id="scoreCircle" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="264"/>
+                        </svg>
+                        <div class="score-text" id="scoreText">0.0</div>
                     </div>
-                    <div id="analysisContent" style="display: none;">
-                        <div class="score-ring">
-                            <svg width="100" height="100" viewBox="0 0 100 100">
-                                <circle class="score-ring-bg" cx="50" cy="50" r="42"/>
-                                <circle class="score-ring-fill" id="scoreRingFill" cx="50" cy="50" r="42" stroke-dasharray="263.89" stroke-dashoffset="263.89"/>
-                            </svg>
-                            <div class="score-center">
-                                <div class="score-number" id="scoreNumber">0.0</div>
-                                <div class="score-label">综合评分</div>
-                            </div>
-                        </div>
-                        <div class="metric-list" id="metricList"></div>
-                        <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border);">
-                            <div style="font-weight: 600; font-size: 12px; margin-bottom: 10px; color: var(--text-secondary);">💡 优化建议</div>
-                            <div id="suggestionList"></div>
-                        </div>
+                    <div class="score-label">综合评分</div>
+                    <div id="dimensions"></div>
+                    <div style="margin-top: 16px; padding: 12px; background: rgba(99,102,241,0.08); border-radius: 10px;">
+                        <div style="font-weight: 600; font-size: 13px; margin-bottom: 6px;">💡 优化建议</div>
+                        <div id="suggestions" style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">生成提示词后将显示优化建议</div>
                     </div>
                 </div>
-            </div>
-            <div class="panel" style="margin-top: 16px;">
-                <div class="panel-header">📜 最近使用</div>
-                <div class="panel-body" id="historyPanel">
-                    <div style="text-align: center; padding: 16px; color: var(--text-muted); font-size: 12px;">暂无记录</div>
+
+                <div style="margin-top: 20px;">
+                    <div class="collapsible-header" onclick="toggleCollapse('historyPanel')">
+                        <div class="panel-title" style="margin:0">📜 历史记录</div>
+                        <span class="toggle-icon" id="historyPanel-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content" id="historyPanel">
+                        <div id="historyList" style="margin-top: 12px;">
+                            <div style="text-align: center; color: var(--text-secondary); font-size: 13px; padding: 20px;">暂无记录</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Toast -->
     <div class="toast" id="toast"></div>
-<script>
-const DOMAINS = {
-    general: { name: '通用', icon: '🌐', category: '基础', methods: ['结构化思维', 'MECE原则'], desc: '通用任务处理' },
-    marketing: { name: '电商营销', icon: '🛒', category: '内容', methods: ['SCQA-R', 'AIDA', 'PAS'], desc: '种草文案、广告投放' },
-    writing: { name: '创意写作', icon: '✍️', category: '内容', methods: ['三幕式', '英雄之旅', '雪花法'], desc: '小说、剧本、散文' },
-    coding: { name: '编程开发', icon: '💻', category: '技术', methods: ['TDD', '设计模式', 'Clean Code'], desc: '代码生成、技术方案' },
-    data: { name: '数据分析', icon: '📊', category: '技术', methods: ['CRISP-DM', '假设驱动', 'A/B测试'], desc: '商业分析、数据报告' },
-    customer: { name: '客服支持', icon: '🎧', category: '服务', methods: ['HEARD模型', 'LEARN模型'], desc: '客诉处理、服务话术' },
-    legal: { name: '法律文档', icon: '⚖️', category: '专业', methods: ['IRAC', '要件分析', '风险矩阵'], desc: '合同审查、法律分析' },
-    education: { name: '教育培训', icon: '📚', category: '专业', methods: ['BOPPPS', '布鲁姆分类', 'ADDIE'], desc: '课程设计、教学方案' },
-    medical: { name: '医疗健康', icon: '🏥', category: '专业', methods: ['SOAP', '循证医学', 'PICO'], desc: '诊断辅助、健康科普' },
-    finance: { name: '金融投资', icon: '💰', category: '专业', methods: ['DCF', '马科维茨', 'Black-Litterman'], desc: '研报、风控、资产配置' },
-    research: { name: '科研学术', icon: '🔬', category: '科研', methods: ['IMRaD', 'PRISMA', 'PICOS'], desc: '论文写作、实验设计' },
-    game: { name: '游戏开发', icon: '🎮', category: '创意', methods: ['心流理论', 'MDA框架', '留存模型'], desc: '策划、数值、剧情' },
-    design: { name: '设计创意', icon: '🎨', category: '创意', methods: ['双钻模型', '格式塔', '设计思维'], desc: 'UI/UX、平面设计' },
-    hr: { name: '人力资源', icon: '👥', category: '商业', methods: ['OKR', 'KPI', '胜任力模型'], desc: '招聘、绩效、培训' },
-    product: { name: '产品经理', icon: '📱', category: '商业', methods: ['用户故事', 'Kano模型', 'MVP'], desc: '需求分析、PRD文档' },
-    consulting: { name: '管理咨询', icon: '💼', category: '商业', methods: ['麦肯锡7S', '波特五力', 'BCG矩阵'], desc: '战略、流程、组织' },
-    translation: { name: '翻译本地化', icon: '🌏', category: '语言', methods: ['功能对等', '文化转码'], desc: '多语言翻译、文化适配' },
-    speech: { name: '演讲口才', icon: '🎤', category: '语言', methods: ['PREP', '故事弧', '峰终定律'], desc: '演讲稿、辩论、主持' },
-    social: { name: '社交媒体', icon: '📱', category: '运营', methods: ['钩子理论', '算法逻辑'], desc: '短视频、直播、社群' },
-    seo: { name: 'SEO优化', icon: '🔍', category: '运营', methods: ['E-E-A-T', 'TF-IDF'], desc: '关键词、内容优化' },
-    email: { name: '邮件沟通', icon: '📧', category: '商务', methods: ['金字塔原理', 'SCQA'], desc: '商务邮件、跟进、谈判' },
-    meeting: { name: '会议管理', icon: '🤝', category: '商务', methods: ['六顶思考帽', '罗伯特议事'], desc: '会议纪要、议程、主持' },
-    project: { name: '项目管理', icon: '📋', category: '商务', methods: ['WBS', '甘特图', '敏捷Scrum'], desc: '计划、风险、汇报' },
-    architecture: { name: '系统架构', icon: '🏗️', category: '技术', methods: ['CAP', '微服务', 'DDD'], desc: '技术方案、架构设计' },
-    security: { name: '网络安全', icon: '🔒', category: '技术', methods: ['OWASP', 'STRIDE', 'CVSS'], desc: '渗透测试、安全审计' },
-    blockchain: { name: '区块链', icon: '⛓️', category: '技术', methods: ['共识机制', 'Gas优化'], desc: '智能合约、DApp' },
-    biotech: { name: '生物科技', icon: '🧬', category: '科研', methods: ['CRISPR', '通路分析'], desc: '基因分析、药物研发' },
-    energy: { name: '新能源', icon: '⚡', category: '产业', methods: ['LCOE', '能量密度'], desc: '光伏、储能、电动车' },
-    realestate: { name: '房地产', icon: '🏘️', category: '产业', methods: ['DCF估值', 'Cap Rate'], desc: '投资分析、营销策划' },
-    manufacturing: { name: '智能制造', icon: '🏭', category: '产业', methods: ['精益生产', '六西格玛'], desc: '工业4.0、供应链' }
-};
 
-const MODULES = {
-    role: {
-        name: '角色锚定', icon: '👤', desc: '定义AI的身份、能力和思维特征', color: '#6366f1',
-        render: (domain, task, complexity) => {
-            const roles = {
-                general: '专业助手', marketing: '资深电商文案专家', writing: '顶级创意写作教练',
-                coding: '资深开发工程师', data: '数据分析师', customer: '金牌客服培训师',
-                legal: '资深法律顾问', education: '教育设计专家', medical: '临床医疗专家',
-                finance: 'CFA持证分析师', research: '科研方法论专家', game: '游戏策划总监',
-                design: '资深UX设计师', hr: 'HRBP专家', product: '产品总监',
-                consulting: '麦肯锡资深顾问', translation: '资深本地化专家', speech: 'TED演讲教练',
-                social: '社交媒体运营总监', seo: 'SEO技术专家', email: '商务沟通顾问',
-                meeting: '高效会议facilitator', project: 'PMP认证项目经理', architecture: '系统架构师',
-                security: '网络安全专家', blockchain: '区块链架构师', biotech: '生物信息学专家',
-                energy: '新能源产业分析师', realestate: '房地产投资顾问', manufacturing: '智能制造专家'
+    <!-- 密码弹窗 -->
+    <div class="modal-overlay" id="passwordModal">
+        <div class="modal">
+            <div class="modal-title" id="modalTitle">🔒 输入密码</div>
+            <div class="modal-desc">该功能需要密码解锁。联系作者 Q704451222 获取密码。</div>
+            <input type="password" class="modal-input" id="passwordInput" placeholder="请输入密码">
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closePasswordModal()">取消</button>
+                <button class="modal-btn primary" onclick="verifyPassword()">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== 配置 ==========
+        const PASSWORDS = {
+            advanced: 'PRO662026',
+            expert: '662026PRO'
+        };
+
+        const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdib9LvrZEpU2zrcoibYBuA6l11M6UUsXi2_TOwN2JweG1FZQ/formResponse';
+        const GOOGLE_FORM_FIELDS = {
+            task: 'entry.693672273',
+            domain: 'entry.528075606',
+            complexity: 'entry.607505779',
+            score: 'entry.2070225006',
+            device: 'entry.303138273'
+        };
+
+        // ========== 状态 ==========
+        let currentComplexity = 'basic';
+        let currentTab = 'generate';
+        let lastResult = null;
+        let pendingComplexity = null;
+
+        // ========== 初始化 ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHistory();
+            renderTemplates();
+            checkSavedPasswords();
+
+            // 移动端默认折叠面板
+            if (window.innerWidth <= 768) {
+                document.getElementById('qualityPanel').classList.add('collapsed');
+                document.getElementById('qualityPanel-icon').classList.add('rotated');
+                document.getElementById('historyPanel').classList.add('collapsed');
+                document.getElementById('historyPanel-icon').classList.add('rotated');
+            }
+        });
+
+        // ========== 复杂度选择 ==========
+        function setComplexity(level) {
+            // 检查是否需要密码
+            if (level !== 'basic') {
+                const saved = localStorage.getItem('password_' + level);
+                if (!saved) {
+                    pendingComplexity = level;
+                    document.getElementById('modalTitle').textContent = level === 'advanced' ? '🔥 解锁进阶版' : '👑 解锁专家版';
+                    document.getElementById('passwordModal').classList.add('show');
+                    document.getElementById('passwordInput').value = '';
+                    document.getElementById('passwordInput').focus();
+                    return;
+                }
+            }
+
+            currentComplexity = level;
+            document.querySelectorAll('.complexity-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + level).classList.add('active');
+
+            const hint = document.getElementById('passwordHint');
+            if (level !== 'basic') {
+                hint.classList.add('visible');
+            } else {
+                hint.classList.remove('visible');
+            }
+        }
+
+        function verifyPassword() {
+            const input = document.getElementById('passwordInput').value.trim();
+            const level = pendingComplexity;
+
+            if (!level) return;
+
+            if (input === PASSWORDS[level]) {
+                localStorage.setItem('password_' + level, 'true');
+                closePasswordModal();
+                currentComplexity = level;
+                document.querySelectorAll('.complexity-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById('btn-' + level).classList.add('active');
+                document.getElementById('passwordHint').classList.add('visible');
+                showToast('✅ 解锁成功！');
+            } else {
+                showToast('❌ 密码错误，请重试');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.remove('show');
+            pendingComplexity = null;
+        }
+
+        function checkSavedPasswords() {
+            if (localStorage.getItem('password_advanced')) {
+                document.getElementById('btn-advanced').querySelector('.tag').textContent = '已解锁';
+            }
+            if (localStorage.getItem('password_expert')) {
+                document.getElementById('btn-expert').querySelector('.tag').textContent = '已解锁';
+            }
+        }
+
+        // ========== 标签切换 ==========
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('nav-' + tab).classList.add('active');
+
+            ['generate', 'compare', 'optimize', 'market'].forEach(t => {
+                document.getElementById(t + '-view').classList.add('hidden');
+            });
+            document.getElementById(tab + '-view').classList.remove('hidden');
+
+            if (tab === 'market') renderTemplates();
+            if (tab === 'compare' && lastResult) renderCompare();
+            if (tab === 'optimize' && lastResult) renderOptimize();
+        }
+
+        // ========== 主题切换 ==========
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        }
+
+        // 加载保存的主题
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // ========== 清空输入 ==========
+        function clearTask() {
+            document.getElementById('taskInput').value = '';
+            document.getElementById('taskInput').focus();
+        }
+
+        // ========== 核心生成函数 ==========
+        function generate() {
+            const task = document.getElementById('taskInput').value.trim();
+            const domain = document.getElementById('domainSelect').value;
+
+            if (!task) {
+                showToast('⚠️ 请先输入任务描述');
+                document.getElementById('taskInput').focus();
+                return;
+            }
+
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳</span><span>生成中...</span>';
+
+            // 模拟生成延迟
+            setTimeout(() => {
+                const result = generatePrompt(task, domain, currentComplexity);
+                lastResult = result;
+
+                // 显示结果
+                document.getElementById('emptyState').classList.add('hidden');
+                document.getElementById('resultContainer').classList.remove('hidden');
+                document.getElementById('resultContent').textContent = result.content;
+
+                // 渲染结构图谱
+                renderStructure(result.modules);
+
+                // 更新质量分析
+                updateQuality(result.score, result.dimensions);
+
+                // 保存历史
+                saveHistory(task, domain, currentComplexity, result.content, result.score);
+
+                // 提交到Google Forms
+                submitToGoogleForms(task, domain, currentComplexity, result.score);
+
+                // 恢复按钮
+                btn.disabled = false;
+                btn.innerHTML = '<span>✨</span><span>智能生成</span>';
+
+                // 自动滚动到结果
+                document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                showToast('✅ 生成完成！');
+            }, 800);
+        }
+
+        // ========== 提示词生成逻辑 ==========
+        function generatePrompt(task, domain, complexity) {
+            const domainNames = {
+                social_media: '社交媒体', copywriting: '文案创作', video_script: '视频脚本',
+                seo: 'SEO优化', email: '邮件写作', live_stream: '直播话术',
+                news: '新闻稿', novel: '小说创作', poetry: '诗词创作', translation: '翻译润色',
+                python: 'Python开发', frontend: '前端开发', backend: '后端开发',
+                api: 'API设计', database: '数据库', devops: 'DevOps',
+                security: '安全审计', testing: '测试用例', algorithm: '算法设计', architecture: '架构设计',
+                prd: 'PRD文档', competitive: '竞品分析', consulting: '咨询报告',
+                okr: 'OKR制定', interview: '面试准备', presentation: '演讲PPT',
+                business_plan: '商业计划', user_research: '用户研究', data_analysis: '数据分析', project_mgmt: '项目管理',
+                legal: '法律文书', medical: '医疗咨询', finance: '金融分析',
+                education: '教育辅导', customer_service: '客服话术', hr: 'HR招聘',
+                real_estate: '房产文案', travel: '旅游攻略', food: '美食点评', fitness: '健身计划',
+                game_design: '游戏设计', ui_design: 'UI设计', research: '科研论文',
+                patent: '专利申请', biotech: '生物科技', new_energy: '新能源',
+                math: '数学推导', chemistry: '化学实验', physics: '物理分析', philosophy: '哲学思辨'
             };
-            const exp = complexity === 'expert' ? '拥有15年以上实战经验，行业TOP 1%水平' : complexity === 'advanced' ? '拥有10年以上实战经验' : '专业级水平';
-            const skillsMap = {
-                general: '结构化思维、跨领域迁移、精准表达', marketing: '消费者洞察、转化优化、平台算法',
-                writing: '叙事架构、人物塑造、节奏控制', coding: '代码设计、性能优化、安全审查',
-                data: '统计分析、商业洞察、可视化', customer: '情绪识别、冲突化解、服务设计',
-                legal: '风险预判、条文解释、谈判策略', education: '教学设计、认知科学、评估体系',
-                medical: '循证医学、诊断推理、患者沟通', finance: '资产定价、风险管理、量化建模',
-                research: '文献综述、实验设计、学术写作', game: '心流设计、数值平衡、留存优化',
-                design: '用户研究、交互设计、视觉系统', hr: '人才盘点、组织发展、薪酬设计',
-                product: '需求分析、用户研究、数据驱动', consulting: '战略分析、问题拆解、方案落地',
-                translation: '文化转码、术语管理、质量保证', speech: '故事构建、舞台呈现、观众互动',
-                social: '算法逻辑、内容策略、流量运营', seo: '技术SEO、内容策略、数据监控',
-                email: '商务礼仪、谈判技巧、关系维护', meeting: '议程设计、冲突管理、决策推进',
-                project: '进度控制、风险预警、团队协作', architecture: '高可用设计、性能优化、技术选型',
-                security: '威胁建模、漏洞分析、安全加固', blockchain: '共识设计、智能合约、经济模型',
-                biotech: '基因分析、药物筛选、临床统计', energy: '技术路线、成本分析、政策解读',
-                realestate: '市场研判、投资测算、交易谈判', manufacturing: '工艺优化、质量控制、智能改造'
+
+            const domainName = domainNames[domain] || '通用';
+
+            let modules = [];
+            let content = '';
+            let score = 0;
+            let dimensions = {};
+
+            if (complexity === 'basic') {
+                modules = ['角色锚定', '任务解构', '输出规范'];
+                content = `【角色锚定】
+你是一位资深的${domainName}专家，拥有10年以上行业经验，精通该领域的最佳实践和方法论。
+
+【任务解构】
+请基于以下任务描述，提供专业的解决方案：
+任务：${task}
+
+【输出规范】
+1. 结构清晰，分点阐述
+2. 内容具体可操作
+3. 语言简洁专业
+4. 总字数控制在500-800字`;
+                score = 7.2;
+                dimensions = { 角色清晰度: 80, 任务可执行: 75, 结构完整度: 70, 专业深度: 65, 创新程度: 60, 输出规范: 85 };
+            } else if (complexity === 'advanced') {
+                modules = ['角色锚定', '任务解构', '执行框架', '质量控制', '输出规范'];
+                content = `【角色锚定】
+你是一位资深的${domainName}专家，拥有10年以上行业经验。你擅长将复杂问题拆解为可执行的步骤，并给出结构化的解决方案。你的风格是专业、严谨但不失灵活性。
+
+【任务解构】
+请基于以下任务描述，提供系统化的解决方案：
+核心任务：${task}
+目标受众：请根据任务内容推断目标受众特征
+关键约束：请考虑时间、成本、质量等维度
+
+【执行框架】
+Phase 1 - 分析诊断：识别核心问题和关键变量
+Phase 2 - 策略制定：提供3种可选方案，并分析优劣
+Phase 3 - 执行路径：给出详细的步骤清单和时间线
+Phase 4 - 风险预判：列出潜在风险和应对预案
+
+【质量控制】
+- 每个建议需说明理论依据或行业最佳实践
+- 提供可量化的评估指标
+- 标注需要进一步确认的关键假设
+
+【输出规范】
+1. 使用Markdown格式
+2. 包含目录导航
+3. 关键术语加粗
+4. 总字数控制在1000-1500字`;
+                score = 8.6;
+                dimensions = { 角色清晰度: 90, 任务可执行: 88, 结构完整度: 85, 专业深度: 82, 创新程度: 78, 输出规范: 92 };
+            } else {
+                modules = ['角色锚定', '任务解构', '执行框架', '质量控制', '示例嵌入', '迭代机制', '输出规范'];
+                content = `【角色锚定】
+你是一位${domainName}领域的顶级专家，拥有15年以上实战经验，曾服务过多家世界500强企业。你不仅精通理论，更擅长将理论与实际场景深度结合。你的分析框架融合了麦肯锡方法论、设计思维和第一性原理。
+
+【任务解构】
+请对以下任务进行深度解构和系统化解决：
+核心任务：${task}
+
+解构维度：
+1. 业务背景：分析该任务所处的业务环境和战略价值
+2. 利益相关方：识别所有关键利益相关方及其诉求
+3. 成功标准：定义清晰的、可量化的成功指标
+4. 约束条件：梳理技术、资源、时间、合规等约束
+
+【执行框架】
+Phase 1 - 深度诊断（30%）
+  • 现状分析：用数据和事实描述当前状态
+  • 根因分析：使用5Why或鱼骨图定位根本原因
+  • 机会识别：发现被忽视的优化空间
+
+Phase 2 - 策略设计（40%）
+  • 方案A：保守型（低风险、稳收益）
+  • 方案B：平衡型（中等风险、优化收益）
+  • 方案C：激进型（高风险、高回报）
+  • 决策矩阵：从成本、时间、质量、风险四维度评分
+
+Phase 3 - 实施路径（20%）
+  • 里程碑规划：按周/月拆解关键节点
+  • 资源分配：人力、预算、工具需求清单
+  • 依赖管理：识别关键路径和阻塞点
+
+Phase 4 - 运营保障（10%）
+  • KPI监控体系： leading + lagging 指标
+  • 复盘机制：PDCA循环设计
+  • 知识沉淀：可复用的SOP和模板
+
+【质量控制】
+- 每个论点需引用权威来源或数据支撑
+- 使用MECE原则确保分析穷尽且互斥
+- 对关键假设进行敏感性分析
+- 提供"如果...那么..."的条件分支建议
+
+【示例嵌入】
+在适当位置提供：
+- 行业标杆案例（成功/失败）
+- 模板/框架的填写示例
+- 常见陷阱和避坑指南
+
+【迭代机制】
+在输出末尾提供：
+- 自检清单（10项快速验证）
+- 优化建议（基于不同场景的微调方向）
+- 扩展阅读（3-5个相关深度主题）
+
+【输出规范】
+1. 使用专业Markdown，包含多级标题
+2. 关键数据用表格呈现
+3. 复杂流程用Mermaid或ASCII图表
+4. 总字数控制在2000-3000字
+5. 结尾附「执行摘要」（200字以内）`;
+                score = 9.4;
+                dimensions = { 角色清晰度: 95, 任务可执行: 93, 结构完整度: 92, 专业深度: 90, 创新程度: 88, 输出规范: 96 };
+            }
+
+            return { content, modules, score, dimensions };
+        }
+
+        // ========== 结构图谱 ==========
+        function renderStructure(modules) {
+            const allModules = ['角色锚定', '任务解构', '执行框架', '质量控制', '示例嵌入', '迭代机制', '输出规范'];
+            const container = document.getElementById('structureMap');
+            container.innerHTML = allModules.map(m => {
+                const active = modules.includes(m);
+                return `<span class="module-tag ${active ? '' : 'inactive'}">${active ? '✅' : '❌'} ${m}</span>`;
+            }).join('');
+        }
+
+        // ========== 质量分析 ==========
+        function updateQuality(score, dimensions) {
+            document.getElementById('scoreText').textContent = score.toFixed(1);
+            const circle = document.getElementById('scoreCircle');
+            const circumference = 2 * Math.PI * 42;
+            const offset = circumference - (score / 10) * circumference;
+            circle.style.strokeDashoffset = offset;
+
+            const container = document.getElementById('dimensions');
+            container.innerHTML = Object.entries(dimensions).map(([name, value]) => `
+                <div class="dimension-bar">
+                    <div class="dimension-label">
+                        <span>${name}</span>
+                        <span>${value}%</span>
+                    </div>
+                    <div class="dimension-track">
+                        <div class="dimension-fill" style="width: ${value}%"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            const suggestions = score < 8 
+                ? '建议增加执行框架和示例嵌入模块，提升提示词的可执行性。可考虑升级到进阶版。' 
+                : '提示词结构完整，质量优秀。如需进一步提升，可增加迭代机制模块，加入自检清单和优化方向。';
+            document.getElementById('suggestions').textContent = suggestions;
+        }
+
+        // ========== 历史记录 ==========
+        function saveHistory(task, domain, complexity, content, score) {
+            let history = JSON.parse(localStorage.getItem('prompt_history') || '[]');
+            const item = {
+                id: Date.now(),
+                time: new Date().toLocaleString('zh-CN'),
+                task: task.substring(0, 30) + (task.length > 30 ? '...' : ''),
+                domain,
+                complexity,
+                content,
+                score
             };
-            const skills = (skillsMap[domain] || '专业分析、方案设计、落地执行').split('、');
-            const thinking = complexity === 'expert' ? '第一性原理思考者，擅长从本质出发重构问题' : complexity === 'advanced' ? '系统思维，善于平衡多方约束' : '目标导向，高效执行';
-            return `你是一位${roles[domain] || '专业专家'}，${exp}。
-
-【核心能力】
-1. ${skills[0] || '深度分析'}
-2. ${skills[1] || '方案设计'}
-3. ${skills[2] || '持续优化'}
-
-【思维特征】
-${thinking}`;
+            history.unshift(item);
+            if (history.length > 50) history = history.slice(0, 50);
+            localStorage.setItem('prompt_history', JSON.stringify(history));
+            loadHistory();
         }
-    },
-    task: {
-        name: '任务解构', icon: '🎯', desc: '深度分析用户需求', color: '#06b6d4',
-        render: (domain, task, complexity) => {
-            if (complexity === 'basic') return `【任务】${task}`;
-            return `【任务深度分析】
-核心需求：${task}
-表层目标：[用户明确表达的需求]
-深层目标：[用户未明说但期望达成的效果]
-成功标准：[可量化的验收指标]
-约束条件：[时间/预算/技术/合规限制]`;
+
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('prompt_history') || '[]');
+            const container = document.getElementById('historyList');
+            if (history.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: var(--text-secondary); font-size: 13px; padding: 20px;">暂无记录</div>';
+                return;
+            }
+            container.innerHTML = history.map(item => `
+                <div class="history-item" onclick="loadHistoryItem(${item.id})">
+                    <div class="time">${item.time}</div>
+                    <div class="task">${item.task}</div>
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">
+                        ${item.domain} · ${item.complexity === 'basic' ? '基础' : item.complexity === 'advanced' ? '进阶' : '专家'} · ${item.score}分
+                    </div>
+                </div>
+            `).join('');
         }
-    },
-    framework: {
-        name: '执行框架', icon: '📐', desc: '领域特定方法论', color: '#f59e0b',
-        render: (domain, task, complexity) => {
-            const frameworks = {
-                marketing: `【执行框架】
-步骤1：受众洞察
-- 识别目标人群画像（年龄/收入/痛点/媒介习惯）
-- 分析消费决策路径（认知→兴趣→评估→购买）
 
-步骤2：卖点提炼
-- 功能卖点：产品能解决什么问题
-- 情感卖点：用户能获得什么感受
-- 社会卖点：用户想展示什么形象
+        function loadHistoryItem(id) {
+            const history = JSON.parse(localStorage.getItem('prompt_history') || '[]');
+            const item = history.find(h => h.id === id);
+            if (!item) return;
 
-步骤3：内容构建
-- 标题：制造好奇或承诺利益
-- 正文：场景代入→问题放大→解决方案→行动号召
-- 结尾：降低决策门槛（限时/限量/赠品）
+            document.getElementById('taskInput').value = item.task.replace('...', '');
+            document.getElementById('domainSelect').value = item.domain;
+            setComplexity(item.complexity);
 
-步骤4：优化迭代
-- A/B测试不同版本
-- 根据数据反馈调整`,
-                coding: `【执行框架】
-步骤1：需求澄清
-- 明确功能边界（做什么/不做什么）
-- 识别非功能需求（性能/安全/可用性）
-
-步骤2：方案设计
-- 架构选型（单体/微服务/Serverless）
-- 数据模型设计
-- 接口契约定义
-
-步骤3：代码实现
-- 核心逻辑编码
-- 边界条件处理
-- 错误处理与日志
-
-步骤4：质量保障
-- 单元测试覆盖
-- 集成测试验证
-- 代码审查通过`,
-                data: `【分析框架】
-步骤1：问题定义
-- 明确业务问题（描述性/诊断性/预测性/规范性）
-- 确定成功指标（北极星指标+辅助指标）
-
-步骤2：数据探索
-- 数据质量评估（完整性/准确性/时效性）
-- 描述性统计分析
-- 异常值与缺失值处理
-
-步骤3：分析建模
-- 选择分析方法（对比/相关/回归/聚类）
-- 模型构建与验证
-- 结果解释与业务翻译
-
-步骤4：洞察输出
-- 核心发现提炼
-- 可落地建议（优先级/责任人/时间）
-- 风险提示与局限性`,
-                general: `【执行框架】
-步骤1：需求拆解
-- 识别显式要求（用户明确说的）
-- 挖掘隐式要求（用户没明说但需要的）
-
-步骤2：方案设计
-- 提供2种解决思路
-- 对比优劣，推荐最优方案
-
-步骤3：执行与输出
-- 按推荐方案详细执行
-- 关键决策点说明理由
-
-步骤4：质量验证
-- 自检：输出是否符合用户原始意图？
-- 边界：是否遗漏了重要约束？`
-            };
-            return frameworks[domain] || frameworks.general;
+            lastResult = { content: item.content, modules: [], score: item.score, dimensions: {} };
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('resultContainer').classList.remove('hidden');
+            document.getElementById('resultContent').textContent = item.content;
+            updateQuality(item.score, {});
+            switchTab('generate');
         }
-    },
-    quality: {
-        name: '质量控制', icon: '✅', desc: '自检清单与验收标准', color: '#10b981',
-        render: (domain, task, complexity) => {
-            if (complexity === 'basic') return '';
-            const checks = {
-                marketing: `【质量控制】
-□ 文案读起来像分享还是广告？（目标：像分享）
-□ 是否有具体细节而非泛泛而谈？
-□ 前3句能否留住读者？
-□ 是否包含行动号召？
-□ 是否符合平台合规要求？`,
-                coding: `【质量控制】
-□ 代码是否可直接运行（无伪代码）？
-□ 是否处理了所有边界条件？
-□ 变量名是否具有语义化？
-□ 是否包含至少3个测试用例（含异常输入）？
-□ 时间/空间复杂度是否标注？`,
-                data: `【质量控制】
-□ 结论是否有数据支撑，而非主观臆断？
-□ 是否区分了相关性与因果性？
-□ 建议是否具体（含责任方/时间/预期效果）？
-□ 非专业读者能否理解核心结论？
-□ 是否指出了数据局限性？`,
-                general: `【质量控制】
-□ 输出是否符合用户原始意图？
-□ 是否遗漏了重要约束？
-□ 如果需求变更，方案是否可调整？
-□ 是否存在歧义表述？
-□ 是否提供了可验证的交付物？`
-            };
-            return checks[domain] || checks.general;
+
+        // ========== 复制功能 ==========
+        function copyResult() {
+            const content = document.getElementById('resultContent').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.textContent = '✅ 已复制';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 复制';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
         }
-    },
-    examples: {
-        name: '示例嵌入', icon: '💡', desc: 'Few-shot正/反例', color: '#ec4899',
-        render: (domain, task, complexity) => {
-            if (complexity !== 'expert') return '';
-            return `【示例参考】
 
-优秀示例 ✅：
-[该领域高质量输出的典型特征]
+        // ========== Google Forms 提交 ==========
+        function submitToGoogleForms(task, domain, complexity, score) {
+            const device = /Mobile|Android|iPhone/i.test(navigator.userAgent) ? '手机' : '电脑';
+            const complexityLabel = complexity === 'basic' ? '基础' : complexity === 'advanced' ? '进阶' : '专家';
 
-避免示例 ❌：
-[常见低质量输出的典型问题]
+            const formData = new FormData();
+            formData.append(GOOGLE_FORM_FIELDS.task, task);
+            formData.append(GOOGLE_FORM_FIELDS.domain, domain);
+            formData.append(GOOGLE_FORM_FIELDS.complexity, complexityLabel);
+            formData.append(GOOGLE_FORM_FIELDS.score, score.toString());
+            formData.append(GOOGLE_FORM_FIELDS.device, device);
 
-对比说明：
-为什么优秀示例更好？具体差在哪？`;
+            fetch(GOOGLE_FORM_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData
+            }).catch(() => {});
         }
-    },
-    iteration: {
-        name: '迭代机制', icon: '🔄', desc: '多轮优化流程', color: '#8b5cf6',
-        render: (domain, task, complexity) => {
-            if (complexity !== 'expert') return '';
-            return `【迭代优化】
 
-第一轮：生成初稿
-- 快速输出完整框架
-- 不追求完美，先求完整
+        // ========== 对比视图 ==========
+        function renderCompare() {
+            const task = document.getElementById('taskInput').value.trim() || '示例任务';
+            const domain = document.getElementById('domainSelect').value;
+            const levels = [
+                { key: 'basic', name: '⚡ 基础版', class: 'basic' },
+                { key: 'advanced', name: '🔥 进阶版', class: 'advanced' },
+                { key: 'expert', name: '👑 专家版', class: 'expert' }
+            ];
 
-第二轮：自我审查
-- 对照质量控制清单逐项检查
-- 标记薄弱环节
-
-第三轮：针对性优化
-- 对标记的薄弱环节重点改进
-- 补充具体细节和案例
-
-第四轮：最终润色
-- 检查语言流畅度
-- 确保格式一致性
-- 验证所有变量已替换`;
+            document.getElementById('compareGrid').innerHTML = levels.map(l => {
+                const result = generatePrompt(task, domain, l.key);
+                return `
+                    <div class="compare-card ${l.class}">
+                        <div class="level">${l.name}</div>
+                        <div class="content">${result.content}</div>
+                    </div>
+                `;
+            }).join('');
         }
-    },
-    output: {
-        name: '输出规范', icon: '📤', desc: '格式、长度、风格要求', color: '#3b82f6',
-        render: (domain, task, complexity) => {
-            const specs = {
-                marketing: `【输出规范】
-- 格式：标题（含emoji）+ 正文 + 标签
-- 字数：根据平台要求调整
-- 风格：${complexity === 'expert' ? '真实分享感，避免硬广' : '专业且吸引人'}
-- 合规：避免绝对化用语，用"我觉得""个人体验"替代`,
-                coding: `【输出规范】
-- 格式：Markdown代码块，含语法高亮
-- 结构：方案对比 → 推荐代码 → 测试用例 → 使用说明
-- 注释：关键逻辑添加行内注释
-- 可运行：代码可直接复制执行`,
-                data: `【输出规范】
-- 格式：执行摘要 → 分析过程 → 数据表格 → 建议清单
-- 图表：如需可视化，用文字描述关键信息
-- 结论：每个结论必须有数据支撑
-- 建议：区分短期/长期，标注优先级`,
-                general: `【输出规范】
-- 格式：结构清晰，分点说明
-- 语言：简洁，避免冗余
-- 如有不确定之处，明确标注
-- 请直接开始`
-            };
-            return specs[domain] || specs.general;
+
+        // ========== 优化视图 ==========
+        function renderOptimize() {
+            if (!lastResult) return;
+            const issues = lastResult.score < 8 
+                ? ['角色定义不够具体', '缺少执行步骤', '无质量控制机制', '缺少示例说明']
+                : ['迭代机制可进一步完善', '可增加更多行业案例', '自检清单可更详细'];
+
+            const issueTags = issues.map(i => `<span class="issue-tag ${lastResult.score < 8 ? 'danger' : 'warning'}">${i}</span>`).join('');
+
+            document.getElementById('optimizeContent').innerHTML = `
+                <div class="optimize-section">
+                    <div class="optimize-title">🔍 问题诊断</div>
+                    <div class="optimize-content">${issueTags}</div>
+                </div>
+                <div class="optimize-section">
+                    <div class="optimize-title">✨ 优化版本</div>
+                    <div class="optimize-content">
+                        基于当前提示词，建议增加以下模块：
+
+
+                        1. <strong>迭代机制</strong>：添加自检清单和优化方向
+
+                        2. <strong>示例嵌入</strong>：补充具体案例和模板
+
+                        3. <strong>质量控制</strong>：增加量化评估指标
+
+
+                        预期提升：综合评分可从 ${lastResult.score} 分提升至 ${Math.min(lastResult.score + 1.2, 9.8).toFixed(1)} 分
+                    </div>
+                </div>
+            `;
         }
-    }
-};
 
-const MARKET_TEMPLATES = [
-    // 内容创作类
-    { id: 1, title: '小红书爆款种草文案', domain: 'marketing', complexity: 'advanced', author: '官方', likes: 328, desc: 'SCQA-R结构，适合美妆/护肤/食品类种草，真实感强' },
-    { id: 2, title: '抖音短视频脚本', domain: 'social', complexity: 'advanced', author: '官方', likes: 256, desc: '钩子+痛点+解决方案+行动号召，3秒留住用户' },
-    { id: 3, title: '公众号深度长文', domain: 'writing', complexity: 'expert', author: '官方', likes: 198, desc: '故事弧+金句+数据支撑，适合知识付费类文章' },
-    { id: 4, title: '淘宝详情页文案', domain: 'marketing', complexity: 'advanced', author: '官方', likes: 245, desc: 'FABE法则，卖点可视化，提升转化率' },
-    { id: 5, title: '直播带货话术', domain: 'social', complexity: 'expert', author: '官方', likes: 312, desc: '开场留人+产品介绍+逼单+互动，完整直播脚本' },
-    { id: 6, title: 'SEO优化文章', domain: 'seo', complexity: 'advanced', author: '官方', likes: 167, desc: '关键词布局+E-E-A-T标准，搜索引擎友好' },
-    { id: 7, title: '品牌故事文案', domain: 'writing', complexity: 'expert', author: '官方', likes: 145, desc: '创始人故事+品牌使命+用户共鸣，提升品牌调性' },
-    { id: 8, title: '朋友圈营销文案', domain: 'marketing', complexity: 'basic', author: '官方', likes: 289, desc: '生活化场景+软性植入，避免硬广感' },
-    { id: 9, title: '演讲开场白', domain: 'speech', complexity: 'advanced', author: '官方', likes: 134, desc: 'PREP结构，3分钟抓住听众注意力' },
-    { id: 10, title: '产品发布会PPT讲稿', domain: 'speech', complexity: 'expert', author: '官方', likes: 178, desc: '乔布斯式演讲结构，悬念+ reveal + 愿景' },
+        // ========== 模板市场 ==========
+        const TEMPLATES = [
+            { icon: '📱', title: '小红书爆款文案', desc: '生成吸引眼球的小红书种草文案', domain: 'social_media', complexity: 'advanced', tag: '内容创作' },
+            { icon: '🎬', title: '抖音短视频脚本', desc: '15秒黄金开头的视频脚本', domain: 'video_script', complexity: 'advanced', tag: '内容创作' },
+            { icon: '🐍', title: 'Python爬虫模板', desc: 'Requests+BeautifulSoup爬虫框架', domain: 'python', complexity: 'advanced', tag: '技术开发' },
+            { icon: '💻', title: 'React组件开发', desc: '可复用的React函数组件模板', domain: 'frontend', complexity: 'advanced', tag: '技术开发' },
+            { icon: '📋', title: 'PRD需求文档', desc: '标准产品需求文档结构', domain: 'prd', complexity: 'expert', tag: '商业管理' },
+            { icon: '🔍', title: '竞品分析报告', desc: '系统化竞品分析框架', domain: 'competitive', complexity: 'expert', tag: '商业管理' },
+            { icon: '💼', title: '麦肯锡咨询报告', desc: '结构化商业咨询报告模板', domain: 'consulting', complexity: 'expert', tag: '商业管理' },
+            { icon: '🎯', title: 'OKR制定模板', desc: '目标与关键结果制定框架', domain: 'okr', complexity: 'advanced', tag: '商业管理' },
+            { icon: '🎤', title: '面试准备指南', desc: '技术面试常见问题及回答', domain: 'interview', complexity: 'advanced', tag: '商业管理' },
+            { icon: '📊', title: '数据分析报告', desc: '从数据清洗到洞察输出', domain: 'data_analysis', complexity: 'expert', tag: '商业管理' },
+            { icon: '⚖️', title: '合同审查清单', desc: '法律合同关键条款审查', domain: 'legal', complexity: 'expert', tag: '专业服务' },
+            { icon: '🏥', title: '医疗问诊模板', desc: '标准化患者问诊流程', domain: 'medical', complexity: 'advanced', tag: '专业服务' },
+            { icon: '💰', title: '投资分析报告', desc: '股票/基金投资分析框架', domain: 'finance', complexity: 'expert', tag: '专业服务' },
+            { icon: '📚', title: '课程设计大纲', desc: '系统化在线课程设计', domain: 'education', complexity: 'advanced', tag: '专业服务' },
+            { icon: '🎧', title: '客服话术库', desc: '高情商客服应对话术', domain: 'customer_service', complexity: 'advanced', tag: '专业服务' },
+            { icon: '🎮', title: '游戏策划案', desc: '核心玩法与数值设计', domain: 'game_design', complexity: 'expert', tag: '科研创意' },
+            { icon: '🎨', title: 'UI设计规范', desc: '移动端UI设计系统', domain: 'ui_design', complexity: 'advanced', tag: '科研创意' },
+            { icon: '🔬', title: '科研论文摘要', desc: 'SCI论文摘要写作模板', domain: 'research', complexity: 'expert', tag: '科研创意' },
+            { icon: '📧', title: '商务邮件模板', desc: '正式商务邮件写作框架', domain: 'email', complexity: 'basic', tag: '内容创作' },
+            { icon: '🔍', title: 'SEO优化方案', desc: '网站SEO诊断与优化', domain: 'seo', complexity: 'advanced', tag: '内容创作' },
+            { icon: '📺', title: '直播带货话术', desc: '高转化直播话术脚本', domain: 'live_stream', complexity: 'advanced', tag: '内容创作' },
+            { icon: '📰', title: '新闻通稿模板', desc: '标准新闻稿写作格式', domain: 'news', complexity: 'basic', tag: '内容创作' },
+            { icon: '📖', title: '网文大纲生成', desc: '爽文/甜文大纲框架', domain: 'novel', complexity: 'advanced', tag: '内容创作' },
+            { icon: '🎭', title: '古诗词创作', desc: '格律诗词生成助手', domain: 'poetry', complexity: 'expert', tag: '内容创作' },
+            { icon: '🌐', title: '中英翻译润色', desc: '学术/商务翻译优化', domain: 'translation', complexity: 'advanced', tag: '内容创作' },
+            { icon: '⚙️', title: '微服务架构', desc: 'Spring Cloud微服务设计', domain: 'backend', complexity: 'expert', tag: '技术开发' },
+            { icon: '🔌', title: 'RESTful API设计', desc: '标准API接口设计规范', domain: 'api', complexity: 'advanced', tag: '技术开发' },
+            { icon: '🗄️', title: 'SQL优化方案', desc: '数据库查询优化指南', domain: 'database', complexity: 'advanced', tag: '技术开发' },
+            { icon: '🚀', title: 'CI/CD流水线', desc: 'DevOps自动化部署', domain: 'devops', complexity: 'expert', tag: '技术开发' },
+            { icon: '🔒', title: '安全渗透测试', desc: 'Web应用安全审计', domain: 'security', complexity: 'expert', tag: '技术开发' },
+            { icon: '🧪', title: '自动化测试用例', desc: 'Selenium/Appium测试', domain: 'testing', complexity: 'advanced', tag: '技术开发' },
+            { icon: '📐', title: '算法题解模板', desc: 'LeetCode解题框架', domain: 'algorithm', complexity: 'advanced', tag: '技术开发' },
+            { icon: '🏗️', title: '系统架构评审', desc: '技术架构设计评审', domain: 'architecture', complexity: 'expert', tag: '技术开发' },
+            { icon: '📁', title: '敏捷项目管理', desc: 'Scrum/Kanban实践', domain: 'project_mgmt', complexity: 'advanced', tag: '商业管理' },
+            { icon: '👥', title: '用户画像分析', desc: '用户调研与画像构建', domain: 'user_research', complexity: 'advanced', tag: '商业管理' },
+            { icon: '💡', title: '创业商业计划', desc: 'BP商业计划书模板', domain: 'business_plan', complexity: 'expert', tag: '商业管理' },
+            { icon: '📊', title: '路演PPT大纲', desc: '投资人路演演示结构', domain: 'presentation', complexity: 'advanced', tag: '商业管理' },
+            { icon: '👔', title: '招聘JD撰写', desc: '精准人才招聘文案', domain: 'hr', complexity: 'basic', tag: '专业服务' },
+            { icon: '🏠', title: '房产销售文案', desc: '高转化房产推广文案', domain: 'real_estate', complexity: 'advanced', tag: '专业服务' },
+            { icon: '✈️', title: '旅行攻略生成', desc: '深度游攻略规划', domain: 'travel', complexity: 'advanced', tag: '专业服务' },
+            { icon: '🍜', title: '美食探店文案', desc: '大众点评/小红书美食', domain: 'food', complexity: 'basic', tag: '专业服务' },
+            { icon: '💪', title: '健身训练计划', desc: '个性化健身方案', domain: 'fitness', complexity: 'advanced', tag: '专业服务' },
+            { icon: '📜', title: '专利申请模板', desc: '发明专利申请文书', domain: 'patent', complexity: 'expert', tag: '科研创意' },
+            { icon: '🧬', title: '生物实验方案', desc: '分子生物学实验设计', domain: 'biotech', complexity: 'expert', tag: '科研创意' },
+            { icon: '⚡', title: '新能源技术报告', desc: '光伏/储能技术分析', domain: 'new_energy', complexity: 'expert', tag: '科研创意' },
+            { icon: '📐', title: '数学证明助手', desc: '定理证明思路引导', domain: 'math', complexity: 'expert', tag: '科研创意' },
+            { icon: '⚗️', title: '化学实验报告', desc: '实验设计与报告撰写', domain: 'chemistry', complexity: 'advanced', tag: '科研创意' },
+            { icon: '🔭', title: '物理问题分析', desc: '力学/电磁学问题求解', domain: 'physics', complexity: 'advanced', tag: '科研创意' },
+            { icon: '🤔', title: '哲学论证框架', desc: '逻辑论证与批判思维', domain: 'philosophy', complexity: 'expert', tag: '科研创意' },
+        ];
 
-    // 技术开发类
-    { id: 11, title: 'Python爬虫开发', domain: 'coding', complexity: 'expert', author: '官方', likes: 456, desc: '反爬策略+数据清洗+异常处理，完整可运行代码' },
-    { id: 12, title: 'React组件设计', domain: 'coding', complexity: 'advanced', author: '官方', likes: 234, desc: 'Props设计+状态管理+性能优化，最佳实践' },
-    { id: 13, title: 'API接口文档', domain: 'coding', complexity: 'basic', author: '官方', likes: 189, desc: 'RESTful规范+示例+错误码，开发者友好' },
-    { id: 14, title: '微服务架构方案', domain: 'architecture', complexity: 'expert', author: '官方', likes: 267, desc: '服务拆分+通信方式+数据一致性，企业级方案' },
-    { id: 15, title: '数据库设计规范', domain: 'architecture', complexity: 'advanced', author: '官方', likes: 198, desc: '三范式+索引优化+分库分表，高性能设计' },
-    { id: 16, title: '渗透测试报告', domain: 'security', complexity: 'expert', author: '官方', likes: 156, desc: 'OWASP标准+漏洞详情+修复建议，专业安全报告' },
-    { id: 17, title: '智能合约审计', domain: 'blockchain', complexity: 'expert', author: '官方', likes: 123, desc: 'Solidity安全+Gas优化+逻辑漏洞检查' },
-    { id: 18, title: '数据分析报告', domain: 'data', complexity: 'advanced', author: '官方', likes: 289, desc: '假设驱动+可视化+业务建议，决策者视角' },
-    { id: 19, title: '机器学习模型文档', domain: 'data', complexity: 'expert', author: '官方', likes: 178, desc: '特征工程+模型选择+评估指标，完整ML流程' },
-    { id: 20, title: 'Git提交规范', domain: 'coding', complexity: 'basic', author: '官方', likes: 345, desc: 'Conventional Commits+版本管理，团队协作必备' },
-
-    // 商业管理类
-    { id: 21, title: '产品需求文档PRD', domain: 'product', complexity: 'advanced', author: '官方', likes: 398, desc: '用户故事+验收标准+数据埋点，开发可直接执行' },
-    { id: 22, title: '竞品分析报告', domain: 'product', complexity: 'advanced', author: '官方', likes: 267, desc: '功能对比+用户体验+市场定位，战略决策依据' },
-    { id: 23, title: '麦肯锡战略咨询', domain: 'consulting', complexity: 'expert', author: '官方', likes: 234, desc: '7S模型+波特五力+BCG矩阵，顶层战略设计' },
-    { id: 24, title: 'OKR制定指南', domain: 'hr', complexity: 'advanced', author: '官方', likes: 312, desc: '目标对齐+关键结果量化+复盘机制，团队管理' },
-    { id: 25, title: '面试评估表', domain: 'hr', complexity: 'basic', author: '官方', likes: 289, desc: '胜任力模型+行为面试法+评分标准，科学招聘' },
-    { id: 26, title: '项目进度汇报', domain: 'project', complexity: 'advanced', author: '官方', likes: 198, desc: '甘特图+风险预警+下一步计划，老板爱看' },
-    { id: 27, title: '商务邮件模板', domain: 'email', complexity: 'basic', author: '官方', likes: 456, desc: '金字塔原理+礼貌用语+行动项，职场必备' },
-    { id: 28, title: '会议纪要模板', domain: 'meeting', complexity: 'basic', author: '官方', likes: 378, desc: '议程+决议+待办+责任人，会后可追溯' },
-    { id: 29, title: '融资路演PPT', domain: 'consulting', complexity: 'expert', author: '官方', likes: 245, desc: '痛点+解决方案+商业模式+财务预测，投资人视角' },
-    { id: 30, title: '年终总结报告', domain: 'project', complexity: 'advanced', author: '官方', likes: 567, desc: '成果量化+问题反思+明年规划，升职加薪利器' },
-
-    // 专业服务类
-    { id: 31, title: '合同审查清单', domain: 'legal', complexity: 'advanced', author: '官方', likes: 234, desc: 'IRAC方法+风险点+修改建议，法务必备' },
-    { id: 32, title: '健康科普文章', domain: 'medical', complexity: 'basic', author: '官方', likes: 189, desc: '循证医学+通俗表达+免责声明，安全科普' },
-    { id: 33, title: '投资分析报告', domain: 'finance', complexity: 'expert', author: '官方', likes: 178, desc: 'DCF估值+风险评估+投资建议，专业研报' },
-    { id: 34, title: '课程大纲设计', domain: 'education', complexity: 'advanced', author: '官方', likes: 245, desc: '布鲁姆分类+学习目标+评估方式，教学设计' },
-    { id: 35, title: '客服话术库', domain: 'customer', complexity: 'basic', author: '官方', likes: 398, desc: 'HEARD模型+常见场景+应对话术，提升满意度' },
-    { id: 36, title: '保险方案配置', domain: 'finance', complexity: 'advanced', author: '官方', likes: 156, desc: '需求分析+产品对比+保障缺口，个性化方案' },
-    { id: 37, title: '学术论文摘要', domain: 'research', complexity: 'advanced', author: '官方', likes: 267, desc: 'IMRaD结构+关键词+研究意义，期刊投稿' },
-    { id: 38, title: '实验设计方案', domain: 'research', complexity: 'expert', author: '官方', likes: 198, desc: '假设+变量控制+样本量+统计方法，科研规范' },
-    { id: 39, title: '多语言翻译校对', domain: 'translation', complexity: 'advanced', author: '官方', likes: 134, desc: '功能对等+文化转码+术语一致性，本地化标准' },
-    { id: 40, title: '留学申请文书', domain: 'education', complexity: 'expert', author: '官方', likes: 289, desc: '个人故事+学术动机+职业规划，藤校录取' },
-
-    // 科研创意类
-    { id: 41, title: '游戏策划案', domain: 'game', complexity: 'expert', author: '官方', likes: 234, desc: '核心玩法+数值系统+留存设计，完整策划文档' },
-    { id: 42, title: 'UI设计规范', domain: 'design', complexity: 'advanced', author: '官方', likes: 312, desc: '色彩系统+字体规范+组件库，设计团队标准' },
-    { id: 43, title: '用户调研问卷', domain: 'design', complexity: 'basic', author: '官方', likes: 267, desc: '问题设计+逻辑跳转+数据分析，科学调研' },
-    { id: 44, title: '基因测序分析', domain: 'biotech', complexity: 'expert', author: '官方', likes: 123, desc: '生物信息学+通路分析+临床意义，科研级报告' },
-    { id: 45, title: '新能源投资分析', domain: 'energy', complexity: 'advanced', author: '官方', likes: 156, desc: 'LCOE+政策解读+技术路线，产业投资视角' },
-    { id: 46, title: '房产投资测算', domain: 'realestate', complexity: 'advanced', author: '官方', likes: 198, desc: 'DCF+Cap Rate+市场周期，投资决策依据' },
-    { id: 47, title: '智能制造方案', domain: 'manufacturing', complexity: 'expert', author: '官方', likes: 145, desc: '精益生产+六西格玛+IoT集成，工业4.0' },
-    { id: 48, title: '短视频分镜脚本', domain: 'game', complexity: 'advanced', author: '官方', likes: 289, desc: '镜头语言+节奏控制+转场设计，影视制作' },
-    { id: 49, title: '品牌VI设计说明', domain: 'design', complexity: 'advanced', author: '官方', likes: 178, desc: 'Logo释义+色彩心理学+应用场景，品牌手册' },
-    { id: 50, title: '跨境电商运营', domain: 'marketing', complexity: 'advanced', author: '官方', likes: 345, desc: '平台算法+Listing优化+广告投放，出海攻略' }
-];
-
-let currentDomain = 'general', currentComplexity = 'basic', currentOutput = '', currentTask = '', currentAnalysis = null;
-
-function init() { loadTheme(); loadHistory(); renderMarket(); }
-
-function clearTask() {
-    document.getElementById('taskInput').value = '';
-    document.getElementById('taskInput').focus();
-    showToast('已清空');
-}
-
-function selectComplexity(value) {
-    currentComplexity = value;
-    document.querySelectorAll('.complexity-option').forEach(btn => btn.classList.toggle('active', btn.dataset.value === value));
-}
-
-function getModuleKeys(complexity) {
-    const map = { basic: ['role', 'task', 'output'], advanced: ['role', 'task', 'framework', 'quality', 'output'], expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output'] };
-    return map[complexity];
-}
-
-function generate() {
-    const task = document.getElementById('taskInput').value.trim();
-    if (!task) { showToast('请输入任务描述'); return; }
-
-    // 按钮加载状态
-    const btn = document.querySelector('.generate-btn');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '⏳ 生成中...';
-    btn.disabled = true;
-    btn.style.opacity = '0.7';
-
-    currentTask = task;
-    currentDomain = document.getElementById('domainSelect').value;
-    const domain = DOMAINS[currentDomain];
-    const moduleKeys = getModuleKeys(currentComplexity);
-    let output = '';
-    moduleKeys.forEach(key => { if (MODULES[key]) { const content = MODULES[key].render(currentDomain, task, currentComplexity); if (content) output += content + '\n\n'; } });
-    currentOutput = output.trim();
-    document.getElementById('outputContent').textContent = currentOutput;
-    document.getElementById('outputDomain').textContent = domain.name;
-    document.getElementById('outputComplexity').textContent = currentComplexity === 'expert' ? '专家版' : currentComplexity === 'advanced' ? '进阶版' : '基础版';
-    document.getElementById('emptyState').style.display = 'none';
-    document.getElementById('outputArea').style.display = 'block';
-    analyzeQuality();
-    renderStructureMap(moduleKeys);
-    saveHistory(); loadHistory();
-
-    // 恢复按钮
-    btn.innerHTML = originalText;
-    btn.disabled = false;
-    btn.style.opacity = '1';
-
-    // 自动滚动到结果
-    setTimeout(() => {
-        const outputArea = document.getElementById('outputArea');
-        if (outputArea) {
-            outputArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        function renderTemplates() {
+            const container = document.getElementById('marketGrid');
+            container.innerHTML = TEMPLATES.map(t => `
+                <div class="template-card" onclick="loadTemplate('${t.domain}', '${t.complexity}', '${t.title}')">
+                    <div class="icon">${t.icon}</div>
+                    <div class="title">${t.title}</div>
+                    <div class="desc">${t.desc}</div>
+                    <span class="tag">${t.tag}</span>
+                </div>
+            `).join('');
         }
-    }, 100);
-}
 
-function renderStructureMap(activeModules) {
-    const container = document.getElementById('structureMap');
-    const allModules = ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output'];
-    container.innerHTML = allModules.map(key => {
-        const mod = MODULES[key];
-        const isActive = activeModules.includes(key);
-        return `<div class="structure-node"><div class="node-icon node-${key}">${isActive ? mod.icon : '○'}</div><div class="node-content"><div class="node-title">${mod.name}</div><div class="node-desc">${mod.desc}</div></div><div class="node-status ${isActive ? 'status-present' : 'status-absent'}">${isActive ? '已启用' : '未启用'}</div></div>`;
-    }).join('');
-}
+        function loadTemplate(domain, complexity, title) {
+            document.getElementById('domainSelect').value = domain;
+            setComplexity(complexity);
+            document.getElementById('taskInput').value = '请生成一个关于' + title + '的提示词';
+            switchTab('generate');
+            showToast('✅ 已加载模板：' + title);
+        }
 
-function analyzeQuality() {
-    const text = currentOutput, complexity = currentComplexity;
-    let dimensions = {
-        role: { name: '角色清晰度', score: 0 }, task: { name: '任务可执行性', score: 0 },
-        output: { name: '输入/输出规范', score: 0 }, constraint: { name: '约束完整性', score: 0 },
-        quality: { name: '质量控制机制', score: 0 }, extend: { name: '可扩展性', score: 0 }
-    };
-    let suggestions = [];
-    if (text.includes('你是一位') && text.includes('核心能力')) { dimensions.role.score = complexity === 'expert' ? 5 : 4; }
-    else if (text.includes('你是一位')) { dimensions.role.score = 3; suggestions.push({ type: 'critical', text: '建议补充"核心能力"和"思维特征"描述' }); }
-    else { dimensions.role.score = 2; suggestions.push({ type: 'critical', text: '缺少角色定义，建议添加"你是一位[领域]专家"' }); }
-    if (text.includes('步骤') && text.includes('步骤1') && text.includes('步骤2')) { dimensions.task.score = complexity === 'expert' ? 5 : 4; }
-    else if (text.includes('步骤')) { dimensions.task.score = 3; suggestions.push({ type: '', text: '有步骤但不够详细，建议拆分为可执行的最小单元' }); }
-    else { dimensions.task.score = 2; suggestions.push({ type: 'critical', text: '缺少执行步骤，建议采用"步骤1/2/3"结构' }); }
-    if (text.includes('输出规范') && text.includes('格式')) { dimensions.output.score = 5; }
-    else if (text.includes('输出') || text.includes('格式')) { dimensions.output.score = 3; suggestions.push({ type: '', text: '输出规范可以更具体，建议包含格式、长度、风格要求' }); }
-    else { dimensions.output.score = 2; suggestions.push({ type: 'critical', text: '缺少输出规范，建议添加"格式/长度/风格"要求' }); }
-    if (text.includes('禁止') || text.includes('避免') || text.includes('不要')) { dimensions.constraint.score = 4; }
-    else { dimensions.constraint.score = 2; suggestions.push({ type: '', text: '建议添加约束边界（禁止事项/合规要求）' }); }
-    if (text.includes('□') || text.includes('自检') || text.includes('质量控制')) { dimensions.quality.score = complexity === 'expert' ? 5 : 4; }
-    else if (complexity === 'advanced') { dimensions.quality.score = 2; suggestions.push({ type: 'critical', text: '进阶版建议添加自检清单（□符号）' }); }
-    else { dimensions.quality.score = 3; }
-    if (text.includes('[') && text.includes(']')) { dimensions.extend.score = 4; }
-    else { dimensions.extend.score = 2; suggestions.push({ type: '', text: '建议添加参数化变量（用[]标注），提升可复用性' }); }
-    if (dimensions.role.score >= 4 && dimensions.task.score >= 4) suggestions.push({ type: 'good', text: '✅ 角色定义和任务结构都很清晰' });
-    if (complexity === 'expert' && text.includes('示例')) suggestions.push({ type: 'good', text: '✅ 包含Few-shot示例，有助于提升输出质量' });
-    currentAnalysis = { dimensions, suggestions };
-    renderAnalysis(dimensions, suggestions);
-    renderMobileAnalysis(dimensions, suggestions);
-}
+        // ========== 折叠面板 ==========
+        function toggleCollapse(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(id + '-icon');
+            content.classList.toggle('collapsed');
+            icon.classList.toggle('rotated');
+        }
 
-function renderAnalysis(dimensions, suggestions) {
-    document.getElementById('analysisEmpty').style.display = 'none';
-    document.getElementById('analysisContent').style.display = 'block';
-    const weights = { role: 0.15, task: 0.20, output: 0.15, constraint: 0.15, quality: 0.20, extend: 0.15 };
-    let total = 0;
-    Object.entries(dimensions).forEach(([key, val]) => { total += val.score * weights[key]; });
-    const circumference = 2 * Math.PI * 42;
-    const offset = circumference - (total / 5) * circumference;
-    document.getElementById('scoreRingFill').style.strokeDashoffset = offset;
-    document.getElementById('scoreNumber').textContent = total.toFixed(1);
-    document.getElementById('outputScore').textContent = total.toFixed(1);
-    document.getElementById('metricList').innerHTML = Object.entries(dimensions).map(([key, val]) => {
-        const pct = (val.score / 5) * 100;
-        const color = val.score >= 4 ? '#10b981' : val.score >= 3 ? '#f59e0b' : '#ef4444';
-        return `<div class="metric-item"><span class="metric-name">${val.name}</span><div class="metric-bar"><div class="metric-fill" style="width: ${pct}%; background: ${color}"></div></div><span class="metric-value" style="color: ${color}">${val.score}</span></div>`;
-    }).join('');
-    document.getElementById('suggestionList').innerHTML = suggestions.map(s => `<div class="suggestion-card ${s.type}">${s.text}</div>`).join('');
-}
+        // ========== Toast提示 ==========
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
 
-function renderMobileAnalysis(dimensions, suggestions) {
-    const container = document.getElementById('mobileAnalysisContent');
-    if (!container) return;
-    const weights = { role: 0.15, task: 0.20, output: 0.15, constraint: 0.15, quality: 0.20, extend: 0.15 };
-    let total = 0;
-    Object.entries(dimensions).forEach(([key, val]) => { total += val.score * weights[key]; });
-    container.innerHTML = `<div style="text-align: center; margin-bottom: 16px;"><div style="font-size: 32px; font-weight: 700; background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">${total.toFixed(1)}</div><div style="font-size: 11px; color: var(--text-muted);">综合评分</div></div>` +
-        Object.entries(dimensions).map(([key, val]) => {
-            const pct = (val.score / 5) * 100;
-            const color = val.score >= 4 ? '#10b981' : val.score >= 3 ? '#f59e0b' : '#ef4444';
-            return `<div class="metric-item" style="margin-bottom: 8px;"><span class="metric-name">${val.name}</span><div class="metric-bar"><div class="metric-fill" style="width: ${pct}%; background: ${color}"></div></div><span class="metric-value" style="color: ${color}">${val.score}</span></div>`;
-        }).join('') +
-        `<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);"><div style="font-weight: 600; font-size: 12px; margin-bottom: 8px;">💡 优化建议</div>${suggestions.map(s => `<div class="suggestion-card ${s.type}">${s.text}</div>`).join('')}</div>`;
-}
+        // ========== 键盘事件 ==========
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verifyPassword();
+        });
 
-function toggleMobileSection(header) {
-    const body = header.nextElementSibling;
-    const icon = header.querySelector('.mobile-toggle-icon');
-    body.classList.toggle('open');
-    icon.classList.toggle('open');
-    icon.textContent = body.classList.contains('open') ? '▲' : '▼';
-}
-
-function optimizeCurrent() {
-    if (!currentOutput) { showToast('请先生成提示词'); return; }
-    switchTab('optimize');
-    renderOptimize();
-}
-
-function renderOptimize() {
-    const container = document.getElementById('optimizeContainer');
-    const issues = [];
-    if (!currentOutput.includes('思维特征')) issues.push('缺少"思维特征"描述，角色不够立体');
-    if (!currentOutput.includes('□')) issues.push('缺少自检清单，难以保证输出质量');
-    if (!currentOutput.includes('示例')) issues.push('缺少Few-shot示例，AI理解可能偏差');
-    if (!currentOutput.includes('迭代')) issues.push('缺少迭代机制，一次性输出风险高');
-    if (issues.length === 0) issues.push('整体结构良好，建议根据具体场景微调细节');
-    let optimized = currentOutput;
-    if (!optimized.includes('【思维特征】')) optimized = optimized.replace('【核心能力】', '【思维特征】\n第一性原理思考者，擅长从本质重构问题\n\n【核心能力】');
-    if (!optimized.includes('【自检清单】') && !optimized.includes('□')) optimized += '\n\n【自检清单】\n□ 输出是否符合原始意图？\n□ 是否遗漏关键约束？\n□ 是否存在歧义表述？\n□ 交付物是否可验证？';
-    container.innerHTML = `<div class="panel"><div class="panel-header">🔍 问题诊断</div><div class="panel-body">${issues.map(i => `<div class="suggestion-card critical">• ${i}</div>`).join('')}</div></div><div class="panel" style="margin-top: 16px;"><div class="panel-header">✨ 优化版本</div><div class="panel-body"><div class="code-block" style="font-size: 12px;">${optimized}</div><div style="display: flex; gap: 8px; margin-top: 12px;"><button class="nav-btn" style="flex: 1; justify-content: center;" onclick="copyOptimized()">📋 复制优化版</button><button class="nav-btn" style="flex: 1; justify-content: center; background: var(--primary); color: white;" onclick="useOptimized()">✅ 使用此版本</button></div></div></div><div class="panel" style="margin-top: 16px;"><div class="panel-header">📈 预期提升</div><div class="panel-body"><div class="suggestion-card good">• 角色清晰度：<span style="color: var(--success); font-weight: 600;">+20%</span></div><div class="suggestion-card good">• 任务可执行性：<span style="color: var(--success); font-weight: 600;">+15%</span></div><div class="suggestion-card good">• 质量控制：<span style="color: var(--success); font-weight: 600;">+25%</span></div></div></div>`;
-}
-
-function copyOptimized() { navigator.clipboard.writeText(document.querySelector('#optimizeContainer .code-block').textContent); showToast('📋 已复制优化版本'); }
-function useOptimized() { currentOutput = document.querySelector('#optimizeContainer .code-block').textContent; document.getElementById('outputContent').textContent = currentOutput; switchTab('generate'); analyzeQuality(); showToast('已应用优化版本'); }
-
-function generateCompare() {
-    if (!currentTask) { showToast('请先在"生成"标签页创建提示词'); return; }
-    switchTab('compare');
-    const container = document.getElementById('compareContainer');
-    const basic = generateVersion('basic'), advanced = generateVersion('advanced'), expert = generateVersion('expert');
-    container.innerHTML = `<div class="compare-grid"><div class="compare-card"><div class="compare-header"><span>⚡ 基础版</span><span class="compare-badge" style="background: rgba(245,158,11,0.1); color: #92400e;">快速</span></div><div class="compare-body"><div class="compare-features"><div class="feature-item"><span class="feature-check">✓</span> 角色锚定</div><div class="feature-item"><span class="feature-check">✓</span> 任务描述</div><div class="feature-item"><span class="feature-check">✓</span> 输出规范</div><div class="feature-item"><span class="feature-cross">✗</span> 执行框架</div><div class="feature-item"><span class="feature-cross">✗</span> 自检清单</div></div><div class="compare-code">${basic.substring(0, 400)}...</div></div></div><div class="compare-card recommended"><div class="compare-header"><span>🔥 进阶版</span><span class="compare-badge" style="background: rgba(16,185,129,0.1); color: #065f46;">推荐</span></div><div class="compare-body"><div class="compare-features"><div class="feature-item"><span class="feature-check">✓</span> 角色锚定</div><div class="feature-item"><span class="feature-check">✓</span> 任务解构</div><div class="feature-item"><span class="feature-check">✓</span> 执行框架</div><div class="feature-item"><span class="feature-check">✓</span> 质量控制</div><div class="feature-item"><span class="feature-cross">✗</span> Few-shot</div></div><div class="compare-code">${advanced.substring(0, 400)}...</div></div></div><div class="compare-card"><div class="compare-header"><span>👑 专家版</span><span class="compare-badge" style="background: rgba(99,102,241,0.1); color: #4f46e5;">专业</span></div><div class="compare-body"><div class="compare-features"><div class="feature-item"><span class="feature-check">✓</span> 全部模块</div><div class="feature-item"><span class="feature-check">✓</span> Few-shot</div><div class="feature-item"><span class="feature-check">✓</span> 迭代机制</div><div class="feature-item"><span class="feature-check">✓</span> 自检清单</div><div class="feature-item"><span class="feature-check">✓</span> 参数化变量</div></div><div class="compare-code">${expert.substring(0, 400)}...</div></div></div></div>`;
-}
-
-function generateVersion(complexity) {
-    const moduleKeys = getModuleKeys(complexity);
-    let output = '';
-    moduleKeys.forEach(key => { if (MODULES[key]) { const content = MODULES[key].render(currentDomain, currentTask, complexity); if (content) output += content + '\n\n'; } });
-    return output.trim();
-}
-
-function renderMarket() {
-    const container = document.getElementById('marketList');
-    container.innerHTML = MARKET_TEMPLATES.map(t => {
-        const domain = DOMAINS[t.domain];
-        return `<div class="market-item" onclick="loadMarketTemplate(${t.id})"><div class="market-title">${domain.icon} ${t.title}</div><div class="market-desc">${t.desc}</div><div class="market-meta"><span>👤 ${t.author}</span><span>❤️ ${t.likes}</span><span>${t.complexity === 'expert' ? '👑 专家' : t.complexity === 'advanced' ? '🔥 进阶' : '⚡ 基础'}</span></div></div>`;
-    }).join('');
-}
-
-function loadMarketTemplate(id) {
-    const t = MARKET_TEMPLATES.find(x => x.id === id);
-    if (!t) return;
-    document.getElementById('domainSelect').value = t.domain;
-    selectComplexity(t.complexity);
-    document.querySelectorAll('.complexity-option').forEach(btn => btn.classList.toggle('active', btn.dataset.value === t.complexity));
-    switchTab('generate');
-    showToast(`已加载模板：${t.title}`);
-}
-
-function saveHistory() {
-    let history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
-    history.unshift({ id: Date.now(), task: currentTask, domain: currentDomain, domainName: DOMAINS[currentDomain].name, complexity: currentComplexity, output: currentOutput, time: new Date().toLocaleString('zh-CN') });
-    if (history.length > 50) history = history.slice(0, 50);
-    localStorage.setItem('promptHistory', JSON.stringify(history));
-}
-
-function loadHistory() {
-    const history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
-    const desktopContainer = document.getElementById('historyPanel');
-    const mobileContainer = document.getElementById('mobileHistoryContent');
-    const html = history.length === 0 ? '<div style="text-align: center; padding: 16px; color: var(--text-muted); font-size: 12px;">暂无记录</div>' :
-        history.map(item => `<div class="history-item-compact" onclick="loadHistoryItem(${item.id})"><div class="history-task-text">${item.task}</div><div class="history-meta-row"><div class="history-tags-row"><span class="history-tag-sm">${item.domainName}</span><span class="history-tag-sm">${item.complexity === 'expert' ? '专家' : item.complexity === 'advanced' ? '进阶' : '基础'}</span></div><span class="history-time-sm">${item.time}</span></div></div>`).join('');
-    if (desktopContainer) desktopContainer.innerHTML = html;
-    if (mobileContainer) mobileContainer.innerHTML = html;
-}
-
-function loadHistoryItem(id) {
-    const history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
-    const item = history.find(h => h.id === id);
-    if (!item) return;
-    document.getElementById('taskInput').value = item.task;
-    document.getElementById('domainSelect').value = item.domain;
-    currentDomain = item.domain;
-    selectComplexity(item.complexity);
-    document.querySelectorAll('.complexity-option').forEach(btn => btn.classList.toggle('active', btn.dataset.value === item.complexity));
-    currentOutput = item.output; currentTask = item.task; currentComplexity = item.complexity;
-    document.getElementById('outputContent').textContent = item.output;
-    document.getElementById('outputDomain').textContent = DOMAINS[item.domain].name;
-    document.getElementById('outputComplexity').textContent = item.complexity === 'expert' ? '专家版' : item.complexity === 'advanced' ? '进阶版' : '基础版';
-    document.getElementById('emptyState').style.display = 'none';
-    document.getElementById('outputArea').style.display = 'block';
-    analyzeQuality();
-    renderStructureMap(getModuleKeys(item.complexity));
-    switchTab('generate');
-}
-
-function switchTab(tab) {
-    document.querySelectorAll('.nav-btn[data-tab]').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.getElementById(tab + 'Tab').classList.add('active');
-    if (tab === 'history') loadHistory();
-    if (tab === 'compare') generateCompare();
-    if (tab === 'market') renderMarket();
-}
-
-function copyOutput() { navigator.clipboard.writeText(currentOutput); showToast('📋 已复制到剪贴板'); }
-function exportMD() { downloadFile(new Blob([currentOutput], { type: 'text/markdown' }), 'prompt.md'); }
-function exportTXT() { downloadFile(new Blob([currentOutput], { type: 'text/plain' }), 'prompt.txt'); }
-function downloadFile(blob, filename) { const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename; a.click(); URL.revokeObjectURL(url); }
-
-function toggleTheme() {
-    const html = document.documentElement;
-    const current = html.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    html.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️' : '🌙';
-}
-
-function loadTheme() {
-    const theme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-    const btn = document.getElementById('themeBtn');
-    if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-}
-
-function showToast(msg) {
-    const toast = document.getElementBy生成('toast');
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2000);
-}
-
-init();
-</script>
+        // 监听ESC关闭弹窗
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closePasswordModal();
+        });
+    </script>
 </body>
 </html>
