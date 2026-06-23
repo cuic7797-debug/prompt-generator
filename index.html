@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>提示词生成器</title>
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi5o+P6ICD6K+m57uG5a6e546wIiwic2hvcnRfbmFtZSI6IuePj+iAg+ivpue7hiIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZjVmN2ZhIiwidGhlbWVfY29sb3IiOiIjNjM2NmYxIn0=">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?你的百度统计ID";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <style>
+        :root {
+            --bg: #f5f7fa;
+            --card: #ffffff;
+            --text: #1a1a2e;
+            --text-secondary: #666;
+            --border: #e0e0e0;
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+            --radius: 14px;
+        }
+        [data-theme="dark"] {
+            --bg: #0f0f1a;
+            --card: #1a1a2e;
+            --text: #e0e0e0;
+            --text-secondary: #999;
+            --border: #2a2a3e;
+            --primary: #818cf8;
+            --primary-light: #a5b4fc;
+            --primary-dark: #6366f1;
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.4);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition: all 0.3s;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 16px; }
+
+        .navbar {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 14px 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .brand { font-size: 18px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .nav-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+        .nav-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+        .nav-btn:hover, .nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .nav-btn .badge {
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            padding: 1px 5px;
+            border-radius: 10px;
+            margin-left: 2px;
+        }
+
+        .usage-bar {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+        .usage-track { flex: 1; height: 6px; background: var(--bg); border-radius: 3px; margin: 0 12px; overflow: hidden; }
+        .usage-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+        .usage-fill.safe { background: var(--success); }
+        .usage-fill.warn { background: var(--warning); }
+        .usage-fill.danger { background: var(--danger); }
+        .usage-text { color: var(--text-secondary); white-space: nowrap; }
+        .usage-text.limit { color: var(--danger); font-weight: 600; }
+        .usage-text.unlimited { color: var(--success); font-weight: 600; }
+
+        .main-layout { display: grid; grid-template-columns: 300px 1fr 300px; gap: 16px; }
+
+        .panel {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+        .panel-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-group { margin-bottom: 14px; }
+        .form-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            display: block;
+        }
+        .input-wrapper { position: relative; }
+        .form-textarea {
+            width: 100%;
+            padding: 12px 36px 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            transition: all 0.2s;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 90px;
+        }
+        .form-textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+        .clear-btn {
+            position: absolute;
+            right: 10px;
+            top: 12px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .clear-btn:hover { color: var(--danger); background: rgba(239,68,68,0.1); }
+        .char-count { text-align: right; font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+
+        .hot-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+        .hot-tag {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: rgba(99,102,241,0.08);
+            color: var(--primary);
+            border: 1px solid rgba(99,102,241,0.15);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .hot-tag:hover { background: var(--primary); color: white; }
+        .hot-tag::before { content: "🔥"; margin-right: 2px; font-size: 10px; }
+
+        .random-btn {
+            width: 100%;
+            padding: 8px;
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 6px;
+            transition: all 0.2s;
+        }
+        .random-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(99,102,241,0.03); }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .complexity-group { display: flex; gap: 6px; }
+        .complexity-btn {
+            flex: 1;
+            padding: 10px 4px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 12px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .complexity-btn:hover { border-color: var(--primary-light); }
+        .complexity-btn.active { border-color: var(--primary); background: rgba(99,102,241,0.08); color: var(--primary); font-weight: 600; }
+        .complexity-btn .emoji { font-size: 16px; display: block; margin-bottom: 2px; }
+        .complexity-btn .tag { font-size: 10px; color: var(--text-secondary); }
+        .password-hint {
+            font-size: 11px;
+            color: var(--warning);
+            margin-top: 6px;
+            padding: 6px 10px;
+            background: rgba(245,158,11,0.08);
+            border-radius: 8px;
+            display: none;
+        }
+        .password-hint.visible { display: block; }
+
+        .generate-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(99,102,241,0.3);
+        }
+        .generate-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99,102,241,0.4); }
+        .generate-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .output-area { min-height: 400px; }
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-secondary);
+        }
+        .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .result-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .action-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .action-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .action-btn.copied { background: var(--success); color: white; border-color: var(--success); }
+        .action-btn.favorited { background: var(--danger); color: white; border-color: var(--danger); }
+        .action-btn.premium { border-color: var(--warning); color: var(--warning); }
+        .action-btn.premium:hover { background: var(--warning); color: white; }
+
+        .result-box {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            border: 1px solid var(--border);
+        }
+        .result-content {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .result-content h1, .result-content h2, .result-content h3 { margin: 16px 0 8px; color: var(--primary); }
+        .result-content h1 { font-size: 18px; border-bottom: 2px solid var(--primary); padding-bottom: 6px; }
+        .result-content h2 { font-size: 16px; }
+        .result-content h3 { font-size: 15px; }
+        .result-content p { margin-bottom: 10px; }
+        .result-content ul, .result-content ol { margin-left: 20px; margin-bottom: 10px; }
+        .result-content li { margin-bottom: 4px; }
+        .result-content strong { color: var(--primary-dark); }
+        .result-content code {
+            background: rgba(99,102,241,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'SF Mono', monospace;
+            font-size: 13px;
+        }
+        .result-content pre {
+            background: #1e1e2e;
+            color: #e0e0e0;
+            padding: 14px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .result-content pre code { background: none; padding: 0; color: inherit; }
+        .result-content blockquote {
+            border-left: 3px solid var(--primary);
+            padding-left: 12px;
+            margin: 10px 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        .result-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+        .result-content th, .result-content td {
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            text-align: left;
+        }
+        .result-content th { background: rgba(99,102,241,0.08); font-weight: 600; }
+
+        .result-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .result-rating { display: flex; gap: 8px; }
+        .rating-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        .rating-btn:hover { background: var(--bg); }
+        .rating-btn.voted { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .typing-cursor::after {
+            content: "▋";
+            animation: blink 1s infinite;
+            color: var(--primary);
+            margin-left: 2px;
+        }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        .chat-optimize {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        .chat-input-row { display: flex; gap: 8px; }
+        .chat-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            font-family: inherit;
+        }
+        .chat-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        .chat-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .chat-history { margin-bottom: 12px; }
+        .chat-msg {
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            line-height: 1.6;
+            max-width: 90%;
+        }
+        .chat-msg.user {
+            background: var(--primary);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-msg.ai {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+        }
+
+        .structure-map {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: var(--bg);
+            border-radius: 10px;
+        }
+        .module-tag {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            background: rgba(99,102,241,0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .module-tag.inactive { background: var(--bg); color: var(--text-secondary); opacity: 0.5; }
+
+        .score-ring { width: 90px; height: 90px; margin: 0 auto 12px; position: relative; }
+        .score-ring svg { transform: rotate(-90deg); }
+        .score-ring circle { fill: none; stroke-width: 8; }
+        .score-ring .bg { stroke: var(--border); }
+        .score-ring .progress { stroke: var(--primary); stroke-linecap: round; transition: stroke-dashoffset 0.5s; }
+        .score-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 22px; font-weight: 700; color: var(--primary); }
+        .score-label { text-align: center; font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; }
+        .dimension-bar { margin-bottom: 8px; }
+        .dimension-label { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px; }
+        .dimension-track { height: 5px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+        .dimension-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-light)); border-radius: 3px; transition: width 0.5s; }
+
+        .history-item {
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: var(--bg);
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+        .history-item:hover { background: rgba(99,102,241,0.06); border-left-color: var(--primary); }
+        .history-item .time { font-size: 11px; color: var(--text-secondary); }
+        .history-item .task { font-weight: 500; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .history-item .fav-star { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--warning); font-size: 14px; }
+
+        .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-top: 10px; }
+        .template-card {
+            padding: 14px;
+            border-radius: 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .template-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow); }
+        .template-card .icon { font-size: 22px; margin-bottom: 6px; }
+        .template-card .title { font-weight: 600; font-size: 13px; margin-bottom: 3px; }
+        .template-card .desc { font-size: 11px; color: var(--text-secondary); line-height: 1.4; }
+        .template-card .tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10px; background: rgba(99,102,241,0.1); color: var(--primary); margin-top: 6px; }
+
+        .compare-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+        .compare-card { background: var(--bg); border-radius: 12px; padding: 14px; border: 2px solid transparent; }
+        .compare-card.basic { border-color: var(--success); }
+        .compare-card.advanced { border-color: var(--warning); }
+        .compare-card.expert { border-color: var(--danger); }
+        .compare-card .level { font-weight: 700; font-size: 13px; margin-bottom: 8px; }
+        .compare-card .content { font-size: 12px; line-height: 1.7; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+
+        .optimize-section { margin-bottom: 14px; }
+        .optimize-title { font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+        .optimize-content { background: var(--bg); border-radius: 10px; padding: 12px; font-size: 13px; line-height: 1.7; }
+        .issue-tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; margin-right: 4px; margin-bottom: 4px; }
+        .issue-tag.warning { background: rgba(245,158,11,0.12); color: var(--warning); }
+        .issue-tag.danger { background: rgba(239,68,68,0.12); color: var(--danger); }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-lg);
+            white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: var(--shadow-lg);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .modal-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.6; }
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            margin-bottom: 12px;
+            font-family: inherit;
+        }
+        .modal-buttons { display: flex; gap: 8px; }
+        .modal-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .modal-btn.primary { background: var(--primary); color: white; }
+        .modal-btn.secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+        .modal-btn.danger { background: var(--danger); color: white; }
+
+        .export-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .export-preview::before {
+            content: "";
+            position: absolute;
+            top: -50%; right: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+        }
+        .export-preview .brand-watermark { font-size: 24px; font-weight: 700; margin-bottom: 16px; position: relative; z-index: 1; }
+        .export-preview .content { font-size: 14px; line-height: 1.8; position: relative; z-index: 1; max-height: 300px; overflow-y: auto; }
+        .export-preview .footer { margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 12px; opacity: 0.8; position: relative; z-index: 1; }
+
+        .collapsible-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 6px 0; }
+        .collapsible-content { max-height: 600px; overflow: hidden; transition: max-height 0.3s; }
+        .collapsible-content.collapsed { max-height: 0; }
+        .toggle-icon { transition: transform 0.3s; font-size: 12px; }
+        .toggle-icon.rotated { transform: rotate(180deg); }
+
+        @media (max-width: 1024px) {
+            .main-layout { grid-template-columns: 260px 1fr 260px; }
+            .market-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .main-layout { grid-template-columns: 1fr; }
+            .navbar { padding: 10px 14px; position: relative; }
+            .brand { font-size: 15px; }
+            .nav-btn { padding: 6px 8px; font-size: 12px; }
+            .compare-grid { grid-template-columns: 1fr; }
+            .market-grid { grid-template-columns: 1fr; }
+            .container { padding: 10px; }
+            .panel { padding: 14px; }
+            .result-actions { width: 100%; justify-content: flex-end; }
+            .chat-input-row { flex-direction: column; }
+            .chat-btn { width: 100%; }
+        }
+
+        .hidden { display: none !important; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+        ::selection { background: rgba(99,102,241,0.3); color: inherit; }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="brand">🎯 提示词生成器</div>
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="switchTab('generate')" id="nav-generate">🚀 生成</button>
+                <button class="nav-btn" onclick="switchTab('compare')" id="nav-compare">⚖️ 对比</button>
+                <button class="nav-btn" onclick="switchTab('optimize')" id="nav-optimize">🔧 优化</button>
+                <button class="nav-btn" onclick="switchTab('market')" id="nav-market">🏪 市场<span class="badge" id="marketBadge">50</span></button>
+                <button class="nav-btn" onclick="switchTab('favorites')" id="nav-favorites">⭐ 收藏<span class="badge" id="favBadge" style="display:none">0</span></button>
+                <button class="nav-btn" onclick="toggleTheme()" id="nav-theme">🌙 主题</button>
+            </div>
+        </div>
+
+        <div class="usage-bar" id="usageBar">
+            <span>📊 今日生成</span>
+            <div class="usage-track"><div class="usage-fill safe" id="usageFill" style="width:0%"></div></div>
+            <span class="usage-text" id="usageText">0 / 5 次</span>
+        </div>
+
+        <div class="main-layout">
+            <div class="panel" id="left-panel">
+                <div class="panel-title">⚙️ 配置</div>
+
+                <div class="form-group">
+                    <label class="form-label">任务描述 <span style="color:var(--danger)">*</span></label>
+                    <div class="input-wrapper">
+                        <textarea class="form-textarea" id="taskInput" placeholder="请输入你的任务描述，例如：帮我写一篇小红书文案..." oninput="updateCharCount()"></textarea>
+                        <button class="clear-btn" onclick="clearTask()" title="清空">❌</button>
+                    </div>
+                    <div class="char-count" id="charCount">0 字</div>
+                    <div class="hot-tags" id="hotTags"></div>
+                    <button class="random-btn" onclick="randomTask()">🎲 随机给我一个任务</button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">选择领域</label>
+                    <select class="form-select" id="domainSelect">
+                        <optgroup label="内容创作">
+                            <option value="social_media">📱 社交媒体</option>
+                            <option value="copywriting">✍️ 文案创作</option>
+                            <option value="video_script">🎬 视频脚本</option>
+                            <option value="seo">🔍 SEO优化</option>
+                            <option value="email">📧 邮件写作</option>
+                            <option value="live_stream">📺 直播话术</option>
+                            <option value="news">📰 新闻稿</option>
+                            <option value="novel">📖 小说创作</option>
+                            <option value="poetry">🎭 诗词创作</option>
+                            <option value="translation">🌐 翻译润色</option>
+                        </optgroup>
+                        <optgroup label="技术开发">
+                            <option value="python">🐍 Python开发</option>
+                            <option value="frontend">💻 前端开发</option>
+                            <option value="backend">⚙️ 后端开发</option>
+                            <option value="api">🔌 API设计</option>
+                            <option value="database">🗄️ 数据库</option>
+                            <option value="devops">🚀 DevOps</option>
+                            <option value="security">🔒 安全审计</option>
+                            <option value="testing">🧪 测试用例</option>
+                            <option value="algorithm">📐 算法设计</option>
+                            <option value="architecture">🏗️ 架构设计</option>
+                        </optgroup>
+                        <optgroup label="商业管理">
+                            <option value="prd">📋 PRD文档</option>
+                            <option value="competitive">🔍 竞品分析</option>
+                            <option value="consulting">💼 咨询报告</option>
+                            <option value="okr">🎯 OKR制定</option>
+                            <option value="interview">🎤 面试准备</option>
+                            <option value="presentation">📊 演讲PPT</option>
+                            <option value="business_plan">💡 商业计划</option>
+                            <option value="user_research">👥 用户研究</option>
+                            <option value="data_analysis">📈 数据分析</option>
+                            <option value="project_mgmt">📁 项目管理</option>
+                        </optgroup>
+                        <optgroup label="专业服务">
+                            <option value="legal">⚖️ 法律文书</option>
+                            <option value="medical">🏥 医疗咨询</option>
+                            <option value="finance">💰 金融分析</option>
+                            <option value="education">📚 教育辅导</option>
+                            <option value="customer_service">🎧 客服话术</option>
+                            <option value="hr">👔 HR招聘</option>
+                            <option value="real_estate">🏠 房产文案</option>
+                            <option value="travel">✈️ 旅游攻略</option>
+                            <option value="food">🍜 美食点评</option>
+                            <option value="fitness">💪 健身计划</option>
+                        </optgroup>
+                        <optgroup label="科研创意">
+                            <option value="game_design">🎮 游戏设计</option>
+                            <option value="ui_design">🎨 UI设计</option>
+                            <option value="research">🔬 科研论文</option>
+                            <option value="patent">📜 专利申请</option>
+                            <option value="biotech">🧬 生物科技</option>
+                            <option value="new_energy">⚡ 新能源</option>
+                            <option value="math">📐 数学推导</option>
+                            <option value="chemistry">⚗️ 化学实验</option>
+                            <option value="physics">🔭 物理分析</option>
+                            <option value="philosophy">🤔 哲学思辨</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">复杂度</label>
+                    <div class="complexity-group">
+                        <button class="complexity-btn active" onclick="setComplexity('basic')" id="btn-basic">
+                            <span class="emoji">⚡</span>
+                            <span>基础</span>
+                            <span class="tag">免费</span>
+                        </button>
+                        <button class="complexity-btn" onclick="setComplexity('advanced')" id="btn-advanced">
+                            <span class="emoji">🔥</span>
+                            <span>进阶</span>
+                            <span class="tag">需密码</span>
+                        </button>
+                        <button class="complexity-btn" onclick="setComplexity('expert')" id="btn-expert">
+                            <span class="emoji">👑</span>
+                            <span>专家</span>
+                            <span class="tag">需密码</span>
+                        </button>
+                    </div>
+                    <div class="password-hint" id="passwordHint">
+                        🔒 该版本需联系作者 Q704451222 获取密码解锁
+                    </div>
+                </div>
+
+                <button class="generate-btn" id="generateBtn" onclick="generate()">
+                    <span>✨</span>
+                    <span>智能生成</span>
+                </button>
+                <div style="text-align:center; font-size:11px; color:var(--text-secondary); margin-top:8px;">
+                    按 <kbd style="background:var(--bg); padding:2px 6px; border-radius:4px; border:1px solid var(--border);">Ctrl</kbd> + <kbd style="background:var(--bg); padding:2px 6px; border-radius:4px; border:1px solid var(--border);">Enter</kbd> 快速生成
+                </div>
+            </div>
+
+            <div class="panel output-area" id="center-panel">
+                <div id="generate-view">
+                    <div class="empty-state" id="emptyState">
+                        <div class="emoji">🎯</div>
+                        <div style="font-size:15px; font-weight:500; margin-bottom:6px;">输入任务描述，选择领域和复杂度</div>
+                        <div style="font-size:13px; opacity:0.7;">点击「智能生成」获取你的专属提示词</div>
+                    </div>
+                    <div id="resultContainer" class="hidden">
+                        <div class="result-header">
+                            <span class="result-title">📝 生成结果</span>
+                            <div class="result-actions">
+                                <button class="action-btn" id="copyBtn" onclick="copyResult()">📋 复制</button>
+                                <button class="action-btn" id="copyMdBtn" onclick="copyMarkdown()">📝 复制MD</button>
+                                <button class="action-btn premium" id="exportBtn" onclick="showExportModal()">🖼️ 导出卡片</button>
+                                <button class="action-btn" id="favBtn" onclick="toggleFavorite()">⭐ 收藏</button>
+                                <button class="action-btn" onclick="showShortenModal()">✂️ 精简</button>
+                                <button class="action-btn premium" onclick="showExpandModal()">📈 扩写</button>
+                            </div>
+                        </div>
+                        <div class="structure-map" id="structureMap"></div>
+                        <div class="result-box">
+                            <div class="result-content" id="resultContent"></div>
+                        </div>
+                        <div class="result-meta">
+                            <span id="resultStats">字数：0 | 模块：0 | 评分：0.0</span>
+                            <div class="result-rating">
+                                <button class="rating-btn" id="rateUp" onclick="rateResult('up')">👍 有用</button>
+                                <button class="rating-btn" id="rateDown" onclick="rateResult('down')">👎 需改进</button>
+                            </div>
+                        </div>
+
+                        <div class="chat-optimize">
+                            <div class="chat-history" id="chatHistory"></div>
+                            <div class="chat-input-row">
+                                <input type="text" class="chat-input" id="chatInput" placeholder="对结果不满意？输入优化建议...（需解锁进阶版）" onkeypress="if(event.key==='Enter')optimizeChat()">
+                                <button class="chat-btn" id="chatBtn" onclick="optimizeChat()">继续优化</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="compare-view" class="hidden">
+                    <div class="panel-title">⚖️ 版本对比</div>
+                    <div class="compare-grid" id="compareGrid"></div>
+                </div>
+
+                <div id="optimize-view" class="hidden">
+                    <div class="panel-title">🔧 AI优化</div>
+                    <div id="optimizeContent"></div>
+                </div>
+
+                <div id="market-view" class="hidden">
+                    <div class="panel-title">🏪 模板市场 <span style="font-size:12px; color:var(--text-secondary); font-weight:400;">共 50 个精品模板</span></div>
+                    <div class="market-grid" id="marketGrid"></div>
+                </div>
+
+                <div id="favorites-view" class="hidden">
+                    <div class="panel-title">⭐ 我的收藏</div>
+                    <div id="favoritesList">
+                        <div class="empty-state">
+                            <div class="emoji">⭐</div>
+                            <div>暂无收藏</div>
+                            <div style="font-size:13px; margin-top:6px; opacity:0.7;">生成提示词后点击「收藏」保存到这里</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel" id="right-panel">
+                <div class="collapsible-header" onclick="toggleCollapse('qualityPanel')">
+                    <div class="panel-title" style="margin:0">📊 质量分析</div>
+                    <span class="toggle-icon" id="qualityPanel-icon">▼</span>
+                </div>
+                <div class="collapsible-content" id="qualityPanel">
+                    <div class="score-ring">
+                        <svg width="90" height="90">
+                            <circle class="bg" cx="45" cy="45" r="38"/>
+                            <circle class="progress" id="scoreCircle" cx="45" cy="45" r="38" stroke-dasharray="239" stroke-dashoffset="239"/>
+                        </svg>
+                        <div class="score-text" id="scoreText">0.0</div>
+                    </div>
+                    <div class="score-label">综合评分</div>
+                    <div id="dimensions"></div>
+                    <div style="margin-top: 14px; padding: 12px; background: rgba(99,102,241,0.06); border-radius: 10px;">
+                        <div style="font-weight: 600; font-size: 13px; margin-bottom: 6px;">💡 优化建议</div>
+                        <div id="suggestions" style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">生成提示词后将显示优化建议</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <div class="collapsible-header" onclick="toggleCollapse('historyPanel')">
+                        <div class="panel-title" style="margin:0">📜 历史记录</div>
+                        <span class="toggle-icon" id="historyPanel-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content" id="historyPanel">
+                        <div id="historyList" style="margin-top: 10px;">
+                            <div style="text-align: center; color: var(--text-secondary); font-size: 13px; padding: 20px;">暂无记录</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="modal-overlay" id="passwordModal">
+        <div class="modal">
+            <div class="modal-title" id="modalTitle">🔒 输入密码</div>
+            <div class="modal-desc">该功能需要密码解锁。联系作者 Q704451222 获取密码。</div>
+            <input type="password" class="modal-input" id="passwordInput" placeholder="请输入密码">
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closePasswordModal()">取消</button>
+                <button class="modal-btn primary" onclick="verifyPassword()">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="exportModal">
+        <div class="modal">
+            <div class="modal-title">🖼️ 导出分享卡片</div>
+            <div class="modal-desc">生成精美卡片，方便分享到朋友圈/小红书/微信群</div>
+            <div class="export-preview" id="exportPreview">
+                <div class="brand-watermark">🎯 提示词生成器</div>
+                <div class="content" id="exportContent">预览内容...</div>
+                <div class="footer">由 提示词生成器 生成 · 联系Q704451222解锁更多</div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeExportModal()">取消</button>
+                <button class="modal-btn primary" onclick="downloadCard()">📥 下载图片</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="limitModal">
+        <div class="modal">
+            <div class="modal-title">⏳ 今日次数已用完</div>
+            <div class="modal-desc">
+                免费用户每日限生成 <strong>5 次</strong>。<br><br>
+                联系作者 <strong>Q704451222</strong> 解锁：<br>
+                ✅ 无限次生成<br>
+                ✅ 进阶/专家版全部功能<br>
+                ✅ 导出卡片、扩写、继续优化<br>
+                ✅ 优先技术支持
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closeLimitModal()">知道了</button>
+                <button class="modal-btn primary" onclick="copyQQ()">📋 复制QQ号</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="pwdLimitModal">
+        <div class="modal">
+            <div class="modal-title">⚠️ 该密码使用次数已达上限</div>
+            <div class="modal-desc">
+                该密码今日已被使用 <strong>50 次</strong>，达到每日上限。<br><br>
+                可能原因：<br>
+                • 该密码被多人分享使用<br>
+                • 今日使用过于频繁<br><br>
+                如需继续使用，请联系作者 <strong>Q704451222</strong> 获取新密码。
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="closePwdLimitModal()">知道了</button>
+                <button class="modal-btn primary" onclick="copyQQ()">📋 复制QQ号</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== 安全存储 ==========
+        function safeStorageSet(key, value) {
+            try { localStorage.setItem(key, value); } catch(e) {}
+        }
+        function safeStorageGet(key) {
+            try { return localStorage.getItem(key); } catch(e) { return null; }
+        }
+        function safeStorageRemove(key) {
+            try { localStorage.removeItem(key); } catch(e) {}
+        }
+
+        // ========== 配置 ==========
+        const PASSWORDS = { advanced: 'PRO662026', expert: '662026PRO' };
+        const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdib9LvrZEpU2zrcoibYBuA6l11M6UUsXi2_TOwN2JweG1FZQ/formResponse';
+        const GOOGLE_FORM_FIELDS = {
+            task: 'entry.693672273', domain: 'entry.528075606',
+            complexity: 'entry.607505779', score: 'entry.2070225006', device: 'entry.303138273'
+        };
+        const DAILY_LIMIT = 5;
+        const PASSWORD_DAILY_LIMIT = 50;
+
+        // ========== 状态 ==========
+        let currentComplexity = 'basic';
+        let currentTab = 'generate';
+        let lastResult = null;
+        let pendingComplexity = null;
+        let chatHistoryData = [];
+        let isTyping = false;
+
+        // ========== 热门任务 ==========
+        const HOT_TASKS = [
+            '帮我写小红书种草文案',
+            '生成Python爬虫代码',
+            '写一份竞品分析报告',
+            '制作抖音短视频脚本',
+            '设计一个RESTful API',
+            '写一封商务合作邮件',
+            '生成面试自我介绍',
+            '写一份PRD需求文档',
+            '制作SEO优化方案',
+            '生成健身训练计划'
+        ];
+
+        // ========== 初始化 ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            renderHotTags();
+            loadHistory();
+            renderTemplates();
+            checkSavedPasswords();
+            updateUsageBar();
+            loadFavorites();
+
+            if (window.innerWidth <= 768) {
+                document.getElementById('qualityPanel').classList.add('collapsed');
+                document.getElementById('qualityPanel-icon').classList.add('rotated');
+                document.getElementById('historyPanel').classList.add('collapsed');
+                document.getElementById('historyPanel-icon').classList.add('rotated');
+            }
+        });
+
+        // ========== 热门标签 ==========
+        function renderHotTags() {
+            const container = document.getElementById('hotTags');
+            container.innerHTML = HOT_TASKS.slice(0, 6).map(t => 
+                `<span class="hot-tag" onclick="fillTask('${t.replace(/'/g, "\'")}')">${t}</span>`
+            ).join('');
+        }
+        function fillTask(text) {
+            document.getElementById('taskInput').value = text;
+            updateCharCount();
+            showToast('✅ 已填入任务');
+        }
+
+        // ========== 随机任务 ==========
+        function randomTask() {
+            const idx = Math.floor(Math.random() * HOT_TASKS.length);
+            document.getElementById('taskInput').value = HOT_TASKS[idx];
+            updateCharCount();
+            showToast('🎲 随机任务已生成');
+        }
+
+        // ========== 字数统计 ==========
+        function updateCharCount() {
+            const len = document.getElementById('taskInput').value.length;
+            document.getElementById('charCount').textContent = len + ' 字';
+        }
+
+        // ========== 使用次数 ==========
+        function getTodayKey() { return 'usage_' + new Date().toISOString().slice(0, 10); }
+        function getTodayUsage() { return parseInt(safeStorageGet(getTodayKey()) || '0'); }
+        function incrementUsage() {
+            safeStorageSet(getTodayKey(), (getTodayUsage() + 1).toString());
+            updateUsageBar();
+        }
+        function updateUsageBar() {
+            const hasAdvanced = safeStorageGet('password_advanced');
+            const hasExpert = safeStorageGet('password_expert');
+            const fill = document.getElementById('usageFill');
+            const text = document.getElementById('usageText');
+
+            if (hasAdvanced || hasExpert) {
+                fill.style.width = '100%';
+                fill.className = 'usage-fill safe';
+                text.textContent = '✅ 已解锁 · 无限次';
+                text.className = 'usage-text unlimited';
+                return;
+            }
+
+            const used = getTodayUsage();
+            const pct = Math.min((used / DAILY_LIMIT) * 100, 100);
+            fill.style.width = pct + '%';
+            fill.className = 'usage-fill ' + (used >= DAILY_LIMIT ? 'danger' : used >= 3 ? 'warn' : 'safe');
+            text.textContent = used + ' / ' + DAILY_LIMIT + ' 次';
+            text.className = 'usage-text ' + (used >= DAILY_LIMIT ? 'limit' : '');
+        }
+
+        // ========== 次数限制检查 ==========
+        function checkLimit() {
+            if (currentComplexity !== 'basic' && safeStorageGet('password_' + currentComplexity)) {
+                return true;
+            }
+            if (getTodayUsage() >= DAILY_LIMIT) {
+                document.getElementById('limitModal').classList.add('show');
+                return false;
+            }
+            return true;
+        }
+        function closeLimitModal() { document.getElementById('limitModal').classList.remove('show'); }
+        function copyQQ() {
+            fallbackCopy('704451222');
+            showToast('✅ QQ号已复制：704451222');
+        }
+
+        // ========== 密码使用次数限制（防分享） ==========
+        function getPasswordUsageKey(password) {
+            return 'pwd_usage_' + password + '_' + new Date().toISOString().slice(0, 10);
+        }
+        function getPasswordUsage(password) {
+            return parseInt(safeStorageGet(getPasswordUsageKey(password)) || '0');
+        }
+        function incrementPasswordUsage(password) {
+            safeStorageSet(getPasswordUsageKey(password), (getPasswordUsage(password) + 1).toString());
+        }
+        function checkPasswordLimit(password) {
+            const used = getPasswordUsage(password);
+            if (used >= PASSWORD_DAILY_LIMIT) {
+                document.getElementById('pwdLimitModal').classList.add('show');
+                return false;
+            }
+            return true;
+        }
+        function closePwdLimitModal() { document.getElementById('pwdLimitModal').classList.remove('show'); }
+
+        // ========== 付费功能权限检查 ==========
+        function checkPremiumFeature(featureName) {
+            const hasAdvanced = safeStorageGet('password_advanced');
+            const hasExpert = safeStorageGet('password_expert');
+            if (hasAdvanced || hasExpert) {
+                return true;
+            }
+            showToast('🔒 ' + featureName + ' 需解锁进阶/专家版');
+            pendingComplexity = 'advanced';
+            document.getElementById('modalTitle').textContent = '🔥 解锁进阶版';
+            document.getElementById('passwordModal').classList.add('show');
+            document.getElementById('passwordInput').value = '';
+            setTimeout(() => document.getElementById('passwordInput').focus(), 100);
+            return false;
+        }
+
+        // ========== 复杂度选择 ==========
+        function setComplexity(level) {
+            if (level !== 'basic') {
+                const saved = safeStorageGet('password_' + level);
+                if (!saved) {
+                    pendingComplexity = level;
+                    document.getElementById('modalTitle').textContent = level === 'advanced' ? '🔥 解锁进阶版' : '👑 解锁专家版';
+                    document.getElementById('passwordModal').classList.add('show');
+                    document.getElementById('passwordInput').value = '';
+                    setTimeout(() => document.getElementById('passwordInput').focus(), 100);
+                    return;
+                }
+            }
+            applyComplexity(level);
+        }
+        function applyComplexity(level) {
+            currentComplexity = level;
+            document.querySelectorAll('.complexity-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + level).classList.add('active');
+            document.getElementById('passwordHint').classList.toggle('visible', level !== 'basic');
+            updateUsageBar();
+        }
+        function verifyPassword() {
+            const input = document.getElementById('passwordInput').value.trim();
+            const level = pendingComplexity;
+            if (!level) return;
+            if (input === PASSWORDS[level]) {
+                if (!checkPasswordLimit(input)) {
+                    document.getElementById('passwordInput').value = '';
+                    return;
+                }
+                incrementPasswordUsage(input);
+                safeStorageSet('password_' + level, 'true');
+                closePasswordModal();
+                applyComplexity(level);
+                document.getElementById('btn-' + level).querySelector('.tag').textContent = '已解锁';
+                showToast('✅ 解锁成功！');
+            } else {
+                showToast('❌ 密码错误');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+        function closePasswordModal() { document.getElementById('passwordModal').classList.remove('show'); pendingComplexity = null; }
+        function checkSavedPasswords() {
+            if (safeStorageGet('password_advanced')) {
+                document.getElementById('btn-advanced').querySelector('.tag').textContent = '已解锁';
+            }
+            if (safeStorageGet('password_expert')) {
+                document.getElementById('btn-expert').querySelector('.tag').textContent = '已解锁';
+            }
+        }
+
+        // ========== 标签切换 ==========
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('nav-' + tab).classList.add('active');
+            ['generate', 'compare', 'optimize', 'market', 'favorites'].forEach(t => {
+                document.getElementById(t + '-view').classList.add('hidden');
+            });
+            document.getElementById(tab + '-view').classList.remove('hidden');
+            if (tab === 'market') renderTemplates();
+            if (tab === 'compare' && lastResult) renderCompare();
+            if (tab === 'optimize' && lastResult) renderOptimize();
+            if (tab === 'favorites') renderFavorites();
+        }
+
+        // ========== 主题 ==========
+        function toggleTheme() {
+            const html = document.documentElement;
+            const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            safeStorageSet('theme', next);
+        }
+        const savedTheme = safeStorageGet('theme');
+        if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // ========== 清空 ==========
+        function clearTask() {
+            document.getElementById('taskInput').value = '';
+            updateCharCount();
+            document.getElementById('taskInput').focus();
+        }
+
+        // ========== 核心生成 ==========
+        function generate() {
+            const task = document.getElementById('taskInput').value.trim();
+            const domain = document.getElementById('domainSelect').value;
+
+            if (!task) { showToast('⚠️ 请先输入任务描述'); document.getElementById('taskInput').focus(); return; }
+            if (!checkLimit()) return;
+
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳</span><span>生成中...</span>';
+
+            incrementUsage();
+
+            setTimeout(() => {
+                const result = generatePrompt(task, domain, currentComplexity);
+                lastResult = result;
+                chatHistoryData = [];
+                document.getElementById('chatHistory').innerHTML = '';
+
+                document.getElementById('emptyState').classList.add('hidden');
+                document.getElementById('resultContainer').classList.remove('hidden');
+
+                typeWriter(result.content, 'resultContent', function() {
+                    document.getElementById('resultContent').innerHTML = marked.parse(result.content);
+                });
+
+                renderStructure(result.modules);
+                updateQuality(result.score, result.dimensions);
+                updateResultStats(result);
+                saveHistory(task, domain, currentComplexity, result.content, result.score);
+                submitToGoogleForms(task, domain, currentComplexity, result.score);
+                resetRating();
+
+                btn.disabled = false;
+                btn.innerHTML = '<span>✨</span><span>智能生成</span>';
+                document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                showToast('✅ 生成完成！');
+            }, 600);
+        }
+
+        function typeWriter(text, elementId, callback) {
+            isTyping = true;
+            const el = document.getElementById(elementId);
+            el.classList.add('typing-cursor');
+            el.textContent = '';
+            let i = 0;
+            const speed = 8;
+            function type() {
+                if (i < text.length) {
+                    el.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    el.classList.remove('typing-cursor');
+                    isTyping = false;
+                    if (callback) callback();
+                }
+            }
+            type();
+        }
+
+        // ========== 提示词生成逻辑 ==========
+        function generatePrompt(task, domain, complexity) {
+            const domainNames = {
+                social_media:'社交媒体', copywriting:'文案创作', video_script:'视频脚本', seo:'SEO优化', email:'邮件写作',
+                live_stream:'直播话术', news:'新闻稿', novel:'小说创作', poetry:'诗词创作', translation:'翻译润色',
+                python:'Python开发', frontend:'前端开发', backend:'后端开发', api:'API设计', database:'数据库',
+                devops:'DevOps', security:'安全审计', testing:'测试用例', algorithm:'算法设计', architecture:'架构设计',
+                prd:'PRD文档', competitive:'竞品分析', consulting:'咨询报告', okr:'OKR制定', interview:'面试准备',
+                presentation:'演讲PPT', business_plan:'商业计划', user_research:'用户研究', data_analysis:'数据分析', project_mgmt:'项目管理',
+                legal:'法律文书', medical:'医疗咨询', finance:'金融分析', education:'教育辅导', customer_service:'客服话术',
+                hr:'HR招聘', real_estate:'房产文案', travel:'旅游攻略', food:'美食点评', fitness:'健身计划',
+                game_design:'游戏设计', ui_design:'UI设计', research:'科研论文', patent:'专利申请', biotech:'生物科技',
+                new_energy:'新能源', math:'数学推导', chemistry:'化学实验', physics:'物理分析', philosophy:'哲学思辨'
+            };
+            const domainName = domainNames[domain] || '通用';
+
+            let modules = [], content = '', score = 0, dimensions = {};
+
+            if (complexity === 'basic') {
+                modules = ['角色锚定', '任务解构', '输出规范'];
+                content = `【角色锚定】\n你是一位资深的${domainName}专家，拥有10年以上行业经验，精通该领域的最佳实践和方法论。\n\n【任务解构】\n请基于以下任务描述，提供专业的解决方案：\n任务：${task}\n\n【输出规范】\n1. 结构清晰，分点阐述\n2. 内容具体可操作\n3. 语言简洁专业\n4. 总字数控制在500-800字`;
+                score = 7.2;
+                dimensions = { 角色清晰度: 80, 任务可执行: 75, 结构完整度: 70, 专业深度: 65, 创新程度: 60, 输出规范: 85 };
+            } else if (complexity === 'advanced') {
+                modules = ['角色锚定', '任务解构', '执行框架', '质量控制', '输出规范'];
+                content = `【角色锚定】\n你是一位资深的${domainName}专家，拥有10年以上行业经验。你擅长将复杂问题拆解为可执行的步骤，并给出结构化的解决方案。你的风格是专业、严谨但不失灵活性。\n\n【任务解构】\n请基于以下任务描述，提供系统化的解决方案：\n核心任务：${task}\n目标受众：请根据任务内容推断目标受众特征\n关键约束：请考虑时间、成本、质量等维度\n\n【执行框架】\nPhase 1 - 分析诊断：识别核心问题和关键变量\nPhase 2 - 策略制定：提供3种可选方案，并分析优劣\nPhase 3 - 执行路径：给出详细的步骤清单和时间线\nPhase 4 - 风险预判：列出潜在风险和应对预案\n\n【质量控制】\n- 每个建议需说明理论依据或行业最佳实践\n- 提供可量化的评估指标\n- 标注需要进一步确认的关键假设\n\n【输出规范】\n1. 使用Markdown格式\n2. 包含目录导航\n3. 关键术语加粗\n4. 总字数控制在1000-1500字`;
+                score = 8.6;
+                dimensions = { 角色清晰度: 90, 任务可执行: 88, 结构完整度: 85, 专业深度: 82, 创新程度: 78, 输出规范: 92 };
+            } else {
+                modules = ['角色锚定', '任务解构', '执行框架', '质量控制', '示例嵌入', '迭代机制', '输出规范'];
+                content = `【角色锚定】\n你是一位${domainName}领域的顶级专家，拥有15年以上实战经验，曾服务过多家世界500强企业。你不仅精通理论，更擅长将理论与实际场景深度结合。你的分析框架融合了麦肯锡方法论、设计思维和第一性原理。\n\n【任务解构】\n请对以下任务进行深度解构和系统化解决：\n核心任务：${task}\n\n解构维度：\n1. 业务背景：分析该任务所处的业务环境和战略价值\n2. 利益相关方：识别所有关键利益相关方及其诉求\n3. 成功标准：定义清晰的、可量化的成功指标\n4. 约束条件：梳理技术、资源、时间、合规等约束\n\n【执行框架】\nPhase 1 - 深度诊断（30%）\n  • 现状分析：用数据和事实描述当前状态\n  • 根因分析：使用5Why或鱼骨图定位根本原因\n  • 机会识别：发现被忽视的优化空间\n\nPhase 2 - 策略设计（40%）\n  • 方案A：保守型（低风险、稳收益）\n  • 方案B：平衡型（中等风险、优化收益）\n  • 方案C：激进型（高风险、高回报）\n  • 决策矩阵：从成本、时间、质量、风险四维度评分\n\nPhase 3 - 实施路径（20%）\n  • 里程碑规划：按周/月拆解关键节点\n  • 资源分配：人力、预算、工具需求清单\n  • 依赖管理：识别关键路径和阻塞点\n\nPhase 4 - 运营保障（10%）\n  • KPI监控体系： leading + lagging 指标\n  • 复盘机制：PDCA循环设计\n  • 知识沉淀：可复用的SOP和模板\n\n【质量控制】\n- 每个论点需引用权威来源或数据支撑\n- 使用MECE原则确保分析穷尽且互斥\n- 对关键假设进行敏感性分析\n- 提供"如果...那么..."的条件分支建议\n\n【示例嵌入】\n在适当位置提供：\n- 行业标杆案例（成功/失败）\n- 模板/框架的填写示例\n- 常见陷阱和避坑指南\n\n【迭代机制】\n在输出末尾提供：\n- 自检清单（10项快速验证）\n- 优化建议（基于不同场景的微调方向）\n- 扩展阅读（3-5个相关深度主题）\n\n【输出规范】\n1. 使用专业Markdown，包含多级标题\n2. 关键数据用表格呈现\n3. 复杂流程用Mermaid或ASCII图表\n4. 总字数控制在2000-3000字\n5. 结尾附「执行摘要」（200字以内）`;
+                score = 9.4;
+                dimensions = { 角色清晰度: 95, 任务可执行: 93, 结构完整度: 92, 专业深度: 90, 创新程度: 88, 输出规范: 96 };
+            }
+            return { content, modules, score, dimensions };
+        }
+
+        // ========== 结构图谱 ==========
+        function renderStructure(modules) {
+            const all = ['角色锚定', '任务解构', '执行框架', '质量控制', '示例嵌入', '迭代机制', '输出规范'];
+            document.getElementById('structureMap').innerHTML = all.map(m => {
+                const active = modules.includes(m);
+                return `<span class="module-tag ${active ? '' : 'inactive'}">${active ? '✅' : '❌'} ${m}</span>`;
+            }).join('');
+        }
+
+        // ========== 质量分析 ==========
+        function updateQuality(score, dimensions) {
+            document.getElementById('scoreText').textContent = score.toFixed(1);
+            const c = document.getElementById('scoreCircle');
+            const circ = 2 * Math.PI * 38;
+            c.style.strokeDashoffset = circ - (score / 10) * circ;
+
+            document.getElementById('dimensions').innerHTML = Object.entries(dimensions).map(([name, val]) => `
+                <div class="dimension-bar">
+                    <div class="dimension-label"><span>${name}</span><span>${val}%</span></div>
+                    <div class="dimension-track"><div class="dimension-fill" style="width:${val}%"></div></div>
+                </div>
+            `).join('');
+
+            const sug = score < 8 
+                ? '建议增加执行框架和示例嵌入模块，提升提示词的可执行性。可考虑升级到进阶版。' 
+                : '提示词结构完整，质量优秀。如需进一步提升，可增加迭代机制模块，加入自检清单和优化方向。';
+            document.getElementById('suggestions').textContent = sug;
+        }
+
+        // ========== 结果统计 ==========
+        function updateResultStats(result) {
+            const wordCount = result.content.length;
+            const moduleCount = result.modules.length;
+            document.getElementById('resultStats').textContent = `字数：${wordCount} | 模块：${moduleCount} | 评分：${result.score}`;
+        }
+
+        // ========== 历史记录 ==========
+        function saveHistory(task, domain, complexity, content, score) {
+            let history = JSON.parse(safeStorageGet('prompt_history') || '[]');
+            const item = {
+                id: Date.now(), time: new Date().toLocaleString('zh-CN'),
+                task: task.substring(0, 30) + (task.length > 30 ? '...' : ''),
+                domain, complexity, content, score
+            };
+            history.unshift(item);
+            if (history.length > 50) history = history.slice(0, 50);
+            safeStorageSet('prompt_history', JSON.stringify(history));
+            loadHistory();
+        }
+        function loadHistory() {
+            const history = JSON.parse(safeStorageGet('prompt_history') || '[]');
+            const container = document.getElementById('historyList');
+            if (history.length === 0) {
+                container.innerHTML = '<div style="text-align:center; color:var(--text-secondary); font-size:13px; padding:20px;">暂无记录</div>';
+                return;
+            }
+            const favs = JSON.parse(safeStorageGet('favorites') || '[]').map(f => f.id);
+            container.innerHTML = history.map(item => `
+                <div class="history-item" onclick="loadHistoryItem(${item.id})">
+                    <div class="time">${item.time}</div>
+                    <div class="task">${item.task}</div>
+                    <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">
+                        ${item.domain} · ${item.complexity === 'basic' ? '基础' : item.complexity === 'advanced' ? '进阶' : '专家'} · ${item.score}分
+                    </div>
+                    ${favs.includes(item.id) ? '<span class="fav-star">⭐</span>' : ''}
+                </div>
+            `).join('');
+        }
+        function loadHistoryItem(id) {
+            const history = JSON.parse(safeStorageGet('prompt_history') || '[]');
+            const item = history.find(h => h.id === id);
+            if (!item) return;
+            document.getElementById('taskInput').value = item.task.replace('...', '');
+            document.getElementById('domainSelect').value = item.domain;
+            applyComplexity(item.complexity);
+            lastResult = { content: item.content, modules: [], score: item.score, dimensions: {} };
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('resultContainer').classList.remove('hidden');
+            document.getElementById('resultContent').innerHTML = marked.parse(item.content);
+            updateQuality(item.score, {});
+            updateResultStats(lastResult);
+            switchTab('generate');
+        }
+
+        // ========== 收藏夹 ==========
+        function toggleFavorite() {
+            if (!lastResult) return;
+            const task = document.getElementById('taskInput').value.trim() || '未命名';
+            const domain = document.getElementById('domainSelect').value;
+            const complexity = currentComplexity;
+            const content = lastResult.content;
+            const score = lastResult.score;
+
+            let favs = JSON.parse(safeStorageGet('favorites') || '[]');
+            const existing = favs.find(f => f.content === content);
+            const btn = document.getElementById('favBtn');
+
+            if (existing) {
+                favs = favs.filter(f => f.content !== content);
+                btn.classList.remove('favorited');
+                btn.innerHTML = '⭐ 收藏';
+                showToast('❌ 已取消收藏');
+            } else {
+                favs.unshift({ id: Date.now(), task, domain, complexity, content, score, time: new Date().toLocaleString('zh-CN') });
+                btn.classList.add('favorited');
+                btn.innerHTML = '❤️ 已收藏';
+                showToast('✅ 已加入收藏');
+            }
+            safeStorageSet('favorites', JSON.stringify(favs));
+            updateFavBadge();
+            loadHistory();
+        }
+        function loadFavorites() {
+            updateFavBadge();
+        }
+        function updateFavBadge() {
+            const favs = JSON.parse(safeStorageGet('favorites') || '[]');
+            const badge = document.getElementById('favBadge');
+            if (favs.length > 0) {
+                badge.textContent = favs.length;
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+        function renderFavorites() {
+            const favs = JSON.parse(safeStorageGet('favorites') || '[]');
+            const container = document.getElementById('favoritesList');
+            if (favs.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="emoji">⭐</div>
+                        <div>暂无收藏</div>
+                        <div style="font-size:13px; margin-top:6px; opacity:0.7;">生成提示词后点击「收藏」保存到这里</div>
+                    </div>`;
+                return;
+            }
+            container.innerHTML = favs.map(f => `
+                <div class="history-item" onclick="loadFavoriteItem(${f.id})">
+                    <div class="time">${f.time}</div>
+                    <div class="task">${f.task}</div>
+                    <div style="font-size:11px; color:var(--text-secondary); margin-top:4px;">
+                        ${f.domain} · ${f.complexity === 'basic' ? '基础' : f.complexity === 'advanced' ? '进阶' : '专家'} · ${f.score}分
+                    </div>
+                </div>
+            `).join('');
+        }
+        function loadFavoriteItem(id) {
+            const favs = JSON.parse(safeStorageGet('favorites') || '[]');
+            const item = favs.find(f => f.id === id);
+            if (!item) return;
+            document.getElementById('taskInput').value = item.task;
+            document.getElementById('domainSelect').value = item.domain;
+            applyComplexity(item.complexity);
+            lastResult = { content: item.content, modules: [], score: item.score, dimensions: {} };
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('resultContainer').classList.remove('hidden');
+            document.getElementById('resultContent').innerHTML = marked.parse(item.content);
+            updateQuality(item.score, {});
+            updateResultStats(lastResult);
+            document.getElementById('favBtn').classList.add('favorited');
+            document.getElementById('favBtn').innerHTML = '❤️ 已收藏';
+            switchTab('generate');
+        }
+
+        // ========== 复制功能 ==========
+        function copyResult() {
+            const content = document.getElementById('resultContent').innerText;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(content).then(showCopySuccess).catch(() => fallbackCopy(content));
+            } else {
+                fallbackCopy(content);
+            }
+        }
+        function copyMarkdown() {
+            if (!lastResult) return;
+            const content = lastResult.content;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(content).then(() => {
+                    showToast('📝 Markdown已复制');
+                }).catch(() => fallbackCopy(content));
+            } else {
+                fallbackCopy(content);
+            }
+        }
+        function fallbackCopy(text) {
+            try {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showCopySuccess();
+            } catch(e) { showToast('⚠️ 复制失败，请手动复制'); }
+        }
+        function showCopySuccess() {
+            const btn = document.getElementById('copyBtn');
+            btn.textContent = '✅ 已复制';
+            btn.classList.add('copied');
+            showToast('📋 已复制到剪贴板');
+            setTimeout(() => { btn.textContent = '📋 复制'; btn.classList.remove('copied'); }, 2000);
+        }
+
+        // ========== 导出卡片（付费功能） ==========
+        function showExportModal() {
+            if (!lastResult) return;
+            if (!checkPremiumFeature('导出卡片')) return;
+            document.getElementById('exportContent').innerHTML = marked.parse(lastResult.content);
+            document.getElementById('exportModal').classList.add('show');
+        }
+        function closeExportModal() { document.getElementById('exportModal').classList.remove('show'); }
+        function downloadCard() {
+            const preview = document.getElementById('exportPreview');
+            html2canvas(preview, { scale: 2, backgroundColor: null }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = '提示词卡片_' + new Date().getTime() + '.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('🖼️ 卡片已下载');
+            }).catch(() => showToast('⚠️ 导出失败，请重试'));
+        }
+
+        // ========== 精简（免费） ==========
+        function showShortenModal() {
+            if (!lastResult) return;
+            const shortened = lastResult.content.split('\n').filter(l => l.trim() && !l.startsWith('  ')).slice(0, 15).join('\n');
+            const el = document.getElementById('resultContent');
+            el.innerHTML = marked.parse(shortened + '\n\n> ✂️ 以上为精简版，保留核心框架，去除细节展开。');
+            showToast('✂️ 已生成精简版');
+        }
+
+        // ========== 扩写（付费功能） ==========
+        function showExpandModal() {
+            if (!lastResult) return;
+            if (!checkPremiumFeature('扩写功能')) return;
+            const expanded = lastResult.content + '\n\n【扩展补充】\n\n基于以上内容，进一步补充以下维度：\n\n1. **行业对标**：列举3个行业标杆案例，分析其成功要素和可借鉴之处\n2. **工具推荐**：推荐5个实用的工具/平台，并说明使用场景\n3. **常见误区**：列出该任务中常见的5个错误认知和纠正方法\n4. **进阶路径**：从入门到精通的3个阶段划分，每个阶段的核心能力要求\n5. **资源清单**：推荐3本书籍、2个课程、3个社群/论坛\n\n> 📈 以上为扩写版，在原有框架基础上增加了深度拓展内容。';
+            const el = document.getElementById('resultContent');
+            el.innerHTML = marked.parse(expanded);
+            showToast('📈 已生成扩写版');
+        }
+
+        // ========== 多轮优化（付费功能） ==========
+        function optimizeChat() {
+            if (!checkPremiumFeature('继续优化')) return;
+            const input = document.getElementById('chatInput').value.trim();
+            if (!input || !lastResult) return;
+
+            const history = document.getElementById('chatHistory');
+            history.innerHTML += `<div class="chat-msg user">${input}</div>`;
+            chatHistoryData.push({ role: 'user', text: input });
+            document.getElementById('chatInput').value = '';
+
+            const replies = [
+                '已根据您的建议优化，增加了具体案例和量化指标。',
+                '收到！已补充行业标杆案例和常见陷阱分析。',
+                '好的，已调整结构，增加了自检清单和迭代建议。',
+                '已优化，增加了工具推荐和资源清单，方便落地执行。'
+            ];
+            const reply = replies[Math.floor(Math.random() * replies.length)];
+
+            setTimeout(() => {
+                history.innerHTML += `<div class="chat-msg ai">${reply}</div>`;
+                chatHistoryData.push({ role: 'ai', text: reply });
+                history.scrollTop = history.scrollHeight;
+
+                const current = document.getElementById('resultContent').innerText;
+                const marker = `\n\n---\n\n🔄 **优化记录**\n\n用户反馈：${input}\n\nAI调整：${reply}\n\n优化时间：${new Date().toLocaleString('zh-CN')}`;
+                document.getElementById('resultContent').innerHTML = marked.parse(current + marker);
+            }, 800);
+        }
+
+        // ========== 评分 ==========
+        function resetRating() {
+            document.getElementById('rateUp').classList.remove('voted');
+            document.getElementById('rateDown').classList.remove('voted');
+        }
+        function rateResult(type) {
+            document.getElementById('rateUp').classList.toggle('voted', type === 'up');
+            document.getElementById('rateDown').classList.toggle('voted', type === 'down');
+            showToast(type === 'up' ? '👍 感谢反馈！' : '👎 收到，我们会持续优化');
+            try {
+                const img = new Image();
+                img.src = GOOGLE_FORM_URL + '?entry.693672273=' + encodeURIComponent('用户评分：' + type) + '&entry.528075606=评分反馈&entry.607505779=基础&entry.2070225006=0&entry.303138273=' + (/Mobile|Android|iPhone/i.test(navigator.userAgent) ? '手机' : '电脑');
+            } catch(e) {}
+        }
+
+        // ========== Google Forms ==========
+        function submitToGoogleForms(task, domain, complexity, score) {
+            try {
+                const device = /Mobile|Android|iPhone/i.test(navigator.userAgent) ? '手机' : '电脑';
+                const complexityLabel = complexity === 'basic' ? '基础' : complexity === 'advanced' ? '进阶' : '专家';
+                const params = new URLSearchParams();
+                params.append(GOOGLE_FORM_FIELDS.task, task.substring(0, 200));
+                params.append(GOOGLE_FORM_FIELDS.domain, domain);
+                params.append(GOOGLE_FORM_FIELDS.complexity, complexityLabel);
+                params.append(GOOGLE_FORM_FIELDS.score, score.toString());
+                params.append(GOOGLE_FORM_FIELDS.device, device);
+                const img = new Image();
+                img.src = GOOGLE_FORM_URL + '?' + params.toString();
+            } catch(e) {}
+        }
+
+        // ========== 对比视图 ==========
+        function renderCompare() {
+            const task = document.getElementById('taskInput').value.trim() || '示例任务';
+            const domain = document.getElementById('domainSelect').value;
+            const levels = [
+                { key: 'basic', name: '⚡ 基础版', class: 'basic' },
+                { key: 'advanced', name: '🔥 进阶版', class: 'advanced' },
+                { key: 'expert', name: '👑 专家版', class: 'expert' }
+            ];
+            document.getElementById('compareGrid').innerHTML = levels.map(l => {
+                const result = generatePrompt(task, domain, l.key);
+                return `<div class="compare-card ${l.class}"><div class="level">${l.name}</div><div class="content">${result.content}</div></div>`;
+            }).join('');
+        }
+
+        // ========== 优化视图 ==========
+        function renderOptimize() {
+            if (!lastResult) return;
+            const issues = lastResult.score < 8 
+                ? ['角色定义不够具体', '缺少执行步骤', '无质量控制机制', '缺少示例说明']
+                : ['迭代机制可进一步完善', '可增加更多行业案例', '自检清单可更详细'];
+            const issueTags = issues.map(i => `<span class="issue-tag ${lastResult.score < 8 ? 'danger' : 'warning'}">${i}</span>`).join('');
+            document.getElementById('optimizeContent').innerHTML = `
+                <div class="optimize-section">
+                    <div class="optimize-title">🔍 问题诊断</div>
+                    <div class="optimize-content">${issueTags}</div>
+                </div>
+                <div class="optimize-section">
+                    <div class="optimize-title">✨ 优化版本</div>
+                    <div class="optimize-content">
+                        基于当前提示词，建议增加以下模块：\n\n
+                        1. <strong>迭代机制</strong>：添加自检清单和优化方向\n
+                        2. <strong>示例嵌入</strong>：补充具体案例和模板\n
+                        3. <strong>质量控制</strong>：增加量化评估指标\n\n
+                        预期提升：综合评分可从 ${lastResult.score} 分提升至 ${Math.min(lastResult.score + 1.2, 9.8).toFixed(1)} 分
+                    </div>
+                </div>
+            `;
+        }
+
+        // ========== 模板市场 ==========
+        const TEMPLATES = [
+            { icon: '📱', title: '小红书爆款文案', desc: '生成吸引眼球的小红书种草文案', domain: 'social_media', complexity: 'advanced', tag: '内容创作' },
+            { icon: '🎬', title: '抖音短视频脚本', desc: '15秒黄金开头的视频脚本', domain: 'video_script', complexity: 'advanced', tag: '内容创作' },
+            { icon: '🐍', title: 'Python爬虫模板', desc: 'Requests+BeautifulSoup爬虫框架', domain: 'python', complexity: 'advanced', tag: '技术开发' },
+            { icon: '💻', title: 'React组件开发', desc: '可复用的React函数组件模板', domain: 'frontend', complexity: 'advanced', tag: '技术开发' },
+            { icon: '📋', title: 'PRD需求文档', desc: '标准产品需求文档结构', domain: 'prd', complexity: 'expert', tag: '商业管理' },
+            { icon: '🔍', title: '竞品分析报告', desc: '系统化竞品分析框架', domain: 'competitive', complexity: 'expert', tag: '商业管理' },
+            { icon: '💼', title: '麦肯锡咨询报告', desc: '结构化商业咨询报告模板', domain: 'consulting', complexity: 'expert', tag: '商业管理' },
+            { icon: '🎯', title: 'OKR制定模板', desc: '目标与关键结果制定框架', domain: 'okr', complexity: 'advanced', tag: '商业管理' },
+            { icon: '🎤', title: '面试准备指南', desc: '技术面试常见问题及回答', domain: 'interview', complexity: 'advanced', tag: '商业管理' },
+            { icon: '📊', title: '数据分析报告', desc: '从数据清洗到洞察输出', domain: 'data_analysis', complexity: 'expert', tag: '商业管理' },
+            { icon: '⚖️', title: '合同审查清单', desc: '法律合同关键条款审查', domain: 'legal', complexity: 'expert', tag: '专业服务' },
+            { icon: '🏥', title: '医疗问诊模板', desc: '标准化患者问诊流程', domain: 'medical', complexity: 'advanced', tag: '专业服务' },
+            { icon: '💰', title: '投资分析报告', desc: '股票/基金投资分析框架', domain: 'finance', complexity: 'expert', tag: '专业服务' },
+            { icon: '📚', title: '课程设计大纲', desc: '系统化在线课程设计', domain: 'education', complexity: 'advanced', tag: '专业服务' },
+            { icon: '🎧', title: '客服话术库', desc: '高情商客服应对话术', domain: 'customer_service', complexity: 'advanced', tag: '专业服务' },
+            { icon: '🎮', title: '游戏策划案', desc: '核心玩法与数值设计', domain: 'game_design', complexity: 'expert', tag: '科研创意' },
+            { icon: '🎨', title: 'UI设计规范', desc: '移动端UI设计系统', domain: 'ui_design', complexity: 'advanced', tag: '科研创意' },
+            { icon: '🔬', title: '科研论文摘要', desc: 'SCI论文摘要写作模板', domain: 'research', complexity: 'expert', tag: '科研创意' },
+            { icon: '📧', title: '商务邮件模板', desc: '正式商务邮件写作框架', domain: 'email', complexity: 'basic', tag: '内容创作' },
+            { icon: '🔍', title: 'SEO优化方案', desc: '网站SEO诊断与优化', domain: 'seo', complexity: 'advanced', tag: '内容创作' },
+            { icon: '📺', title: '直播带货话术', desc: '高转化直播话术脚本', domain: 'live_stream', complexity: 'advanced', tag: '内容创作' },
+            { icon: '📰', title: '新闻通稿模板', desc: '标准新闻稿写作格式', domain: 'news', complexity: 'basic', tag: '内容创作' },
+            { icon: '📖', title: '网文大纲生成', desc: '爽文/甜文大纲框架', domain: 'novel', complexity: 'advanced', tag: '内容创作' },
+            { icon: '🎭', title: '古诗词创作', desc: '格律诗词生成助手', domain: 'poetry', complexity: 'expert', tag: '内容创作' },
+            { icon: '🌐', title: '中英翻译润色', desc: '学术/商务翻译优化', domain: 'translation', complexity: 'advanced', tag: '内容创作' },
+            { icon: '⚙️', title: '微服务架构', desc: 'Spring Cloud微服务设计', domain: 'backend', complexity: 'expert', tag: '技术开发' },
+            { icon: '🔌', title: 'RESTful API设计', desc: '标准API接口设计规范', domain: 'api', complexity: 'advanced', tag: '技术开发' },
+            { icon: '🗄️', title: 'SQL优化方案', desc: '数据库查询优化指南', domain: 'database', complexity: 'advanced', tag: '技术开发' },
+            { icon: '🚀', title: 'CI/CD流水线', desc: 'DevOps自动化部署', domain: 'devops', complexity: 'expert', tag: '技术开发' },
+            { icon: '🔒', title: '安全渗透测试', desc: 'Web应用安全审计', domain: 'security', complexity: 'expert', tag: '技术开发' },
+            { icon: '🧪', title: '自动化测试用例', desc: 'Selenium/Appium测试', domain: 'testing', complexity: 'advanced', tag: '技术开发' },
+            { icon: '📐', title: '算法题解模板', desc: 'LeetCode解题框架', domain: 'algorithm', complexity: 'advanced', tag: '技术开发' },
+            { icon: '🏗️', title: '系统架构评审', desc: '技术架构设计评审', domain: 'architecture', complexity: 'expert', tag: '技术开发' },
+            { icon: '📁', title: '敏捷项目管理', desc: 'Scrum/Kanban实践', domain: 'project_mgmt', complexity: 'advanced', tag: '商业管理' },
+            { icon: '👥', title: '用户画像分析', desc: '用户调研与画像构建', domain: 'user_research', complexity: 'advanced', tag: '商业管理' },
+            { icon: '💡', title: '创业商业计划', desc: 'BP商业计划书模板', domain: 'business_plan', complexity: 'expert', tag: '商业管理' },
+            { icon: '📊', title: '路演PPT大纲', desc: '投资人路演演示结构', domain: 'presentation', complexity: 'advanced', tag: '商业管理' },
+            { icon: '👔', title: '招聘JD撰写', desc: '精准人才招聘文案', domain: 'hr', complexity: 'basic', tag: '专业服务' },
+            { icon: '🏠', title: '房产销售文案', desc: '高转化房产推广文案', domain: 'real_estate', complexity: 'advanced', tag: '专业服务' },
+            { icon: '✈️', title: '旅行攻略生成', desc: '深度游攻略规划', domain: 'travel', complexity: 'advanced', tag: '专业服务' },
+            { icon: '🍜', title: '美食探店文案', desc: '大众点评/小红书美食', domain: 'food', complexity: 'basic', tag: '专业服务' },
+            { icon: '💪', title: '健身训练计划', desc: '个性化健身方案', domain: 'fitness', complexity: 'advanced', tag: '专业服务' },
+            { icon: '📜', title: '专利申请模板', desc: '发明专利申请文书', domain: 'patent', complexity: 'expert', tag: '科研创意' },
+            { icon: '🧬', title: '生物实验方案', desc: '分子生物学实验设计', domain: 'biotech', complexity: 'expert', tag: '科研创意' },
+            { icon: '⚡', title: '新能源技术报告', desc: '光伏/储能技术分析', domain: 'new_energy', complexity: 'expert', tag: '科研创意' },
+            { icon: '📐', title: '数学证明助手', desc: '定理证明思路引导', domain: 'math', complexity: 'expert', tag: '科研创意' },
+            { icon: '⚗️', title: '化学实验报告', desc: '实验设计与报告撰写', domain: 'chemistry', complexity: 'advanced', tag: '科研创意' },
+            { icon: '🔭', title: '物理问题分析', desc: '力学/电磁学问题求解', domain: 'physics', complexity: 'advanced', tag: '科研创意' },
+            { icon: '🤔', title: '哲学论证框架', desc: '逻辑论证与批判思维', domain: 'philosophy', complexity: 'expert', tag: '科研创意' },
+        ];
+
+        function renderTemplates() {
+            document.getElementById('marketGrid').innerHTML = TEMPLATES.map(t => `
+                <div class="template-card" onclick="loadTemplate('${t.domain}', '${t.complexity}', '${t.title.replace(/'/g, "\'")}')">
+                    <div class="icon">${t.icon}</div>
+                    <div class="title">${t.title}</div>
+                    <div class="desc">${t.desc}</div>
+                    <span class="tag">${t.tag}</span>
+                </div>
+            `).join('');
+        }
+        function loadTemplate(domain, complexity, title) {
+            document.getElementById('domainSelect').value = domain;
+            setComplexity(complexity);
+            document.getElementById('taskInput').value = '请生成一个关于' + title + '的提示词';
+            updateCharCount();
+            switchTab('generate');
+            showToast('✅ 已加载模板：' + 标题);
+        }
+
+        // ========== 折叠 ==========
+        function toggleCollapse(id) {
+            const content = 文档.getElementById(id);
+            const 图标 = 文档.getElementById(id + '-icon');
+            content.classList.切换('已折叠');
+            图标.classList.切换('rotated');
+        }
+
+        // ========== Toast ==========
+        function showToast(message) {
+            const toast = 文档.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // ========== 键盘事件 ==========
+        文档.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            如果 (e.key === 'Enter') verifyPassword();
+        });
+        文档.getElementById('taskInput').addEventListener('keydown', function(e) {
+            如果 (e.ctrlKey && e.key === 'Enter') generate();
+        });
+        文档.addEventListener('keydown', function(e) {
+            如果 (e.key === “逃脱”) {
+                closePasswordModal();
+                closeExportModal();
+                closeLimitModal();
+                closePwdLimitModal();
+            }
+        });
+    </脚本>
+</主体>
+      </html>
