@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提示词生成器 Pro</title>
+    <style>
+        :root {
+            --primary: #0070f3;
+            --primary-dark: #0051a2;
+            --bg: #f5f7fa;
+            --card-bg: #ffffff;
+            --text: #1a1a2e;
+            --text-secondary: #666;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --code-bg: #0f172a;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg); 
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            background: var(--bg);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+            background: var(--card-bg);
+            padding: 4px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.2s;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,112,243,0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .category-card {
+            padding: 16px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--card-bg);
+        }
+
+        .category-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .category-card.active {
+            border-color: var(--primary);
+            background: rgba(0,112,243,0.05);
+        }
+
+        .category-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .category-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .category-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Output Section */
+        .output-container {
+            display: none;
+        }
+
+        .output-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .code-lang {
+            font-size: 12px;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+
+        /* Action Buttons */
+        .action-bar {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .action-bar .btn {
+            flex: 1;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        /* Comparison View */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .compare-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .compare-card {
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .compare-header {
+            padding: 12px 16px;
+            background: var(--bg);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .compare-body {
+            padding: 16px;
+        }
+
+        .compare-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 4px;
+        }
+
+        .tag-green { background: #d1fae5; color: #065f46; }
+        .tag-yellow { background: #fef3c7; color: #92400e; }
+        .tag-red { background: #fee2e2; color: #991b1b; }
+
+        /* Analysis Panel */
+        .analysis-panel {
+            margin-top: 20px;
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .score-item {
+            padding: 16px;
+            border-radius: 10px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+        }
+
+        .score-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .score-name {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .score-value {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .score-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .suggestion-list {
+            list-style: none;
+        }
+
+        .suggestion-item {
+            padding: 12px;
+            border-radius: 8px;
+            background: var(--bg);
+            margin-bottom: 8px;
+            border-left: 3px solid var(--warning);
+            font-size: 14px;
+        }
+
+        .suggestion-item.critical {
+            border-left-color: var(--danger);
+        }
+
+        .suggestion-item.good {
+            border-left-color: var(--success);
+        }
+
+        /* History */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-item {
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            transition: all 0.2s;
+        }
+
+        .history-item:hover {
+            box-shadow: var(--shadow);
+        }
+
+        .history-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .history-tags {
+            display: flex;
+            gap: 6px;
+        }
+
+        .history-tag {
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: rgba(0,112,243,0.1);
+            color: var(--primary);
+        }
+
+        .history-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .history-task {
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .history-preview {
+            font-size: 13px;
+            color: var(--text-secondary);
+            background: var(--bg);
+            padding: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+            max-height: 80px;
+            overflow: hidden;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .history-actions .btn {
+            flex: 1;
+            padding: 8px;
+            font-size: 13px;
+        }
+
+        /* Optimize Panel */
+        .optimize-panel {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(0,112,243,0.05), rgba(139,92,246,0.05));
+            border: 1px solid rgba(0,112,243,0.2);
+        }
+
+        .optimize-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .optimize-content {
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .diff-added {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .diff-removed {
+            background: #fee2e2;
+            color: #991b1b;
+            text-decoration: line-through;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 12px;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-bar .btn {
+                flex: 100%;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Module Tags */
+        .module-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .module-tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .module-tag.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">🎯</div>
+                <div>
+                    <div>提示词生成器</div>
+                    <div style="font-size: 12px; color: var(--text-secondary); font-weight: 400;">Prompt Architect Pro</div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn" onclick="toggleTheme()">
+                    <span id="themeIcon">🌙</span> 切换主题
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('generate')">🚀 生成</button>
+            <button class="nav-tab" onclick="switchTab('compare')">⚖️ 对比</button>
+            <button class="nav-tab" onclick="switchTab('optimize')">🔧 优化</button>
+            <button class="nav-tab" onclick="switchTab('history')">📜 历史</button>
+        </div>
+
+        <!-- Generate Tab -->
+        <div id="generateTab" class="tab-content active">
+            <div class="card">
+                <div class="card-title">📝 任务描述</div>
+                <div class="form-group">
+                    <textarea class="form-textarea" id="taskInput" placeholder="例如：帮我写小红书种草文案，产品是美白精华，目标人群是25-30岁职场女性，要求真实感强、避免硬广"></textarea>
+                </div>
+
+                <div class="card-title">🏷️ 选择领域</div>
+                <div class="category-grid" id="categoryGrid"></div>
+
+                <div class="form-group">
+                    <label class="form-label">复杂度</label>
+                    <select class="form-select" id="complexitySelect">
+                        <option value="basic">⚡ 基础版（快速使用，3个核心模块）</option>
+                        <option value="advanced">🔥 进阶版（完整流程，5个模块+自检）</option>
+                        <option value="expert">👑 专家版（全模块+Few-shot+迭代机制）</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 16px;" onclick="generate()">
+                    🚀 生成提示词
+                </button>
+            </div>
+
+            <div class="output-container" id="outputContainer">
+                <div class="card">
+                    <div class="code-header">
+                        <span class="code-lang">Generated Prompt</span>
+                        <span id="moduleTags" class="module-tags"></span>
+                    </div>
+                    <div class="code-block" id="outputBlock"></div>
+                    
+                    <div class="action-bar">
+                        <button class="btn" onclick="copyOutput()">📋 复制</button>
+                        <button class="btn" onclick="exportMD()">📝 导出MD</button>
+                        <button class="btn" onclick="exportTXT()">📄 导出TXT</button>
+                        <button class="btn btn-primary" onclick="optimizePrompt()">🔧 AI优化</button>
+                    </div>
+                </div>
+
+                <!-- Analysis Panel -->
+                <div class="card analysis-panel" id="analysisPanel">
+                    <div class="card-title">📊 智能质量分析</div>
+                    <div class="score-grid" id="scoreGrid"></div>
+                    <div id="suggestionList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compare Tab -->
+        <div id="compareTab" class="tab-content">
+            <div class="card">
+                <div class="card-title">⚖️ 版本对比</div>
+                <div id="compareContainer"></div>
+            </div>
+        </div>
+
+        <!-- Optimize Tab -->
+        <div id="optimizeTab" class="tab-content">
+            <div class="card">
+                <div class="card-title">🔧 递归优化</div>
+                <div id="optimizeContainer"></div>
+            </div>
+        </div>
+
+        <!-- History Tab -->
+        <div id="historyTab" class="tab-content">
+            <div class="card">
+                <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>📜 历史记录</span>
+                    <button class="btn btn-danger" onclick="clearHistory()">🗑️ 清空</button>
+                </div>
+                <div id="historyContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ============ 数据配置 ============
+        const DOMAINS = {
+            general: {
+                name: '通用',
+                icon: '🌐',
+                category: '基础',
+                desc: '通用任务处理',
+                methods: ['结构化思维', 'MECE原则'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            marketing: {
+                name: '电商营销',
+                icon: '🛒',
+                category: '内容',
+                desc: '种草文案、广告投放',
+                methods: ['SCQA-R', 'AIDA', 'PAS', '4P理论'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            writing: {
+                name: '创意写作',
+                icon: '✍️',
+                category: '内容',
+                desc: '小说、剧本、散文',
+                methods: ['三幕式', '英雄之旅', '雪花法'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            coding: {
+                name: '编程开发',
+                icon: '💻',
+                category: '技术',
+                desc: '代码生成、技术方案',
+                methods: ['TDD', '设计模式', 'Clean Code'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            data: {
+                name: '数据分析',
+                icon: '📊',
+                category: '技术',
+                desc: '商业分析、数据报告',
+                methods: ['CRISP-DM', '假设驱动', 'A/B测试'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            customer: {
+                name: '客服支持',
+                icon: '🎧',
+                category: '服务',
+                desc: '客诉处理、服务话术',
+                methods: ['HEARD模型', 'LEARN模型', '情绪ABC'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            legal: {
+                name: '法律文档',
+                icon: '⚖️',
+                category: '专业',
+                desc: '合同审查、法律分析',
+                methods: ['IRAC', '要件分析', '风险矩阵'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            education: {
+                name: '教育培训',
+                icon: '📚',
+                category: '专业',
+                desc: '课程设计、教学方案',
+                methods: ['BOPPPS', '布鲁姆分类', 'ADDIE'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            medical: {
+                name: '医疗健康',
+                icon: '🏥',
+                category: '专业',
+                desc: '诊断辅助、健康科普',
+                methods: ['SOAP', '循证医学', 'PICO'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            finance: {
+                name: '金融投资',
+                icon: '💰',
+                category: '专业',
+                desc: '研报、风控、资产配置',
+                methods: ['DCF', '马科维茨', 'Black-Litterman'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            research: {
+                name: '科研学术',
+                icon: '🔬',
+                category: '专业',
+                desc: '论文写作、实验设计',
+                methods: ['IMRaD', 'PRISMA', 'PICOS'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            game: {
+                name: '游戏开发',
+                icon: '🎮',
+                category: '创意',
+                desc: '策划、数值、剧情',
+                methods: ['心流理论', 'MDA框架', '留存模型'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            design: {
+                name: '设计创意',
+                icon: '🎨',
+                category: '创意',
+                desc: 'UI/UX、平面设计',
+                methods: ['双钻模型', '格式塔', '设计思维'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            hr: {
+                name: '人力资源',
+                icon: '👥',
+                category: '商业',
+                desc: '招聘、绩效、培训',
+                methods: ['OKR', 'KPI', '胜任力模型'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            product: {
+                name: '产品经理',
+                icon: '📱',
+                category: '商业',
+                desc: '需求分析、PRD文档',
+                methods: ['用户故事', 'Kano模型', 'MVP'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            consulting: {
+                name: '管理咨询',
+                icon: '💼',
+                category: '商业',
+                desc: '战略、流程、组织',
+                methods: ['麦肯锡7S', '波特五力', 'BCG矩阵'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            translation: {
+                name: '翻译本地化',
+                icon: '🌏',
+                category: '语言',
+                desc: '多语言翻译、文化适配',
+                methods: ['功能对等', '文化转码', '术语一致性'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            speech: {
+                name: '演讲口才',
+                icon: '🎤',
+                category: '语言',
+                desc: '演讲稿、辩论、主持',
+                methods: ['PREP', '故事弧', '峰终定律'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            social: {
+                name: '社交媒体',
+                icon: '📱',
+                category: '运营',
+                desc: '短视频、直播、社群',
+                methods: ['钩子理论', '算法逻辑', '人设打造'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            seo: {
+                name: 'SEO优化',
+                icon: '🔍',
+                category: '运营',
+                desc: '关键词、内容优化',
+                methods: ['E-E-A-T', 'TF-IDF', '语义搜索'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            email: {
+                name: '邮件沟通',
+                icon: '📧',
+                category: '商务',
+                desc: '商务邮件、跟进、谈判',
+                methods: ['金字塔原理', 'SCQA', 'FAB'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            meeting: {
+                name: '会议管理',
+                icon: '🤝',
+                category: '商务',
+                desc: '会议纪要、议程、主持',
+                methods: ['六顶思考帽', '罗伯特议事', 'OKR对齐'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            project: {
+                name: '项目管理',
+                icon: '📋',
+                category: '商务',
+                desc: '计划、风险、汇报',
+                methods: ['WBS', '甘特图', '敏捷Scrum'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            architecture: {
+                name: '系统架构',
+                icon: '🏗️',
+                category: '技术',
+                desc: '技术方案、架构设计',
+                methods: ['CAP', '微服务', 'DDD'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            security: {
+                name: '网络安全',
+                icon: '🔒',
+                category: '技术',
+                desc: '渗透测试、安全审计',
+                methods: ['OWASP', 'STRIDE', 'CVSS'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            blockchain: {
+                name: '区块链',
+                icon: '⛓️',
+                category: '技术',
+                desc: '智能合约、DApp',
+                methods: ['共识机制', 'Gas优化', 'MEV防护'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            biotech: {
+                name: '生物科技',
+                icon: '🧬',
+                category: '科研',
+                desc: '基因分析、药物研发',
+                methods: ['CRISPR', '通路分析', '临床试验'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            energy: {
+                name: '新能源',
+                icon: '⚡',
+                category: '产业',
+                desc: '光伏、储能、电动车',
+                methods: ['LCOE', '能量密度', '梯次利用'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            realestate: {
+                name: '房地产',
+                icon: '🏘️',
+                category: '产业',
+                desc: '投资分析、营销策划',
+                methods: ['DCF估值', 'Cap Rate', '区位分析'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            },
+            manufacturing: {
+                name: '智能制造',
+                icon: '🏭',
+                category: '产业',
+                desc: '工业4.0、供应链',
+                methods: ['精益生产', '六西格玛', '数字孪生'],
+                modules: {
+                    basic: ['role', 'task', 'output'],
+                    advanced: ['role', 'task', 'framework', 'quality', 'output'],
+                    expert: ['role', 'task', 'framework', 'quality', 'examples', 'iteration', 'output']
+                }
+            }
+        };
+
+        // ============ 模块模板库 ============
+        const MODULES = {
+            role: {
+                name: '角色锚定',
+                render: (domain, task, complexity) => {
+                    const roles = {
+                        general: '专业助手',
+                        marketing: '资深电商文案专家',
+                        writing: '顶级创意写作教练',
+                        coding: '资深开发工程师',
+                        data: '数据分析师',
+                        customer: '金牌客服培训师',
+                        legal: '资深法律顾问',
+                        education: '教育设计专家',
+                        medical: '临床医疗专家',
+                        finance: 'CFA持证分析师',
+                        research: '科研方法论专家',
+                        game: '游戏策划总监',
+                        design: '资深UX设计师',
+                        hr: 'HRBP专家',
+                        product: '产品总监',
+                        consulting: '麦肯锡资深顾问',
+                        translation: '资深本地化专家',
+                        speech: 'TED演讲教练',
+                        social: '社交媒体运营总监',
+                        seo: 'SEO技术专家',
+                        email: '商务沟通顾问',
+                        meeting: '高效会议 facilitator',
+                        project: 'PMP认证项目经理',
+                        architecture: '系统架构师',
+                        security: '网络安全专家',
+                        blockchain: '区块链架构师',
+                        biotech: '生物信息学专家',
+                        energy: '新能源产业分析师',
+                        realestate: '房地产投资顾问',
+                        manufacturing: '智能制造专家'
+                    };
+                    
+                    const experience = complexity === 'expert' ? '拥有15年以上实战经验，行业TOP 1%水平' :
+                                     complexity === 'advanced' ? '拥有10年以上实战经验' : '专业级水平';
+                    
+                    const skills = {
+                        general: '结构化思维、跨领域迁移、精准表达',
+                        marketing: '消费者洞察、转化优化、平台算法',
+                        writing: '叙事架构、人物塑造、节奏控制',
+                        coding: '代码设计、性能优化、安全审查',
+                        data: '统计分析、商业洞察、可视化',
+                        customer: '情绪识别、冲突化解、服务设计',
+                        legal: '风险预判、条文解释、谈判策略',
+                        education: '教学设计、认知科学、评估体系',
+                        medical: '循证医学、诊断推理、患者沟通',
+                        finance: '资产定价、风险管理、量化建模',
+                        research: '文献综述、实验设计、学术写作',
+                        game: '心流设计、数值平衡、留存优化',
+                        design: '用户研究、交互设计、视觉系统',
+                        hr: '人才盘点、组织发展、薪酬设计',
+                        product: '需求分析、用户研究、数据驱动',
+                        consulting: '战略分析、问题拆解、方案落地',
+                        translation: '文化转码、术语管理、质量保证',
+                        speech: '故事构建、舞台呈现、观众互动',
+                        social: '算法逻辑、内容策略、流量运营',
+                        seo: '技术SEO、内容策略、数据监控',
+                        email: '商务礼仪、谈判技巧、关系维护',
+                        meeting: '议程设计、冲突管理、决策推进',
+                        project: '进度控制、风险预警、团队协作',
+                        architecture: '高可用设计、性能优化、技术选型',
+                        security: '威胁建模、漏洞分析、安全加固',
+                        blockchain: '共识设计、智能合约、经济模型',
+                        biotech: '基因分析、药物筛选、临床统计',
+                        energy: '技术路线、成本分析、政策解读',
+                        realestate: '市场研判、投资测算、交易谈判',
+                        manufacturing: '工艺优化、质量控制、智能改造'
+                    };
+
+                    return `你是一位${roles[domain] || '专业专家'}，${experience}。
+
+【核心能力】
+1. ${(skills[domain] || '专业分析').split('、')[0]}
+2. ${(skills[domain] || '方案设计').split('、')[1] || '深度研究'}
+3. ${(skills[domain] || '落地执行').split('、')[2] || '持续优化'}
+
+【思维特征】
+${complexity === 'expert' ? '第一性原理思考者，擅长从本质出发重构问题' : 
+  complexity === 'advanced' ? '系统思维，善于平衡多方约束' : '目标导向，高效执行'}`;
+                }
+            },
+            task: {
+                name: '任务解构',
+                render: (domain, task, complexity) => {
+                    const analysis = complexity === 'expert' ? 
+                        `【任务深度分析】
+核心需求：${task}
+表层目标：[用户明确表达的需求]
+深层目标：[用户未明说但期望达成的效果]
+成功标准：[可量化的验收指标]
+约束条件：[时间/预算/技术/合规限制]` :
+                        `【任务】${task}`;
+                    
+                    return analysis;
+                }
+            },
+            framework: {
+                name: '执行框架',
+                render: (domain, task, complexity) => {
+                    const frameworks = {
+                        marketing: `【执行框架】
+步骤1：受众洞察
+- 识别目标人群画像（年龄/收入/痛点/媒介习惯）
+- 分析消费决策路径（认知→兴趣→评估→购买）
+
+步骤2：卖点提炼
+- 功能卖点：产品能解决什么问题
+- 情感卖点：用户能获得什么感受
+- 社会卖点：用户想展示什么形象
+
+步骤3：内容构建
+- 标题：制造好奇或承诺利益
+- 正文：场景代入→问题放大→解决方案→行动号召
+- 结尾：降低决策门槛（限时/限量/赠品）
+
+步骤4：优化迭代
+- A/B测试不同版本
+- 根据数据反馈调整`,
+                        coding: `【执行框架】
+步骤1：需求澄清
+- 明确功能边界（做什么/不做什么）
+- 识别非功能需求（性能/安全/可用性）
+
+步骤2：方案设计
+- 架构选型（单体/微服务/Serverless）
+- 数据模型设计
+- 接口契约定义
+
+步骤3：代码实现
+- 核心逻辑编码
+- 边界条件处理
+- 错误处理与日志
+
+步骤4：质量保障
+- 单元测试覆盖
+- 集成测试验证
+- 代码审查通过`,
+                        data: `【分析框架】
+步骤1：问题定义
+- 明确业务问题（描述性/诊断性/预测性/规范性）
+- 确定成功指标（北极星指标+辅助指标）
+
+步骤2：数据探索
+- 数据质量评估（完整性/准确性/时效性）
+- 描述性统计分析
+- 异常值与缺失值处理
+
+步骤3：分析建模
+- 选择分析方法（对比/相关/回归/聚类）
+- 模型构建与验证
+- 结果解释与业务翻译
+
+步骤4：洞察输出
+- 核心发现提炼
+- 可落地建议（优先级/责任人/时间）
+- 风险提示与局限性`,
+                        general: `【执行框架】
+步骤1：需求拆解
+- 识别显式要求（用户明确说的）
+- 挖掘隐式要求（用户没明说但需要的）
+
+步骤2：方案设计
+- 提供2种解决思路
+- 对比优劣，推荐最优方案
+
+步骤3：执行与输出
+- 按推荐方案详细执行
+- 关键决策点说明理由
+
+步骤4：质量验证
+- 自检：输出是否符合用户原始意图？
+- 边界：是否遗漏了重要约束？`
+                    };
+                    
+                    return frameworks[domain] || frameworks.general;
+                }
+            },
+            quality: {
+                name: '质量控制',
+                render: (domain, task, complexity) => {
+                    if (complexity === 'basic') return '';
+                    
+                    const checks = {
+                        marketing: `【质量控制】
+□ 文案读起来像分享还是广告？（目标：像分享）
+□ 是否有具体细节而非泛泛而谈？
+□ 前3句能否留住读者？
+□ 是否包含行动号召？
+□ 是否符合平台合规要求？`,
+                        coding: `【质量控制】
+□ 代码是否可直接运行（无伪代码）？
+□ 是否处理了所有边界条件？
+□ 变量名是否具有语义化？
+□ 是否包含至少3个测试用例（含异常输入）？
+□ 时间/空间复杂度是否标注？`,
+                        data: `【质量控制】
+□ 结论是否有数据支撑，而非主观臆断？
+□ 是否区分了相关性与因果性？
+□ 建议是否具体（含责任方/时间/预期效果）？
+□ 非专业读者能否理解核心结论？
+□ 是否指出了数据局限性？`,
+                        general: `【质量控制】
+□ 输出是否符合用户原始意图？
+□ 是否遗漏了重要约束？
+□ 如果需求变更，方案是否可调整？
+□ 是否存在歧义表述？
+□ 是否提供了可验证的交付物？`
+                    };
+                    
+                    return checks[domain] || checks.general;
+                }
+            },
+            examples: {
+                name: '示例嵌入',
+                render: (domain, task, complexity) => {
+                    if (complexity !== 'expert') return '';
+                    
+                    return `【示例参考】
+
+优秀示例 ✅：
+[该领域高质量输出的典型特征]
+
+避免示例 ❌：
+[常见低质量输出的典型问题]
+
+对比说明：
+为什么优秀示例更好？具体差在哪？`;
+                }
+            },
+            iteration: {
+                name: '迭代机制',
+                render: (domain, task, complexity) => {
+                    if (complexity !== 'expert') return '';
+                    
+                    return `【迭代优化】
+
+第一轮：生成初稿
+- 快速输出完整框架
+- 不追求完美，先求完整
+
+第二轮：自我审查
+- 对照质量控制清单逐项检查
+- 标记薄弱环节
+
+第三轮：针对性优化
+- 对标记的薄弱环节重点改进
+- 补充具体细节和案例
+
+第四轮：最终润色
+- 检查语言流畅度
+- 确保格式一致性
+- 验证所有变量已替换`;
+                }
+            },
+            output: {
+                name: '输出规范',
+                render: (domain, task, complexity) => {
+                    const specs = {
+                        marketing: `【输出规范】
+- 格式：标题（含emoji）+ 正文 + 标签
+- 字数：根据平台要求调整
+- 风格：${complexity === 'expert' ? '真实分享感，避免硬广' : '专业且吸引人'}
+- 合规：避免绝对化用语，用"我觉得""个人体验"替代`,
+                        coding: `【输出规范】
+- 格式：Markdown代码块，含语法高亮
+- 结构：方案对比 → 推荐代码 → 测试用例 → 使用说明
+- 注释：关键逻辑添加行内注释
+- 可运行：代码可直接复制执行`,
+                        data: `【输出规范】
+- 格式：执行摘要 → 分析过程 → 数据表格 → 建议清单
+- 图表：如需可视化，用文字描述关键信息
+- 结论：每个结论必须有数据支撑
+- 建议：区分短期/长期，标注优先级`,
+                        general: `【输出规范】
+- 格式：结构清晰，分点说明
+- 语言：简洁，避免冗余
+- 如有不确定之处，明确标注
+- 请直接开始`
+                    };
+                    
+                    return specs[domain] || specs.general;
+                }
+            }
+        };
+
+        // ============ 状态管理 ============
+        let currentDomain = 'general';
+        let currentComplexity = 'basic';
+        let currentOutput = '';
+        let currentTask = '';
+
+        // ============ 初始化 ============
+        function init() {
+            renderCategories();
+            loadTheme();
+        }
+
+        // ============ 渲染分类 ============
+        function renderCategories() {
+            const grid = document.getElementById('categoryGrid');
+            grid.innerHTML = Object.entries(DOMAINS).map(([key, domain]) => `
+                <div class="category-card ${key === currentDomain ? 'active' : ''}" 
+                     onclick="selectDomain('${key}')" data-key="${key}">
+                    <div class="category-icon">${domain.icon}</div>
+                    <div class="category-name">${domain.name}</div>
+                    <div class="category-desc">${domain.desc}</div>
+                    <div style="margin-top: 8px; font-size: 11px; color: var(--text-secondary);">
+                        ${domain.methods.slice(0, 2).join(' · ')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectDomain(key) {
+            currentDomain = key;
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.classList.toggle('active', card.dataset.key === key);
+            });
+        }
+
+        // ============ 生成提示词 ============
+        function generate() {
+            const task = document.getElementById('taskInput').value.trim();
+            if (!task) {
+                showToast('请输入任务描述');
+                return;
+            }
+
+            currentTask = task;
+            currentComplexity = document.getElementById('complexitySelect').value;
+            
+            const domain = DOMAINS[currentDomain];
+            const moduleKeys = domain.modules[currentComplexity];
+            
+            let output = '';
+            moduleKeys.forEach(key => {
+                if (MODULES[key]) {
+                    output += MODULES[key].render(currentDomain, task, currentComplexity) + '\n\n';
+                }
+            });
+
+            currentOutput = output.trim();
+            
+            // 显示输出
+            document.getElementById('outputBlock').textContent = currentOutput;
+            document.getElementById('outputContainer').classList.add('active');
+            
+            // 显示模块标签
+            const tagsHtml = moduleKeys.map(k => 
+                `<span class="module-tag active">${MODULES[k]?.name || k}</span>`
+            ).join('');
+            document.getElementById('moduleTags').innerHTML = tagsHtml;
+            
+            // 分析质量
+            analyzeQuality();
+            
+            // 保存历史
+            saveHistory();
+            
+            // 滚动到输出
+            setTimeout(() => {
+                document.getElementById('outputContainer').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        // ============ 质量分析 ============
+        function analyzeQuality() {
+            const panel = document.getElementById('analysisPanel');
+            const scores = calculateScores();
+            
+            // 渲染分数
+            const scoreGrid = document.getElementById('scoreGrid');
+            scoreGrid.innerHTML = Object.entries(scores.dimensions).map(([key, val]) => `
+                <div class="score-item">
+                    <div class="score-header">
+                        <span class="score-name">${val.name}</span>
+                        <span class="score-value" style="color: ${val.score >= 4 ? '#10b981' : val.score >= 3 ? '#f59e0b' : '#ef4444'}">${val.score}/5</span>
+                    </div>
+                    <div class="score-bar">
+                        <div class="score-fill" style="width: ${(val.score/5)*100}%; background: ${val.score >= 4 ? '#10b981' : val.score >= 3 ? '#f59e0b' : '#ef4444'}"></div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // 渲染建议
+            const suggestionList = document.getElementById('suggestionList');
+            suggestionList.innerHTML = scores.suggestions.map(s => `
+                <li class="suggestion-item ${s.type}">${s.text}</li>
+            `).join('');
+            
+            panel.style.display = 'block';
+        }
+
+        function calculateScores() {
+            const text = currentOutput;
+            const complexity = currentComplexity;
+            
+            let dimensions = {
+                role: { name: '角色清晰度', score: 0 },
+                task: { name: '任务可执行性', score: 0 },
+                output: { name: '输入/输出规范', score: 0 },
+                constraint: { name: '约束完整性', score: 0 },
+                quality: { name: '质量控制机制', score: 0 },
+                extend: { name: '可扩展性', score: 0 }
+            };
+
+            let suggestions = [];
+
+            // 角色清晰度
+            if (text.includes('你是一位') && text.includes('核心能力')) {
+                dimensions.role.score = complexity === 'expert' ? 5 : 4;
+            } else if (text.includes('你是一位')) {
+                dimensions.role.score = 3;
+                suggestions.push({ type: 'critical', text: '建议补充"核心能力"和"思维特征"描述，让角色更立体' });
+            } else {
+                dimensions.role.score = 2;
+                suggestions.push({ type: 'critical', text: '缺少角色定义，建议添加"你是一位[领域]专家"' });
+            }
+
+            // 任务可执行性
+            if (text.includes('步骤') && text.includes('步骤1') && text.includes('步骤2')) {
+                dimensions.task.score = complexity === 'expert' ? 5 : 4;
+            } else if (text.includes('步骤')) {
+                dimensions.task.score = 3;
+                suggestions.push({ type: '', text: '有步骤但不够详细，建议拆分为可执行的最小单元' });
+            } else {
+                dimensions.task.score = 2;
+                suggestions.push({ type: 'critical', text: '缺少执行步骤，建议采用"步骤1/2/3"结构' });
+            }
+
+            // 输入/输出规范
+            if (text.includes('输出规范') && text.includes('格式')) {
+                dimensions.output.score = 5;
+            } else if (text.includes('输出') || text.includes('格式')) {
+                dimensions.output.score = 3;
+                suggestions.push({ type: '', text: '输出规范可以更具体，建议包含格式、长度、风格要求' });
+            } else {
+                dimensions.output.score = 2;
+                suggestions.push({ type: 'critical', text: '缺少输出规范，建议添加"格式/长度/风格"要求' });
+            }
+
+            // 约束完整性
+            if (text.includes('禁止') || text.includes('避免') || text.includes('不要')) {
+                dimensions.constraint.score = 4;
+            } else {
+                dimensions.constraint.score = 2;
+                suggestions.push({ type: '', text: '建议添加约束边界（禁止事项/合规要求）' });
+            }
+
+            // 质量控制
+            if (text.includes('□') || text.includes('自检') || text.includes('质量控制')) {
+                dimensions.quality.score = complexity === 'expert' ? 5 : 4;
+            } else if (complexity === 'advanced') {
+                dimensions.quality.score = 2;
+                suggestions.push({ type: 'critical', text: '进阶版建议添加自检清单（□符号）' });
+            } else {
+                dimensions.quality.score = 3;
+            }
+
+            // 可扩展性
+            if (text.includes('[') && text.includes(']')) {
+                dimensions.extend.score = 4;
+            } else {
+                dimensions.extend.score = 2;
+                suggestions.push({ type: '', text: '建议添加参数化变量（用[]标注），提升可复用性' });
+            }
+
+            // 正面反馈
+            if (dimensions.role.score >= 4 && dimensions.task.score >= 4) {
+                suggestions.push({ type: 'good', text: '✅ 角色定义和任务结构都很清晰，继续保持' });
+            }
+            if (complexity === 'expert' && text.includes('示例')) {
+                suggestions.push({ type: 'good', text: '✅ 包含Few-shot示例，有助于提升输出质量' });
+            }
+
+            return { dimensions, suggestions };
+        }
+
+        // ============ 优化功能 ============
+        function optimizePrompt() {
+            if (!currentOutput) {
+                showToast('请先生成提示词');
+                return;
+            }
+            
+            switchTab('optimize');
+            const container = document.getElementById('optimizeContainer');
+            
+            // 模拟AI优化分析
+            const issues = findIssues(currentOutput);
+            const optimized = generateOptimized(currentOutput);
+            
+            container.innerHTML = `
+                <div class="optimize-panel">
+                    <div class="optimize-title">🔍 问题诊断</div>
+                    <div class="optimize-content">
+                        ${issues.map(i => `<p>• ${i}</p>`).join('')}
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 16px;">
+                    <div class="card-title">✨ 优化版本</div>
+                    <div class="code-block">${optimized}</div>
+                    <div class="action-bar">
+                        <button class="btn" onclick="copyOptimized()">📋 复制优化版</button>
+                        <button class="btn btn-primary" onclick="useOptimized()">✅ 使用此版本</button>
+                    </div>
+                </div>
+                
+                <div class="optimize-panel" style="margin-top: 16px;">
+                    <div class="optimize-title">📈 预期提升</div>
+                    <div class="optimize-content">
+                        <p>• 角色清晰度：<span class="diff-added">+20%</span>（补充思维特征）</p>
+                        <p>• 任务可执行性：<span class="diff-added">+15%</span>（步骤更具体）</p>
+                        <p>• 质量控制：<span class="diff-added">+25%</span>（新增自检清单）</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function findIssues(text) {
+            const issues = [];
+            if (!text.includes('思维特征')) issues.push('缺少"思维特征"描述，角色不够立体');
+            if (!text.includes('□')) issues.push('缺少自检清单，难以保证输出质量');
+            if (!text.includes('示例')) issues.push('缺少Few-shot示例，AI理解可能偏差');
+            if (!text.includes('迭代')) issues.push('缺少迭代机制，一次性输出风险高');
+            if (issues.length === 0) issues.push('整体结构良好，建议根据具体场景微调细节');
+            return issues;
+        }
+
+        function generateOptimized(text) {
+            // 在原文基础上添加优化
+            let optimized = text;
+            
+            if (!optimized.includes('【思维特征】')) {
+                optimized = optimized.replace('【核心能力】', '【思维特征】\n第一性原理思考者，擅长从本质重构问题\n\n【核心能力】');
+            }
+            
+            if (!optimized.includes('【自检清单】') && !optimized.includes('□')) {
+                optimized += '\n\n【自检清单】\n□ 输出是否符合原始意图？\n□ 是否遗漏关键约束？\n□ 是否存在歧义表述？\n□ 交付物是否可验证？';
+            }
+            
+            return optimized;
+        }
+
+        let optimizedText = '';
+        function copyOptimized() {
+            navigator.clipboard.writeText(optimizedText || generateOptimized(currentOutput));
+            showToast('已复制优化版本');
+        }
+
+        function useOptimized() {
+            currentOutput = optimizedText || generateOptimized(currentOutput);
+            document.getElementById('outputBlock').textContent = currentOutput;
+            switchTab('generate');
+            analyzeQuality();
+            showToast('已应用优化版本');
+        }
+
+        // ============ 对比功能 ============
+        function generateCompare() {
+            if (!currentTask) {
+                showToast('请先在"生成"标签页创建提示词');
+                return;
+            }
+            
+            switchTab('compare');
+            const container = document.getElementById('compareContainer');
+            
+            // 生成三个版本
+            const basic = generateVersion('basic');
+            const advanced = generateVersion('advanced');
+            const expert = generateVersion('expert');
+            
+            container.innerHTML = `
+                <div class="compare-grid">
+                    <div class="compare-card">
+                        <div class="compare-header">
+                            ⚡ 基础版
+                            <span class="compare-tag tag-green">快速</span>
+                        </div>
+                        <div class="compare-body">
+                            <div class="code-block" style="font-size: 12px;">${basic}</div>
+                            <div style="margin-top: 12px;">
+                                <span class="compare-tag tag-yellow">3个模块</span>
+                                <span class="compare-tag tag-yellow">无自检</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="compare-card">
+                        <div class="compare-header">
+                            🔥 进阶版
+                            <span class="compare-tag tag-green">推荐</span>
+                        </div>
+                        <div class="compare-body">
+                            <div class="code-block" style="font-size: 12px;">${advanced}</div>
+                            <div style="margin-top: 12px;">
+                                <span class="compare-tag tag-green">5个模块</span>
+                                <span class="compare-tag tag-green">含自检</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="compare-card" style="margin-top: 16px;">
+                    <div class="compare-header">
+                        👑 专家版
+                        <span class="compare-tag tag-green">专业</span>
+                    </div>
+                    <div class="compare-body">
+                        <div class="code-block" style="font-size: 12px;">${expert}</div>
+                        <div style="margin-top: 12px;">
+                            <span class="compare-tag tag-green">7个模块</span>
+                            <span class="compare-tag tag-green">Few-shot</span>
+                            <span class="compare-tag tag-green">迭代机制</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateVersion(complexity) {
+            const domain = DOMAINS[currentDomain];
+            const moduleKeys = domain.modules[complexity];
+            
+            let output = '';
+            moduleKeys.forEach(key => {
+                if (MODULES[key]) {
+                    output += MODULES[key].render(currentDomain, currentTask, complexity) + '\n\n';
+                }
+            });
+            
+            return output.trim();
+        }
+
+        // ============ 历史记录 ============
+        function saveHistory() {
+            let history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
+            history.unshift({
+                id: Date.now(),
+                task: currentTask,
+                domain: currentDomain,
+                domainName: DOMAINS[currentDomain].name,
+                complexity: currentComplexity,
+                output: currentOutput,
+                time: new Date().toLocaleString('zh-CN')
+            });
+            if (history.length > 50) history = history.slice(0, 50);
+            localStorage.setItem('promptHistory', JSON.stringify(history));
+        }
+
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
+            const container = document.getElementById('historyContainer');
+            
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <p>暂无历史记录</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = history.map(item => `
+                <div class="history-item">
+                    <div class="history-meta">
+                        <div class="history-tags">
+                            <span class="history-tag">${item.domainName}</span>
+                            <span class="history-tag">${item.complexity === 'expert' ? '专家' : item.complexity === 'advanced' ? '进阶' : '基础'}</span>
+                        </div>
+                        <span class="history-time">${item.time}</span>
+                    </div>
+                    <div class="history-task">${item.task}</div>
+                    <div class="history-preview">${item.output.substring(0, 120)}...</div>
+                    <div class="history-actions">
+                        <button class="btn" onclick="loadHistoryItem(${item.id})">📋 加载</button>
+                        <button class="btn" onclick="copyHistoryItem(${item.id})">📄 复制</button>
+                        <button class="btn btn-danger" onclick="deleteHistoryItem(${item.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadHistoryItem(id) {
+            const history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
+            const item = history.find(h => h.id === id);
+            if (item) {
+                document.getElementById('taskInput').value = item.task;
+                currentDomain = item.domain;
+                currentComplexity = item.complexity;
+                currentOutput = item.output;
+                currentTask = item.task;
+                
+                renderCategories();
+                document.getElementById('complexitySelect').value = item.complexity;
+                document.getElementById('outputBlock').textContent = item.output;
+                document.getElementById('outputContainer').classList.add('active');
+                
+                switchTab('generate');
+                analyzeQuality();
+            }
+        }
+
+        function copyHistoryItem(id) {
+            const history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
+            const item = history.find(h => h.id === id);
+            if (item) {
+                navigator.clipboard.writeText(item.output);
+                showToast('已复制');
+            }
+        }
+
+        function deleteHistoryItem(id) {
+            let history = JSON.parse(localStorage.getItem('promptHistory') || '[]');
+            history = history.filter(h => h.id !== id);
+            localStorage.setItem('promptHistory', JSON.stringify(history));
+            loadHistory();
+        }
+
+        function clearHistory() {
+            if (confirm('确定清空所有历史记录？')) {
+                localStorage.removeItem('promptHistory');
+                loadHistory();
+                showToast('已清空');
+            }
+        }
+
+        // ============ 工具函数 ============
+        function switchTab(tab) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
+            
+            if (tab === 'history') loadHistory();
+            if (tab === 'compare') generateCompare();
+        }
+
+        function copyOutput() {
+            navigator.clipboard.writeText(currentOutput);
+            showToast('已复制到剪贴板');
+        }
+
+        function exportMD() {
+            const blob = new Blob([currentOutput], { type: 'text/markdown' });
+            downloadFile(blob, 'prompt.md');
+        }
+
+        function exportTXT() {
+            const blob = new Blob([currentOutput], { type: 'text/plain' });
+            downloadFile(blob, 'prompt.txt');
+        }
+
+        function downloadFile(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+        }
+
+        function loadTheme() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            document.getElementById('themeIcon').textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // 初始化
+        init();
+    </script>
+</body>
+</html>
