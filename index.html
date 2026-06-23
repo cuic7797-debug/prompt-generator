@@ -292,6 +292,23 @@
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+        .password-hint {
+            font-size: 11px;
+            color: var(--warning);
+            margin-top: 6px;
+            padding: 6px 10px;
+            background: rgba(245,158,11,0.08);
+            border-radius: 6px;
+            display: none;
+        }
+        .password-hint.show { display: block; }
+
+        .locked-badge {
+            font-size: 10px;
+            color: var(--warning);
+            margin-left: 4px;
+        }
     </style>
 <script>
 var _hmt = _hmt || [];
@@ -365,11 +382,14 @@ var _hmt = _hmt || [];
                         <label class="form-label">复杂度</label>
                         <div class="complexity-selector">
                             <button class="complexity-option active" data-value="basic" onclick="selectComplexity('basic')">⚡ 基础</button>
-                            <button class="complexity-option" data-value="advanced" onclick="selectComplexity('advanced')">🔥 进阶</button>
-                            <button class="complexity-option" data-value="expert" onclick="selectComplexity('expert')">👑 专家</button>
+                            <button class="complexity-option" data-value="advanced" onclick="selectComplexity('advanced')">🔥 进阶<span class="locked-badge">🔒</span></button>
+                            <button class="complexity-option" data-value="expert" onclick="selectComplexity('expert')">👑 专家<span class="locked-badge">🔒</span></button>
+                        </div>
+                        <div class="password-hint" id="passwordHint">
+                            🔒 进阶/专家版需联系作者 <strong>Q704451222</strong> 获取密码
                         </div>
                     </div>
-                    <button class="generate-btn" onclick="generate()">✨ 智能生成</button>
+                    <button class="generate-btn" onclick="generateWithTracking()">✨ 智能生成</button>
                 </div>
             </div>
         </div>
@@ -761,12 +781,65 @@ ${thinking}`;
 };
 
 const MARKET_TEMPLATES = [
-    { id: 1, title: '小红书爆款种草文案', domain: 'marketing', complexity: 'advanced', author: '官方', likes: 128, desc: '基于SCQA-R结构，适合美妆/护肤/食品类种草' },
-    { id: 2, title: 'Python爬虫开发模板', domain: 'coding', complexity: 'expert', author: '官方', likes: 96, desc: '含反爬策略、数据清洗、异常处理完整方案' },
-    { id: 3, title: '商业数据分析报告', domain: 'data', complexity: 'advanced', author: '官方', likes: 84, desc: '假设驱动分析框架，适合运营/产品数据分析' },
-    { id: 4, title: '学术论文写作助手', domain: 'research', complexity: 'expert', author: '官方', likes: 72, desc: 'IMRaD结构，含文献综述和实验设计模块' },
-    { id: 5, title: '客服客诉处理话术', domain: 'customer', complexity: 'advanced', author: '官方', likes: 65, desc: 'HEARD模型，适合电商/ SaaS客服场景' },
-    { id: 6, title: '产品需求文档PRD', domain: 'product', complexity: 'advanced', author: '官方', likes: 58, desc: '含用户故事、验收标准、数据埋点设计' }
+    // 内容创作类
+    { id: 1, title: '小红书爆款种草文案', domain: 'marketing', complexity: 'advanced', author: '官方', likes: 328, desc: 'SCQA-R结构，适合美妆/护肤/食品类种草，真实感强' },
+    { id: 2, title: '抖音短视频脚本', domain: 'social', complexity: 'advanced', author: '官方', likes: 256, desc: '钩子+痛点+解决方案+行动号召，3秒留住用户' },
+    { id: 3, title: '公众号深度长文', domain: 'writing', complexity: 'expert', author: '官方', likes: 198, desc: '故事弧+金句+数据支撑，适合知识付费类文章' },
+    { id: 4, title: '淘宝详情页文案', domain: 'marketing', complexity: 'advanced', author: '官方', likes: 245, desc: 'FABE法则，卖点可视化，提升转化率' },
+    { id: 5, title: '直播带货话术', domain: 'social', complexity: 'expert', author: '官方', likes: 312, desc: '开场留人+产品介绍+逼单+互动，完整直播脚本' },
+    { id: 6, title: 'SEO优化文章', domain: 'seo', complexity: 'advanced', author: '官方', likes: 167, desc: '关键词布局+E-E-A-T标准，搜索引擎友好' },
+    { id: 7, title: '品牌故事文案', domain: 'writing', complexity: 'expert', author: '官方', likes: 145, desc: '创始人故事+品牌使命+用户共鸣，提升品牌调性' },
+    { id: 8, title: '朋友圈营销文案', domain: 'marketing', complexity: 'basic', author: '官方', likes: 289, desc: '生活化场景+软性植入，避免硬广感' },
+    { id: 9, title: '演讲开场白', domain: 'speech', complexity: 'advanced', author: '官方', likes: 134, desc: 'PREP结构，3分钟抓住听众注意力' },
+    { id: 10, title: '产品发布会PPT讲稿', domain: 'speech', complexity: 'expert', author: '官方', likes: 178, desc: '乔布斯式演讲结构，悬念+ reveal + 愿景' },
+
+    // 技术开发类
+    { id: 11, title: 'Python爬虫开发', domain: 'coding', complexity: 'expert', author: '官方', likes: 456, desc: '反爬策略+数据清洗+异常处理，完整可运行代码' },
+    { id: 12, title: 'React组件设计', domain: 'coding', complexity: 'advanced', author: '官方', likes: 234, desc: 'Props设计+状态管理+性能优化，最佳实践' },
+    { id: 13, title: 'API接口文档', domain: 'coding', complexity: 'basic', author: '官方', likes: 189, desc: 'RESTful规范+示例+错误码，开发者友好' },
+    { id: 14, title: '微服务架构方案', domain: 'architecture', complexity: 'expert', author: '官方', likes: 267, desc: '服务拆分+通信方式+数据一致性，企业级方案' },
+    { id: 15, title: '数据库设计规范', domain: 'architecture', complexity: 'advanced', author: '官方', likes: 198, desc: '三范式+索引优化+分库分表，高性能设计' },
+    { id: 16, title: '渗透测试报告', domain: 'security', complexity: 'expert', author: '官方', likes: 156, desc: 'OWASP标准+漏洞详情+修复建议，专业安全报告' },
+    { id: 17, title: '智能合约审计', domain: 'blockchain', complexity: 'expert', author: '官方', likes: 123, desc: 'Solidity安全+Gas优化+逻辑漏洞检查' },
+    { id: 18, title: '数据分析报告', domain: 'data', complexity: 'advanced', author: '官方', likes: 289, desc: '假设驱动+可视化+业务建议，决策者视角' },
+    { id: 19, title: '机器学习模型文档', domain: 'data', complexity: 'expert', author: '官方', likes: 178, desc: '特征工程+模型选择+评估指标，完整ML流程' },
+    { id: 20, title: 'Git提交规范', domain: 'coding', complexity: 'basic', author: '官方', likes: 345, desc: 'Conventional Commits+版本管理，团队协作必备' },
+
+    // 商业管理类
+    { id: 21, title: '产品需求文档PRD', domain: 'product', complexity: 'advanced', author: '官方', likes: 398, desc: '用户故事+验收标准+数据埋点，开发可直接执行' },
+    { id: 22, title: '竞品分析报告', domain: 'product', complexity: 'advanced', author: '官方', likes: 267, desc: '功能对比+用户体验+市场定位，战略决策依据' },
+    { id: 23, title: '麦肯锡战略咨询', domain: 'consulting', complexity: 'expert', author: '官方', likes: 234, desc: '7S模型+波特五力+BCG矩阵，顶层战略设计' },
+    { id: 24, title: 'OKR制定指南', domain: 'hr', complexity: 'advanced', author: '官方', likes: 312, desc: '目标对齐+关键结果量化+复盘机制，团队管理' },
+    { id: 25, title: '面试评估表', domain: 'hr', complexity: 'basic', author: '官方', likes: 289, desc: '胜任力模型+行为面试法+评分标准，科学招聘' },
+    { id: 26, title: '项目进度汇报', domain: 'project', complexity: 'advanced', author: '官方', likes: 198, desc: '甘特图+风险预警+下一步计划，老板爱看' },
+    { id: 27, title: '商务邮件模板', domain: 'email', complexity: 'basic', author: '官方', likes: 456, desc: '金字塔原理+礼貌用语+行动项，职场必备' },
+    { id: 28, title: '会议纪要模板', domain: 'meeting', complexity: 'basic', author: '官方', likes: 378, desc: '议程+决议+待办+责任人，会后可追溯' },
+    { id: 29, title: '融资路演PPT', domain: 'consulting', complexity: 'expert', author: '官方', likes: 245, desc: '痛点+解决方案+商业模式+财务预测，投资人视角' },
+    { id: 30, title: '年终总结报告', domain: 'project', complexity: 'advanced', author: '官方', likes: 567, desc: '成果量化+问题反思+明年规划，升职加薪利器' },
+
+    // 专业服务类
+    { id: 31, title: '合同审查清单', domain: 'legal', complexity: 'advanced', author: '官方', likes: 234, desc: 'IRAC方法+风险点+修改建议，法务必备' },
+    { id: 32, title: '健康科普文章', domain: 'medical', complexity: 'basic', author: '官方', likes: 189, desc: '循证医学+通俗表达+免责声明，安全科普' },
+    { id: 33, title: '投资分析报告', domain: 'finance', complexity: 'expert', author: '官方', likes: 178, desc: 'DCF估值+风险评估+投资建议，专业研报' },
+    { id: 34, title: '课程大纲设计', domain: 'education', complexity: 'advanced', author: '官方', likes: 245, desc: '布鲁姆分类+学习目标+评估方式，教学设计' },
+    { id: 35, title: '客服话术库', domain: 'customer', complexity: 'basic', author: '官方', likes: 398, desc: 'HEARD模型+常见场景+应对话术，提升满意度' },
+    { id: 36, title: '保险方案配置', domain: 'finance', complexity: 'advanced', author: '官方', likes: 156, desc: '需求分析+产品对比+保障缺口，个性化方案' },
+    { id: 37, title: '学术论文摘要', domain: 'research', complexity: 'advanced', author: '官方', likes: 267, desc: 'IMRaD结构+关键词+研究意义，期刊投稿' },
+    { id: 38, title: '实验设计方案', domain: 'research', complexity: 'expert', author: '官方', likes: 198, desc: '假设+变量控制+样本量+统计方法，科研规范' },
+    { id: 39, title: '多语言翻译校对', domain: 'translation', complexity: 'advanced', author: '官方', likes: 134, desc: '功能对等+文化转码+术语一致性，本地化标准' },
+    { id: 40, title: '留学申请文书', domain: 'education', complexity: 'expert', author: '官方', likes: 289, desc: '个人故事+学术动机+职业规划，藤校录取' },
+
+    // 科研创意类
+    { id: 41, title: '游戏策划案', domain: 'game', complexity: 'expert', author: '官方', likes: 234, desc: '核心玩法+数值系统+留存设计，完整策划文档' },
+    { id: 42, title: 'UI设计规范', domain: 'design', complexity: 'advanced', author: '官方', likes: 312, desc: '色彩系统+字体规范+组件库，设计团队标准' },
+    { id: 43, title: '用户调研问卷', domain: 'design', complexity: 'basic', author: '官方', likes: 267, desc: '问题设计+逻辑跳转+数据分析，科学调研' },
+    { id: 44, title: '基因测序分析', domain: 'biotech', complexity: 'expert', author: '官方', likes: 123, desc: '生物信息学+通路分析+临床意义，科研级报告' },
+    { id: 45, title: '新能源投资分析', domain: 'energy', complexity: 'advanced', author: '官方', likes: 156, desc: 'LCOE+政策解读+技术路线，产业投资视角' },
+    { id: 46, title: '房产投资测算', domain: 'realestate', complexity: 'advanced', author: '官方', likes: 198, desc: 'DCF+Cap Rate+市场周期，投资决策依据' },
+    { id: 47, title: '智能制造方案', domain: 'manufacturing', complexity: 'expert', author: '官方', likes: 145, desc: '精益生产+六西格玛+IoT集成，工业4.0' },
+    { id: 48, title: '短视频分镜脚本', domain: 'game', complexity: 'advanced', author: '官方', likes: 289, desc: '镜头语言+节奏控制+转场设计，影视制作' },
+    { id: 49, title: '品牌VI设计说明', domain: 'design', complexity: 'advanced', author: '官方', likes: 178, desc: 'Logo释义+色彩心理学+应用场景，品牌手册' },
+    { id: 50, title: '跨境电商运营', domain: 'marketing', complexity: 'advanced', author: '官方', likes: 345, desc: '平台算法+Listing优化+广告投放，出海攻略' }
 ];
 
 let currentDomain = 'general', currentComplexity = 'basic', currentOutput = '', currentTask = '', currentAnalysis = null;
