@@ -208,6 +208,7 @@ body {
 
 .admin-panel { display: none; }
 .admin-panel.active { display: block; }
+#sectionAdmin:not(.hidden) { display: block !important; }
 .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
 .admin-card {
   background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
@@ -297,6 +298,7 @@ body {
 
 .hidden { display: none !important; }
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -446,7 +448,7 @@ body {
   </div>
 </div>
 
-<div id="sectionAdmin" class="hidden admin-panel">
+<div id="sectionAdmin" class="hidden">
   <div class="card">
     <div class="card-title">🔐 密码管理面板</div>
     <div class="admin-grid" style="margin-bottom:20px;">
