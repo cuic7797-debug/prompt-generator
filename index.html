@@ -1,0 +1,2571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI提示词生成器 - 让AI为你打工</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --dark: #1e1b4b;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --radius-lg: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 背景粒子 */
+        .bg-particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            animation: float 20s infinite ease-in-out;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+            25% { transform: translateY(-30px) translateX(20px); opacity: 0.6; }
+            50% { transform: translateY(-60px) translateX(-10px); opacity: 0.4; }
+            75% { transform: translateY(-30px) translateX(-20px); opacity: 0.5; }
+        }
+
+        /* 顶部导航 */
+        .navbar {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0 16px;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .nav-brand .logo-icon {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2px;
+        }
+        .nav-link {
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            color: var(--gray-600);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+            white-space: nowrap;
+        }
+        .nav-link:hover {
+            background: var(--gray-100);
+            color: var(--gray-800);
+        }
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: var(--shadow);
+        }
+        .nav-link .nav-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--danger);
+            color: white;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 8px;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        /* 移动端菜单按钮 */
+        .mobile-menu-btn {
+            display: none;
+            width: 36px; height: 36px;
+            border: none;
+            background: var(--gray-100);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-nav-overlay {
+            display: none;
+            position: fixed;
+            top: 56px; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            backdrop-filter: blur(4px);
+        }
+        .mobile-nav-overlay.show {
+            display: block;
+        }
+        .mobile-nav-menu {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            background: white;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+            padding: 12px;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+        .mobile-nav-overlay.show .mobile-nav-menu {
+            transform: translateY(0);
+        }
+        .mobile-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+        .mobile-nav-item:hover, .mobile-nav-item.active {
+            background: var(--gray-100);
+            color: var(--primary);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .usage-badge {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .usage-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+        }
+
+        /* 主内容区 */
+        .main-container {
+            padding-top: 56px;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .page-content {
+            width: 100%;
+            padding: 16px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 首页布局 */
+        .home-layout {
+            display: flex;
+            gap: 16px;
+            min-height: calc(100vh - 88px);
+        }
+
+        /* 左侧配置面板 */
+        .config-panel {
+            width: 380px;
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-lg);
+            height: fit-content;
+            position: sticky;
+            top: 72px;
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            color: var(--gray-800);
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 36px;
+        }
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+
+        /* 任务描述区 */
+        .task-input-wrapper {
+            position: relative;
+        }
+        .form-textarea {
+            width: 100%;
+            padding: 12px 14px 40px 14px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            color: var(--gray-800);
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+        .form-textarea::placeholder {
+            color: var(--gray-400);
+        }
+        .task-actions {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            display: flex;
+            gap: 6px;
+        }
+        .task-action-btn {
+            padding: 4px 10px;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            background: white;
+            color: var(--gray-500);
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .task-action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(99,102,241,0.05);
+        }
+
+        /* 推荐任务 */
+        .hot-tasks {
+            margin-bottom: 16px;
+        }
+        .hot-tasks-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .hot-tasks-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .hot-task-tag {
+            padding: 5px 10px;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 1px solid #fbbf24;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 500;
+            color: #92400e;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .hot-task-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            background: linear-gradient(135deg, #fde68a, #fcd34d);
+        }
+
+        /* 复杂度选择 */
+        .complexity-section {
+            margin-bottom: 16px;
+        }
+        .complexity-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .complexity-card {
+            padding: 12px 14px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+        }
+        .complexity-card:hover {
+            border-color: var(--primary-light);
+            transform: translateX(3px);
+        }
+        .complexity-card.selected {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(99,102,241,0.05), rgba(99,102,241,0.1));
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+        .complexity-card.locked {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        .complexity-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .complexity-icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .complexity-icon.basic { background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
+        .complexity-icon.advanced { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+        .complexity-icon.expert { background: linear-gradient(135deg, #fce7f3, #fbcfe8); }
+        .complexity-text h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        .complexity-text p {
+            font-size: 10px;
+            color: var(--gray-500);
+            margin-top: 1px;
+        }
+        .complexity-badge {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .complexity-badge.free {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+        .complexity-badge.trial {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            color: white;
+            cursor: pointer;
+        }
+        .complexity-badge.locked {
+            background: var(--gray-300);
+            color: var(--gray-600);
+            cursor: pointer;
+        }
+        .complexity-badge.used {
+            background: var(--gray-300);
+            color: var(--gray-500);
+        }
+
+        /* 生成按钮 */
+        .generate-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+        }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99,102,241,0.5);
+        }
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 右侧结果区 */
+        .result-panel {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .result-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            min-height: 400px;
+        }
+
+        .result-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .result-header h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .result-actions {
+            display: flex;
+            gap: 6px;
+        }
+        .action-btn {
+            padding: 6px 12px;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            background: white;
+            color: var(--gray-600);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(99,102,241,0.05);
+        }
+        .action-btn.copied {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .result-body {
+            padding: 20px;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 30px;
+            text-align: center;
+        }
+        .empty-state .empty-icon {
+            width: 100px; height: 100px;
+            background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 6px;
+        }
+        .empty-state p {
+            font-size: 13px;
+            color: var(--gray-500);
+            max-width: 360px;
+            line-height: 1.6;
+        }
+        .empty-state .empty-steps {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .empty-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .empty-step .step-num {
+            width: 28px; height: 28px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .empty-step span {
+            font-size: 11px;
+            color: var(--gray-500);
+        }
+
+        /* 生成的提示词内容 */
+        .prompt-content {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--gray-800);
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: 'Noto Sans SC', -apple-system, sans-serif;
+        }
+        .prompt-content h1, .prompt-content h2, .prompt-content h3 {
+            color: var(--dark);
+            margin: 14px 0 6px;
+        }
+        .prompt-content strong {
+            color: var(--primary-dark);
+        }
+
+        .result-meta {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .meta-tag {
+            padding: 3px 10px;
+            background: var(--gray-100);
+            border-radius: 16px;
+            font-size: 11px;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+        .meta-tag.version-basic { background: #d1fae5; color: #065f46; }
+        .meta-tag.version-advanced { background: #dbeafe; color: #1e40af; }
+        .meta-tag.version-expert { background: #fce7f3; color: #9d174d; }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-size: 13px;
+            font-weight: 500;
+            color: white;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            max-width: 90vw;
+            word-break: break-word;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .toast.success { background: linear-gradient(135deg, var(--success), #059669); }
+        .toast.error { background: linear-gradient(135deg, var(--danger), #dc2626); }
+        .toast.warning { background: linear-gradient(135deg, var(--warning), #d97706); }
+        .toast.info { background: linear-gradient(135deg, var(--info), #2563eb); }
+
+        /* 模态框 */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: var(--shadow-xl);
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+        .modal-desc {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        .modal-contact {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 1px solid #fbbf24;
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            font-size: 12px;
+            color: #92400e;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .modal-contact strong {
+            color: #78350f;
+        }
+        .modal-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            margin-bottom: 14px;
+            transition: all 0.2s;
+        }
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        .modal-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+        .modal-btn.primary:hover {
+            box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+        }
+        .modal-btn.secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+        .modal-btn.secondary:hover {
+            background: var(--gray-200);
+        }
+
+        /* 历史/收藏页面 */
+        .list-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .list-header h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .clear-btn {
+            padding: 6px 14px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: var(--radius-sm);
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .clear-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+        }
+        .history-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .history-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        .history-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .history-card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-800);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 180px;
+        }
+        .history-card-time {
+            font-size: 11px;
+            color: var(--gray-400);
+        }
+        .history-card-preview {
+            font-size: 12px;
+            color: var(--gray-500);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 10px;
+            background: var(--gray-50);
+            padding: 8px;
+            border-radius: var(--radius-sm);
+        }
+        .history-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .history-card-tags {
+            display: flex;
+            gap: 4px;
+        }
+        .history-card-tag {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+        .history-card-actions {
+            display: flex;
+            gap: 4px;
+        }
+        .card-action-btn {
+            width: 28px; height: 28px;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.2s;
+            color: var(--gray-500);
+        }
+        .card-action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(99,102,241,0.05);
+        }
+        .card-action-btn.favorited {
+            color: var(--danger);
+            border-color: var(--danger);
+            background: rgba(239,68,68,0.05);
+        }
+
+        .empty-list {
+            text-align: center;
+            padding: 60px 30px;
+            color: white;
+        }
+        .empty-list .empty-icon {
+            font-size: 56px;
+            margin-bottom: 14px;
+            opacity: 0.6;
+        }
+        .empty-list h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .empty-list p {
+            font-size: 13px;
+            opacity: 0.7;
+        }
+
+        /* 管理面板 */
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .admin-header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        .admin-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+        .admin-header p {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            box-shadow: var(--shadow);
+        }
+        .stat-card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .stat-icon {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .stat-icon.blue { background: #dbeafe; }
+        .stat-icon.green { background: #d1fae5; }
+        .stat-icon.purple { background: #f3e8ff; }
+        .stat-icon.orange { background: #ffedd5; }
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-top: 2px;
+        }
+
+        .admin-section {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        .admin-section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .admin-section-title .add-btn {
+            padding: 6px 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .admin-section-title .add-btn:hover {
+            box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+        }
+
+        .password-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .password-table th,
+        .password-table td {
+            padding: 10px 12px;
+            text-align: left;
+        }
+        .password-table th {
+            background: var(--gray-50);
+            font-weight: 600;
+            color: var(--gray-700);
+            border-bottom: 2px solid var(--gray-200);
+            font-size: 12px;
+        }
+        .password-table td {
+            border-bottom: 1px solid var(--gray-100);
+            color: var(--gray-600);
+        }
+        .password-table tr:hover td {
+            background: var(--gray-50);
+        }
+        .password-tag {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .password-tag.advanced { background: #dbeafe; color: #1e40af; }
+        .password-tag.expert { background: #fce7f3; color: #9d174d; }
+        .password-tag.active { background: #d1fae5; color: #065f46; }
+        .password-tag.used { background: #fee2e2; color: #991b1b; }
+        .progress-bar {
+            width: 80px;
+            height: 5px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+        .progress-bar-fill.green { background: var(--success); }
+        .progress-bar-fill.yellow { background: var(--warning); }
+        .progress-bar-fill.red { background: var(--danger); }
+
+        /* 使用统计弹窗 */
+        .stats-modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .stats-modal-overlay.show {
+            display: flex;
+        }
+        .stats-modal {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            max-width: 460px;
+            width: 100%;
+            box-shadow: var(--shadow-xl);
+            animation: modalIn 0.3s ease;
+        }
+        .stats-modal h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .usage-stat-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .usage-stat-item:last-child {
+            border-bottom: none;
+        }
+        .usage-stat-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+        .usage-stat-icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        .usage-stat-bar {
+            flex: 1;
+            margin: 0 12px;
+            height: 6px;
+            background: var(--gray-100);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .usage-stat-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+        .usage-stat-count {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-800);
+            min-width: 50px;
+            text-align: right;
+        }
+
+        /* 模板库 */
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+        .template-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .template-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        .template-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .template-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .template-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        .template-desc {
+            font-size: 12px;
+            color: var(--gray-500);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        .template-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .template-tag {
+            padding: 2px 8px;
+            background: var(--gray-100);
+            border-radius: 10px;
+            font-size: 10px;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .home-layout {
+                flex-direction: column;
+            }
+            .config-panel {
+                width: 100%;
+                position: static;
+            }
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 12px;
+                height: 52px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .mobile-menu-btn {
+                display: flex;
+            }
+            .nav-brand {
+                font-size: 15px;
+            }
+            .nav-brand .logo-icon {
+                width: 30px; height: 30px;
+                font-size: 14px;
+            }
+            .main-container {
+                padding-top: 52px;
+            }
+            .page-content {
+                padding: 12px;
+            }
+            .history-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .template-grid {
+                grid-template-columns: 1fr;
+            }
+            .config-panel {
+                padding: 16px;
+            }
+            .result-card {
+                min-height: 300px;
+            }
+            .usage-badge {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-400);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-particles" id="particles"></div>
+
+    <nav class="navbar">
+        <a href="#" class="nav-brand" onclick="showSection('home'); return false;">
+            <div class="logo-icon">✨</div>
+            <span>AI提示词生成器</span>
+        </a>
+
+        <div class="nav-links">
+            <button class="nav-link active" data-section="home" onclick="showSection('home')">🏠 首页</button>
+            <button class="nav-link" data-section="templates" onclick="showSection('templates')">📚 模板库</button>
+            <button class="nav-link" data-section="history" onclick="showSection('history')">📜 历史<span class="nav-badge" id="historyBadge" style="display:none;">0</span></button>
+            <button class="nav-link" data-section="favorites" onclick="showSection('favorites')">⭐ 收藏<span class="nav-badge" id="favBadge" style="display:none;">0</span></button>
+            <button class="nav-link" data-section="admin" onclick="showSection('admin')">🔒 管理</button>
+        </div>
+
+        <div class="nav-right">
+            <div class="usage-badge" id="usageBadge" onclick="showUsageStats()">
+                📊 <span id="totalUsed">0</span>次
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" id="mobileMenuBtn">☰</button>
+        </div>
+    </nav>
+
+    <!-- 移动端菜单 -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="toggleMobileMenu()">
+        <div class="mobile-nav-menu" onclick="event.stopPropagation()">
+            <button class="mobile-nav-item active" data-section="home" onclick="showSection('home'); toggleMobileMenu();">🏠 首页</button>
+            <button class="mobile-nav-item" data-section="templates" onclick="showSection('templates'); toggleMobileMenu();">📚 模板库</button>
+            <button class="mobile-nav-item" data-section="history" onclick="showSection('history'); toggleMobileMenu();">📜 历史 <span id="mobileHistoryCount" style="color:var(--primary);font-weight:700;"></span></button>
+            <button class="mobile-nav-item" data-section="favorites" onclick="showSection('favorites'); toggleMobileMenu();">⭐ 收藏 <span id="mobileFavCount" style="color:var(--primary);font-weight:700;"></span></button>
+            <button class="mobile-nav-item" data-section="admin" onclick="showSection('admin'); toggleMobileMenu();">🔒 管理</button>
+            <div style="border-top:1px solid var(--gray-200); margin-top:8px; padding-top:8px;">
+                <button class="mobile-nav-item" onclick="showUsageStats(); toggleMobileMenu();">📊 使用统计</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="page-content">
+
+            <div class="section active" id="section-home">
+                <div class="home-layout">
+                    <div class="config-panel">
+                        <div class="panel-title">🎛️ 配置参数</div>
+
+                        <div class="form-group">
+                            <label class="form-label">🏢 选择领域</label>
+                            <select class="form-select" id="domainSelect">
+                                <option value="">-- 请选择领域 --</option>
+                                <option value="通用">🌍 通用领域</option>
+                                <option value="文案写作">✍️ 文案写作</option>
+                                <option value="编程开发">💻 编程开发</option>
+                                <option value="数据分析">📊 数据分析</option>
+                                <option value="营销推广">📢 营销推广</option>
+                                <option value="教育培训">🎓 教育培训</option>
+                                <option value="设计创意">🎨 设计创意</option>
+                                <option value="翻译润色">🌐 翻译润色</option>
+                                <option value="学术研究">🔬 学术研究</option>
+                                <option value="商业策划">💼 商业策划</option>
+                                <option value="法律咨询">⚖️ 法律咨询</option>
+                                <option value="医疗健康">🏥 医疗健康</option>
+                                <option value="金融理财">💰 金融理财</option>
+                                <option value="人力资源">👥 人力资源</option>
+                                <option value="项目管理">📋 项目管理</option>
+                                <option value="客户服务">🎧 客户服务</option>
+                                <option value="产品运营">📱 产品运营</option>
+                                <option value="短视频创作">🎬 短视频创作</option>
+                                <option value="直播带货">📺 直播带货</option>
+                                <option value="小说创作">📚 小说创作</option>
+                                <option value="电商运营">🛒 电商运营</option>
+                                <option value="内容创作">📝 内容创作</option>
+                                <option value="SEO优化">🔍 SEO优化</option>
+                                <option value="社交媒体">📲 社交媒体</option>
+                                <option value="品牌策划">🏷️ 品牌策划</option>
+                                <option value="公关传播">📣 公关传播</option>
+                                <option value="供应链管理">📦 供应链管理</option>
+                                <option value="财务会计">📈 财务会计</option>
+                                <option value="行政管理">📂 行政管理</option>
+                                <option value="生产制造">🏭 生产制造</option>
+                                <option value="房地产">🏘️ 房地产</option>
+                                <option value="旅游酒店">✈️ 旅游酒店</option>
+                                <option value="餐饮美食">🍽️ 餐饮美食</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">📝 任务描述</label>
+                            <div class="task-input-wrapper">
+                                <textarea class="form-textarea" id="taskInput" placeholder="请描述您需要AI完成的任务..."></textarea>
+                                <div class="task-actions">
+                                    <button class="task-action-btn" onclick="copyTaskInput()" title="复制内容">📋 复制</button>
+                                    <button class="task-action-btn" onclick="clearTaskInput()" title="清空内容">🗑️ 清空</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hot-tasks">
+                            <div class="hot-tasks-title">🔥 推荐任务</div>
+                            <div class="hot-tasks-grid">
+                                <span class="hot-task-tag" onclick="setTask('帮我写小红书种草文案')">小红书文案</span>
+                                <span class="hot-task-tag" onclick="setTask('帮我写一个Python爬虫脚本')">Python脚本</span>
+                                <span class="hot-task-tag" onclick="setTask('帮我做一份数据分析报告')">数据分析</span>
+                                <span class="hot-task-tag" onclick="setTask('帮我写一封商务合作邮件')">商务邮件</span>
+                                <span class="hot-task-tag" onclick="setTask('帮我写一份产品需求文档')">产品方案</span>
+                                <span class="hot-task-tag" onclick="setTask('帮我优化网站SEO关键词')">SEO优化</span>
+                                <span class="hot-task-tag" onclick="setTask('帮我写一篇公众号推文')">公众号推文</span>
+                                <span class="hot-task-tag" onclick="setTask('帮我写一份项目计划书')">项目计划书</span>
+                            </div>
+                        </div>
+
+                        <div class="complexity-section">
+                            <label class="form-label">🎯 选择复杂度</label>
+                            <div class="complexity-options">
+                                <div class="complexity-card selected" data-level="basic" onclick="selectComplexity('basic')">
+                                    <div class="complexity-info">
+                                        <div class="complexity-icon basic">🌱</div>
+                                        <div class="complexity-text"><h4>基础版</h4><p>简单直接，快速生成</p></div>
+                                    </div>
+                                    <span class="complexity-badge free">免费</span>
+                                </div>
+                                <div class="complexity-card" data-level="advanced" id="card-advanced" onclick="handleAdvancedClick()">
+                                    <div class="complexity-info">
+                                        <div class="complexity-icon advanced">🚀</div>
+                                        <div class="complexity-text"><h4>进阶版</h4><p>结构化提示词，精准输出</p></div>
+                                    </div>
+                                    <span class="complexity-badge trial" id="badge-advanced">✨ 体验1次</span>
+                                </div>
+                                <div class="complexity-card" data-level="expert" id="card-expert" onclick="handleExpertClick()">
+                                    <div class="complexity-info">
+                                        <div class="complexity-icon expert">👑</div>
+                                        <div class="complexity-text"><h4>专家版</h4><p>完整专业级提示词架构</p></div>
+                                    </div>
+                                    <span class="complexity-badge trial" id="badge-expert">✨ 体验1次</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="generate-btn" id="generateBtn" onclick="generatePrompt()">
+                            <span>✨</span><span>生成提示词</span>
+                        </button>
+                    </div>
+
+                    <div class="result-panel">
+                        <div class="result-card">
+                            <div class="result-header">
+                                <h3>📋 生成结果</h3>
+                                <div class="result-actions" id="resultActions" style="display:none;">
+                                    <button class="action-btn" onclick="copyResult()"><span>📋</span> 复制</button>
+                                    <button class="action-btn" onclick="toggleFavorite()" id="favBtn"><span>⭐</span> 收藏</button>
+                                </div>
+                            </div>
+                            <div class="result-body" id="resultBody">
+                                <div class="empty-state">
+                                    <div class="empty-icon">📝</div>
+                                    <h3>开始生成您的专属提示词</h3>
+                                    <p>在左侧配置您的任务需求，选择复杂度，点击生成按钮</p>
+                                    <div class="empty-steps">
+                                        <div class="empty-step"><div class="step-num">1</div><span>选择领域</span></div>
+                                        <div class="empty-step"><div class="step-num">2</div><span>描述任务</span></div>
+                                        <div class="empty-step"><div class="step-num">3</div><span>选择版本</span></div>
+                                        <div class="empty-step"><div class="step-num">4</div><span>生成提示词</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="section-templates">
+                <div class="list-header"><h2>📚 提示词模板库</h2></div>
+                <div class="template-grid" id="templateGrid"></div>
+            </div>
+
+            <div class="section" id="section-history">
+                <div class="list-header">
+                    <h2>📜 生成历史</h2>
+                    <button class="clear-btn" onclick="clearHistory()">🗑️ 清空</button>
+                </div>
+                <div class="history-grid" id="historyGrid"></div>
+            </div>
+
+            <div class="section" id="section-favorites">
+                <div class="list-header">
+                    <h2>⭐ 我的收藏</h2>
+                    <button class="clear-btn" onclick="clearFavorites()">🗑️ 清空</button>
+                </div>
+                <div class="history-grid" id="favoritesGrid"></div>
+            </div>
+
+            <div class="section" id="section-admin">
+                <div class="admin-container" id="adminContainer">
+                    <div class="admin-header">
+                        <h2>🔐 管理面板</h2>
+                        <p>请输入管理密码以访问管理功能</p>
+                    </div>
+                    <div class="admin-section" style="max-width: 400px; margin: 0 auto;">
+                        <div class="form-group">
+                            <label class="form-label">🔑 管理密码</label>
+                            <input type="password" class="modal-input" id="adminPasswordInput" placeholder="请输入管理密码" style="margin-bottom: 14px;">
+                            <button class="modal-btn primary" style="width: 100%;" onclick="verifyAdmin()">验证密码</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="modal-overlay" id="unlockModal">
+        <div class="modal">
+            <div class="modal-title" id="modalTitle">🔓 解锁进阶版</div>
+            <div class="modal-desc" id="modalDesc">请输入密码以解锁此功能。</div>
+            <div class="modal-contact">
+                <span>💬</span>
+                <span>如需获取密码，请添加QQ：<strong>704451222</strong></span>
+            </div>
+            <input type="password" class="modal-input" id="unlockPassword" placeholder="请输入密码">
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeModal()">取消</button>
+                <button class="modal-btn primary" onclick="confirmUnlock()">确认解锁</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-modal-overlay" id="statsModal">
+        <div class="stats-modal">
+            <h3>📊 今日使用统计</h3>
+            <div id="statsContent"></div>
+            <div style="margin-top: 16px; text-align: center;">
+                <button class="modal-btn secondary" style="width: 100%;" onclick="closeStatsModal()">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const ADMIN_PASSWORD = 'c123456888';
+        const SPECIAL_PASSWORD = '123456888';
+        const BASIC_DAILY_LIMIT = 5;
+        const PASSWORD_MAX_USES = 100;
+        const ADVANCED_PASSWORD_COUNT = 50;
+        const EXPERT_PASSWORD_COUNT = 50;
+
+        const Storage = {
+            get(key, defaultValue = null) {
+                try {
+                    const data = localStorage.getItem('promptGen_' + key);
+                    return data ? JSON.parse(data) : defaultValue;
+                } catch(e) { return defaultValue; }
+            },
+            set(key, value) {
+                localStorage.setItem('promptGen_' + key, JSON.stringify(value));
+            },
+            remove(key) {
+                localStorage.removeItem('promptGen_' + key);
+            }
+        };
+
+        function initData() {
+            if (!Storage.get('usage')) {
+                Storage.set('usage', {
+                    basic: { count: 0, date: new Date().toDateString() },
+                    advanced: { count: 0, date: new Date().toDateString() },
+                    expert: { count: 0, date: new Date().toDateString() }
+                });
+            }
+            if (Storage.get('trialUsed') === null) {
+                Storage.set('trialUsed', { advanced: false, expert: false });
+            }
+            if (!Storage.get('passwords')) {
+                const passwords = { advanced: [], expert: [] };
+                for (let i = 1; i <= ADVANCED_PASSWORD_COUNT; i++) {
+                    passwords.advanced.push({ id: 'adv_' + i, password: 'ADV' + String(i).padStart(3, '0'), used: 0, max: PASSWORD_MAX_USES, active: true });
+                }
+                for (let i = 1; i <= EXPERT_PASSWORD_COUNT; i++) {
+                    passwords.expert.push({ id: 'exp_' + i, password: 'EXP' + String(i).padStart(3, '0'), used: 0, max: PASSWORD_MAX_USES, active: true });
+                }
+                Storage.set('passwords', passwords);
+            }
+            if (!Storage.get('history')) Storage.set('history', []);
+            if (!Storage.get('favorites')) Storage.set('favorites', []);
+            if (!Storage.get('unlocked')) Storage.set('unlocked', { advanced: false, expert: false });
+            checkDailyReset();
+        }
+
+        function checkDailyReset() {
+            const usage = Storage.get('usage');
+            const today = new Date().toDateString();
+            if (usage.basic.date !== today) {
+                usage.basic = { count: 0, date: today };
+                usage.advanced = { count: 0, date: today };
+                usage.expert = { count: 0, date: today };
+                Storage.set('usage', usage);
+            }
+        }
+
+        let currentLevel = 'basic';
+        let currentResult = null;
+        let pendingUnlockLevel = null;
+        let isAdmin = false;
+        let mobileMenuOpen = false;
+
+        function showSection(sectionName) {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.section === sectionName) link.classList.add('active');
+            });
+            document.querySelectorAll('.mobile-nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.section === sectionName) item.classList.add('active');
+            });
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            const target = document.getElementById('section-' + sectionName);
+            if (target) target.classList.add('active');
+            if (sectionName === 'history') renderHistory();
+            else if (sectionName === 'favorites') renderFavorites();
+            else if (sectionName === 'templates') renderTemplates();
+            else if (sectionName === 'admin' && isAdmin) renderAdminPanel();
+            updateNavBadges();
+            window.scrollTo(0, 0);
+        }
+
+        function toggleMobileMenu() {
+            mobileMenuOpen = !mobileMenuOpen;
+            const overlay = document.getElementById('mobileNavOverlay');
+            const btn = document.getElementById('mobileMenuBtn');
+            if (mobileMenuOpen) {
+                overlay.classList.add('show');
+                btn.textContent = '✕';
+            } else {
+                overlay.classList.remove('show');
+                btn.textContent = '☰';
+            }
+        }
+
+        function updateNavBadges() {
+            const history = Storage.get('history') || [];
+            const favorites = Storage.get('favorites') || [];
+
+            const histBadge = document.getElementById('historyBadge');
+            if (history.length > 0) {
+                histBadge.textContent = history.length > 99 ? '99+' : history.length;
+                histBadge.style.display = 'block';
+            } else histBadge.style.display = 'none';
+
+            const favBadge = document.getElementById('favBadge');
+            if (favorites.length > 0) {
+                favBadge.textContent = favorites.length > 99 ? '99+' : favorites.length;
+                favBadge.style.display = 'block';
+            } else favBadge.style.display = 'none';
+
+            document.getElementById('mobileHistoryCount').textContent = history.length > 0 ? '(' + history.length + ')' : '';
+            document.getElementById('mobileFavCount').textContent = favorites.length > 0 ? '(' + favorites.length + ')' : '';
+        }
+
+        const domainData = {
+            '通用': { role: '专业人士', expertise: ['多领域知识整合', '跨学科思维', '通用问题解决'], thinking: '系统性思考者，善于从不同角度分析问题' },
+            '文案写作': { role: '资深文案策划总监', expertise: ['爆款文案撰写', '用户心理洞察', '品牌调性把控'], thinking: '用户视角思考者，擅长用数据驱动内容创作' },
+            '编程开发': { role: '高级技术架构师', expertise: ['系统架构设计', '代码质量优化', '技术方案选型'], thinking: '工程化思维，注重可维护性与扩展性' },
+            '数据分析': { role: '首席数据分析师', expertise: ['数据挖掘建模', '商业洞察提取', '可视化呈现'], thinking: '数据驱动决策者，善于从数据中发现规律' },
+            '营销推广': { role: '营销增长总监', expertise: ['增长黑客策略', '渠道优化运营', '转化漏斗设计'], thinking: '增长思维，关注ROI与可量化的业务成果' },
+            '教育培训': { role: '资深教育专家', expertise: ['课程设计开发', '学习效果评估', '教学方法创新'], thinking: '以学习者为中心，注重知识传递的有效性' },
+            '设计创意': { role: '创意总监', expertise: ['视觉传达设计', '用户体验设计', '品牌视觉系统'], thinking: '视觉思维者，善于用设计解决商业问题' },
+            '翻译润色': { role: '资深翻译专家', expertise: ['多语言精准翻译', '文化差异处理', '术语一致性管理'], thinking: '跨文化沟通者，注重信达雅的翻译标准' },
+            '学术研究': { role: '学术研究员', expertise: ['文献综述撰写', '研究方法设计', '学术规范遵循'], thinking: '批判性思维者，注重证据与逻辑严谨性' },
+            '商业策划': { role: '战略咨询顾问', expertise: ['商业模式设计', '市场机会分析', '战略规划制定'], thinking: '战略思维者，善于从全局视角制定可执行方案' },
+            '法律咨询': { role: '资深法律顾问', expertise: ['法律风险识别', '合规方案设计', '合同条款审查'], thinking: '风险导向思维，注重法律合规与权益保护' },
+            '医疗健康': { role: '医学健康顾问', expertise: ['健康知识普及', '疾病预防指导', '健康管理方案'], thinking: '循证医学思维，注重科学性与实用性' },
+            '金融理财': { role: '财富管理专家', expertise: ['资产配置策略', '风险评估管理', '财务规划制定'], thinking: '风险管理思维，注重长期价值与稳健回报' },
+            '人力资源': { role: '人力资源总监', expertise: ['人才招聘选拔', '绩效管理体系', '组织发展设计'], thinking: '人才发展思维，注重人岗匹配与组织效能' },
+            '项目管理': { role: '项目管理专家', expertise: ['项目规划执行', '风险管控协调', '团队资源管理'], thinking: '系统化思维，善于平衡范围、时间、成本、质量' },
+            '客户服务': { role: '客户体验总监', expertise: ['服务流程优化', '客户满意度提升', '投诉处理策略'], thinking: '客户中心思维，注重服务体验与关系维护' },
+            '产品运营': { role: '产品运营总监', expertise: ['用户增长运营', '产品数据分析', '运营策略制定'], thinking: '数据驱动运营思维，关注用户生命周期价值' },
+            '短视频创作': { role: '短视频内容总监', expertise: ['爆款内容策划', '平台算法理解', '流量运营策略'], thinking: '算法逻辑+内容策略双驱动思维' },
+            '直播带货': { role: '直播运营总监', expertise: ['直播脚本设计', '选品策略制定', '流量转化优化'], thinking: '实时互动思维，注重转化效率与用户体验' },
+            '小说创作': { role: '资深小说编辑', expertise: ['故事架构设计', '人物塑造技巧', '情节节奏把控'], thinking: '叙事思维，善于构建引人入胜的故事世界' },
+            '电商运营': { role: '电商运营总监', expertise: ['店铺运营优化', '流量获取策略', '转化率提升'], thinking: '数据驱动电商思维，关注GMV与ROI指标' },
+            '内容创作': { role: '内容策略总监', expertise: ['内容矩阵规划', '选题策划执行', '内容分发策略'], thinking: '内容思维，注重价值传递与用户共鸣' },
+            'SEO优化': { role: 'SEO优化专家', expertise: ['关键词策略', '站内优化技术', '外链建设方案'], thinking: '搜索引擎思维，注重长期排名与流量获取' },
+            '社交媒体': { role: '社交媒体运营总监', expertise: ['社媒矩阵运营', '内容互动策略', 'KOL合作管理'], thinking: '社交思维，注重社群关系与品牌声量' },
+            '品牌策划': { role: '品牌策略总监', expertise: ['品牌定位策略', '视觉识别系统', '品牌传播规划'], thinking: '品牌资产思维，注重长期价值与差异化' },
+            '公关传播': { role: '公关传播总监', expertise: ['媒体关系维护', '危机公关处理', '品牌声誉管理'], thinking: '关系思维，注重舆情管理与公众认知' },
+            '供应链管理': { role: '供应链优化专家', expertise: ['供应链规划', '库存优化管理', '物流效率提升'], thinking: '系统优化思维，注重效率与成本控制' },
+            '财务会计': { role: '财务总监', expertise: ['财务报表分析', '税务筹划优化', '预算管理控制'], thinking: '财务思维，注重合规性与资金效率' },
+            '行政管理': { role: '行政总监', expertise: ['办公流程优化', '行政制度设计', '团队后勤保障'], thinking: '服务思维，注重效率与员工体验' },
+            '生产制造': { role: '生产管理专家', expertise: ['生产流程优化', '质量控制体系', '精益生产管理'], thinking: '精益思维，注重效率提升与质量稳定' },
+            '房地产': { role: '房地产投资顾问', expertise: ['市场趋势分析', '投资策略制定', '项目评估筛选'], thinking: '价值投资思维，注重地段分析与收益预测' },
+            '旅游酒店': { role: '旅游体验设计师', expertise: ['行程规划定制', '酒店服务优化', '目的地营销'], thinking: '体验思维，注重旅程设计与满意度提升' },
+            '餐饮美食': { role: '餐饮品牌顾问', expertise: ['菜品研发创新', '餐厅运营优化', '品牌营销推广'], thinking: '味觉思维，注重产品创新与顾客体验' }
+        };
+
+        const templates = [
+            { id: 't1', icon: '📝', title: '小红书种草文案', desc: '生成高质量小红书风格种草文案，含标题、正文、标签', domain: '文案写作', task: '帮我写一篇小红书种草文案，推荐一款护肤品', tags: ['文案', '社交'] },
+            { id: 't2', icon: '💻', title: 'Python自动化脚本', desc: '生成完整Python脚本，含注释、错误处理和最佳实践', domain: '编程开发', task: '帮我写一个Python脚本，自动整理文件夹中的文件', tags: ['编程', '自动化'] },
+            { id: 't3', icon: '📊', title: '数据分析报告', desc: '生成专业数据分析报告框架，含可视化建议和洞察', domain: '数据分析', task: '帮我做一份销售数据分析报告，找出增长机会', tags: ['数据', '商业'] },
+            { id: 't4', icon: '📧', title: '商务邮件模板', desc: '生成专业商务邮件，含礼貌用语、清晰结构和行动号召', domain: '通用', task: '帮我写一封商务合作邀约邮件', tags: ['通用', '商务'] },
+            { id: 't5', icon: '📱', title: '产品需求文档', desc: '生成完整PRD，含功能描述、用户故事和验收标准', domain: '产品运营', task: '帮我写一份产品需求文档，关于新增用户反馈功能', tags: ['产品', '文档'] },
+            { id: 't6', icon: '🔍', title: 'SEO优化方案', desc: '生成完整SEO策略，含关键词布局、内容优化和技术建议', domain: 'SEO优化', task: '帮我制定一个网站的SEO优化方案', tags: ['SEO', '营销'] },
+            { id: 't7', icon: '🎬', title: '短视频脚本', desc: '生成抖音/快手风格脚本，含开场、内容和结尾', domain: '短视频创作', task: '帮我写一个60秒的抖音短视频脚本，介绍一款产品', tags: ['短视频', '营销'] },
+            { id: 't8', icon: '📋', title: '项目计划书', desc: '生成专业项目计划书，含目标、里程碑、资源和风险', domain: '项目管理', task: '帮我写一份项目计划书，关于新产品上线', tags: ['项目', '文档'] },
+            { id: 't9', icon: '🎓', title: '课程大纲设计', desc: '生成完整课程大纲，含学习目标、章节安排和评估', domain: '教育培训', task: '帮我设计一个Python入门课程大纲', tags: ['教育', '课程'] },
+            { id: 't10', icon: '🛒', title: '电商运营方案', desc: '生成电商运营全案，含选品、定价、推广和转化', domain: '电商运营', task: '帮我制定一个电商店铺的运营方案', tags: ['电商', '运营'] },
+            { id: 't11', icon: '🎨', title: '品牌视觉方案', desc: '生成品牌视觉设计方案，含色彩、字体、风格规范', domain: '设计创意', task: '帮我设计一个咖啡品牌的视觉方案', tags: ['设计', '品牌'] },
+            { id: 't12', icon: '📺', title: '直播带货脚本', desc: '生成直播带货完整脚本，含开场、产品介绍、促单', domain: '直播带货', task: '帮我写一份直播带货脚本，介绍美妆产品', tags: ['直播', '营销'] },
+            { id: 't13', icon: '📄', title: '简历优化', desc: '生成专业简历优化建议，突出个人优势和成就', domain: '人力资源', task: '帮我优化一份产品经理的简历', tags: ['简历', '求职'] },
+            { id: 't14', icon: '🏥', title: '健康科普文章', desc: '生成通俗易懂的医疗健康科普文章', domain: '医疗健康', task: '帮我写一篇关于失眠原因和解决方法的科普文章', tags: ['健康', '科普'] },
+            { id: 't15', icon: '💰', title: '投资理财分析', desc: '生成投资理财分析报告，含风险评估和收益预测', domain: '金融理财', task: '帮我分析当前基金市场的投资机会', tags: ['理财', '投资'] },
+            { id: 't16', icon: '📚', title: '小说大纲设计', desc: '生成完整小说大纲，含世界观、人物、情节线', domain: '小说创作', task: '帮我设计一个科幻小说的故事大纲', tags: ['小说', '创作'] },
+            { id: 't17', icon: '📣', title: '活动策划方案', desc: '生成完整活动策划方案，含流程、预算、执行', domain: '营销推广', task: '帮我策划一场新品发布会的活动方案', tags: ['活动', '策划'] },
+            { id: 't18', icon: '🌐', title: '多语言翻译', desc: '生成专业翻译润色，保持原文风格和术语准确', domain: '翻译润色', task: '帮我把这段中文产品介绍翻译成英文', tags: ['翻译', '语言'] },
+            { id: 't19', icon: '⚖️', title: '合同条款审查', desc: '生成合同条款审查要点，识别风险和漏洞', domain: '法律咨询', task: '帮我审查一份房屋租赁合同的风险点', tags: ['法律', '合同'] },
+            { id: 't20', icon: '🏨', title: '旅游攻略', desc: '生成详细旅游攻略，含行程、美食、住宿推荐', domain: '旅游酒店', task: '帮我写一份云南7天自由行攻略', tags: ['旅游', '攻略'] },
+            { id: 't21', icon: '🍽️', title: '美食探店文案', desc: '生成美食探店文案，突出特色和体验感受', domain: '餐饮美食', task: '帮我写一篇日式料理店的探店文案', tags: ['美食', '探店'] },
+            { id: 't22', icon: '📈', title: '年度工作总结', desc: '生成专业年度工作总结，突出成果和规划', domain: '行政管理', task: '帮我写一份市场部的年度工作总结', tags: ['总结', '职场'] },
+            { id: 't23', icon: '🎮', title: '游戏策划案', desc: '生成游戏策划文档，含玩法、数值、系统设计', domain: '设计创意', task: '帮我设计一个休闲消除类游戏的策划案', tags: ['游戏', '策划'] },
+            { id: 't24', icon: '📰', title: '新闻稿撰写', desc: '生成专业新闻稿，符合媒体发布规范', domain: '公关传播', task: '帮我写一份公司获得融资的新闻稿', tags: ['新闻', '公关'] }
+        ];
+
+        function renderTemplates() {
+            const grid = document.getElementById('templateGrid');
+            grid.innerHTML = templates.map(t => `
+                <div class="template-card" onclick="useTemplate('${t.id}')">
+                    <div class="template-card-header">
+                        <div class="template-icon" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);">${t.icon}</div>
+                        <div class="template-title">${t.title}</div>
+                    </div>
+                    <div class="template-desc">${t.desc}</div>
+                    <div class="template-tags">
+                        ${t.tags.map(tag => `<span class="template-tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function useTemplate(id) {
+            const template = templates.find(t => t.id === id);
+            if (template) {
+                document.getElementById('domainSelect').value = template.domain;
+                document.getElementById('taskInput').value = template.task;
+                showSection('home');
+                showToast('✅ 已加载模板：' + template.title, 'success');
+            }
+        }
+
+        function selectComplexity(level) {
+            currentLevel = level;
+            document.querySelectorAll('.complexity-card').forEach(card => card.classList.remove('selected'));
+            document.querySelector('.complexity-card[data-level="' + level + '"]').classList.add('selected');
+        }
+
+        function handleAdvancedClick() {
+            const trialUsed = Storage.get('trialUsed');
+            const unlocked = Storage.get('unlocked');
+            if (!trialUsed.advanced) {
+                selectComplexity('advanced');
+                showToast('✨ 进阶版体验已激活！', 'success');
+            } else if (unlocked.advanced) {
+                selectComplexity('advanced');
+            } else {
+                pendingUnlockLevel = 'advanced';
+                showUnlockModal('进阶版');
+            }
+        }
+
+        function handleExpertClick() {
+            const trialUsed = Storage.get('trialUsed');
+            const unlocked = Storage.get('unlocked');
+            if (!trialUsed.expert) {
+                selectComplexity('expert');
+                showToast('✨ 专家版体验已激活！', 'success');
+            } else if (unlocked.expert) {
+                selectComplexity('expert');
+            } else {
+                pendingUnlockLevel = 'expert';
+                showUnlockModal('专家版');
+            }
+        }
+
+        function showUnlockModal(levelName) {
+            document.getElementById('modalTitle').textContent = '🔓 解锁' + levelName;
+            document.getElementById('modalDesc').textContent = '您的' + levelName + '免费体验次数已用完。请输入密码以解锁。';
+            document.getElementById('unlockPassword').value = '';
+            document.getElementById('unlockModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('unlockModal').classList.remove('show');
+            pendingUnlockLevel = null;
+        }
+
+        function confirmUnlock() {
+            const password = document.getElementById('unlockPassword').value.trim();
+            if (!password) {
+                showToast('请输入密码', 'error');
+                return;
+            }
+
+            // 专用密码 - 永久使用，不消耗次数
+            if (password === SPECIAL_PASSWORD) {
+                const unlocked = Storage.get('unlocked');
+                unlocked[pendingUnlockLevel] = true;
+                Storage.set('unlocked', unlocked);
+                selectComplexity(pendingUnlockLevel);
+                closeModal();
+                showToast('✅ 专用密码验证成功！已永久解锁' + (pendingUnlockLevel === 'advanced' ? '进阶版' : '专家版'), 'success');
+                updateBadges();
+                return;
+            }
+
+            const passwords = Storage.get('passwords');
+            const pool = pendingUnlockLevel === 'advanced' ? passwords.advanced : passwords.expert;
+            const found = pool.find(p => p.password === password && p.active && p.used < p.max);
+
+            if (found) {
+                found.used++;
+                if (found.used >= found.max) found.active = false;
+                Storage.set('passwords', passwords);
+
+                const unlocked = Storage.get('unlocked');
+                unlocked[pendingUnlockLevel] = true;
+                Storage.set('unlocked', unlocked);
+
+                selectComplexity(pendingUnlockLevel);
+                closeModal();
+                showToast('✅ 解锁成功！', 'success');
+                updateBadges();
+            } else {
+                showToast('❌ 密码无效或已用完', 'error');
+            }
+        }
+
+        function updateBadges() {
+            const trialUsed = Storage.get('trialUsed');
+            const unlocked = Storage.get('unlocked');
+
+            const advBadge = document.getElementById('badge-advanced');
+            if (!trialUsed.advanced) {
+                advBadge.textContent = '✨ 体验1次';
+                advBadge.className = 'complexity-badge trial';
+            } else if (unlocked.advanced) {
+                advBadge.textContent = '🔓 已解锁';
+                advBadge.className = 'complexity-badge free';
+            } else {
+                advBadge.textContent = '🔒 需密码';
+                advBadge.className = 'complexity-badge locked';
+            }
+
+            const expBadge = document.getElementById('badge-expert');
+            if (!trialUsed.expert) {
+                expBadge.textContent = '✨ 体验1次';
+                expBadge.className = 'complexity-badge trial';
+            } else if (unlocked.expert) {
+                expBadge.textContent = '🔓 已解锁';
+                expBadge.className = 'complexity-badge free';
+            } else {
+                expBadge.textContent = '🔒 需密码';
+                expBadge.className = 'complexity-badge locked';
+            }
+        }
+
+        function setTask(task) {
+            document.getElementById('taskInput').value = task;
+            showToast('✅ 已填入：' + task, 'info');
+        }
+
+        // 任务描述操作
+        function clearTaskInput() {
+            document.getElementById('taskInput').value = '';
+            showToast('🗑️ 已清空', 'info');
+        }
+
+        function copyTaskInput() {
+            const text = document.getElementById('taskInput').value;
+            if (!text.trim()) {
+                showToast('没有内容可复制', 'warning');
+                return;
+            }
+            copyText(text, '✅ 任务描述已复制');
+        }
+
+        function generatePrompt() {
+            const domain = document.getElementById('domainSelect').value;
+            const task = document.getElementById('taskInput').value.trim();
+
+            if (!domain) { showToast('请先选择领域', 'warning'); document.getElementById('domainSelect').focus(); return; }
+            if (!task) { showToast('请描述您的任务', 'warning'); document.getElementById('taskInput').focus(); return; }
+
+            const usage = Storage.get('usage');
+            const trialUsed = Storage.get('trialUsed');
+            const unlocked = Storage.get('unlocked');
+
+            if (currentLevel === 'basic') {
+                if (usage.basic.count >= BASIC_DAILY_LIMIT) {
+                    showToast('⚠️ 今日基础版次数已用完（' + BASIC_DAILY_LIMIT + '次/天）', 'warning');
+                    return;
+                }
+            } else if (currentLevel === 'advanced') {
+                if (!trialUsed.advanced && !unlocked.advanced) {
+                    trialUsed.advanced = true;
+                    Storage.set('trialUsed', trialUsed);
+                    showToast('✨ 正在体验进阶版...', 'success');
+                } else if (!unlocked.advanced) {
+                    showToast('⚠️ 进阶版体验已用完', 'warning');
+                    pendingUnlockLevel = 'advanced';
+                    showUnlockModal('进阶版');
+                    return;
+                }
+            } else if (currentLevel === 'expert') {
+                if (!trialUsed.expert && !unlocked.expert) {
+                    trialUsed.expert = true;
+                    Storage.set('trialUsed', trialUsed);
+                    showToast('✨ 正在体验专家版...', 'success');
+                } else if (!unlocked.expert) {
+                    showToast('⚠️ 专家版体验已用完', 'warning');
+                    pendingUnlockLevel = 'expert';
+                    showUnlockModal('专家版');
+                    return;
+                }
+            }
+
+            const result = buildPrompt(domain, task, currentLevel);
+            currentResult = result;
+
+            usage[currentLevel].count++;
+            Storage.set('usage', usage);
+            updateUsageBadge();
+            updateBadges();
+            updateNavBadges();
+
+            saveToHistory(result);
+            displayResult(result);
+            showToast('✅ 提示词生成成功！', 'success');
+        }
+
+        function buildPrompt(domain, task, level) {
+            const domainInfo = domainData[domain] || domainData['通用'];
+            const timestamp = new Date().toLocaleString('zh-CN');
+            let prompt = '';
+
+            if (level === 'basic') {
+                prompt = `你是一位${domainInfo.role}，专注于${domain}领域。
+
+【核心任务】
+${task}
+
+【基本要求】
+1. 请给出清晰、实用的解决方案
+2. 内容要专业且易于理解
+3. 直接输出结果，无需过多解释
+
+请直接开始。`;
+            } else if (level === 'advanced') {
+                prompt = `你是一位资深的${domainInfo.role}，在${domain}领域拥有10年以上实战经验，是行业内的权威专家。
+
+【核心能力】
+1. ${domainInfo.expertise[0]}
+2. ${domainInfo.expertise[1]}
+3. ${domainInfo.expertise[2]}
+
+【任务背景】
+${task}
+
+【执行框架】
+请按以下步骤完成任务：
+
+步骤1：需求分析
+- 理解用户的核心诉求
+- 识别关键约束条件
+- 明确成功标准
+
+步骤2：方案设计
+- 提供结构化的解决方案
+- 给出3个不同角度的建议
+- 标注每个建议的适用场景
+
+步骤3：执行输出
+- 按照最优方案执行
+- 确保内容完整、准确
+- 使用专业术语但保持可读性
+
+步骤4：质量检查
+- 检查是否符合原始需求
+- 确认没有遗漏重要信息
+- 确保输出格式规范
+
+【输出要求】
+1. 使用Markdown格式，层次分明
+2. 重点内容加粗标注
+3. 提供具体的执行步骤
+4. 最后附上一个检查清单
+
+请直接开始。`;
+            } else {
+                prompt = `你是一位${domain}领域的顶级专家，拥有15年以上实战经验，行业TOP 1%水平。曾为世界500强企业和知名机构提供专业服务，拥有丰富的实战案例和深厚的理论功底。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+【核心能力】
+1. ${domainInfo.expertise[0]} — 精通行业最佳实践，能够识别关键成功因素
+2. ${domainInfo.expertise[1]} — 具备深度分析能力，能够发现隐藏机会
+3. ${domainInfo.expertise[2]} — 拥有系统化方法论，确保交付质量
+
+【思维特征】
+${domainInfo.thinking}，擅长从本质出发重构问题，能够在复杂情境中快速找到最优解。具备第一性原理思考能力，不满足于表面答案，追求根本性的解决方案。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+【任务深度分析】
+
+核心需求：${task}
+
+表层目标：[用户明确表达的需求，即直接完成上述任务]
+
+深层目标：[用户未明说但期望达成的效果，例如：提升效率、降低成本、增强竞争力、建立专业形象等]
+
+成功标准：[可量化的验收指标，例如：内容质量达到行业领先水平、方案可直接落地执行、输出物符合专业规范等]
+
+约束条件：[时间限制、预算范围、技术可行性、合规要求、目标受众特征等]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+【执行框架】
+
+步骤1：需求拆解
+- 将复杂任务分解为可执行的子任务
+- 识别关键依赖关系和优先级
+- 评估资源需求和潜在风险
+- 确定最小可行方案(MVP)
+
+步骤2：方案设计
+- 基于行业最佳实践设计解决方案
+- 提供至少3种可选方案（保守型/平衡型/激进型）
+- 每种方案标注：适用场景、优缺点、资源需求、预期效果
+- 推荐最优方案并说明理由
+
+步骤3：执行与输出
+- 按照最优方案详细执行
+- 每个环节标注思考逻辑和决策依据
+- 使用专业术语但确保可读性
+- 提供具体案例或数据支撑
+
+步骤4：质量验证
+- 对照成功标准逐项检查
+- 识别潜在漏洞和优化空间
+- 提供改进建议和备选方案
+- 确保输出可直接投入使用
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+【质量控制 — 自检清单】
+
+□ 输出是否完全符合用户原始意图？
+□ 是否遗漏了用户明确提到的关键要求？
+□ 是否考虑了用户未明说但合理的隐含需求？
+□ 方案是否具有可执行性？步骤是否清晰具体？
+□ 输出是否符合行业专业标准和最佳实践？
+□ 是否存在逻辑漏洞或事实错误？
+□ 语言是否简洁专业，没有冗余信息？
+□ 是否提供了足够的上下文帮助用户理解？
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+【示例参考】
+
+优秀示例 ✅：
+- 结构清晰，层次分明
+- 观点明确，论据充分
+- 可操作性强，步骤具体
+- 专业术语使用准确
+
+避免示例 ❌：
+- 内容空泛，缺乏实质
+- 逻辑混乱，前后矛盾
+- 过于理论化，无法落地
+- 忽视用户实际场景
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+【迭代优化流程】
+
+第一轮：生成初稿
+- 基于以上框架快速产出完整内容
+- 不追求完美，先确保覆盖所有要素
+
+第二轮：自我审查
+- 对照质量控制清单逐项检查
+- 标记需要改进的地方
+- 识别逻辑漏洞和表达不清之处
+
+第三轮：针对性优化
+- 对标记的问题进行修正
+- 补充缺失的信息和案例
+- 优化表达，提升专业度
+
+第四轮：最终润色
+- 检查整体结构和流畅度
+- 确保格式统一、排版美观
+- 最后确认没有遗漏和错误
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+【输出规范】
+
+格式要求：
+- 使用清晰的层级结构（标题/段落/列表）
+- 关键信息使用加粗或高亮标注
+- 适当使用分隔线区分不同模块
+
+语言风格：
+- 专业严谨但不晦涩
+- 简洁有力，避免冗余
+- 如有不确定之处，明确标注"此处需要您补充确认"
+
+最终要求：
+- 请直接开始输出，不要重复以上指令
+- 确保内容完整、专业、可直接使用
+- 如果任务涉及敏感或专业领域，请标注免责声明
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+请直接开始。`;
+            }
+
+            return {
+                id: Date.now().toString(),
+                domain: domain,
+                task: task,
+                level: level,
+                content: prompt,
+                timestamp: timestamp,
+                levelName: level === 'basic' ? '基础版' : level === 'advanced' ? '进阶版' : '专家版'
+            };
+        }
+
+        function displayResult(result) {
+            const resultBody = document.getElementById('resultBody');
+            const resultActions = document.getElementById('resultActions');
+            const levelClass = result.level === 'basic' ? 'version-basic' : result.level === 'advanced' ? 'version-advanced' : 'version-expert';
+
+            resultBody.innerHTML = `
+                <div class="result-meta">
+                    <span class="meta-tag ${levelClass}">${result.levelName}</span>
+                    <span class="meta-tag">🏢 ${result.domain}</span>
+                    <span class="meta-tag">🕐 ${result.timestamp}</span>
+                </div>
+                <div class="prompt-content">${escapeHtml(result.content)}</div>
+            `;
+
+            resultActions.style.display = 'flex';
+            const favorites = Storage.get('favorites') || [];
+            const isFav = favorites.some(f => f.id === result.id);
+            document.getElementById('favBtn').innerHTML = isFav ? '<span>❤️</span> 已收藏' : '<span>⭐</span> 收藏';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ==================== 复制功能（双重保障）====================
+        function copyResult() {
+            if (!currentResult) return;
+            copyText(currentResult.content, '✅ 提示词已复制！快去粘贴给AI吧');
+        }
+
+        function copyText(text, successMsg) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showCopySuccess(successMsg);
+                }).catch(() => {
+                    fallbackCopy(text, successMsg);
+                });
+            } else {
+                fallbackCopy(text, successMsg);
+            }
+        }
+
+        function fallbackCopy(text, successMsg) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            textarea.style.top = '0';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopySuccess(successMsg);
+                } else {
+                    showToast('复制失败，请手动复制', 'error');
+                }
+            } catch (err) {
+                showToast('复制失败，请手动复制', 'error');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function showCopySuccess(msg) {
+            const btn = event.target.closest('.action-btn');
+            if (btn) {
+                btn.classList.add('copied');
+                btn.innerHTML = '<span>✅</span> 已复制';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.innerHTML = '<span>📋</span> 复制';
+                }, 2000);
+            }
+            showToast(msg || '✅ 已复制到剪贴板', 'success');
+        }
+
+        function toggleFavorite() {
+            if (!currentResult) return;
+            let favorites = Storage.get('favorites') || [];
+            const index = favorites.findIndex(f => f.id === currentResult.id);
+
+            if (index > -1) {
+                favorites.splice(index, 1);
+                Storage.set('favorites', favorites);
+                document.getElementById('favBtn').innerHTML = '<span>⭐</span> 收藏';
+                showToast('已取消收藏', 'info');
+            } else {
+                favorites.unshift({ ...currentResult });
+                Storage.set('favorites', favorites);
+                document.getElementById('favBtn').innerHTML = '<span>❤️</span> 已收藏';
+                showToast('⭐ 已收藏！', 'success');
+            }
+            updateNavBadges();
+        }
+
+        function saveToHistory(result) {
+            let history = Storage.get('history') || [];
+            history.unshift({ ...result });
+            if (history.length > 100) history = history.slice(0, 100);
+            Storage.set('history', history);
+        }
+
+        function renderHistory() {
+            const history = Storage.get('history') || [];
+            const grid = document.getElementById('historyGrid');
+            if (history.length === 0) {
+                grid.innerHTML = '<div class="empty-list" style="grid-column: 1 / -1;"><div class="empty-icon">📭</div><h3>暂无历史记录</h3><p>快去首页生成您的第一条提示词吧！</p></div>';
+                return;
+            }
+            grid.innerHTML = history.map(item => renderCard(item, 'history')).join('');
+        }
+
+        function renderFavorites() {
+            const favorites = Storage.get('favorites') || [];
+            const grid = document.getElementById('favoritesGrid');
+            if (favorites.length === 0) {
+                grid.innerHTML = '<div class="empty-list" style="grid-column: 1 / -1;"><div class="empty-icon">⭐</div><h3>暂无收藏</h3><p>生成提示词后点击收藏按钮，即可在这里查看</p></div>';
+                return;
+            }
+            grid.innerHTML = favorites.map(item => renderCard(item, 'favorites')).join('');
+        }
+
+        function renderCard(item, type) {
+            const levelClass = item.level === 'basic' ? 'version-basic' : item.level === 'advanced' ? 'version-advanced' : 'version-expert';
+            const favorites = Storage.get('favorites') || [];
+            const isFav = favorites.some(f => f.id === item.id);
+
+            return `
+                <div class="history-card" onclick="loadFromCard('${item.id}', '${type}')">
+                    <div class="history-card-header">
+                        <div class="history-card-title">${escapeHtml(item.task.substring(0, 30))}${item.task.length > 30 ? '...' : ''}</div>
+                        <div class="history-card-time">${item.timestamp}</div>
+                    </div>
+                    <div class="history-card-preview">${escapeHtml(item.content.substring(0, 120))}...</div>
+                    <div class="history-card-footer">
+                        <div class="history-card-tags">
+                            <span class="history-card-tag ${levelClass}">${item.levelName}</span>
+                            <span class="history-card-tag">${item.domain}</span>
+                        </div>
+                        <div class="history-card-actions" onclick="event.stopPropagation()">
+                            <button class="card-action-btn ${isFav ? 'favorited' : ''}" onclick="toggleCardFavorite('${item.id}', '${type}')">${isFav ? '❤️' : '⭐'}</button>
+                            <button class="card-action-btn" onclick="copyCardContent('${item.id}', '${type}')">📋</button>
+                            <button class="card-action-btn" onclick="deleteCard('${item.id}', '${type}')">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadFromCard(id, type) {
+            const list = type === 'history' ? (Storage.get('history') || []) : (Storage.get('favorites') || []);
+            const item = list.find(i => i.id === id);
+            if (item) {
+                currentResult = item;
+                showSection('home');
+                displayResult(item);
+                document.getElementById('domainSelect').value = item.domain;
+                document.getElementById('taskInput').value = item.task;
+                selectComplexity(item.level);
+            }
+        }
+
+        function toggleCardFavorite(id, type) {
+            const list = type === 'history' ? (Storage.get('history') || []) : (Storage.get('favorites') || []);
+            const item = list.find(i => i.id === id);
+            if (!item) return;
+
+            let favorites = Storage.get('favorites') || [];
+            const index = favorites.findIndex(f => f.id === id);
+
+            if (index > -1) {
+                favorites.splice(index, 1);
+                showToast('已取消收藏', 'info');
+            } else {
+                favorites.unshift({ ...item });
+                showToast('⭐ 已收藏！', 'success');
+            }
+            Storage.set('favorites', favorites);
+            updateNavBadges();
+            if (type === 'history') renderHistory();
+            else renderFavorites();
+        }
+
+        function copyCardContent(id, type) {
+            const list = type === 'history' ? (Storage.get('history') || []) : (Storage.get('favorites') || []);
+            const item = list.find(i => i.id === id);
+            if (item) copyText(item.content, '✅ 已复制到剪贴板');
+        }
+
+        function deleteCard(id, type) {
+            if (!confirm('确定要删除这条记录吗？')) return;
+            if (type === 'history') {
+                let history = Storage.get('history') || [];
+                history = history.filter(i => i.id !== id);
+                Storage.set('history', history);
+                renderHistory();
+            } else {
+                let favorites = Storage.get('favorites') || [];
+                favorites = favorites.filter(i => i.id !== id);
+                Storage.set('favorites', favorites);
+                renderFavorites();
+            }
+            updateNavBadges();
+            showToast('已删除', 'info');
+        }
+
+        function clearHistory() {
+            if (!confirm('确定要清空所有历史记录吗？')) return;
+            Storage.set('history', []);
+            renderHistory();
+            updateNavBadges();
+            showToast('历史记录已清空', 'info');
+        }
+
+        function clearFavorites() {
+            if (!confirm('确定要清空所有收藏吗？')) return;
+            Storage.set('favorites', []);
+            renderFavorites();
+            updateNavBadges();
+            showToast('收藏已清空', 'info');
+        }
+
+        function updateUsageBadge() {
+            const usage = Storage.get('usage');
+            const total = usage.basic.count + usage.advanced.count + usage.expert.count;
+            document.getElementById('totalUsed').textContent = total;
+        }
+
+        function showUsageStats() {
+            const usage = Storage.get('usage');
+            const trialUsed = Storage.get('trialUsed');
+            const unlocked = Storage.get('unlocked');
+
+            const basicPercent = Math.min((usage.basic.count / BASIC_DAILY_LIMIT) * 100, 100);
+            const advStatus = !trialUsed.advanced ? '✨ 可免费体验1次' : unlocked.advanced ? '🔓 已解锁' : '🔒 需密码解锁';
+            const expStatus = !trialUsed.expert ? '✨ 可免费体验1次' : unlocked.expert ? '🔓 已解锁' : '🔒 需密码解锁';
+
+            document.getElementById('statsContent').innerHTML = `
+                <div class="usage-stat-item">
+                    <div class="usage-stat-label"><div class="usage-stat-icon" style="background: linear-gradient(135deg, #d1fae5, #a7f3d0);">🌱</div>基础版</div>
+                    <div class="usage-stat-bar"><div class="usage-stat-bar-fill" style="width:${basicPercent}%; background: ${basicPercent >= 100 ? '#ef4444' : basicPercent >= 60 ? '#f59e0b' : '#10b981'};"></div></div>
+                    <div class="usage-stat-count">${usage.basic.count}/${BASIC_DAILY_LIMIT}</div>
+                </div>
+                <div class="usage-stat-item">
+                    <div class="usage-stat-label"><div class="usage-stat-icon" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);">🚀</div>进阶版</div>
+                    <div style="flex:1; text-align:center; font-size:12px; color:#64748b;">${advStatus}</div>
+                    <div class="usage-stat-count">${usage.advanced.count}次</div>
+                </div>
+                <div class="usage-stat-item">
+                    <div class="usage-stat-label"><div class="usage-stat-icon" style="background: linear-gradient(135deg, #fce7f3, #fbcfe8);">👑</div>专家版</div>
+                    <div style="flex:1; text-align:center; font-size:12px; color:#64748b;">${expStatus}</div>
+                    <div class="usage-stat-count">${usage.expert.count}次</div>
+                </div>
+                <div style="margin-top:14px; padding:10px; background: linear-gradient(135deg, #fef3c7, #fde68a); border-radius:8px; font-size:12px; color:#92400e; text-align:center;">
+                    💬 如需解锁更多次数，请添加QQ：<strong>704451222</strong>
+                </div>
+            `;
+            document.getElementById('statsModal').classList.add('show');
+        }
+
+        function closeStatsModal() {
+            document.getElementById('statsModal').classList.remove('show');
+        }
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        function verifyAdmin() {
+            const input = document.getElementById('adminPasswordInput').value.trim();
+            if (input === ADMIN_PASSWORD) {
+                isAdmin = true;
+                showToast('✅ 验证成功！', 'success');
+                renderAdminPanel();
+            } else {
+                showToast('❌ 密码错误', 'error');
+            }
+        }
+
+        function renderAdminPanel() {
+            const passwords = Storage.get('passwords');
+            const usage = Storage.get('usage');
+            const history = Storage.get('history') || [];
+            const favorites = Storage.get('favorites') || [];
+            const advActive = passwords.advanced.filter(p => p.active).length;
+            const expActive = passwords.expert.filter(p => p.active).length;
+
+            document.getElementById('adminContainer').innerHTML = `
+                <div class="admin-header"><h2>🔐 管理面板</h2><p>管理密码池、查看使用统计、监控系统状态</p></div>
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-card-header"><div class="stat-icon blue">📊</div><span class="stat-label">今日生成次数</span></div><div class="stat-value">${usage.basic.count + usage.advanced.count + usage.expert.count}</div></div>
+                    <div class="stat-card"><div class="stat-card-header"><div class="stat-icon green">📜</div><span class="stat-label">历史记录总数</span></div><div class="stat-value">${history.length}</div></div>
+                    <div class="stat-card"><div class="stat-card-header"><div class="stat-icon purple">🔓</div><span class="stat-label">进阶版密码可用</span></div><div class="stat-value">${advActive}/${passwords.advanced.length}</div></div>
+                    <div class="stat-card"><div class="stat-card-header"><div class="stat-icon orange">👑</div><span class="stat-label">专家版密码可用</span></div><div class="stat-value">${expActive}/${passwords.expert.length}</div></div>
+                </div>
+                <div class="admin-section">
+                    <div class="admin-section-title"><span>🔑 进阶版密码池</span><button class="add-btn" onclick="showAddPasswordModal('advanced')">+ 添加密码</button></div>
+                    <div style="overflow-x:auto;"><table class="password-table"><thead><tr><th>密码</th><th>类型</th><th>使用次数</th><th>使用率</th><th>状态</th></tr></thead><tbody>
+                        ${passwords.advanced.map(p => `<tr><td><code>${p.password}</code></td><td><span class="password-tag advanced">进阶版</span></td><td>${p.used}/${p.max}</td><td><div class="progress-bar"><div class="progress-bar-fill ${p.used/p.max < 0.5 ? 'green' : p.used/p.max < 0.8 ? 'yellow' : 'red'}" style="width:${(p.used/p.max)*100}%"></div></div></td><td><span class="password-tag ${p.active ? 'active' : 'used'}">${p.active ? '可用' : '已用完'}</span></td></tr>`).join('')}
+                    </tbody></table></div>
+                </div>
+                <div class="admin-section">
+                    <div class="admin-section-title"><span>👑 专家版密码池</span><button class="add-btn" onclick="showAddPasswordModal('expert')">+ 添加密码</button></div>
+                    <div style="overflow-x:auto;"><table class="password-table"><thead><tr><th>密码</th><th>类型</th><th>使用次数</th><th>使用率</th><th>状态</th></tr></thead><tbody>
+                        ${passwords.expert.map(p => `<tr><td><code>${p.password}</code></td><td><span class="password-tag expert">专家版</span></td><td>${p.used}/${p.max}</td><td><div class="progress-bar"><div class="progress-bar-fill ${p.used/p.max < 0.5 ? 'green' : p.used/p.max < 0.8 ? 'yellow' : 'red'}" style="width:${(p.used/p.max)*100}%"></div></div></td><td><span class="password-tag ${p.active ? 'active' : 'used'}">${p.active ? '可用' : '已用完'}</span></td></tr>`).join('')}
+                    </tbody></table></div>
+                </div>
+                <div class="admin-section">
+                    <div class="admin-section-title"><span>⚙️ 系统操作</span></div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="modal-btn secondary" onclick="resetAllData()">🗑️ 重置所有数据</button>
+                        <button class="modal-btn secondary" onclick="exportData()">📥 导出数据</button>
+                        <button class="modal-btn secondary" onclick="location.reload()">🔄 刷新页面</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showAddPasswordModal(type) {
+            const password = prompt('请输入新密码（' + (type === 'advanced' ? '进阶版' : '专家版') + '）：');
+            if (!password || !password.trim()) return;
+            const passwords = Storage.get('passwords');
+            const pool = type === 'advanced' ? passwords.advanced : passwords.expert;
+            pool.push({ id: (type === 'advanced' ? 'adv_' : 'exp_') + (pool.length + 1), password: password.trim(), used: 0, max: PASSWORD_MAX_USES, active: true });
+            Storage.set('passwords', passwords);
+            renderAdminPanel();
+            showToast('✅ 密码添加成功', 'success');
+        }
+
+        function resetAllData() {
+            if (!confirm('⚠️ 警告：这将清除所有数据，确定要继续吗？')) return;
+            ['usage', 'trialUsed', 'passwords', 'history', 'favorites', 'unlocked'].forEach(key => Storage.remove(key));
+            initData();
+            location.reload();
+        }
+
+        function exportData() {
+            const data = { usage: Storage.get('usage'), trialUsed: Storage.get('trialUsed'), passwords: Storage.get('passwords'), history: Storage.get('history'), favorites: Storage.get('favorites'), unlocked: Storage.get('unlocked'), exportTime: new Date().toISOString() };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'prompt-generator-data-' + new Date().toISOString().slice(0, 10) + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('✅ 数据导出成功', 'success');
+        }
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 50 + 15 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 15) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') { closeModal(); closeStatsModal(); }
+        });
+
+        document.getElementById('unlockPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') confirmUnlock();
+        });
+
+        document.getElementById('adminPasswordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verifyAdmin();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initData();
+            updateUsageBadge();
+            updateBadges();
+            updateNavBadges();
+            createParticles();
+
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') === ADMIN_PASSWORD) {
+                isAdmin = true;
+                showSection('admin');
+            }
+        });
+    </script>
+</body>
+</html>
