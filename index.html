@@ -790,7 +790,67 @@ textarea::placeholder { color: var(--text-muted); }
 /* 页面切换 */
 .page { display: none; }
 .page.active { display: block; }
-</style>
+        /* 底部版权 */
+        #page-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 26, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 10px 20px;
+            z-index: 100;
+            text-align: center;
+        }
+        .footer-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .footer-copyright {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+        .footer-divider {
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 12px;
+        }
+        .footer-license {
+            color: rgba(100, 200, 255, 0.7);
+            font-size: 12px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-license:hover {
+            color: rgba(100, 200, 255, 1);
+            text-decoration: underline;
+        }
+        .footer-qq {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+        }
+        /* 为底部footer留出空间 */
+        #app {
+            padding-bottom: 50px;
+        }
+        @media (max-width: 600px) {
+            .footer-content {
+                gap: 8px;
+            }
+            .footer-copyright, .footer-license, .footer-qq, .footer-divider {
+                font-size: 11px;
+            }
+            #page-footer {
+                padding: 8px 12px;
+            }
+            #app {
+                padding-bottom: 42px;
+            }
+        }</style>
 
 <base target="_blank">
 </head>
@@ -2005,5 +2065,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-</body>
+
+    <!-- 底部版权信息 -->
+    <footer id="page-footer">
+        <div class="footer-content">
+            <span class="footer-copyright">© 2025 微风拂面，细雨蒙蒙</span>
+            <span class="footer-divider">|</span>
+            <a href="https://github.com/cuic7797-debug/prompt-generator/blob/main/LICENSE" target="_blank" class="footer-license">MIT License</a>
+            <span class="footer-divider">|</span>
+            <span class="footer-qq">QQ: 704451222</span>
+        </div>
+    </footer></body>
 </html>
