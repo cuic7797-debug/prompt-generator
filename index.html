@@ -2013,7 +2013,7 @@ function getStyleDesc(type, lang, isExpert) {
 
 function getCompositionDesc(type, lang) {
     const descs = {
-        '白底主图': { zh: '居中构图，产品正面或45°展示，四周等距留白', en: 'Centered composition, front or 45° display, equal whitespace around' },
+        '白底主图': { zh: '居中构图，产品正面或45°展示，四周等距留白', en: 'Centered composition, front or 45 degree display, equal whitespace around' },
         '场景氛围图': { zh: '三分法构图，产品位于视觉焦点，环境自然延伸', en: 'Rule of thirds, product at visual focal point, environment naturally extends' },
         '模特穿搭图': { zh: '全身或七分身构图，模特位于画面中央偏左/右，留出呼吸空间', en: 'Full or 7/8 body composition, model slightly off-center, breathing space' },
         '节日促销图': { zh: '中心聚焦+放射状构图，促销信息区域预留空白', en: 'Center focus + radial composition, promotional text area reserved' },
@@ -2027,7 +2027,7 @@ function getColorDesc(type, lang) {
     const descs = {
         '白底主图': { zh: '产品本色还原，白底不偏色，整体色调中性', en: 'True product color, white bg no color cast, neutral overall tone' },
         '场景氛围图': { zh: '暖色调为主（色温5000-6000K），与产品色调协调', en: 'Warm tones dominant (5000-6000K), harmonizing with product colors' },
-        '模特穿搭图': { zh: '服装色彩真实还原，背景色与服装形成对比但不冲突', en: 'True clothing color, background contrasts but doesn\'t clash' },
+        '模特穿搭图': { zh: '服装色彩真实还原，背景色与服装形成对比但不冲突', en: 'True clothing color, background contrasts but does not clash' },
         '节日促销图': { zh: '节日主色调（红/金/橙）+ 产品色点缀，整体饱和度高', en: 'Holiday primary colors (red/gold/orange) + product accent, high overall saturation' },
         '详情页套图': { zh: '整套图色彩统一，产品色一致，背景色系统一', en: 'Unified color across set, consistent product color, unified background system' },
         'AI模特换脸': { zh: '保持原图色彩不变', en: 'Preserve original colors unchanged' }
@@ -2038,66 +2038,28 @@ function getColorDesc(type, lang) {
 function getQualityDesc(platform, lang, isExpert) {
     const qualityMap = {
         'doubao': {
-            zh: isExpert ? '分辨率：2048×2048（1:1）/ 1536×2048（3:4）
-画质：超高清，细节丰富
-风格：写实摄影
-其他：关闭AI水印' : '超高清，2048×2048，写实摄影风格',
-            en: isExpert ? 'Resolution: 2048×2048 (1:1) / 1536×2048 (3:4)
-Quality: Ultra HD, rich details
-Style: Realistic photography
-Other: Disable AI watermark' : 'Ultra HD, 2048×2048, realistic photography style'
+            zh: isExpert ? '分辨率：2048×2048（1:1）/ 1536×2048（3:4）\n画质：超高清，细节丰富\n风格：写实摄影\n其他：关闭AI水印' : '超高清，2048×2048，写实摄影风格',
+            en: isExpert ? 'Resolution: 2048×2048 (1:1) / 1536×2048 (3:4)\nQuality: Ultra HD, rich details\nStyle: Realistic photography\nOther: Disable AI watermark' : 'Ultra HD, 2048×2048, realistic photography style'
         },
         'jimeng': {
-            zh: isExpert ? '分辨率：2048×2048
-画质：极致清晰
-风格：摄影写实
-其他：智能优化开启' : '极致清晰，2048×2048，摄影写实',
-            en: isExpert ? 'Resolution: 2048×2048
-Quality: Ultimate clarity
-Style: Photorealistic
-Other: Smart optimization ON' : 'Ultimate clarity, 2048×2048, photorealistic'
+            zh: isExpert ? '分辨率：2048×2048\n画质：极致清晰\n风格：摄影写实\n其他：智能优化开启' : '极致清晰，2048×2048，摄影写实',
+            en: isExpert ? 'Resolution: 2048×2048\nQuality: Ultimate clarity\nStyle: Photorealistic\nOther: Smart optimization ON' : 'Ultimate clarity, 2048×2048, photorealistic'
         },
         'keling': {
-            zh: isExpert ? '分辨率：1920×1080（视频帧）/ 2048×2048（图片）
-画质：电影级
-风格：写实
-其他：运动幅度低（静物）' : '电影级画质，2048×2048，写实风格',
-            en: isExpert ? 'Resolution: 1920×1080 (video frame) / 2048×2048 (image)
-Quality: Cinematic
-Style: Realistic
-Other: Low motion (static objects)' : 'Cinematic quality, 2048×2048, realistic style'
+            zh: isExpert ? '分辨率：1920×1080（视频帧）/ 2048×2048（图片）\n画质：电影级\n风格：写实\n其他：运动幅度低（静物）' : '电影级画质，2048×2048，写实风格',
+            en: isExpert ? 'Resolution: 1920×1080 (video frame) / 2048×2048 (image)\nQuality: Cinematic\nStyle: Realistic\nOther: Low motion (static objects)' : 'Cinematic quality, 2048×2048, realistic style'
         },
         'tongyi': {
-            zh: isExpert ? '分辨率：2048×2048
-画质：超精细
-风格：商业摄影
-其他：中文提示词优化' : '超精细，2048×2048，商业摄影风格',
-            en: isExpert ? 'Resolution: 2048×2048
-Quality: Ultra fine
-Style: Commercial photography
-Other: Chinese prompt optimized' : 'Ultra fine, 2048×2048, commercial photography style'
+            zh: isExpert ? '分辨率：2048×2048\n画质：超精细\n风格：商业摄影\n其他：中文提示词优化' : '超精细，2048×2048，商业摄影风格',
+            en: isExpert ? 'Resolution: 2048×2048\nQuality: Ultra fine\nStyle: Commercial photography\nOther: Chinese prompt optimized' : 'Ultra fine, 2048×2048, commercial photography style'
         },
         'midjourney': {
-            zh: isExpert ? '参数：--ar 1:1 --q 2 --s 250 --v 6
-质量：最高质量渲染
-风格：RAW模式（更真实）
-其他：--no 负面词' : '--ar 1:1 --q 2 --s 250 --v 6，最高质量',
-            en: isExpert ? 'Params: --ar 1:1 --q 2 --s 250 --v 6
-Quality: Maximum quality render
-Style: RAW mode (more realistic)
-Other: --no negative words' : '--ar 1:1 --q 2 --s 250 --v 6, maximum quality'
+            zh: isExpert ? '参数：--ar 1:1 --q 2 --s 250 --v 6\n质量：最高质量渲染\n风格：RAW模式（更真实）\n其他：--no 负面词' : '--ar 1:1 --q 2 --s 250 --v 6，最高质量',
+            en: isExpert ? 'Params: --ar 1:1 --q 2 --s 250 --v 6\nQuality: Maximum quality render\nStyle: RAW mode (more realistic)\nOther: --no negative words' : '--ar 1:1 --q 2 --s 250 --v 6, maximum quality'
         },
         'sd': {
-            zh: isExpert ? '模型：RealisticVision / DreamShaper
-采样：DPM++ 2M Karras
-步数：30-50
-CFG：7-9
-其他：高清修复开启' : 'RealisticVision模型，DPM++采样，30步，CFG7',
-            en: isExpert ? 'Model: RealisticVision / DreamShaper
-Sampler: DPM++ 2M Karras
-Steps: 30-50
-CFG: 7-9
-Other: Hi-res fix ON' : 'RealisticVision model, DPM++ sampler, 30 steps, CFG7'
+            zh: isExpert ? '模型：RealisticVision / DreamShaper\n采样：DPM++ 2M Karras\n步数：30-50\nCFG：7-9\n其他：高清修复开启' : 'RealisticVision模型，DPM++采样，30步，CFG7',
+            en: isExpert ? 'Model: RealisticVision / DreamShaper\nSampler: DPM++ 2M Karras\nSteps: 30-50\nCFG: 7-9\nOther: Hi-res fix ON' : 'RealisticVision model, DPM++ sampler, 30 steps, CFG7'
         }
     };
     return (qualityMap[platform] || qualityMap['doubao'])[lang] || qualityMap['doubao']['zh'];
@@ -2806,8 +2768,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             $('fieldSelect').value = card.dataset.field;
             $('taskInput').value = card.dataset.task;
-            当前等级 = 卡.数据集.等级;
-            文档.querySelectorAll('.complexity-card').forEach(c => {
+            currentLevel = card.dataset.level;
+            document.querySelectorAll('.complexity-card').forEach(c => {
                 c.classList.toggle('selected', c.dataset.level === currentLevel);
             });
             showPage('home');
@@ -2821,16 +2783,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     $('unlockInput').addEventListener('keypress', (e) => {
-        如果 (e.键 === '回车') 则解锁();
+        if (e.key === 'Enter') doUnlock();
     });
 
     $('copyClose').addEventListener('click', () => {
         $('copyModal').classList.remove('active');
     });
 
-    文档.querySelectorAll('.modal-overlay').forEach(覆盖层 => {
-        叠加.添加事件监听器('点击', (e) => {
-            如果 (e.target === overlay) overlay.classList.remove('active');
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.classList.remove('active');
         });
     });
 
@@ -2838,21 +2800,85 @@ document.addEventListener('DOMContentLoaded', () => {
     updateTemplateLocks();
 
     const urlParams = new URLSearchParams(window.location.search);
-    如果 (urlParams.get('admin') === ADMIN_PASSWORD) {
+    if (urlParams.get('admin') === ADMIN_PASSWORD) {
         showPage('admin');
     }
 });
+
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+    initDB();
+    updateStats();
+    showPage('home');
+    renderTemplates();
+    renderHistory();
+    renderFavorites();
+
+    // 绑定事件
+    $('generateBtn').addEventListener('click', doGenerate);
+    $('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
+    $('overlay').addEventListener('click', closeMobileMenu);
+
+    // 复杂度选择
+    document.querySelectorAll('.complexity-card').forEach(card => {
+        card.addEventListener('click', () => {
+            document.querySelectorAll('.complexity-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            当前等级 = card.dataset.level;
+        });
+    });
+
+    // 标签点击
+    document.querySelectorAll('.tag').forEach(tag => {
+        tag.addEventListener('click', () => {
+            $('taskInput').value = tag.dataset.task;
+        });
+    });
+
+    // 领域切换
+    $('fieldSelect').addEventListener('change', () => {
+        const field = $('fieldSelect').value;
+        const 标签容器 = $('tagContainer');
+        const ecommerceTagContainer = $('ecommerceTagContainer');
+        const platformSection = $('platformSection');
+
+        如果 (field === '电商AI绘画') {
+            如果 (标签容器) 标签容器.类列表.add('隐藏');
+            如果 (ecommerceTagContainer) ecommerceTagContainer.类列表.移除('隐藏');
+            如果 (platformSection) platformSection.类列表.移除('隐藏');
+            document.querySelectorAll('.complexity-card').forEach(c => c.类列表.移除('selected'));
+            const expertCard = document.querySelector('.complexity-card[data-level="expert"]');
+            如果 (expertCard) expertCard.类列表.add('selected');
+            当前等级 = '专家';
+        } 否则 {
+            如果 (标签容器) 标签容器.类列表.移除('隐藏');
+            如果 (ecommerceTagContainer) ecommerceTagContainer.类列表.add('隐藏');
+            如果 (platformSection) platformSection.类列表.add('隐藏');
+        }
+    });
+});
+
+函数 toggleMobileMenu() {
+    $('configPanel').类列表.切换('open');
+    $(“叠加”.类列表.toggle('show');
+}
+
+函数 closeMobileMenu() {
+    $('configPanel').classList.remove('open');
+    $(“叠加”).类列表.移除('show');
+}
 </script>
 
 
     <!-- 底部版权信息 -->
     <footer id="page-footer">
-        <div class="footer-content">
-            <span class="footer-copyright">© 2025 微风拂面，细雨蒙蒙</span>
-            <span class="footer-divider">|</span>
-            <span class="footer-license">MIT许可证</span>
-            <span class="footer-divider">|</span>
-            <span class="footer-qq">QQ: 704451222</span>
+        <div 类="footer-content">
+            <span 类="footer-copyright">© 2025 微风拂面，细雨蒙蒙</span>
+            <span 类="footer-divider">|</span>
+            <span 类="footer-license">MIT许可证</span>
+            <span 类="footer-divider">|</span>
+            <span 类="footer-qq">QQ：704451222</span>
         </div>
     </footer></body>
 </html>
