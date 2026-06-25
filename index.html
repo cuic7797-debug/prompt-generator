@@ -2027,7 +2027,7 @@ function getColorDesc(type, lang) {
     const descs = {
         '白底主图': { zh: '产品本色还原，白底不偏色，整体色调中性', en: 'True product color, white bg no color cast, neutral overall tone' },
         '场景氛围图': { zh: '暖色调为主（色温5000-6000K），与产品色调协调', en: 'Warm tones dominant (5000-6000K), harmonizing with product colors' },
-        '模特穿搭图': { zh: '服装色彩真实还原，背景色与服装形成对比但不冲突', en: 'True clothing color, background contrasts but doesn't clash' },
+        '模特穿搭图': { zh: '服装色彩真实还原，背景色与服装形成对比但不冲突', en: 'True clothing color, background contrasts but doesn\'t clash' },
         '节日促销图': { zh: '节日主色调（红/金/橙）+ 产品色点缀，整体饱和度高', en: 'Holiday primary colors (red/gold/orange) + product accent, high overall saturation' },
         '详情页套图': { zh: '整套图色彩统一，产品色一致，背景色系统一', en: 'Unified color across set, consistent product color, unified background system' },
         'AI模特换脸': { zh: '保持原图色彩不变', en: 'Preserve original colors unchanged' }
@@ -2806,8 +2806,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             $('fieldSelect').value = card.dataset.field;
             $('taskInput').value = card.dataset.task;
-            currentLevel = card.dataset.level;
-            document.querySelectorAll('.complexity-card').forEach(c => {
+            当前等级 = 卡.数据集.等级;
+            文档.querySelectorAll('.complexity-card').forEach(c => {
                 c.classList.toggle('selected', c.dataset.level === currentLevel);
             });
             showPage('home');
@@ -2815,30 +2815,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    $('unlockConfirm').添加事件监听器('点击', doUnlock);
-    $('unlockCancel').添加事件监听器('点击', () => {
+    $('unlockConfirm').addEventListener('click', doUnlock);
+    $('unlockCancel').addEventListener('click', () => {
         $('unlockModal').classList.remove('active');
     });
 
-    $('unlockInput').添加事件监听器('keypress', (e) => {
-        如果 (e.key === 'Enter') doUnlock();
+    $('unlockInput').addEventListener('keypress', (e) => {
+        如果 (e.键 === '回车') 则解锁();
     });
 
-    $('copyClose').添加事件监听器('点击', () => {
+    $('copyClose').addEventListener('click', () => {
         $('copyModal').classList.remove('active');
     });
 
-    文档.querySelectorAll('.modal-overlay').forEach(叠加 => {
+    文档.querySelectorAll('.modal-overlay').forEach(覆盖层 => {
         叠加.添加事件监听器('点击', (e) => {
-            如果 (e.目标 === 叠加) 叠加.classList.remove('active');
+            如果 (e.target === overlay) overlay.classList.remove('active');
         });
     });
 
-    更新统计信息();
-    更新模板锁定状态();
+    updateStats();
+    updateTemplateLocks();
 
-    常量 urlParams = new URLSearchParams(window.location.search);
-    如果 (urlParams.获取('admin') === ADMIN_PASSWORD) {
+    const urlParams = new URLSearchParams(window.location.search);
+    如果 (urlParams.get('admin') === ADMIN_PASSWORD) {
         showPage('admin');
     }
 });
@@ -2852,7 +2852,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="footer-divider">|</span>
             <span class="footer-license">MIT许可证</span>
             <span class="footer-divider">|</span>
-            <span class="footer-qq">QQ：704451222</span>
+            <span class="footer-qq">QQ: 704451222</span>
         </div>
-    </footer></正文>
+    </footer></body>
 </html>
