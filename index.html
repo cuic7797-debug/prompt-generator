@@ -8,226 +8,226 @@
 <style>
 /* ===== 基础变量 ===== */
 :root {
-    --bg-primary: #0f0f1a;
-    --bg-secondary: #1a1a2e;
-    --bg-card: rgba(26, 26, 46, 0.8);
-    --bg-glass: rgba(255, 255, 255, 0.05);
-    --border-glass: rgba(255, 255, 255, 0.1);
-    --text-primary: #e8e8f0;
-    --text-secondary: #a0a0b8;
-    --text-muted: #6b6b8a;
-    --accent-purple: #8b5cf6;
-    --accent-purple-light: #a78bfa;
-    --accent-pink: #ec4899;
-    --accent-blue: #3b82f6;
-    --accent-green: #10b981;
-    --accent-amber: #f59e0b;
-    --accent-red: #ef4444;
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
-    --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+--bg-primary: #0f0f1a;
+--bg-secondary: #1a1a2e;
+--bg-card: rgba(26, 26, 46, 0.8);
+--bg-glass: rgba(255, 255, 255, 0.05);
+--border-glass: rgba(255, 255, 255, 0.1);
+--text-primary: #e8e8f0;
+--text-secondary: #a0a0b8;
+--text-muted: #6b6b8a;
+--accent-purple: #8b5cf6;
+--accent-purple-light: #a78bfa;
+--accent-pink: #ec4899;
+--accent-blue: #3b82f6;
+--accent-green: #10b981;
+--accent-amber: #f59e0b;
+--accent-red: #ef4444;
+--shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+--shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    min-height: 100vh;
-    overflow-x: hidden;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+background: var(--bg-primary);
+color: var(--text-primary);
+min-height: 100vh;
+overflow-x: hidden;
 }
 
 /* ===== 导航栏 ===== */
 .navbar {
-    position: fixed; top: 0; left: 0; right: 0; height: 60px;
-    background: rgba(15, 15, 26, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border-glass);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 24px; z-index: 1000;
+position: fixed; top: 0; left: 0; right: 0; height: 60px;
+background: rgba(15, 15, 26, 0.85);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border-bottom: 1px solid var(--border-glass);
+display: flex; align-items: center; justify-content: space-between;
+padding: 0 24px; z-index: 1000;
 }
 
 .logo {
-    font-size: 20px; font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
+font-size: 20px; font-weight: 700;
+background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+background-clip: text;
 }
 
 .nav-links {
-    display: flex; gap: 8px;
+display: flex; gap: 8px;
 }
 
 .nav-btn {
-    padding: 8px 16px; border-radius: 8px;
-    background: transparent; border: none;
-    color: var(--text-secondary); cursor: pointer;
-    font-size: 14px; transition: all 0.3s;
-    display: flex; align-items: center; gap: 6px;
+padding: 8px 16px; border-radius: 8px;
+background: transparent; border: none;
+color: var(--text-secondary); cursor: pointer;
+font-size: 14px; transition: all 0.3s;
+display: flex; align-items: center; gap: 6px;
 }
 
 .nav-btn:hover, .nav-btn.active {
-    background: var(--bg-glass);
-    color: var(--text-primary);
+background: var(--bg-glass);
+color: var(--text-primary);
 }
 
 .nav-btn.active {
-    box-shadow: 0 0 0 1px var(--accent-purple);
+box-shadow: 0 0 0 1px var(--accent-purple);
 }
 
 .mobile-menu-btn {
-    display: none; background: none; border: none;
-    color: var(--text-primary); font-size: 24px; cursor: pointer;
+display: none; background: none; border: none;
+color: var(--text-primary); font-size: 24px; cursor: pointer;
 }
 
 /* ===== 主布局 ===== */
 .main-container {
-    display: flex; margin-top: 60px; min-height: calc(100vh - 60px);
+display: flex; margin-top: 60px; min-height: calc(100vh - 60px);
 }
 
 /* ===== 左侧配置区 ===== */
 .config-panel {
-    width: 380px; min-width: 380px;
-    background: var(--bg-secondary);
-    border-right: 1px solid var(--border-glass);
-    padding: 24px; overflow-y: auto;
-    height: calc(100vh - 60px);
+width: 380px; min-width: 380px;
+background: var(--bg-secondary);
+border-right: 1px solid var(--border-glass);
+padding: 24px; overflow-y: auto;
+height: calc(100vh - 60px);
 }
 
 .config-section {
-    margin-bottom: 24px;
+margin-bottom: 24px;
 }
 
 .config-label {
-    font-size: 13px; font-weight: 600;
-    color: var(--text-secondary);
-    text-transform: uppercase; letter-spacing: 0.5px;
-    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+font-size: 13px; font-weight: 600;
+color: var(--text-secondary);
+text-transform: uppercase; letter-spacing: 0.5px;
+margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
 }
 
 /* 修复：config-label-row 用于任务描述标签和按钮同行 */
 .config-label-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 10px;
 }
 
 .config-label-row .config-label {
-    margin-bottom: 0;
+margin-bottom: 0;
 }
 
 /* 下拉框 */
 .select-field {
-    width: 100%; padding: 12px 14px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border-glass);
-    border-radius: 10px; color: var(--text-primary);
-    font-size: 14px; cursor: pointer;
-    transition: all 0.3s; appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0a0b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 14px center;
+width: 100%; padding: 12px 14px;
+background: var(--bg-primary);
+border: 1px solid var(--border-glass);
+border-radius: 10px; color: var(--text-primary);
+font-size: 14px; cursor: pointer;
+transition: all 0.3s; appearance: none;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0a0b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+background-repeat: no-repeat; background-position: right 14px center;
 }
 
 .select-field:focus {
-    outline: none; border-color: var(--accent-purple);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+outline: none; border-color: var(--accent-purple);
+box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
 }
 
 /* 文本输入区 */
 .textarea-wrapper {
-    position: relative;
+position: relative;
 }
 
 textarea {
-    width: 100%; min-height: 120px;
-    padding: 14px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border-glass);
-    border-radius: 10px; color: var(--text-primary);
-    font-size: 14px; line-height: 1.6;
-    resize: vertical; transition: all 0.3s;
-    font-family: inherit;
+width: 100%; min-height: 120px;
+padding: 14px;
+background: var(--bg-primary);
+border: 1px solid var(--border-glass);
+border-radius: 10px; color: var(--text-primary);
+font-size: 14px; line-height: 1.6;
+resize: vertical; transition: all 0.3s;
+font-family: inherit;
 }
 
 textarea:focus {
-    outline: none; border-color: var(--accent-purple);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+outline: none; border-color: var(--accent-purple);
+box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
 }
 
 textarea::placeholder { color: var(--text-muted); }
 
 /* 修复：按钮放到标签右侧，横着放 */
 .textarea-actions {
-    display: flex;
-    gap: 6px;
+display: flex;
+gap: 6px;
 }
 
 .icon-btn {
-    width: 28px; height: 28px;
-    border-radius: 6px; border: none;
-    background: var(--bg-glass);
-    color: var(--text-secondary);
-    cursor: pointer; font-size: 12px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
+width: 28px; height: 28px;
+border-radius: 6px; border: none;
+background: var(--bg-glass);
+color: var(--text-secondary);
+cursor: pointer; font-size: 12px;
+display: flex; align-items: center; justify-content: center;
+transition: all 0.2s;
 }
 
 .icon-btn:hover {
-    background: var(--accent-purple);
-    color: white;
+background: var(--accent-purple);
+color: white;
 }
 
 /* 推荐标签 */
 .tag-container {
-    display: flex; flex-wrap: wrap; gap: 8px;
+display: flex; flex-wrap: wrap; gap: 8px;
 }
 
 .tag {
-    padding: 6px 12px; border-radius: 20px;
-    background: var(--bg-glass);
-    border: 1px solid var(--border-glass);
-    color: var(--text-secondary); font-size: 12px;
-    cursor: pointer; transition: all 0.2s;
+padding: 6px 12px; border-radius: 20px;
+background: var(--bg-glass);
+border: 1px solid var(--border-glass);
+color: var(--text-secondary); font-size: 12px;
+cursor: pointer; transition: all 0.2s;
 }
 
 .tag:hover {
-    background: rgba(139, 92, 246, 0.15);
-    border-color: var(--accent-purple);
-    color: var(--accent-purple-light);
+background: rgba(139, 92, 246, 0.15);
+border-color: var(--accent-purple);
+color: var(--accent-purple-light);
 }
 
 /* 复杂度选择卡片 */
 .complexity-cards {
-    display: flex; flex-direction: column; gap: 10px;
+display: flex; flex-direction: column; gap: 10px;
 }
 
 .complexity-card {
-    display: flex; align-items: center; gap: 14px;
-    padding: 14px 16px;
-    background: var(--bg-glass);
-    border: 2px solid transparent;
-    border-radius: 12px; cursor: pointer;
-    transition: all 0.3s;
+display: flex; align-items: center; gap: 14px;
+padding: 14px 16px;
+background: var(--bg-glass);
+border: 2px solid transparent;
+border-radius: 12px; cursor: pointer;
+transition: all 0.3s;
 }
 
 .complexity-card:hover {
-    background: rgba(139, 92, 246, 0.08);
-    border-color: rgba(139, 92, 246, 0.3);
+background: rgba(139, 92, 246, 0.08);
+border-color: rgba(139, 92, 246, 0.3);
 }
 
 .complexity-card.selected {
-    background: rgba(139, 92, 246, 0.12);
-    border-color: var(--accent-purple);
-    box-shadow: var(--shadow-glow);
+background: rgba(139, 92, 246, 0.12);
+border-color: var(--accent-purple);
+box-shadow: var(--shadow-glow);
 }
 
 .complexity-icon {
-    width: 40px; height: 40px;
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
+width: 40px; height: 40px;
+border-radius: 10px;
+display: flex; align-items: center; justify-content: center;
+font-size: 18px; flex-shrink: 0;
 }
 
 .complexity-card[data-level="basic"] .complexity-icon { background: rgba(16, 185, 129, 0.15); }
@@ -236,127 +236,127 @@ textarea::placeholder { color: var(--text-muted); }
 
 .complexity-info { flex: 1; }
 .complexity-name {
-    font-size: 14px; font-weight: 600;
-    color: var(--text-primary); display: flex; align-items: center; gap: 8px;
+font-size: 14px; font-weight: 600;
+color: var(--text-primary); display: flex; align-items: center; gap: 8px;
 }
 .complexity-desc {
-    font-size: 12px; color: var(--text-muted); margin-top: 2px;
+font-size: 12px; color: var(--text-muted); margin-top: 2px;
 }
 .complexity-badge {
-    padding: 2px 8px; border-radius: 10px;
-    font-size: 10px; font-weight: 600;
+padding: 2px 8px; border-radius: 10px;
+font-size: 10px; font-weight: 600;
 }
 
 .badge-free {
-    background: rgba(16, 185, 129, 0.2);
-    color: var(--accent-green);
+background: rgba(16, 185, 129, 0.2);
+color: var(--accent-green);
 }
 
 .badge-locked {
-    background: rgba(245, 158, 11, 0.2);
-    color: var(--accent-amber);
+background: rgba(245, 158, 11, 0.2);
+color: var(--accent-amber);
 }
 
 /* 生成按钮 */
 .generate-btn {
-    width: 100%; padding: 14px;
-    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-    border: none; border-radius: 12px;
-    color: white; font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: all 0.3s;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+width: 100%; padding: 14px;
+background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+border: none; border-radius: 12px;
+color: white; font-size: 15px; font-weight: 600;
+cursor: pointer; transition: all 0.3s;
+display: flex; align-items: center; justify-content: center; gap: 8px;
+box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
 }
 
 .generate-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(139, 92, 246, 0.5);
+transform: translateY(-2px);
+box-shadow: 0 6px 25px rgba(139, 92, 246, 0.5);
 }
 
 .generate-btn:active { transform: translateY(0); }
 
 .generate-btn:disabled {
-    opacity: 0.5; cursor: not-allowed; transform: none;
+opacity: 0.5; cursor: not-allowed; transform: none;
 }
 
 /* 使用统计 */
 .usage-stats {
-    display: flex; gap: 16px; margin-top: 16px;
-    padding-top: 16px; border-top: 1px solid var(--border-glass);
+display: flex; gap: 16px; margin-top: 16px;
+padding-top: 16px; border-top: 1px solid var(--border-glass);
 }
 
 .stat-item {
-    text-align: center; flex: 1;
+text-align: center; flex: 1;
 }
 
 .stat-value {
-    font-size: 20px; font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+font-size: 20px; font-weight: 700;
+background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 
 .stat-label {
-    font-size: 11px; color: var(--text-muted); margin-top: 2px;
+font-size: 11px; color: var(--text-muted); margin-top: 2px;
 }
 
 /* ===== 右侧结果区 ===== */
 .result-panel {
-    flex: 1; padding: 24px; overflow-y: auto;
-    background: var(--bg-primary);
+flex: 1; padding: 24px; overflow-y: auto;
+background: var(--bg-primary);
 }
 
 /* 空状态 */
 .empty-state {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    min-height: 500px; text-align: center;
+display: flex; flex-direction: column;
+align-items: center; justify-content: center;
+min-height: 500px; text-align: center;
 }
 
 .empty-icon {
-    width: 80px; height: 80px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 36px; margin-bottom: 20px;
+width: 80px; height: 80px;
+border-radius: 20px;
+background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+display: flex; align-items: center; justify-content: center;
+font-size: 36px; margin-bottom: 20px;
 }
 
 .empty-title {
-    font-size: 20px; font-weight: 600; margin-bottom: 8px;
+font-size: 20px; font-weight: 600; margin-bottom: 8px;
 }
 
 .empty-desc {
-    color: var(--text-muted); font-size: 14px; max-width: 400px;
+color: var(--text-muted); font-size: 14px; max-width: 400px;
 }
 
 /* 结果卡片 */
 .result-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-glass);
-    border-radius: 16px; overflow: hidden;
-    margin-bottom: 20px;
-    backdrop-filter: blur(10px);
-    animation: fadeInUp 0.5s ease;
+background: var(--bg-card);
+border: 1px solid var(--border-glass);
+border-radius: 16px; overflow: hidden;
+margin-bottom: 20px;
+backdrop-filter: blur(10px);
+animation: fadeInUp 0.5s ease;
 }
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+from { opacity: 0; transform: translateY(20px); }
+to { opacity: 1; transform: translateY(0); }
 }
 
 .result-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 16px 20px;
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.05));
-    border-bottom: 1px solid var(--border-glass);
+display: flex; align-items: center; justify-content: space-between;
+padding: 16px 20px;
+background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.05));
+border-bottom: 1px solid var(--border-glass);
 }
 
 .result-meta {
-    display: flex; align-items: center; gap: 12px;
+display: flex; align-items: center; gap: 12px;
 }
 
 .result-badge {
-    padding: 4px 12px; border-radius: 8px;
-    font-size: 12px; font-weight: 600;
+padding: 4px 12px; border-radius: 8px;
+font-size: 12px; font-weight: 600;
 }
 
 .badge-basic { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
@@ -367,157 +367,157 @@ textarea::placeholder { color: var(--text-muted); }
 .result-time { font-size: 12px; color: var(--text-muted); }
 
 .result-actions {
-    display: flex; gap: 8px;
+display: flex; gap: 8px;
 }
 
 .action-btn {
-    padding: 6px 14px; border-radius: 8px;
-    border: 1px solid var(--border-glass);
-    background: var(--bg-glass); color: var(--text-secondary);
-    font-size: 13px; cursor: pointer; transition: all 0.2s;
-    display: flex; align-items: center; gap: 4px;
+padding: 6px 14px; border-radius: 8px;
+border: 1px solid var(--border-glass);
+background: var(--bg-glass); color: var(--text-secondary);
+font-size: 13px; cursor: pointer; transition: all 0.2s;
+display: flex; align-items: center; gap: 4px;
 }
 
 .action-btn:hover {
-    background: var(--accent-purple); color: white;
-    border-color: var(--accent-purple);
+background: var(--accent-purple); color: white;
+border-color: var(--accent-purple);
 }
 
 .action-btn.favorited {
-    background: rgba(236, 72, 153, 0.2);
-    border-color: var(--accent-pink);
-    color: var(--accent-pink);
+background: rgba(236, 72, 153, 0.2);
+border-color: var(--accent-pink);
+color: var(--accent-pink);
 }
 
 /* 提示词内容格式化 */
 .result-content {
-    padding: 20px; line-height: 1.8;
-    color: var(--text-primary); font-size: 14px;
+padding: 20px; line-height: 1.8;
+color: var(--text-primary); font-size: 14px;
 }
 
 .result-content h3 {
-    font-size: 15px; font-weight: 600;
-    color: var(--accent-purple-light);
-    margin: 20px 0 10px; display: flex; align-items: center; gap: 8px;
+font-size: 15px; font-weight: 600;
+color: var(--accent-purple-light);
+margin: 20px 0 10px; display: flex; align-items: center; gap: 8px;
 }
 
 .result-content h3:first-child { margin-top: 0; }
 
 .result-content ul {
-    margin: 8px 0; padding-left: 20px;
+margin: 8px 0; padding-left: 20px;
 }
 
 .result-content li {
-    margin: 6px 0; color: var(--text-secondary);
-    position: relative;
+margin: 6px 0; color: var(--text-secondary);
+position: relative;
 }
 
 .result-content li::marker { color: var(--accent-purple); }
 
 .result-content p {
-    margin: 10px 0; color: var(--text-secondary);
+margin: 10px 0; color: var(--text-secondary);
 }
 
 .result-content blockquote {
-    margin: 12px 0; padding: 12px 16px;
-    border-left: 3px solid var(--accent-purple);
-    background: rgba(139, 92, 246, 0.05);
-    border-radius: 0 8px 8px 0;
-    color: var(--text-secondary); font-style: italic;
+margin: 12px 0; padding: 12px 16px;
+border-left: 3px solid var(--accent-purple);
+background: rgba(139, 92, 246, 0.05);
+border-radius: 0 8px 8px 0;
+color: var(--text-secondary); font-style: italic;
 }
 
 .result-content strong {
-    color: var(--text-primary); font-weight: 600;
+color: var(--text-primary); font-weight: 600;
 }
 
 /* ===== 模板库 ===== */
 .template-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+gap: 16px;
 }
 
 .template-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-glass);
-    border-radius: 12px; padding: 16px;
-    cursor: pointer; transition: all 0.3s;
-    position: relative;
+background: var(--bg-card);
+border: 1px solid var(--border-glass);
+border-radius: 12px; padding: 16px;
+cursor: pointer; transition: all 0.3s;
+position: relative;
 }
 
 .template-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--accent-purple);
-    box-shadow: var(--shadow-lg);
+transform: translateY(-4px);
+border-color: var(--accent-purple);
+box-shadow: var(--shadow-lg);
 }
 
 .template-card.locked {
-    opacity: 0.6;
-    cursor: not-allowed;
+opacity: 0.6;
+cursor: not-allowed;
 }
 
 .template-card.locked:hover {
-    transform: none;
-    border-color: var(--border-glass);
-    box-shadow: none;
+transform: none;
+border-color: var(--border-glass);
+box-shadow: none;
 }
 
 .template-lock-overlay {
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(15, 15, 26, 0.7);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    flex-direction: column; gap: 8px;
-    font-size: 13px; color: var(--text-muted);
+position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+background: rgba(15, 15, 26, 0.7);
+border-radius: 12px;
+display: flex; align-items: center; justify-content: center;
+flex-direction: column; gap: 8px;
+font-size: 13px; color: var(--text-muted);
 }
 
 .template-lock-overlay .lock-icon {
-    font-size: 24px;
+font-size: 24px;
 }
 
 .template-name {
-    font-size: 14px; font-weight: 600; margin-bottom: 6px;
+font-size: 14px; font-weight: 600; margin-bottom: 6px;
 }
 
 .template-field {
-    font-size: 12px; color: var(--accent-purple-light); margin-bottom: 8px;
+font-size: 12px; color: var(--accent-purple-light); margin-bottom: 8px;
 }
 
 .template-desc {
-    font-size: 12px; color: var(--text-muted);
-    line-height: 1.5;
-    display: -webkit-box; -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical; overflow: hidden;
+font-size: 12px; color: var(--text-muted);
+line-height: 1.5;
+display: -webkit-box; -webkit-line-clamp: 2;
+-webkit-box-orient: vertical; overflow: hidden;
 }
 
 .template-level {
-    display: inline-block; margin-top: 10px;
-    padding: 2px 8px; border-radius: 6px;
-    font-size: 10px; font-weight: 600;
+display: inline-block; margin-top: 10px;
+padding: 2px 8px; border-radius: 6px;
+font-size: 10px; font-weight: 600;
 }
 
 /* ===== 历史/收藏列表 ===== */
 .history-list {
-    display: flex; flex-direction: column; gap: 12px;
+display: flex; flex-direction: column; gap: 12px;
 }
 
 .history-item {
-    display: flex; align-items: center; gap: 16px;
-    padding: 16px; background: var(--bg-card);
-    border: 1px solid var(--border-glass);
-    border-radius: 12px; cursor: pointer;
-    transition: all 0.2s;
+display: flex; align-items: center; gap: 16px;
+padding: 16px; background: var(--bg-card);
+border: 1px solid var(--border-glass);
+border-radius: 12px; cursor: pointer;
+transition: all 0.2s;
 }
 
 .history-item:hover {
-    border-color: var(--accent-purple);
-    background: rgba(139, 92, 246, 0.05);
+border-color: var(--accent-purple);
+background: rgba(139, 92, 246, 0.05);
 }
 
 .history-icon {
-    width: 44px; height: 44px; border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; flex-shrink: 0;
+width: 44px; height: 44px; border-radius: 10px;
+display: flex; align-items: center; justify-content: center;
+font-size: 20px; flex-shrink: 0;
 }
 
 .history-info { flex: 1; }
@@ -525,88 +525,88 @@ textarea::placeholder { color: var(--text-muted); }
 .history-meta { font-size: 12px; color: var(--text-muted); }
 
 .history-actions {
-    display: flex; gap: 6px;
+display: flex; gap: 6px;
 }
 
 /* ===== 管理面板 ===== */
 .admin-panel {
-    max-width: 900px; margin: 0 auto;
+max-width: 900px; margin: 0 auto;
 }
 
 .admin-section {
-    background: var(--bg-card);
-    border: 1px solid var(--border-glass);
-    border-radius: 16px; padding: 24px;
-    margin-bottom: 24px;
+background: var(--bg-card);
+border: 1px solid var(--border-glass);
+border-radius: 16px; padding: 24px;
+margin-bottom: 24px;
 }
 
 .admin-title {
-    font-size: 18px; font-weight: 600; margin-bottom: 20px;
-    display: flex; align-items: center; gap: 10px;
+font-size: 18px; font-weight: 600; margin-bottom: 20px;
+display: flex; align-items: center; gap: 10px;
 }
 
 .stats-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
 }
 
 .stat-card {
-    background: var(--bg-glass); padding: 20px;
-    border-radius: 12px; text-align: center;
-    border: 1px solid var(--border-glass);
-    transition: all 0.3s;
+background: var(--bg-glass); padding: 20px;
+border-radius: 12px; text-align: center;
+border: 1px solid var(--border-glass);
+transition: all 0.3s;
 }
 
 .stat-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--accent-purple);
+transform: translateY(-4px);
+border-color: var(--accent-purple);
 }
 
 .stat-card-value {
-    font-size: 28px; font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+font-size: 28px; font-weight: 700;
+background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 
 .stat-card-label {
-    font-size: 12px; color: var(--text-muted); margin-top: 6px;
+font-size: 12px; color: var(--text-muted); margin-top: 6px;
 }
 
 /* 密码表格 */
 .password-table {
-    width: 100%; border-collapse: collapse;
+width: 100%; border-collapse: collapse;
 }
 
 .password-table th, .password-table td {
-    padding: 12px; text-align: left;
-    border-bottom: 1px solid var(--border-glass);
-    font-size: 13px;
+padding: 12px; text-align: left;
+border-bottom: 1px solid var(--border-glass);
+font-size: 13px;
 }
 
 .password-table th {
-    color: var(--text-muted); font-weight: 600; font-size: 12px;
-    text-transform: uppercase; letter-spacing: 0.5px;
+color: var(--text-muted); font-weight: 600; font-size: 12px;
+text-transform: uppercase; letter-spacing: 0.5px;
 }
 
 .password-table tr:hover td {
-    background: rgba(139, 92, 246, 0.05);
+background: rgba(139, 92, 246, 0.05);
 }
 
 .password-code {
-    font-family: 'Courier New', monospace;
-    background: var(--bg-primary); padding: 4px 8px;
-    border-radius: 6px; font-size: 13px;
-    border: 1px solid var(--border-glass);
+font-family: 'Courier New', monospace;
+background: var(--bg-primary); padding: 4px 8px;
+border-radius: 6px; font-size: 13px;
+border: 1px solid var(--border-glass);
 }
 
 .progress-bar {
-    width: 100%; height: 6px;
-    background: var(--bg-primary); border-radius: 3px;
-    overflow: hidden;
+width: 100%; height: 6px;
+background: var(--bg-primary); border-radius: 3px;
+overflow: hidden;
 }
 
 .progress-fill {
-    height: 100%; border-radius: 3px;
-    transition: width 0.3s;
+height: 100%; border-radius: 3px;
+transition: width 0.3s;
 }
 
 .progress-fill.low { background: var(--accent-green); }
@@ -614,8 +614,8 @@ textarea::placeholder { color: var(--text-muted); }
 .progress-fill.high { background: var(--accent-red); }
 
 .status-badge {
-    padding: 2px 8px; border-radius: 6px;
-    font-size: 11px; font-weight: 600;
+padding: 2px 8px; border-radius: 6px;
+font-size: 11px; font-weight: 600;
 }
 
 .status-available { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
@@ -624,129 +624,129 @@ textarea::placeholder { color: var(--text-muted); }
 
 /* 添加密码 */
 .add-password-row {
-    display: flex; gap: 10px; margin-top: 16px;
+display: flex; gap: 10px; margin-top: 16px;
 }
 
 .add-password-row input, .add-password-row select {
-    padding: 10px 14px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border-glass);
-    border-radius: 8px; color: var(--text-primary);
-    font-size: 14px;
+padding: 10px 14px;
+background: var(--bg-primary);
+border: 1px solid var(--border-glass);
+border-radius: 8px; color: var(--text-primary);
+font-size: 14px;
 }
 
 .add-password-row input:focus, .add-password-row select:focus {
-    outline: none; border-color: var(--accent-purple);
+outline: none; border-color: var(--accent-purple);
 }
 
 .add-btn {
-    padding: 10px 20px;
-    background: var(--accent-purple); color: white;
-    border: none; border-radius: 8px; cursor: pointer;
-    font-size: 14px; font-weight: 500;
-    transition: all 0.2s;
+padding: 10px 20px;
+background: var(--accent-purple); color: white;
+border: none; border-radius: 8px; cursor: pointer;
+font-size: 14px; font-weight: 500;
+transition: all 0.2s;
 }
 
 .add-btn:hover { background: var(--accent-purple-light); }
 
 /* ===== 弹窗 ===== */
 .modal-overlay {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(8px);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 2000; opacity: 0; visibility: hidden;
-    transition: all 0.3s;
+position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+background: rgba(0, 0, 0, 0.7);
+backdrop-filter: blur(8px);
+display: flex; align-items: center; justify-content: center;
+z-index: 2000; opacity: 0; visibility: hidden;
+transition: all 0.3s;
 }
 
 .modal-overlay.active {
-    opacity: 1; visibility: visible;
+opacity: 1; visibility: visible;
 }
 
 .modal {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-glass);
-    border-radius: 20px; padding: 32px;
-    max-width: 420px; width: 90%;
-    box-shadow: var(--shadow-lg);
-    transform: scale(0.9); transition: transform 0.3s;
+background: var(--bg-secondary);
+border: 1px solid var(--border-glass);
+border-radius: 20px; padding: 32px;
+max-width: 420px; width: 90%;
+box-shadow: var(--shadow-lg);
+transform: scale(0.9); transition: transform 0.3s;
 }
 
 .modal-overlay.active .modal {
-    transform: scale(1);
+transform: scale(1);
 }
 
 .modal-title {
-    font-size: 20px; font-weight: 600; margin-bottom: 8px;
+font-size: 20px; font-weight: 600; margin-bottom: 8px;
 }
 
 .modal-desc {
-    color: var(--text-muted); font-size: 14px; margin-bottom: 20px;
+color: var(--text-muted); font-size: 14px; margin-bottom: 20px;
 }
 
 .modal-input {
-    width: 100%; padding: 12px 16px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border-glass);
-    border-radius: 10px; color: var(--text-primary);
-    font-size: 14px; margin-bottom: 16px;
+width: 100%; padding: 12px 16px;
+background: var(--bg-primary);
+border: 1px solid var(--border-glass);
+border-radius: 10px; color: var(--text-primary);
+font-size: 14px; margin-bottom: 16px;
 }
 
 .modal-input:focus {
-    outline: none; border-color: var(--accent-purple);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+outline: none; border-color: var(--accent-purple);
+box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
 }
 
 .modal-actions {
-    display: flex; gap: 10px;
+display: flex; gap: 10px;
 }
 
 .modal-btn {
-    flex: 1; padding: 12px;
-    border-radius: 10px; border: none;
-    font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: all 0.2s;
+flex: 1; padding: 12px;
+border-radius: 10px; border: none;
+font-size: 14px; font-weight: 600;
+cursor: pointer; transition: all 0.2s;
 }
 
 .modal-btn-primary {
-    background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-    color: white;
+background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+color: white;
 }
 
 .modal-btn-secondary {
-    background: var(--bg-glass);
-    color: var(--text-secondary);
-    border: 1px solid var(--border-glass);
+background: var(--bg-glass);
+color: var(--text-secondary);
+border: 1px solid var(--border-glass);
 }
 
 .modal-btn:hover { transform: translateY(-1px); }
 
 /* 复制弹窗 */
 .copy-modal textarea {
-    width: 100%; min-height: 200px;
-    padding: 12px; background: var(--bg-primary);
-    border: 1px solid var(--border-glass);
-    border-radius: 10px; color: var(--text-primary);
-    font-size: 13px; font-family: monospace;
-    resize: vertical; margin-bottom: 12px;
+width: 100%; min-height: 200px;
+padding: 12px; background: var(--bg-primary);
+border: 1px solid var(--border-glass);
+border-radius: 10px; color: var(--text-primary);
+font-size: 13px; font-family: monospace;
+resize: vertical; margin-bottom: 12px;
 }
 
 /* Toast */
 .toast {
-    position: fixed; bottom: 30px; left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-glass);
-    padding: 12px 24px; border-radius: 10px;
-    display: flex; align-items: center; gap: 10px;
-    box-shadow: var(--shadow-lg);
-    z-index: 3000; opacity: 0;
-    transition: all 0.3s;
+position: fixed; bottom: 30px; left: 50%;
+transform: translateX(-50%) translateY(100px);
+background: var(--bg-secondary);
+border: 1px solid var(--border-glass);
+padding: 12px 24px; border-radius: 10px;
+display: flex; align-items: center; gap: 10px;
+box-shadow: var(--shadow-lg);
+z-index: 3000; opacity: 0;
+transition: all 0.3s;
 }
 
 .toast.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
+transform: translateX(-50%) translateY(0);
+opacity: 1;
 }
 
 .toast-icon { font-size: 18px; }
@@ -754,32 +754,32 @@ textarea::placeholder { color: var(--text-muted); }
 
 /* ===== 移动端 ===== */
 @media (max-width: 768px) {
-    .config-panel {
-        position: fixed; left: -100%; top: 60px;
-        width: 85%; max-width: 360px;
-        transition: left 0.3s; z-index: 900;
-    }
+.config-panel {
+position: fixed; left: -100%; top: 60px;
+width: 85%; max-width: 360px;
+transition: left 0.3s; z-index: 900;
+}
 
-    .config-panel.open { left: 0; }
+.config-panel.open { left: 0; }
 
-    .mobile-menu-btn { display: block; }
+.mobile-menu-btn { display: block; }
 
-    .nav-links { display: none; }
+.nav-links { display: none; }
 
-    .result-panel { padding: 16px; }
+.result-panel { padding: 16px; }
 
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+.stats-grid { grid-template-columns: repeat(2, 1fr); }
 
-    .template-grid { grid-template-columns: 1fr; }
+.template-grid { grid-template-columns: 1fr; }
 
-    .add-password-row { flex-direction: column; }
+.add-password-row { flex-direction: column; }
 }
 
 /* 遮罩 */
 .overlay {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 800; display: none;
+position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+background: rgba(0, 0, 0, 0.5);
+z-index: 800; display: none;
 }
 
 .overlay.active { display: block; }
@@ -790,88 +790,68 @@ textarea::placeholder { color: var(--text-muted); }
 /* 页面切换 */
 .page { display: none; }
 .page.active { display: block; }
-        /* 底部版权 */
-        #page-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(15, 15, 26, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 10px 20px;
-            z-index: 100;
-            text-align: center;
-        }
-        .footer-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        .footer-copyright {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 12px;
-        }
-        .footer-divider {
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 12px;
-        }
-        .footer-license {
-            color: rgba(100, 200, 255, 0.7);
-            font-size: 12px;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .footer-license:hover {
-            color: rgba(100, 200, 255, 1);
-            text-decoration: underline;
-        }
-        .footer-qq {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 12px;
-        }
-        /* 为底部footer留出空间 */
-        #app {
-            padding-bottom: 50px;
-        }
-        /* 电商AI绘画平台选择器样式 */
-        #platformSection {
-            transition: all 0.3s ease;
-        }
-        #platformSection.hidden {
-            display: none;
-        }
-        #ecommerceTagContainer.hidden {
-            display: none;
-        }
-        #ecommerceTagContainer .tag {
-            background: rgba(255, 150, 50, 0.15);
-            border-color: rgba(255, 150, 50, 0.3);
-            color: rgba(255, 180, 100, 0.9);
-        }
-        #ecommerceTagContainer .tag:hover {
-            background: rgba(255, 150, 50, 0.25);
-            border-color: rgba(255, 150, 50, 0.5);
-        }
-        @media (max-width: 600px) {
-            .footer-content {
-                gap: 8px;
-            }
-            .footer-copyright, .footer-license, .footer-qq, .footer-divider {
-                font-size: 11px;
-            }
-            #page-footer {
-                padding: 8px 12px;
-            }
-            #app {
-                padding-bottom: 42px;
-            }
-        }</style>
+/* 底部版权 */
+#page-footer {
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+background: rgba(15, 15, 26, 0.85);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+border-top: 1px solid rgba(255, 255, 255, 0.06);
+padding: 10px 20px;
+z-index: 100;
+text-align: center;
+}
+.footer-content {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 12px;
+flex-wrap: wrap;
+}
+.footer-copyright {
+color: rgba(255, 255, 255, 0.5);
+font-size: 12px;
+}
+.footer-divider {
+color: rgba(255, 255, 255, 0.2);
+font-size: 12px;
+}
+.footer-license {
+color: rgba(100, 200, 255, 0.7);
+font-size: 12px;
+text-decoration: none;
+transition: color 0.3s;
+}
+.footer-license:hover {
+color: rgba(100, 200, 255, 1);
+text-decoration: underline;
+}
+.footer-qq {
+color: rgba(255, 255, 255, 0.4);
+font-size: 12px;
+}
+/* 为底部footer留出空间 */
+#app {
+padding-bottom: 50px;
+}
+@media (max-width: 600px) {
+.footer-content {
+gap: 8px;
+}
+.footer-copyright, .footer-license, .footer-qq, .footer-divider {
+font-size: 11px;
+}
+#page-footer {
+padding: 8px 12px;
+}
+#app {
+padding-bottom: 42px;
+}
+}</style>
 
-<base target="_blank">
 <base target="_blank">
 </head>
 <body>
@@ -879,25 +859,25 @@ textarea::placeholder { color: var(--text-muted); }
 <body>
 <!-- 导航栏 -->
 <nav class="navbar">
-    <div class="logo">🚀 AI提示词生成器</div>
-    <div class="nav-links">
-        <button class="nav-btn active" data-page="home">
-            <span>🏠</span> 首页
-        </button>
-        <button class="nav-btn" data-page="templates">
-            <span>📚</span> 模板库
-        </button>
-        <button class="nav-btn" data-page="history">
-            <span>📜</span> 历史
-        </button>
-        <button class="nav-btn" data-page="favorites">
-            <span>⭐</span> 收藏
-        </button>
-        <button class="nav-btn" data-page="admin">
-            <span>⚙️</span> 管理
-        </button>
-    </div>
-    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+<div class="logo">🚀 AI提示词生成器</div>
+<div class="nav-links">
+<button class="nav-btn active" data-page="home">
+<span>🏠</span> 首页
+</button>
+<button class="nav-btn" data-page="templates">
+<span>📚</span> 模板库
+</button>
+<button class="nav-btn" data-page="history">
+<span>📜</span> 历史
+</button>
+<button class="nav-btn" data-page="favorites">
+<span>⭐</span> 收藏
+</button>
+<button class="nav-btn" data-page="admin">
+<span>⚙️</span> 管理
+</button>
+</div>
+<button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
 </nav>
 
 <!-- 移动端遮罩 -->
@@ -905,402 +885,363 @@ textarea::placeholder { color: var(--text-muted); }
 
 <!-- 主容器 -->
 <div class="main-container">
-    <!-- 左侧配置面板 -->
-    <aside class="config-panel" id="configPanel">
-        <div class="config-section">
-            <div class="config-label">🎯 选择领域</div>
-            <select class="select-field" id="fieldSelect">
-                <option value="通用领域">🌐 通用领域</option>
-                <option value="电商AI绘画">🎨 电商AI绘画</option>
-                <option value="软件开发">💻 软件开发</option>
-                <option value="数据分析">📊 数据分析</option>
-                <option value="人工智能">🤖 人工智能</option>
-                <option value="产品设计">🎨 产品设计</option>
-                <option value="市场营销">📢 市场营销</option>
-                <option value="内容创作">✍️ 内容创作</option>
-                <option value="教育培训">📚 教育培训</option>
-                <option value="医疗健康">🏥 医疗健康</option>
-                <option value="金融投资">💰 金融投资</option>
-                <option value="法律咨询">⚖️ 法律咨询</option>
-                <option value="人力资源">👥 人力资源</option>
-                <option value="项目管理">📋 项目管理</option>
-                <option value="客户服务">🎧 客户服务</option>
-                <option value="供应链">📦 供应链</option>
-                <option value="生产制造">🏭 生产制造</option>
-                <option value="建筑工程">🏗️ 建筑工程</option>
-                <option value="能源环保">🌱 能源环保</option>
-                <option value="农业科技">🌾 农业科技</option>
-                <option value="游戏开发">🎮 游戏开发</option>
-                <option value="影视制作">🎬 影视制作</option>
-                <option value="音乐创作">🎵 音乐创作</option>
-                <option value="新闻传媒">📰 新闻传媒</option>
-                <option value="科学研究">🔬 科学研究</option>
-                <option value="心理咨询">🧠 心理咨询</option>
-                <option value="翻译服务">🌏 翻译服务</option>
-                <option value="旅游服务">✈️ 旅游服务</option>
-                <option value="餐饮服务">🍽️ 餐饮服务</option>
-                <option value="房地产">🏠 房地产</option>
-                <option value="汽车销售">🚗 汽车销售</option>
-                <option value="电商运营">🛒 电商运营</option>
-                <option value="物流运输">🚚 物流运输</option>
-                <option value="公共安全">🛡️ 公共安全</option>
-            </select>
-        </div>
+<!-- 左侧配置面板 -->
+<aside class="config-panel" id="configPanel">
+<div class="config-section">
+<div class="config-label">🎯 选择领域</div>
+<select class="select-field" id="fieldSelect">
+<option value="通用领域">🌐 通用领域</option>
+<option value="软件开发">💻 软件开发</option>
+<option value="数据分析">📊 数据分析</option>
+<option value="人工智能">🤖 人工智能</option>
+<option value="产品设计">🎨 产品设计</option>
+<option value="市场营销">📢 市场营销</option>
+<option value="内容创作">✍️ 内容创作</option>
+<option value="教育培训">📚 教育培训</option>
+<option value="医疗健康">🏥 医疗健康</option>
+<option value="金融投资">💰 金融投资</option>
+<option value="法律咨询">⚖️ 法律咨询</option>
+<option value="人力资源">👥 人力资源</option>
+<option value="项目管理">📋 项目管理</option>
+<option value="客户服务">🎧 客户服务</option>
+<option value="供应链">📦 供应链</option>
+<option value="生产制造">🏭 生产制造</option>
+<option value="建筑工程">🏗️ 建筑工程</option>
+<option value="能源环保">🌱 能源环保</option>
+<option value="农业科技">🌾 农业科技</option>
+<option value="游戏开发">🎮 游戏开发</option>
+<option value="影视制作">🎬 影视制作</option>
+<option value="音乐创作">🎵 音乐创作</option>
+<option value="新闻传媒">📰 新闻传媒</option>
+<option value="科学研究">🔬 科学研究</option>
+<option value="心理咨询">🧠 心理咨询</option>
+<option value="翻译服务">🌏 翻译服务</option>
+<option value="旅游服务">✈️ 旅游服务</option>
+<option value="餐饮服务">🍽️ 餐饮服务</option>
+<option value="房地产">🏠 房地产</option>
+<option value="汽车销售">🚗 汽车销售</option>
+<option value="电商运营">🛒 电商运营</option>
+<option value="物流运输">🚚 物流运输</option>
+<option value="公共安全">🛡️ 公共安全</option>
+</select>
+</div>
 
-        <div class="config-section">
-            <!-- 修复：标签和按钮同一行，横排 -->
-            <div class="config-label-row">
-                <div class="config-label">📝 任务描述</div>
-                <div class="textarea-actions">
-                    <button class="icon-btn" id="clearBtn" title="清空">🗑️</button>
-                    <button class="icon-btn" id="pasteBtn" title="粘贴">📋</button>
-                </div>
-            </div>
-            <div class="textarea-wrapper">
-                <textarea id="taskInput" placeholder="请描述您需要AI完成的任务，例如：帮我写一个抖音60秒口播脚本..."></textarea>
-            </div>
-        </div>
+<div class="config-section">
+<!-- 修复：标签和按钮同一行，横排 -->
+<div class="config-label-row">
+<div class="config-label">📝 任务描述</div>
+<div class="textarea-actions">
+<button class="icon-btn" id="clearBtn" title="清空">🗑️</button>
+<button class="icon-btn" id="pasteBtn" title="粘贴">📋</button>
+</div>
+</div>
+<div class="textarea-wrapper">
+<textarea id="taskInput" placeholder="请描述您需要AI完成的任务，例如：帮我写一个抖音60秒口播脚本..."></textarea>
+</div>
+</div>
 
-        <div class="config-section">
-            <div class="config-label">💡 热门平台推荐</div>
-            <div class="tag-container" id="tagContainer">
-                <span class="tag" data-task="抖音短视频脚本（60秒爆款）">抖音短视频脚本（60秒爆款）</span>
-                <span class="tag" data-task="小红书种草文案（带emoji）">小红书种草文案（带emoji）</span>
-                <span class="tag" data-task="公众号深度长文（3000字）">公众号深度长文（3000字）</span>
-                <span class="tag" data-task="B站视频分镜脚本">B站视频分镜脚本</span>
-                <span class="tag" data-task="微博热搜话题文案">微博热搜话题文案</span>
-                <span class="tag" data-task="快手口播脚本">快手口播脚本</span>
-                <span class="tag" data-task="知乎专业回答">知乎专业回答</span>
-                <span class="tag" data-task="朋友圈营销文案">朋友圈营销文案</span>
-            </div>
-        </div>
+<div class="config-section">
+<div class="config-label">💡 热门平台推荐</div>
+<div class="tag-container" id="tagContainer">
+<span class="tag" data-task="抖音短视频脚本（60秒爆款）">抖音短视频脚本（60秒爆款）</span>
+<span class="tag" data-task="小红书种草文案（带emoji）">小红书种草文案（带emoji）</span>
+<span class="tag" data-task="公众号深度长文（3000字）">公众号深度长文（3000字）</span>
+<span class="tag" data-task="B站视频分镜脚本">B站视频分镜脚本</span>
+<span class="tag" data-task="微博热搜话题文案">微博热搜话题文案</span>
+<span class="tag" data-task="快手口播脚本">快手口播脚本</span>
+<span class="tag" data-task="知乎专业回答">知乎专业回答</span>
+<span class="tag" data-task="朋友圈营销文案">朋友圈营销文案</span>
+</div>
+</div>
 
-        <div class="config-section">
-            <div class="config-label">⚡ 选择复杂度</div>
-            <div class="complexity-cards" id="complexityCards">
-                <div class="complexity-card selected" data-level="basic">
-                    <div class="complexity-icon">🌱</div>
-                    <div class="complexity-info">
-                        <div class="complexity-name">
-                            基础版
-                            <span class="complexity-badge badge-free">免费</span>
-                        </div>
-                        <div class="complexity-desc">角色+任务+基本要求，30%完整度</div>
-                    </div>
-                </div>
-                <div class="complexity-card" data-level="advanced">
-                    <div class="complexity-icon">🚀</div>
-                    <div class="complexity-info">
-                        <div class="complexity-name">
-                            进阶版
-                            <span class="complexity-badge badge-locked" id="advancedBadge">体验1次</span>
-                        </div>
-                        <div class="complexity-desc">角色+核心能力+执行框架，60%完整度</div>
-                    </div>
-                </div>
-                <div class="complexity-card" data-level="expert">
-                    <div class="complexity-icon">👑</div>
-                    <div class="complexity-info">
-                        <div class="complexity-name">
-                            专家版
-                            <span class="complexity-badge badge-locked" id="expertBadge">体验1次</span>
-                        </div>
-                        <div class="complexity-desc">全要素深度提示词，100%完整度</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="config-section">
+<div class="config-label">⚡ 选择复杂度</div>
+<div class="complexity-cards" id="complexityCards">
+<div class="complexity-card selected" data-level="basic">
+<div class="complexity-icon">🌱</div>
+<div class="complexity-info">
+<div class="complexity-name">
+基础版
+<span class="complexity-badge badge-free">免费</span>
+</div>
+<div class="complexity-desc">角色+任务+基本要求，30%完整度</div>
+</div>
+</div>
+<div class="complexity-card" data-level="advanced">
+<div class="complexity-icon">🚀</div>
+<div class="complexity-info">
+<div class="complexity-name">
+进阶版
+<span class="complexity-badge badge-locked" id="advancedBadge">体验1次</span>
+</div>
+<div class="complexity-desc">角色+核心能力+执行框架，60%完整度</div>
+</div>
+</div>
+<div class="complexity-card" data-level="expert">
+<div class="complexity-icon">👑</div>
+<div class="complexity-info">
+<div class="complexity-name">
+专家版
+<span class="complexity-badge badge-locked" id="expertBadge">体验1次</span>
+</div>
+<div class="complexity-desc">全要素深度提示词，100%完整度</div>
+</div>
+</div>
+</div>
+</div>
 
-        <button class="generate-btn" id="generateBtn">
-            <span>✨</span> 生成提示词
-        </button>
+<button class="generate-btn" id="generateBtn">
+<span>✨</span> 生成提示词
+</button>
 
-        <div class="usage-stats">
-            <div class="stat-item">
-                <div class="stat-value" id="todayCount">5</div>
-                <div class="stat-label">今日剩余</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="totalCount">0</div>
-                <div class="stat-label">总生成数</div>
-            </div>
-        </div>
-    </aside>
+<div class="usage-stats">
+<div class="stat-item">
+<div class="stat-value" id="todayCount">5</div>
+<div class="stat-label">今日剩余</div>
+</div>
+<div class="stat-item">
+<div class="stat-value" id="totalCount">0</div>
+<div class="stat-label">总生成数</div>
+</div>
+</div>
+</aside>
 
-    <!-- 右侧结果面板 -->
-    <main class="result-panel" id="resultPanel">
-        <!-- 首页页面 -->
-        <div class="page active" id="page-home">
-            <div class="empty-state" id="emptyState">
-                <div class="empty-icon">✨</div>
-                <div class="empty-title">开始生成您的专属提示词</div>
-                <div class="empty-desc">
-                    在左侧选择领域、输入任务描述，选择复杂度后点击生成按钮。<br>
-                    基础版每日免费5次，进阶版和专家版首次可免费体验。<br>
-                    💡 热门平台模板已就绪，直接点击推荐标签快速开始！
-                </div>
-            </div>
-            <div id="resultsContainer"></div>
-        </div>
+<!-- 右侧结果面板 -->
+<main class="result-panel" id="resultPanel">
+<!-- 首页页面 -->
+<div class="page active" id="page-home">
+<div class="empty-state" id="emptyState">
+<div class="empty-icon">✨</div>
+<div class="empty-title">开始生成您的专属提示词</div>
+<div class="empty-desc">
+在左侧选择领域、输入任务描述，选择复杂度后点击生成按钮。<br>
+基础版每日免费5次，进阶版和专家版首次可免费体验。<br>
+💡 热门平台模板已就绪，直接点击推荐标签快速开始！
+</div>
+</div>
+<div id="resultsContainer"></div>
+</div>
 
-        <!-- 模板库页面 -->
-        <div class="page" id="page-templates">
-            <h2 style="margin-bottom: 8px; font-size: 20px;">📚 模板库</h2>
-            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">
-                🔒 模板库为专家版专属功能，解锁专家版后即可使用全部29个平台模板（含6个电商AI绘画模板）
-            </p>
-            <div class="template-grid" id="templateGrid">
-                <div class="template-card" data-field="内容创作" data-task="帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒必须有钩子抓住注意力，中间内容干货密集，结尾有明确的CTA（关注/点赞/评论）。语气要像朋友聊天一样自然，不要像念稿。" data-level="expert">
-                    <div class="template-name">抖音口播脚本</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒必须有钩子抓住注意力，中间内容干货密集，结尾有明确的CTA（关注/点赞/评论）。语气要像朋友...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="写一个抖音带货短视频脚本，产品：[填写产品]。要求：前3秒展示痛点或好奇心钩子，中间15秒展示产品核心卖点和使用场景，最后5秒给出限时优惠催促下单。需要包含镜头切换建议和字幕重点。" data-level="expert">
-                    <div class="template-name">抖音带货脚本</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">写一个抖音带货短视频脚本，产品：[填写产品]。要求：前3秒展示痛点或好奇心钩子，中间15秒展示产品核心卖点和使用场景，最后5秒给出限时优惠催促下单。需要包含镜头...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="市场营销" data-task="帮我写10条抖音评论区引流话术，针对[填写领域]内容。要求：看起来不像广告，像真实用户的推荐，能引发好奇点击主页。" data-level="expert">
-                    <div class="template-name">抖音评论区引流</div>
-                    <div class="template-field">市场营销</div>
-                    <div class="template-desc">帮我写10条抖音评论区引流话术，针对[填写领域]内容。要求：看起来不像广告，像真实用户的推荐，能引发好奇点击主页。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="写一篇小红书种草笔记，推荐[填写产品/服务]。要求：标题带emoji和数字，正文分点列出真实使用感受，包含3-5个相关话题标签，结尾引导互动（收藏/评论）。语气要亲切像闺蜜推荐。" data-level="expert">
-                    <div class="template-name">小红书种草笔记</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">写一篇小红书种草笔记，推荐[填写产品/服务]。要求：标题带emoji和数字，正文分点列出真实使用感受，包含3-5个相关话题标签，结尾引导互动（收藏/评论）。语气...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="写一篇小红书探店笔记，店铺：[填写店名]，类型：[填写类型]。要求：开头交代地址和人均消费，中间详细描述环境/服务/菜品/体验，配emoji和分点，结尾给评分和是否推荐。" data-level="expert">
-                    <div class="template-name">小红书探店文案</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">写一篇小红书探店笔记，店铺：[填写店名]，类型：[填写类型]。要求：开头交代地址和人均消费，中间详细描述环境/服务/菜品/体验，配emoji和分点，结尾给评分和...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="写一篇小红书穿搭分享笔记，风格：[填写风格]，季节：[填写季节]。要求：列出每件单品名称和购买渠道，说明搭配思路，给出适合的身材类型和场合，带相关话题标签。" data-level="expert">
-                    <div class="template-name">小红书穿搭分享</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">写一篇小红书穿搭分享笔记，风格：[填写风格]，季节：[填写季节]。要求：列出每件单品名称和购买渠道，说明搭配思路，给出适合的身材类型和场合，带相关话题标签。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="帮我生成20个公众号爆款标题，主题是：[填写主题]。要求：使用数字、悬念、对比、痛点等技巧，每个标题都要让人有点击欲望。" data-level="expert">
-                    <div class="template-name">公众号爆款标题</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">帮我生成20个公众号爆款标题，主题是：[填写主题]。要求：使用数字、悬念、对比、痛点等技巧，每个标题都要让人有点击欲望。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="帮我写一篇3000字的公众号深度长文，主题：[填写主题]。要求：开头用故事或数据引入，中间分3-4个小节层层递进，每个小节有案例支撑，结尾升华主题并引导关注。语言要有深度但不晦涩。" data-level="expert">
-                    <div class="template-name">公众号深度长文</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">帮我写一篇3000字的公众号深度长文，主题：[填写主题]。要求：开头用故事或数据引入，中间分3-4个小节层层递进，每个小节有案例支撑，结尾升华主题并引导关注。语...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="对以下公众号文章进行排版优化，使其更适合手机阅读：[粘贴文章内容]。要求：段落不超过3行，关键句加粗，适当插入小标题，添加合适的emoji，结尾引导互动。" data-level="expert">
-                    <div class="template-name">公众号排版优化</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">对以下公众号文章进行排版优化，使其更适合手机阅读：[粘贴文章内容]。要求：段落不超过3行，关键句加粗，适当插入小标题，添加合适的emoji，结尾引导互动。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="写一个B站视频的详细分镜脚本，主题：[填写主题]，时长：[填写时长]。要求：包含每个镜头的景别（特写/中景/全景）、画面内容、台词/旁白、时长、转场方式。" data-level="expert">
-                    <div class="template-name">B站视频分镜</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">写一个B站视频的详细分镜脚本，主题：[填写主题]，时长：[填写时长]。要求：包含每个镜头的景别（特写/中景/全景）、画面内容、台词/旁白、时长、转场方式。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="为B站视频生成10个标题和封面文案，主题：[填写主题]。要求：标题要有梗或悬念，封面文案要简洁有力，能吸引目标受众点击。" data-level="expert">
-                    <div class="template-name">B站视频标题+封面</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">为B站视频生成10个标题和封面文案，主题：[填写主题]。要求：标题要有梗或悬念，封面文案要简洁有力，能吸引目标受众点击。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="写一条微博热搜话题文案，话题：[填写话题]。要求：140字以内，有观点有态度，带相关话题标签，能引发讨论和转发。" data-level="expert">
-                    <div class="template-name">微博热搜文案</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">写一条微博热搜话题文案，话题：[填写话题]。要求：140字以内，有观点有态度，带相关话题标签，能引发讨论和转发。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="市场营销" data-task="写一个微博抽奖活动文案，奖品：[填写奖品]，参与方式：[填写方式]。要求：规则清晰，语气活泼，带话题标签，引导关注和转发。" data-level="expert">
-                    <div class="template-name">微博抽奖活动</div>
-                    <div class="template-field">市场营销</div>
-                    <div class="template-desc">写一个微博抽奖活动文案，奖品：[填写奖品]，参与方式：[填写方式]。要求：规则清晰，语气活泼，带话题标签，引导关注和转发。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="写一个快手口播脚本，主题：[填写主题]，时长30秒。要求：语言接地气，像跟老铁聊天，开头直接说重点，中间有情绪起伏，结尾号召互动。" data-level="expert">
-                    <div class="template-name">快手口播脚本</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">写一个快手口播脚本，主题：[填写主题]，时长30秒。要求：语言接地气，像跟老铁聊天，开头直接说重点，中间有情绪起伏，结尾号召互动。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="写一份快手直播带货话术，产品：[填写产品]。要求：包含开场暖场、产品介绍、价格揭晓、催促下单、互动答疑全流程，每部分都有具体台词。" data-level="expert">
-                    <div class="template-name">快手直播话术</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">写一份快手直播带货话术，产品：[填写产品]。要求：包含开场暖场、产品介绍、价格揭晓、催促下单、互动答疑全流程，每部分都有具体台词。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="写一个知乎高质量回答，问题：[填写问题]。要求：开头直接给出结论，中间用数据/案例/逻辑展开论证，结尾总结并引导赞同。字数1500字以上，专业但有可读性。" data-level="expert">
-                    <div class="template-name">知乎专业回答</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">写一个知乎高质量回答，问题：[填写问题]。要求：开头直接给出结论，中间用数据/案例/逻辑展开论证，结尾总结并引导赞同。字数1500字以上，专业但有可读性。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="写一篇知乎好物推荐文章，推荐[填写产品类别]。要求：先讲选购要点和避坑指南，再推荐具体产品并说明理由，最后给出购买建议。像专业人士的真心推荐。" data-level="expert">
-                    <div class="template-name">知乎好物推荐</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">写一篇知乎好物推荐文章，推荐[填写产品类别]。要求：先讲选购要点和避坑指南，再推荐具体产品并说明理由，最后给出购买建议。像专业人士的真心推荐。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="市场营销" data-task="写5条朋友圈产品文案，产品：[填写产品]。要求：每条风格不同（故事型/痛点型/场景型/证言型/限时型），每条配适合的emoji，不刷屏但有吸引力。" data-level="expert">
-                    <div class="template-name">朋友圈产品文案</div>
-                    <div class="template-field">市场营销</div>
-                    <div class="template-desc">写5条朋友圈产品文案，产品：[填写产品]。要求：每条风格不同（故事型/痛点型/场景型/证言型/限时型），每条配适合的emoji，不刷屏但有吸引力。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="市场营销" data-task="帮我规划一周的朋友圈内容，定位：[填写定位]。要求：每天1-2条，包含价值输出/生活展示/产品软植入/互动提问，打造真实可信的个人IP。" data-level="expert">
-                    <div class="template-name">朋友圈个人IP打造</div>
-                    <div class="template-field">市场营销</div>
-                    <div class="template-desc">帮我规划一周的朋友圈内容，定位：[填写定位]。要求：每天1-2条，包含价值输出/生活展示/产品软植入/互动提问，打造真实可信的个人IP。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="内容创作" data-task="生成20个短视频爆款开头句式，适用于[填写领域]。要求：每种开头类型（悬念/痛点/反常识/故事/数据）各4个，直接可用。" data-level="expert">
-                    <div class="template-name">短视频爆款开头</div>
-                    <div class="template-field">内容创作</div>
-                    <div class="template-desc">生成20个短视频爆款开头句式，适用于[填写领域]。要求：每种开头类型（悬念/痛点/反常识/故事/数据）各4个，直接可用。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="市场营销" data-task="写一份完整的直播带货策划方案，产品：[填写产品]。要求：包含直播前预热、直播中流程（开场/产品介绍/互动/促单/收尾）、直播后复盘，每个环节都有具体话术和时间安排。" data-level="expert">
-                    <div class="template-name">直播带货全流程</div>
-                    <div class="template-field">市场营销</div>
-                    <div class="template-desc">写一份完整的直播带货策划方案，产品：[填写产品]。要求：包含直播前预热、直播中流程（开场/产品介绍/互动/促单/收尾）、直播后复盘，每个环节都有具体话术和时间安...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="市场营销" data-task="写10条私域引流话术，场景：[填写场景]。要求：针对不同场景（评论区/私信/直播间/朋友圈），话术自然不突兀，能提高加微信转化率。" data-level="expert">
-                    <div class="template-name">私域引流话术</div>
-                    <div class="template-field">市场营销</div>
-                    <div class="template-desc">写10条私域引流话术，场景：[填写场景]。要求：针对不同场景（评论区/私信/直播间/朋友圈），话术自然不突兀，能提高加微信转化率。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="市场营销" data-task="写一篇品牌故事文案，品牌：[填写品牌]。要求：包含创始人故事/品牌理念/产品初心/用户价值，情感真挚，能引发共鸣，适合放在官网或公众号。" data-level="expert">
-                    <div class="template-name">品牌故事文案</div>
+<!-- 模板库页面 -->
+<div class="page" id="page-templates">
+<h2 style="margin-bottom: 8px; font-size: 20px;">📚 模板库</h2>
+<p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">
+🔒 模板库为专家版专属功能，解锁专家版后即可使用全部23个平台模板
+</p>
+<div class="template-grid" id="templateGrid">
+<div class="template-card" data-field="内容创作" data-task="帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒必须有钩子抓住注意力，中间内容干货密集，结尾有明确的CTA（关注/点赞/评论）。语气要像朋友聊天一样自然，不要像念稿。" data-level="expert">
+<div class="template-name">抖音口播脚本</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒必须有钩子抓住注意力，中间内容干货密集，结尾有明确的CTA（关注/点赞/评论）。语气要像朋友...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="写一个抖音带货短视频脚本，产品：[填写产品]。要求：前3秒展示痛点或好奇心钩子，中间15秒展示产品核心卖点和使用场景，最后5秒给出限时优惠催促下单。需要包含镜头切换建议和字幕重点。" data-level="expert">
+<div class="template-name">抖音带货脚本</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">写一个抖音带货短视频脚本，产品：[填写产品]。要求：前3秒展示痛点或好奇心钩子，中间15秒展示产品核心卖点和使用场景，最后5秒给出限时优惠催促下单。需要包含镜头...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="市场营销" data-task="帮我写10条抖音评论区引流话术，针对[填写领域]内容。要求：看起来不像广告，像真实用户的推荐，能引发好奇点击主页。" data-level="expert">
+<div class="template-name">抖音评论区引流</div>
+<div class="template-field">市场营销</div>
+<div class="template-desc">帮我写10条抖音评论区引流话术，针对[填写领域]内容。要求：看起来不像广告，像真实用户的推荐，能引发好奇点击主页。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="写一篇小红书种草笔记，推荐[填写产品/服务]。要求：标题带emoji和数字，正文分点列出真实使用感受，包含3-5个相关话题标签，结尾引导互动（收藏/评论）。语气要亲切像闺蜜推荐。" data-level="expert">
+<div class="template-name">小红书种草笔记</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">写一篇小红书种草笔记，推荐[填写产品/服务]。要求：标题带emoji和数字，正文分点列出真实使用感受，包含3-5个相关话题标签，结尾引导互动（收藏/评论）。语气...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="写一篇小红书探店笔记，店铺：[填写店名]，类型：[填写类型]。要求：开头交代地址和人均消费，中间详细描述环境/服务/菜品/体验，配emoji和分点，结尾给评分和是否推荐。" data-level="expert">
+<div class="template-name">小红书探店文案</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">写一篇小红书探店笔记，店铺：[填写店名]，类型：[填写类型]。要求：开头交代地址和人均消费，中间详细描述环境/服务/菜品/体验，配emoji和分点，结尾给评分和...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="写一篇小红书穿搭分享笔记，风格：[填写风格]，季节：[填写季节]。要求：列出每件单品名称和购买渠道，说明搭配思路，给出适合的身材类型和场合，带相关话题标签。" data-level="expert">
+<div class="template-name">小红书穿搭分享</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">写一篇小红书穿搭分享笔记，风格：[填写风格]，季节：[填写季节]。要求：列出每件单品名称和购买渠道，说明搭配思路，给出适合的身材类型和场合，带相关话题标签。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="帮我生成20个公众号爆款标题，主题是：[填写主题]。要求：使用数字、悬念、对比、痛点等技巧，每个标题都要让人有点击欲望。" data-level="expert">
+<div class="template-name">公众号爆款标题</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">帮我生成20个公众号爆款标题，主题是：[填写主题]。要求：使用数字、悬念、对比、痛点等技巧，每个标题都要让人有点击欲望。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="帮我写一篇3000字的公众号深度长文，主题：[填写主题]。要求：开头用故事或数据引入，中间分3-4个小节层层递进，每个小节有案例支撑，结尾升华主题并引导关注。语言要有深度但不晦涩。" data-level="expert">
+<div class="template-name">公众号深度长文</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">帮我写一篇3000字的公众号深度长文，主题：[填写主题]。要求：开头用故事或数据引入，中间分3-4个小节层层递进，每个小节有案例支撑，结尾升华主题并引导关注。语...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="对以下公众号文章进行排版优化，使其更适合手机阅读：[粘贴文章内容]。要求：段落不超过3行，关键句加粗，适当插入小标题，添加合适的emoji，结尾引导互动。" data-level="expert">
+<div class="template-name">公众号排版优化</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">对以下公众号文章进行排版优化，使其更适合手机阅读：[粘贴文章内容]。要求：段落不超过3行，关键句加粗，适当插入小标题，添加合适的emoji，结尾引导互动。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="写一个B站视频的详细分镜脚本，主题：[填写主题]，时长：[填写时长]。要求：包含每个镜头的景别（特写/中景/全景）、画面内容、台词/旁白、时长、转场方式。" data-level="expert">
+<div class="template-name">B站视频分镜</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">写一个B站视频的详细分镜脚本，主题：[填写主题]，时长：[填写时长]。要求：包含每个镜头的景别（特写/中景/全景）、画面内容、台词/旁白、时长、转场方式。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="为B站视频生成10个标题和封面文案，主题：[填写主题]。要求：标题要有梗或悬念，封面文案要简洁有力，能吸引目标受众点击。" data-level="expert">
+<div class="template-name">B站视频标题+封面</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">为B站视频生成10个标题和封面文案，主题：[填写主题]。要求：标题要有梗或悬念，封面文案要简洁有力，能吸引目标受众点击。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="写一条微博热搜话题文案，话题：[填写话题]。要求：140字以内，有观点有态度，带相关话题标签，能引发讨论和转发。" data-level="expert">
+<div class="template-name">微博热搜文案</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">写一条微博热搜话题文案，话题：[填写话题]。要求：140字以内，有观点有态度，带相关话题标签，能引发讨论和转发。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="市场营销" data-task="写一个微博抽奖活动文案，奖品：[填写奖品]，参与方式：[填写方式]。要求：规则清晰，语气活泼，带话题标签，引导关注和转发。" data-level="expert">
+<div class="template-name">微博抽奖活动</div>
+<div class="template-field">市场营销</div>
+<div class="template-desc">写一个微博抽奖活动文案，奖品：[填写奖品]，参与方式：[填写方式]。要求：规则清晰，语气活泼，带话题标签，引导关注和转发。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="写一个快手口播脚本，主题：[填写主题]，时长30秒。要求：语言接地气，像跟老铁聊天，开头直接说重点，中间有情绪起伏，结尾号召互动。" data-level="expert">
+<div class="template-name">快手口播脚本</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">写一个快手口播脚本，主题：[填写主题]，时长30秒。要求：语言接地气，像跟老铁聊天，开头直接说重点，中间有情绪起伏，结尾号召互动。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="写一份快手直播带货话术，产品：[填写产品]。要求：包含开场暖场、产品介绍、价格揭晓、催促下单、互动答疑全流程，每部分都有具体台词。" data-level="expert">
+<div class="template-name">快手直播话术</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">写一份快手直播带货话术，产品：[填写产品]。要求：包含开场暖场、产品介绍、价格揭晓、催促下单、互动答疑全流程，每部分都有具体台词。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="写一个知乎高质量回答，问题：[填写问题]。要求：开头直接给出结论，中间用数据/案例/逻辑展开论证，结尾总结并引导赞同。字数1500字以上，专业但有可读性。" data-level="expert">
+<div class="template-name">知乎专业回答</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">写一个知乎高质量回答，问题：[填写问题]。要求：开头直接给出结论，中间用数据/案例/逻辑展开论证，结尾总结并引导赞同。字数1500字以上，专业但有可读性。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="写一篇知乎好物推荐文章，推荐[填写产品类别]。要求：先讲选购要点和避坑指南，再推荐具体产品并说明理由，最后给出购买建议。像专业人士的真心推荐。" data-level="expert">
+<div class="template-name">知乎好物推荐</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">写一篇知乎好物推荐文章，推荐[填写产品类别]。要求：先讲选购要点和避坑指南，再推荐具体产品并说明理由，最后给出购买建议。像专业人士的真心推荐。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="市场营销" data-task="写5条朋友圈产品文案，产品：[填写产品]。要求：每条风格不同（故事型/痛点型/场景型/证言型/限时型），每条配适合的emoji，不刷屏但有吸引力。" data-level="expert">
+<div class="template-name">朋友圈产品文案</div>
+<div class="template-field">市场营销</div>
+<div class="template-desc">写5条朋友圈产品文案，产品：[填写产品]。要求：每条风格不同（故事型/痛点型/场景型/证言型/限时型），每条配适合的emoji，不刷屏但有吸引力。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="市场营销" data-task="帮我规划一周的朋友圈内容，定位：[填写定位]。要求：每天1-2条，包含价值输出/生活展示/产品软植入/互动提问，打造真实可信的个人IP。" data-level="expert">
+<div class="template-name">朋友圈个人IP打造</div>
+<div class="template-field">市场营销</div>
+<div class="template-desc">帮我规划一周的朋友圈内容，定位：[填写定位]。要求：每天1-2条，包含价值输出/生活展示/产品软植入/互动提问，打造真实可信的个人IP。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="内容创作" data-task="生成20个短视频爆款开头句式，适用于[填写领域]。要求：每种开头类型（悬念/痛点/反常识/故事/数据）各4个，直接可用。" data-level="expert">
+<div class="template-name">短视频爆款开头</div>
+<div class="template-field">内容创作</div>
+<div class="template-desc">生成20个短视频爆款开头句式，适用于[填写领域]。要求：每种开头类型（悬念/痛点/反常识/故事/数据）各4个，直接可用。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="市场营销" data-task="写一份完整的直播带货策划方案，产品：[填写产品]。要求：包含直播前预热、直播中流程（开场/产品介绍/互动/促单/收尾）、直播后复盘，每个环节都有具体话术和时间安排。" data-level="expert">
+<div class="template-name">直播带货全流程</div>
+<div class="template-field">市场营销</div>
+<div class="template-desc">写一份完整的直播带货策划方案，产品：[填写产品]。要求：包含直播前预热、直播中流程（开场/产品介绍/互动/促单/收尾）、直播后复盘，每个环节都有具体话术和时间安...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="市场营销" data-task="写10条私域引流话术，场景：[填写场景]。要求：针对不同场景（评论区/私信/直播间/朋友圈），话术自然不突兀，能提高加微信转化率。" data-level="expert">
+<div class="template-name">私域引流话术</div>
+<div class="template-field">市场营销</div>
+<div class="template-desc">写10条私域引流话术，场景：[填写场景]。要求：针对不同场景（评论区/私信/直播间/朋友圈），话术自然不突兀，能提高加微信转化率。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="市场营销" data-task="写一篇品牌故事文案，品牌：[填写品牌]。要求：包含创始人故事/品牌理念/产品初心/用户价值，情感真挚，能引发共鸣，适合放在官网或公众号。" data-level="expert">
+<div class="template-name">品牌故事文案</div>
+<div class="template-field">市场营销</div>
+<div class="template-desc">写一篇品牌故事文案，品牌：[填写品牌]。要求：包含创始人故事/品牌理念/产品初心/用户价值，情感真挚，能引发共鸣，适合放在官网或公众号。...</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+</div>
+</div>
 
-                <!-- 电商AI绘画模板 -->
-                <div class="template-card" data-field="电商AI绘画" data-task="产品白底主图：YSL小金条21号正红色口红" data-level="expert">
-                    <div class="template-name">🔥 口红白底主图</div>
-                    <div class="template-field">电商AI绘画</div>
-                    <div class="template-desc">YSL小金条21号正红色口红，白底主图，超写实材质，品牌logo清晰，适合淘宝/京东/拼多多主图...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="电商AI绘画" data-task="场景氛围图：星巴克咖啡杯放在木质办公桌上，旁边有笔记本电脑和绿植" data-level="expert">
-                    <div class="template-name">🏞️ 咖啡场景图</div>
-                    <div class="template-field">电商AI绘画</div>
-                    <div class="template-desc">星巴克咖啡杯，办公场景，自然光，温馨氛围，适合详情页场景展示...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="电商AI绘画" data-task="模特穿搭图：优衣库米色风衣，亚洲女性模特，街拍场景，秋季氛围" data-level="expert">
-                    <div class="template-name">👗 风衣模特图</div>
-                    <div class="template-field">电商AI绘画</div>
-                    <div class="template-desc">优衣库米色风衣，亚洲模特，秋季街拍，自然姿态，适合服装类商品展示...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="电商AI绘画" data-task="节日促销图：兰蔻小黑瓶精华，圣诞红金配色，礼盒堆叠，限时优惠氛围" data-level="expert">
-                    <div class="template-name">🎁 圣诞促销图</div>
-                    <div class="template-field">电商AI绘画</div>
-                    <div class="template-desc">兰蔻小黑瓶，圣诞主题，红金配色，促销氛围，适合活动海报和主图...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="电商AI绘画" data-task="详情页套图：戴森吹风机，包含白底主图+细节特写+使用场景+包装展示" data-level="expert">
-                    <div class="template-name">📱 吹风机详情套图</div>
-                    <div class="template-field">电商AI绘画</div>
-                    <div class="template-desc">戴森吹风机，6张套图：主图+细节+场景+尺寸+卖点+包装，风格统一...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                <div class="template-card" data-field="电商AI绘画" data-task="AI模特换脸：已有连衣裙产品场景图，替换为指定亚洲女性模特面部" data-level="expert">
-                    <div class="template-name">✨ AI模特换脸</div>
-                    <div class="template-field">电商AI绘画</div>
-                    <div class="template-desc">连衣裙场景图换脸，保持场景光线不变，新面部自然融合，适合品牌专属模特...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-                    <div class="template-field">市场营销</div>
-                    <div class="template-desc">写一篇品牌故事文案，品牌：[填写品牌]。要求：包含创始人故事/品牌理念/产品初心/用户价值，情感真挚，能引发共鸣，适合放在官网或公众号。...</div>
-                    <span class="template-level badge-expert">专家</span>
-                </div>
-            </div>
-        </div>
+<!-- 历史页面 -->
+<div class="page" id="page-history">
+<h2 style="margin-bottom: 20px; font-size: 20px;">📜 生成历史</h2>
+<div class="history-list" id="historyList">
+<div class="empty-state" style="min-height: 300px;">
+<div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">📜</div>
+<div class="empty-title" style="font-size: 16px;">暂无历史记录</div>
+</div>
+</div>
+</div>
 
-        <!-- 历史页面 -->
-        <div class="page" id="page-history">
-            <h2 style="margin-bottom: 20px; font-size: 20px;">📜 生成历史</h2>
-            <div class="history-list" id="historyList">
-                <div class="empty-state" style="min-height: 300px;">
-                    <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">📜</div>
-                    <div class="empty-title" style="font-size: 16px;">暂无历史记录</div>
-                </div>
-            </div>
-        </div>
+<!-- 收藏页面 -->
+<div class="page" id="page-favorites">
+<h2 style="margin-bottom: 20px; font-size: 20px;">⭐ 我的收藏</h2>
+<div class="history-list" id="favoritesList">
+<div class="empty-state" style="min-height: 300px;">
+<div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">⭐</div>
+<div class="empty-title" style="font-size: 16px;">暂无收藏</div>
+</div>
+</div>
+</div>
 
-        <!-- 收藏页面 -->
-        <div class="page" id="page-favorites">
-            <h2 style="margin-bottom: 20px; font-size: 20px;">⭐ 我的收藏</h2>
-            <div class="history-list" id="favoritesList">
-                <div class="empty-state" style="min-height: 300px;">
-                    <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">⭐</div>
-                    <div class="empty-title" style="font-size: 16px;">暂无收藏</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 管理页面 -->
-        <div class="page" id="page-admin">
-            <div class="admin-panel" id="adminPanel">
-                <div class="empty-state" style="min-height: 400px;">
-                    <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">🔒</div>
-                    <div class="empty-title" style="font-size: 16px;">请输入管理密码</div>
-                    <div class="empty-desc" style="margin-top: 12px;">
-                        <input type="password" id="adminPassword" placeholder="管理密码" 
-                            style="padding: 10px 16px; background: var(--bg-primary); border: 1px solid var(--border-glass); 
-                            border-radius: 8px; color: var(--text-primary); width: 200px; text-align: center;">
-                        <br><br>
-                        <button class="generate-btn" id="adminLoginBtn" style="width: 200px;">进入管理</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+<!-- 管理页面 -->
+<div class="page" id="page-admin">
+<div class="admin-panel" id="adminPanel">
+<div class="empty-state" style="min-height: 400px;">
+<div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">🔒</div>
+<div class="empty-title" style="font-size: 16px;">请输入管理密码</div>
+<div class="empty-desc" style="margin-top: 12px;">
+<input type="password" id="adminPassword" placeholder="管理密码" 
+style="padding: 10px 16px; background: var(--bg-primary); border: 1px solid var(--border-glass); 
+                           border-radius: 8px; color: var(--text-primary); width: 200px; text-align: center;">
+<br><br>
+<button class="generate-btn" id="adminLoginBtn" style="width: 200px;">进入管理</button>
+</div>
+</div>
+</div>
+</div>
+</main>
 </div>
 
 <!-- 解锁弹窗 -->
 <div class="modal-overlay" id="unlockModal">
-    <div class="modal">
-        <div class="modal-title">🔐 解锁高级版本</div>
-        <div class="modal-desc" id="unlockDesc">
-            进阶版/专家版需要密码解锁。如需获取密码，请添加QQ：704451222
-        </div>
-        <input type="text" class="modal-input" id="unlockInput" placeholder="请输入解锁密码">
-        <div class="modal-actions">
-            <button class="modal-btn modal-btn-secondary" id="unlockCancel">取消</button>
-            <button class="modal-btn modal-btn-primary" id="unlockConfirm">解锁</button>
-        </div>
-    </div>
+<div class="modal">
+<div class="modal-title">🔐 解锁高级版本</div>
+<div class="modal-desc" id="unlockDesc">
+进阶版/专家版需要密码解锁。如需获取密码，请添加QQ：704451222
+</div>
+<input type="text" class="modal-input" id="unlockInput" placeholder="请输入解锁密码">
+<div class="modal-actions">
+<button class="modal-btn modal-btn-secondary" id="unlockCancel">取消</button>
+<button class="modal-btn modal-btn-primary" id="unlockConfirm">解锁</button>
+</div>
+</div>
 </div>
 
 <!-- 复制弹窗 -->
 <div class="modal-overlay" id="copyModal">
-    <div class="modal copy-modal">
-        <div class="modal-title">📋 复制内容</div>
-        <div class="modal-desc">请长按下方文字全选并复制</div>
-        <textarea id="copyTextarea" readonly></textarea>
-        <div class="modal-actions">
-            <button class="modal-btn modal-btn-secondary" id="copyClose">关闭</button>
-        </div>
-    </div>
+<div class="modal copy-modal">
+<div class="modal-title">📋 复制内容</div>
+<div class="modal-desc">请长按下方文字全选并复制</div>
+<textarea id="copyTextarea" readonly></textarea>
+<div class="modal-actions">
+<button class="modal-btn modal-btn-secondary" id="copyClose">关闭</button>
+</div>
+</div>
 </div>
 
 <!-- Toast -->
 <div class="toast" id="toast">
-    <span class="toast-icon" id="toastIcon">✅</span>
-    <span class="toast-text" id="toastText">操作成功</span>
+<span class="toast-icon" id="toastIcon">✅</span>
+<span class="toast-text" id="toastText">操作成功</span>
 </div>
 
 
@@ -1317,99 +1258,41 @@ const ADVANCED_PASSWORDS = ['ADV0G5U7SWP', 'ADV146XU8OL', 'ADV31PYMER7', 'ADV48F
 const EXPERT_PASSWORDS = ['EXP097KTRHY', 'EXP0AKHTBJN', 'EXP0DCFQKTZ', 'EXP0QOYIHWK', 'EXP39JQ70WA', 'EXP3OKUCN7G', 'EXP41KD2WF6', 'EXP4CWVONJ8', 'EXP5UKOTR4Y', 'EXP6HV79F1K', 'EXP7BQYG0VW', 'EXP7G6OI5DZ', 'EXP7SCFKVT2', 'EXP8BM4LR7I', 'EXP8M2ALVN1', 'EXP97KT0UL1', 'EXP9L0B184F', 'EXP9LMDR6Y8', 'EXPASLQUGMC', 'EXPBLYJTW30', 'EXPBYDM47W0', 'EXPBZLGTJ8C', 'EXPC0TGZS3M', 'EXPGHKTZI57', 'EXPGYM8C2UH', 'EXPI2KQZ3YV', 'EXPI3Y4MOQU', 'EXPJIO73SQ5', 'EXPLVRKNCTI', 'EXPMACWJIDU', 'EXPMLO5W2V3', 'EXPN0MOJY8K', 'EXPN16RUJQW', 'EXPN3OHT748', 'EXPNCIRU2O4', 'EXPND0ICJ83', 'EXPNRK4GSQA', 'EXPNYFJ63KL', 'EXPRCLYO0JH', 'EXPRCOVK14L', 'EXPRCV0Q1F6', 'EXPRWQM1UTJ', 'EXPSMFG4WCT', 'EXPSUOYG5I1', 'EXPSWKGAMJL', 'EXPT1KAN79B', 'EXPT85YDQWI', 'EXPYFB7WCKR', 'EXPZCMOHIKA', 'EXPZN61WJLB'];
 
 // ===== 数据库 =====
-function initDB() {
-    const defaultDB = {
-        passwords: {
-            advanced: ADVANCED_PASSWORDS.map(p => ({ code: p, used: 0, max: MAX_PASSWORD_USES, sold: false })),
-            expert: EXPERT_PASSWORDS.map(p => ({ code: p, used: 0, max: MAX_PASSWORD_USES, sold: false }))
-        },
-        unlocked: { advanced: false, expert: false },
-        firstUse: { advanced: true, expert: true },
-        todayBasicCount: 0,
-        totalGenerated: 0,
-        history: [],
-        favorites: [],
-        lastDate: new Date().toDateString()
-    };
-    saveDB(defaultDB);
-    return defaultDB;
-}
-
-function loadDB() {
-    try {
-        const saved = localStorage.getItem('promptGenDB');
-        if (!saved) return initDB();
-        const parsed = JSON.parse(saved);
-        // 检查是否是新的一天
-        const today = new Date().toDateString();
-        if (parsed.lastDate !== today) {
-            parsed.todayBasicCount = 0;
-            parsed.lastDate = today;
-            saveDB(parsed);
-        }
-        return parsed;
-    } catch (e) {
-        console.error('DB load error:', e);
-        return initDB();
-    }
-}
-
-function renderTemplates() {
-    const container = $('templateGrid');
-    if (!container) return;
-
-    const isLocked = !db.unlocked.expert && !db.firstUse.expert;
-    const cards = container.querySelectorAll('.template-card');
-
-    cards.forEach(card => {
-        const level = card.dataset.level;
-        if (level === 'expert' && isLocked) {
-            card.classList.add('locked');
-            card.style.opacity = '0.6';
-            card.style.cursor = 'not-allowed';
-        } else {
-            card.classList.remove('locked');
-            card.style.opacity = '1';
-            card.style.cursor = 'pointer';
-        }
-    });
-}
-
 function getDB() {
-    const defaultDB = {
-        passwords: {
-            advanced: ADVANCED_PASSWORDS.map(p => ({ code: p, used: 0, max: MAX_PASSWORD_USES, sold: false })),
-            expert: EXPERT_PASSWORDS.map(p => ({ code: p, used: 0, max: MAX_PASSWORD_USES, sold: false }))
-        },
-        unlocked: { advanced: false, expert: false },
-        usedPasswords: {},
-        history: [],
-        favorites: [],
-        todayBasicCount: 0,
-        todayDate: new Date().toDateString(),
-        totalGenerated: 0,
-        firstUse: { advanced: true, expert: true }
-    };
+const defaultDB = {
+passwords: {
+advanced: ADVANCED_PASSWORDS.map(p => ({ code: p, used: 0, max: MAX_PASSWORD_USES, sold: false })),
+expert: EXPERT_PASSWORDS.map(p => ({ code: p, used: 0, max: MAX_PASSWORD_USES, sold: false }))
+},
+unlocked: { advanced: false, expert: false },
+usedPasswords: {},
+history: [],
+favorites: [],
+todayBasicCount: 0,
+todayDate: new Date().toDateString(),
+totalGenerated: 0,
+firstUse: { advanced: true, expert: true }
+};
 
-    try {
-        const saved = localStorage.getItem('promptGenDB');
-        if (saved) {
-            const parsed = JSON.parse(saved);
-            if (parsed.todayDate !== new Date().toDateString()) {
-                parsed.todayBasicCount = 0;
-                parsed.todayDate = new Date().toDateString();
-            }
-            return { ...defaultDB, ...parsed };
-        }
-    } catch (e) { console.error('DB load error:', e); }
+try {
+const saved = localStorage.getItem('promptGenDB');
+if (saved) {
+const parsed = JSON.parse(saved);
+if (parsed.todayDate !== new Date().toDateString()) {
+parsed.todayBasicCount = 0;
+parsed.todayDate = new Date().toDateString();
+}
+return { ...defaultDB, ...parsed };
+}
+} catch (e) { console.error('DB load error:', e); }
 
-    return defaultDB;
+return defaultDB;
 }
 
 function saveDB(db) {
-    try {
-        localStorage.setItem('promptGenDB', JSON.stringify(db));
-    } catch (e) { console.error('DB save error:', e); }
+try {
+localStorage.setItem('promptGenDB', JSON.stringify(db));
+} catch (e) { console.error('DB save error:', e); }
 }
 
 let db = getDB();
@@ -1421,80 +1304,75 @@ const $ = id => document.getElementById(id);
 
 // ===== 工具函数 =====
 function showToast(message, icon = '✅') {
-    const toast = $('toast');
-    $('toastText').textContent = message;
-    $('toastIcon').textContent = icon;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2500);
+const toast = $('toast');
+$('toastText').textContent = message;
+$('toastIcon').textContent = icon;
+toast.classList.add('show');
+setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
 function formatPromptToHTML(text) {
-    let html = text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+let html = text
+.replace(/&/g, '&amp;')
+.replace(/</g, '&lt;')
+.replace(/>/g, '&gt;');
 
-    html = html.replace(/【(.+?)】/g, '<h3>📌 $1</h3>');
-    html = html.replace(/^\d+\.\s(.+)$/gm, '<li>$1</li>');
-    html = html.replace(/^-\s(.+)$/gm, '<li>$1</li>');
-    html = html.replace(/(<li>.+<\/li>\n?)+/g, '<ul>$&</ul>');
-    html = html.replace(/<\/ul>\n*<ul>/g, '');
+html = html.replace(/【(.+?)】/g, '<h3>📌 $1</h3>');
+html = html.replace(/^\d+\.\s(.+)$/gm, '<li>$1</li>');
+html = html.replace(/^-\s(.+)$/gm, '<li>$1</li>');
+html = html.replace(/(<li>.+<\/li>\n?)+/g, '<ul>$&</ul>');
+html = html.replace(/<\/ul>\n*<ul>/g, '');
 
-    const paragraphs = html.split('\n\n');
-    html = paragraphs.map(p => {
-        const trimmed = p.trim();
-        if (!trimmed) return '';
-        if (trimmed.startsWith('<h3>') || trimmed.startsWith('<ul>')) return trimmed;
-        return '<p>' + trimmed + '</p>';
-    }).join('');
+const paragraphs = html.split('\n\n');
+html = paragraphs.map(p => {
+const trimmed = p.trim();
+if (!trimmed) return '';
+if (trimmed.startsWith('<h3>') || trimmed.startsWith('<ul>')) return trimmed;
+return '<p>' + trimmed + '</p>';
+}).join('');
 
-    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 
-    return html;
+return html;
 }
 
 // ===== 复制功能（三重保障）=====
 async function copyToClipboard(text) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        try {
-            await navigator.clipboard.writeText(text);
-            showToast('已复制到剪贴板！', '📋');
-            return true;
-        } catch (e) { console.log('Clipboard API failed:', e); }
-    }
+if (navigator.clipboard && navigator.clipboard.writeText) {
+try {
+await navigator.clipboard.writeText(text);
+showToast('已复制到剪贴板！', '📋');
+return true;
+} catch (e) { console.log('Clipboard API failed:', e); }
+}
 
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    textarea.select();
-    try {
-        const success = document.execCommand('copy');
-        document.body.removeChild(textarea);
-        if (success) {
-            showToast('已复制到剪贴板！', '📋');
-            return true;
-        }
-    } catch (e) {
-        document.body.removeChild(textarea);
-        console.log('execCommand failed:', e);
-    }
+const textarea = document.createElement('textarea');
+textarea.value = text;
+textarea.style.position = 'fixed';
+textarea.style.opacity = '0';
+document.body.appendChild(textarea);
+textarea.select();
+try {
+const success = document.execCommand('copy');
+document.body.removeChild(textarea);
+if (success) {
+showToast('已复制到剪贴板！', '📋');
+return true;
+}
+} catch (e) {
+document.body.removeChild(textarea);
+console.log('execCommand failed:', e);
+}
 
-    $('copyTextarea').value = text;
-    $('copyModal').classList.add('active');
-    return false;
+$('copyTextarea').value = text;
+$('copyModal').classList.add('active');
+return false;
 }
 
 // ===== 提示词生成 =====
 function buildPrompt(field, task, level) {
-    // 电商AI绘画领域特殊处理
-    if (field === '电商AI绘画') {
-        return buildEcommercePrompt(task, level);
-    }
-
-    const prompts = {
-        basic: `【角色定位】
+const prompts = {
+basic: `【角色定位】
 你是一位专业的${field}领域AI助手，擅长处理各类${field}相关任务。
 
 【任务描述】
@@ -1505,7 +1383,7 @@ ${task}
 2. 使用专业但易懂的语言
 3. 确保内容准确、完整`,
 
-        advanced: `【角色定位】
+advanced: `【角色定位】
 你是一位资深的${field}领域专家，拥有10年以上行业经验，精通${field}的核心理论与实践方法。
 
 【核心能力】
@@ -1529,7 +1407,7 @@ ${task}
 - 适当使用示例说明
 - 标注关键注意事项`,
 
-        expert: `【角色定位】
+expert: `【角色定位】
 你是一位${field}领域的顶级专家顾问，拥有15年以上跨行业实战经验，曾服务过多家世界500强企业。你不仅是技术专家，更是战略思想家，能够从宏观和微观两个维度审视问题。
 
 【专业能力矩阵】
@@ -1590,1295 +1468,613 @@ ${task}
 - 重要观点使用加粗标注
 - 复杂概念配合简单示例
 - 结尾提供"下一步行动建议"`
-    };
+};
 
-    return prompts[level] || prompts.basic;
-}
-
-// ===== 电商AI绘画提示词构建器 =====
-function buildEcommercePrompt(task, level) {
-    const platform = $('platformSelect').value || 'doubao';
-    const platformNames = {
-        doubao: '豆包', jimeng: '即梦', keling: '可灵',
-        tongyi: '通义万相', midjourney: 'Midjourney', sd: 'Stable Diffusion'
-    };
-    const platformName = platformNames[platform] || '豆包';
-
-    // 判断图片类型
-    let imageType = '通用产品图';
-    const taskLower = task.toLowerCase();
-    if (taskLower.includes('白底') || taskLower.includes('主图')) imageType = '白底主图';
-    else if (taskLower.includes('场景') || taskLower.includes('氛围')) imageType = '场景氛围图';
-    else if (taskLower.includes('模特') || taskLower.includes('穿搭') || taskLower.includes('穿着')) imageType = '模特穿搭图';
-    else if (taskLower.includes('节日') || taskLower.includes('促销') || taskLower.includes('活动')) imageType = '节日促销图';
-    else if (taskLower.includes('详情') || taskLower.includes('套图')) imageType = '详情页套图';
-    else if (taskLower.includes('换脸') || taskLower.includes('模特换')) imageType = 'AI模特换脸';
-
-    // 提取产品信息
-    const productInfo = task.replace(/(白底主图|场景氛围图|模特穿搭图|节日促销图|详情页套图|AI模特换脸|产品白底主图|场景氛围|模特穿搭|节日促销|详情页套图|AI模特换脸)/g, '').trim() || '产品';
-
-    if (level === 'basic') {
-        if (['midjourney', 'sd'].includes(platform)) {
-            return `【${platformName} - 电商${imageType}提示词】
-
-Product: ${productInfo}
-Style: E-commerce product photography
-Background: Clean and professional
-Lighting: Soft studio lighting
-Quality: High resolution, sharp focus, 4K
-
-Prompt:
-${productInfo}, professional e-commerce product photo, clean background, soft lighting, high quality, sharp details, 4K resolution`;
-        } else {
-            return `【${platformName} - 电商${imageType}提示词】
-
-产品：${productInfo}
-类型：${imageType}
-风格：商业产品摄影
-背景：干净专业
-光线：柔和影棚光
-质量：高清、锐利、4K
-
-提示词：
-${productInfo}，专业电商产品图，干净背景，柔和光线，高清画质，细节清晰，4K分辨率`;
-        }
-    }
-
-    if (level === 'advanced') {
-        if (['midjourney', 'sd'].includes(platform)) {
-            return `【${platformName} - 电商${imageType}提示词（进阶版）】
-
-📦 产品信息：${productInfo}
-🎯 图片类型：${imageType}
-🎨 目标平台：${platformName}
-
-━━━━━━━━━━━━━━━━━━━━━━
-【主体描述 / Subject】
-${getSubjectDesc(imageType, productInfo, 'en')}
-
-【场景设置 / Scene】
-${getSceneDesc(imageType, 'en')}
-
-【光线方案 / Lighting】
-${getLightingDesc(imageType, 'en')}
-
-【风格参数 / Style】
-${getStyleDesc(imageType, 'en')}
-
-【质量指令 / Quality】
-${getQualityDesc(platform, 'en')}
-
-━━━━━━━━━━━━━━━━━━━━━━
-【完整提示词 / Full Prompt】
-${getFullPrompt(imageType, productInfo, platform, 'en', 'advanced')}
-
-【预期效果】
-${getExpectedEffect(imageType)}`;
-        } else {
-            return `【${platformName} - 电商${imageType}提示词（进阶版）】
-
-📦 产品信息：${productInfo}
-🎯 图片类型：${imageType}
-🎨 目标平台：${platformName}
-
-━━━━━━━━━━━━━━━━━━━━━━
-【主体描述】
-${getSubjectDesc(imageType, productInfo, 'zh')}
-
-【场景设置】
-${getSceneDesc(imageType, 'zh')}
-
-【光线方案】
-${getLightingDesc(imageType, 'zh')}
-
-【风格参数】
-${getStyleDesc(imageType, 'zh')}
-
-【质量指令】
-${getQualityDesc(platform, 'zh')}
-
-━━━━━━━━━━━━━━━━━━━━━━
-【完整提示词】
-${getFullPrompt(imageType, productInfo, platform, 'zh', 'advanced')}
-
-【预期效果】
-${getExpectedEffect(imageType)}`;
-        }
-    }
-
-    // expert level
-    if (['midjourney', 'sd'].includes(platform)) {
-        return `【${platformName} - 电商${imageType}提示词（专家版·全链路）】
-
-📦 产品信息：${productInfo}
-🎯 图片类型：${imageType}
-🎨 目标平台：${platformName}
-📐 输出规格：多尺寸适配 + 变体方案
-
-━━━━━━━━━━━━━━━━━━━━━━
-【一、主体深度描述 / Subject Deep Dive】
-${getSubjectDesc(imageType, productInfo, 'en', true)}
-
-【二、场景氛围设计 / Scene Atmosphere】
-${getSceneDesc(imageType, 'en', true)}
-
-【三、专业布光方案 / Professional Lighting】
-${getLightingDesc(imageType, 'en', true)}
-
-【四、视觉风格定义 / Visual Style】
-${getStyleDesc(imageType, 'en', true)}
-
-【五、构图与角度 / Composition】
-${getCompositionDesc(imageType, 'en')}
-
-【六、色彩策略 / Color Strategy】
-${getColorDesc(imageType, 'en')}
-
-【七、质量与参数 / Quality & Parameters】
-${getQualityDesc(platform, 'en', true)}
-
-━━━━━━━━━━━━━━━━━━━━━━
-【主图提示词 / Main Prompt】
-${getFullPrompt(imageType, productInfo, platform, 'en', 'expert')}
-
-【正方形主图版 / 1:1 Main Image】
-${getFullPrompt(imageType, productInfo, platform, 'en', 'expert', '1:1')}
-
-【竖版详情图版 / 3:4 Detail Image】
-${getFullPrompt(imageType, productInfo, platform, 'en', 'expert', '3:4')}
-
-【横版海报版 / 16:9 Banner】
-${getFullPrompt(imageType, productInfo, platform, 'en', 'expert', '16:9')}
-
-━━━━━━━━━━━━━━━━━━━━━━
-【负面提示词 / Negative Prompt】
-${getNegativePrompt(imageType, 'en')}
-
-【预期效果详解】
-${getExpectedEffect(imageType, true)}
-
-【使用建议】
-1. 将主图提示词直接复制到${platformName}输入框
-2. 负面提示词粘贴到负面提示词区域（如支持）
-3. 根据实际出图效果微调光线和色彩关键词
-4. 建议生成3-5张选择最优，用局部重绘修正细节
-5. 如需换脸/换模特，使用${platformName}的图生图功能，保持场景不变仅替换人物`;
-    } else {
-        return `【${platformName} - 电商${imageType}提示词（专家版·全链路）】
-
-📦 产品信息：${productInfo}
-🎯 图片类型：${imageType}
-🎨 目标平台：${platformName}
-📐 输出规格：多尺寸适配 + 变体方案
-
-━━━━━━━━━━━━━━━━━━━━━━
-【一、主体深度描述】
-${getSubjectDesc(imageType, productInfo, 'zh', true)}
-
-【二、场景氛围设计】
-${getSceneDesc(imageType, 'zh', true)}
-
-【三、专业布光方案】
-${getLightingDesc(imageType, 'zh', true)}
-
-【四、视觉风格定义】
-${getStyleDesc(imageType, 'zh', true)}
-
-【五、构图与角度】
-${getCompositionDesc(imageType, 'zh')}
-
-【六、色彩策略】
-${getColorDesc(imageType, 'zh')}
-
-【七、质量与参数】
-${getQualityDesc(platform, 'zh', true)}
-
-━━━━━━━━━━━━━━━━━━━━━━
-【主图提示词】
-${getFullPrompt(imageType, productInfo, platform, 'zh', 'expert')}
-
-【正方形主图版 · 1:1】
-${getFullPrompt(imageType, productInfo, platform, 'zh', 'expert', '1:1')}
-
-【竖版详情图版 · 3:4】
-${getFullPrompt(imageType, productInfo, platform, 'zh', 'expert', '3:4')}
-
-【横版海报版 · 16:9】
-${getFullPrompt(imageType, productInfo, platform, 'zh', 'expert', '16:9')}
-
-━━━━━━━━━━━━━━━━━━━━━━
-【负面提示词】
-${getNegativePrompt(imageType, 'zh')}
-
-【预期效果详解】
-${getExpectedEffect(imageType, true)}
-
-【使用建议】
-1. 将主图提示词直接复制到${platformName}输入框
-2. 负面提示词粘贴到负面提示词区域（如支持）
-3. 根据实际出图效果微调光线和色彩关键词
-4. 建议生成3-5张选择最优，用局部重绘修正细节
-5. 如需换脸/换模特，使用${platformName}的图生图功能，保持场景不变仅替换人物`;
-    }
-}
-
-// ===== 电商AI绘画辅助函数 =====
-function getSubjectDesc(type, product, lang, isExpert) {
-    const descs = {
-        '白底主图': {
-            zh: isExpert
-                ? `主体：${product}，完整展示产品全貌，正面45度角最佳
-细节：清晰呈现材质纹理、品牌logo、产品标签、包装细节
-状态：产品全新无瑕疵，表面光洁无指纹/灰尘
-比例：产品占画面70-80%，四周留白均匀`
-                : `${product}，完整展示，正面角度，清晰材质，品牌细节`,
-            en: isExpert
-                ? `Subject: ${product}, full product display, front 45-degree angle
-Details: Clear material texture, brand logo, product labels, packaging details
-Condition: Brand new, flawless, clean surface without fingerprints or dust
-Proportion: Product occupies 70-80% of frame, even whitespace around`
-                : `${product}, full display, front angle, clear texture, brand details`
-        },
-        '场景氛围图': {
-            zh: isExpert
-                ? `主体：${product}，自然融入生活场景
-场景元素：与产品使用场景相关的道具（如咖啡杯配笔记本、护肤品配梳妆台）
-氛围：温暖、舒适、有生活气息
-人物：如有需要，手部入镜展示使用方式，但不抢主体焦点`
-                : `${product}，自然场景融入，生活化氛围，相关道具搭配`,
-            en: isExpert
-                ? `Subject: ${product}, naturally integrated into lifestyle scene
-Scene elements: Props related to product usage (e.g., coffee cup with laptop, skincare with vanity)
-Atmosphere: Warm, cozy, authentic living feel
-People: If needed, hands showing usage without stealing focus`
-                : `${product}, natural scene integration, lifestyle atmosphere, relevant props`
-        },
-        '模特穿搭图': {
-            zh: isExpert
-                ? `模特：亚洲女性/男性，身材匀称，气质符合产品定位（优雅/活力/商务/休闲）
-穿搭：${product}，完整展示上身效果
-姿态：自然站立，轻微侧身，表情自信放松
-发型妆容：与服装风格匹配，整洁大方`
-                : `亚洲模特，身材匀称，${product}上身效果，自然姿态，自信表情`,
-            en: isExpert
-                ? `Model: Asian female/male, well-proportioned, temperament matching product positioning (elegant/active/business/casual)
-Outfit: ${product}, full upper body display
-Pose: Natural standing, slight side angle, confident relaxed expression
-Hair & Makeup: Matching clothing style, neat and elegant`
-                : `Asian model, well-proportioned, ${product} styling, natural pose, confident expression`
-        },
-        '节日促销图': {
-            zh: isExpert
-                ? `主体：${product}，突出展示核心卖点
-节日元素：根据节日选择对应装饰（圣诞-红金/春节-中国红/双11-橙红）
-促销感：限时、优惠、抢购氛围
-文案预留：画面适当留白，预留促销文案位置`
-                : `${product}，节日氛围，促销元素，限时优惠感，文案留白`,
-            en: isExpert
-                ? `Subject: ${product}, highlighting core selling points
-Holiday elements: Seasonal decorations (Christmas-red&gold, CNY-Chinese red, Double 11-orange&red)
-Promotional feel: Limited time, discount, urgency atmosphere
-Text space: Appropriate留白 for promotional copy`
-                : `${product}, festive atmosphere, promotional elements, urgency feel, text space`
-        },
-        '详情页套图': {
-            zh: isExpert
-                ? `套图包含：
-① 白底主图（正面全貌）
-② 细节特写（材质/工艺/标签）
-③ 场景图（使用场景展示）
-④ 尺寸图（比例参考/手持对比）
-⑤ 卖点图（功能展示/对比图）
-⑥ 包装图（开箱/礼盒展示）
-风格统一：整套图色调、光线、风格保持一致`
-                : `6张套图：白底主图+细节特写+场景图+尺寸图+卖点图+包装图，风格统一`,
-            en: isExpert
-                ? `Image set includes:
-① White background main image (front full view)
-② Detail close-up (material/craftsmanship/labels)
-③ Lifestyle scene (usage demonstration)
-④ Size reference (scale/hand comparison)
-⑤ Selling points (feature display/comparison)
-⑥ Packaging (unboxing/gift box)
-Consistent style: Unified color tone, lighting, and style across all images`
-                : `6-image set: main+details+lifestyle+size+features+packaging, consistent style`
-        },
-        'AI模特换脸': {
-            zh: isExpert
-                ? `原图要求：已有产品场景图或模特图，需要替换模特面部
-换脸目标：指定人物照片（正面清晰，光线均匀）
-保持元素：原图的场景、光线、服装、姿态完全不变
-融合要求：新面部与原图肤色、光影、角度自然融合，无违和感`
-                : `保持原图场景光线服装不变，替换模特面部，新面部自然融合`,
-            en: isExpert
-                ? `Original image: Existing product scene or model photo needing face replacement
-Target face: Specified person photo (front-facing, clear, even lighting)
-Preserve elements: Original scene, lighting, clothing, pose completely unchanged
-Blend requirement: New face naturally merges with original skin tone, lighting, angle seamlessly`
-                : `Preserve original scene/lighting/clothing, replace model face, natural blend`
-        }
-    };
-    return (descs[type] || descs['白底主图'])[lang] || descs['白底主图']['zh'];
-}
-
-function getSceneDesc(type, lang, isExpert) {
-    const descs = {
-        '白底主图': {
-            zh: isExpert ? '纯白无影背景（RGB: 255,255,255），无渐变，无阴影，无反光干扰' : '纯白背景，无阴影',
-            en: isExpert ? 'Pure white seamless background (RGB: 255,255,255), no gradient, no shadow, no reflection interference' : 'Pure white background, no shadows'
-        },
-        '场景氛围图': {
-            zh: isExpert ? '真实生活场景（客厅/卧室/办公室/户外），自然景深，前景虚化' : '真实生活场景，自然景深',
-            en: isExpert ? 'Real-life setting (living room/bedroom/office/outdoor), natural depth of field, foreground blur' : 'Real-life setting, natural depth of field'
-        },
-        '模特穿搭图': {
-            zh: isExpert ? '简约摄影棚背景（浅灰/米白/莫兰迪色），或街拍场景（城市/自然）' : '简约背景或街拍场景',
-            en: isExpert ? 'Minimalist studio backdrop (light gray/beige/Morandi tones), or street scene (urban/nature)' : 'Minimalist backdrop or street scene'
-        },
-        '节日促销图': {
-            zh: isExpert ? '节日主题场景（圣诞树/灯笼/礼盒堆/气球），暖色调为主' : '节日主题场景，暖色调',
-            en: isExpert ? 'Holiday-themed scene (Christmas tree/lanterns/gift boxes/balloons), warm tones dominant' : 'Holiday-themed scene, warm tones'
-        },
-        '详情页套图': {
-            zh: isExpert ? '多场景组合：白底+生活场景+对比场景+开箱场景' : '多场景组合：白底+生活+对比+开箱',
-            en: isExpert ? 'Multi-scene combo: white bg + lifestyle + comparison + unboxing' : 'Multi-scene combo: white bg + lifestyle + comparison + unboxing'
-        },
-        'AI模特换脸': {
-            zh: isExpert ? '保持原图场景完全不变' : '保持原图场景',
-            en: isExpert ? 'Preserve original scene completely unchanged' : 'Preserve original scene'
-        }
-    };
-    return (descs[type] || descs['白底主图'])[lang] || descs['白底主图']['zh'];
-}
-
-function getLightingDesc(type, lang, isExpert) {
-    const descs = {
-        '白底主图': {
-            zh: isExpert ? '双侧柔光箱（左45°主光+右45°补光），消除硬阴影，产品边缘干净' : '双侧柔光，消除硬阴影',
-            en: isExpert ? 'Dual softbox setup (left 45° key light + right 45° fill light), eliminate hard shadows, clean product edges' : 'Dual soft lighting, eliminate hard shadows'
-        },
-        '场景氛围图': {
-            zh: isExpert ? '自然光（窗边柔和日光）+ 环境光（台灯/吊灯），营造温馨氛围' : '自然光+环境光，温馨氛围',
-            en: isExpert ? 'Natural light (soft window daylight) + ambient light (table lamp/pendant), creating cozy atmosphere' : 'Natural + ambient light, cozy atmosphere'
-        },
-        '模特穿搭图': {
-            zh: isExpert ? '主光：正面偏上45°柔光；轮廓光：侧后方发丝光；补光：面部反光板' : '主光+轮廓光+补光，专业人像布光',
-            en: isExpert ? 'Key: Front-top 45° soft light; Rim: Side-back hair light; Fill: Face reflector' : 'Key+rim+fill, professional portrait lighting'
-        },
-        '节日促销图': {
-            zh: isExpert ? '暖色调主光（色温3200K）+ 点缀光（串灯/烛光），营造节日温暖感' : '暖色调主光+点缀光',
-            en: isExpert ? 'Warm key light (3200K color temp) + accent lights (string lights/candles), festive warmth' : 'Warm key + accent lights'
-        },
-        '详情页套图': {
-            zh: isExpert ? '统一色温（5500K日光），整套图光线方向一致' : '统一色温5500K，光线一致',
-            en: isExpert ? 'Consistent color temp (5500K daylight), unified light direction across all images' : 'Consistent 5500K, unified lighting'
-        },
-        'AI模特换脸': {
-            zh: isExpert ? '保持原图光线完全不变' : '保持原图光线',
-            en: isExpert ? 'Preserve original lighting completely unchanged' : 'Preserve original lighting'
-        }
-    };
-    return (descs[type] || descs['白底主图'])[lang] || descs['白底主图']['zh'];
-}
-
-function getStyleDesc(type, lang, isExpert) {
-    const descs = {
-        '白底主图': {
-            zh: isExpert ? '商业产品摄影 · 极简主义 · 超写实 · 电商目录风格' : '商业产品摄影，极简，超写实',
-            en: isExpert ? 'Commercial product photography · Minimalism · Hyper-realistic · E-commerce catalog style' : 'Commercial product photography, minimalist, hyper-realistic'
-        },
-        '场景氛围图': {
-            zh: isExpert ? '生活方式摄影 · 自然纪实 · 温馨生活感 · 杂志风' : '生活方式摄影，自然纪实',
-            en: isExpert ? 'Lifestyle photography · Natural documentary · Cozy living feel · Magazine style' : 'Lifestyle photography, natural documentary'
-        },
-        '模特穿搭图': {
-            zh: isExpert ? '时尚编辑摄影 · 高级时装感 · 自然不做作 · 品牌lookbook' : '时尚编辑摄影，高级时装感',
-            en: isExpert ? 'Fashion editorial photography · High fashion feel · Natural unposed · Brand lookbook' : 'Fashion editorial, high fashion feel'
-        },
-        '节日促销图': {
-            zh: isExpert ? '商业促销海报 · 节日氛围感 · 视觉冲击力强 · 电商大促风格' : '商业促销海报，节日氛围',
-            en: isExpert ? 'Commercial promotional poster · Festive atmosphere · Strong visual impact · E-commerce mega-sale style' : 'Commercial promo poster, festive atmosphere'
-        },
-        '详情页套图': {
-            zh: isExpert ? '电商详情页规范 · 风格统一 · 信息层次清晰 · 转化导向' : '电商详情页规范，风格统一',
-            en: isExpert ? 'E-commerce detail page standard · Consistent style · Clear information hierarchy · Conversion-focused' : 'E-commerce detail standard, consistent style'
-        },
-        'AI模特换脸': {
-            zh: isExpert ? '面部融合自然 · 肤色光影匹配 · 无PS痕迹 · 真实感' : '面部融合自然，肤色匹配',
-            en: isExpert ? 'Natural face blend · Skin tone & lighting match · No PS traces · Authentic feel' : 'Natural face blend, skin tone match'
-        }
-    };
-    return (descs[type] || descs['白底主图'])[lang] || descs['白底主图']['zh'];
-}
-
-function getCompositionDesc(type, lang) {
-    const descs = {
-        '白底主图': { zh: '居中构图，产品正面或45°展示，四周等距留白', en: 'Centered composition, front or 45 degree display, equal whitespace around' },
-        '场景氛围图': { zh: '三分法构图，产品位于视觉焦点，环境自然延伸', en: 'Rule of thirds, product at visual focal point, environment naturally extends' },
-        '模特穿搭图': { zh: '全身或七分身构图，模特位于画面中央偏左/右，留出呼吸空间', en: 'Full or 7/8 body composition, model slightly off-center, breathing space' },
-        '节日促销图': { zh: '中心聚焦+放射状构图，促销信息区域预留空白', en: 'Center focus + radial composition, promotional text area reserved' },
-        '详情页套图': { zh: '统一构图规范：主图居中，细节特写微距，场景图三分法', en: 'Unified composition: main centered, detail macro, lifestyle rule of thirds' },
-        'AI模特换脸': { zh: '保持原图构图不变', en: 'Preserve original composition unchanged' }
-    };
-    return (descs[type] || descs['白底主图'])[lang] || descs['白底主图']['zh'];
-}
-
-function getColorDesc(type, lang) {
-    const descs = {
-        '白底主图': { zh: '产品本色还原，白底不偏色，整体色调中性', en: 'True product color, white bg no color cast, neutral overall tone' },
-        '场景氛围图': { zh: '暖色调为主（色温5000-6000K），与产品色调协调', en: 'Warm tones dominant (5000-6000K), harmonizing with product colors' },
-        '模特穿搭图': { zh: '服装色彩真实还原，背景色与服装形成对比但不冲突', en: 'True clothing color, background contrasts but does not clash' },
-        '节日促销图': { zh: '节日主色调（红/金/橙）+ 产品色点缀，整体饱和度高', en: 'Holiday primary colors (red/gold/orange) + product accent, high overall saturation' },
-        '详情页套图': { zh: '整套图色彩统一，产品色一致，背景色系统一', en: 'Unified color across set, consistent product color, unified background system' },
-        'AI模特换脸': { zh: '保持原图色彩不变', en: 'Preserve original colors unchanged' }
-    };
-    return (descs[type] || descs['白底主图'])[lang] || descs['白底主图']['zh'];
-}
-
-function getQualityDesc(platform, lang, isExpert) {
-    const qualityMap = {
-        'doubao': {
-            zh: isExpert ? '分辨率：2048×2048（1:1）/ 1536×2048（3:4）\n画质：超高清，细节丰富\n风格：写实摄影\n其他：关闭AI水印' : '超高清，2048×2048，写实摄影风格',
-            en: isExpert ? 'Resolution: 2048×2048 (1:1) / 1536×2048 (3:4)\nQuality: Ultra HD, rich details\nStyle: Realistic photography\nOther: Disable AI watermark' : 'Ultra HD, 2048×2048, realistic photography style'
-        },
-        'jimeng': {
-            zh: isExpert ? '分辨率：2048×2048\n画质：极致清晰\n风格：摄影写实\n其他：智能优化开启' : '极致清晰，2048×2048，摄影写实',
-            en: isExpert ? 'Resolution: 2048×2048\nQuality: Ultimate clarity\nStyle: Photorealistic\nOther: Smart optimization ON' : 'Ultimate clarity, 2048×2048, photorealistic'
-        },
-        'keling': {
-            zh: isExpert ? '分辨率：1920×1080（视频帧）/ 2048×2048（图片）\n画质：电影级\n风格：写实\n其他：运动幅度低（静物）' : '电影级画质，2048×2048，写实风格',
-            en: isExpert ? 'Resolution: 1920×1080 (video frame) / 2048×2048 (image)\nQuality: Cinematic\nStyle: Realistic\nOther: Low motion (static objects)' : 'Cinematic quality, 2048×2048, realistic style'
-        },
-        'tongyi': {
-            zh: isExpert ? '分辨率：2048×2048\n画质：超精细\n风格：商业摄影\n其他：中文提示词优化' : '超精细，2048×2048，商业摄影风格',
-            en: isExpert ? 'Resolution: 2048×2048\nQuality: Ultra fine\nStyle: Commercial photography\nOther: Chinese prompt optimized' : 'Ultra fine, 2048×2048, commercial photography style'
-        },
-        'midjourney': {
-            zh: isExpert ? '参数：--ar 1:1 --q 2 --s 250 --v 6\n质量：最高质量渲染\n风格：RAW模式（更真实）\n其他：--no 负面词' : '--ar 1:1 --q 2 --s 250 --v 6，最高质量',
-            en: isExpert ? 'Params: --ar 1:1 --q 2 --s 250 --v 6\nQuality: Maximum quality render\nStyle: RAW mode (more realistic)\nOther: --no negative words' : '--ar 1:1 --q 2 --s 250 --v 6, maximum quality'
-        },
-        'sd': {
-            zh: isExpert ? '模型：RealisticVision / DreamShaper\n采样：DPM++ 2M Karras\n步数：30-50\nCFG：7-9\n其他：高清修复开启' : 'RealisticVision模型，DPM++采样，30步，CFG7',
-            en: isExpert ? 'Model: RealisticVision / DreamShaper\nSampler: DPM++ 2M Karras\nSteps: 30-50\nCFG: 7-9\nOther: Hi-res fix ON' : 'RealisticVision model, DPM++ sampler, 30 steps, CFG7'
-        }
-    };
-    return (qualityMap[platform] || qualityMap['doubao'])[lang] || qualityMap['doubao']['zh'];
-}
-
-function getFullPrompt(type, product, platform, lang, level, ratio) {
-    ratio = ratio || '1:1';
-    const isEn = lang === 'en';
-    const isExpert = level === 'expert';
-
-    // 根据平台返回不同格式
-    if (platform === 'midjourney' || platform === 'sd') {
-        // 英文提示词
-        const prompts = {
-            '白底主图': isExpert
-                ? `${product}, professional e-commerce product photography, pure white seamless background (RGB 255,255,255), front 45-degree angle, dual softbox lighting left 45° key + right 45° fill, clean sharp edges, hyper-realistic texture, 8K ultra HD, commercial catalog style, centered composition, product occupies 75% of frame, no shadows, no reflections, no dust, pristine condition --ar ${ratio} --q 2 --s 250 --v 6`
-                : `${product}, professional product photo, white background, soft lighting, sharp focus, 4K, e-commerce style --ar ${ratio}`,
-            '场景氛围图': isExpert
-                ? `${product}, lifestyle product photography, natural home setting with warm ambient lighting, soft window daylight, cozy atmosphere, shallow depth of field, foreground blur, authentic living feel, magazine editorial style, warm color tone 5500K, hyper-realistic, 8K --ar ${ratio} --q 2 --s 250 --v 6`
-                : `${product}, lifestyle photo, natural home setting, warm lighting, cozy atmosphere, shallow depth of field, 4K --ar ${ratio}`,
-            '模特穿搭图': isExpert
-                ? `Asian female model wearing ${product}, full body shot, natural standing pose, slight side angle, confident relaxed expression, minimalist studio backdrop light gray, professional portrait lighting key 45° front-top + rim light + fill reflector, fashion editorial photography, high fashion feel, brand lookbook style, clean elegant, 8K ultra HD --ar ${ratio} --q 2 --s 250 --v 6`
-                : `Asian model wearing ${product}, full body, natural pose, studio lighting, fashion photography, 4K --ar ${ratio}`,
-            '节日促销图': isExpert
-                ? `${product}, festive promotional poster, Christmas decoration background red and gold color scheme, gift boxes and ribbons, warm lighting 3200K, string lights bokeh, limited time offer atmosphere, strong visual impact, commercial photography, high saturation, centered composition with text space, 8K --ar ${ratio} --q 2 --s 250 --v 6`
-                : `${product}, festive promotional image, holiday decorations, warm lighting, gift boxes, limited offer feel, 4K --ar ${ratio}`,
-            '详情页套图': isExpert
-                ? `${product}, e-commerce detail page image set, consistent commercial photography style, unified 5500K daylight color temp, clean professional look, conversion-focused composition, clear information hierarchy, white background main image, hyper-realistic 8K --ar ${ratio} --q 2 --s 250 --v 6`
-                : `${product}, e-commerce detail page set, consistent style, professional photography, 4K --ar ${ratio}`,
-            'AI模特换脸': isExpert
-                ? `Face swap: Replace model face in product photo with specified person, preserve original scene lighting clothing pose completely unchanged, natural skin tone blending, seamless integration, no PS traces, photorealistic result, professional retouching quality --ar ${ratio} --q 2 --s 250 --v 6`
-                : `Face swap in product photo, preserve scene, natural blend, photorealistic --ar ${ratio}`
-        };
-        return prompts[type] || prompts['白底主图'];
-    } else {
-        // 中文提示词（豆包/即梦/可灵/通义万相）
-        const prompts = {
-            '白底主图': isExpert
-                ? `${product}，专业电商产品摄影，纯白无影背景，正面45度角展示，双侧柔光箱布光，超写实材质纹理，8K超高清，商业目录风格，居中构图，产品占画面75%，无阴影无反光，全新 pristine 状态`
-                : `${product}，专业产品图，纯白背景，柔和光线，清晰锐利，4K高清，电商风格`,
-            '场景氛围图': isExpert
-                ? `${product}，生活方式产品摄影，真实家居场景，窗边自然光+环境暖光，温馨氛围，浅景深前景虚化，自然纪实感，杂志编辑风格，暖色调5500K，超写实8K`
-                : `${product}，生活场景图，自然家居环境，温暖光线，舒适氛围，浅景深，4K高清`,
-            '模特穿搭图': isExpert
-                ? `亚洲女性模特穿着${product}，全身照，自然站立姿态，微侧身，自信放松表情，简约浅灰摄影棚背景，专业人像布光（主光45°前顶光+轮廓光+面部补光），时尚编辑摄影，高级时装感，品牌lookbook风格，优雅大方，8K超高清`
-                : `亚洲模特穿着${product}，全身照，自然姿态，摄影棚灯光，时尚摄影，4K高清`,
-            '节日促销图': isExpert
-                ? `${product}，节日促销海报，圣诞红金配色装饰背景，礼盒丝带堆叠，暖色温3200K主光，串灯散景光斑，限时优惠抢购氛围，视觉冲击力强，商业摄影，高饱和度，中心聚焦构图预留文案空间，8K超高清`
-                : `${product}，节日促销图，节日装饰，暖色灯光，礼盒丝带，限时优惠感，4K高清`,
-            '详情页套图': isExpert
-                ? `${product}，电商详情页套图，统一商业摄影风格，色温5500K日光一致，干净专业外观，转化导向构图，信息层次清晰，白底主图+场景图+细节图组合，超写实8K`
-                : `${product}，详情页套图，统一风格，专业摄影，白底+场景+细节，4K高清`,
-            'AI模特换脸': isExpert
-                ? `产品图中的模特换脸，保持原图场景光线服装姿态完全不变，指定人物面部自然融合，肤色光影角度匹配，无PS痕迹，真实感，专业修图品质，超写实`
-                : `产品图换脸，保持场景不变，面部自然融合，真实感，4K高清`
-        };
-        return prompts[type] || prompts['白底主图'];
-    }
-}
-
-function getNegativePrompt(type, lang) {
-    const isEn = lang === 'en';
-    if (isEn) {
-        return `low quality, blurry, distorted, deformed, ugly, duplicate, watermark, text, logo, bad anatomy, bad proportions, extra limbs, missing fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed features, oversaturated, underexposed, overexposed, grainy, noise, jpeg artifacts`;
-    } else {
-        return `低质量，模糊，变形，扭曲，丑陋，重复，水印，文字，logo，解剖错误，比例失调，多余肢体，缺失手指，变异手部，绘制糟糕的手部，绘制糟糕的脸部，突变，变形特征，过饱和，曝光不足，曝光过度，颗粒感，噪点，JPEG伪影`;
-    }
-}
-
-function getExpectedEffect(type, isExpert) {
-    const effects = {
-        '白底主图': isExpert
-            ? `✅ 产品边缘干净锐利，无杂边
-✅ 材质纹理清晰可见（如金属反光、布料纹理）
-✅ 白底纯净不偏色，适合直接上架淘宝/京东/拼多多
-✅ 产品比例适中，视觉重心稳定
-⚠️ 注意：部分AI对细小文字/logo生成可能不准确，需后期替换`
-            : `产品清晰展示，白底干净，适合电商平台主图使用`,
-        '场景氛围图': isExpert
-            ? `✅ 产品自然融入生活场景，不突兀
-✅ 氛围温馨有代入感，能激发购买欲望
-✅ 景深自然，前景虚化柔和
-✅ 色调温暖统一，适合详情页场景展示
-⚠️ 注意：复杂场景可能出现物品比例失调，需筛选最优图`
-            : `产品融入生活场景，氛围温馨，适合详情页展示`,
-        '模特穿搭图': isExpert
-            ? `✅ 模特姿态自然，不僵硬不做作
-✅ 服装上身效果真实，褶皱自然
-✅ 面部清晰可辨（如未换脸），表情自信
-✅ 背景简约不抢镜，突出服装本身
-⚠️ 注意：AI生成模特手部/手指可能不完美，建议局部重绘或换脸`
-            : `模特展示服装效果，姿态自然，适合服装类商品`,
-        '节日促销图': isExpert
-            ? `✅ 节日氛围浓厚，一眼感知促销主题
-✅ 产品突出，不被装饰元素淹没
-✅ 预留文案空间充足，方便后期加促销信息
-✅ 色彩饱和度高，视觉冲击力强
-⚠️ 注意：装饰元素可能遮挡产品，需调整构图或后期处理`
-            : `节日氛围浓厚，产品突出，适合活动海报和主图`,
-        '详情页套图': isExpert
-            ? `✅ 整套图风格统一，色调一致
-✅ 信息层次清晰：主图→细节→场景→对比→包装
-✅ 每张图都有明确的信息传递目的
-✅ 适合直接用于淘宝/京东/拼多多详情页
-⚠️ 注意：建议先生成主图确认风格，再批量生成套图保持统一`
-            : `整套图风格统一，覆盖主图/细节/场景/包装，适合详情页`,
-        'AI模特换脸': isExpert
-            ? `✅ 新面部与原图完美融合，无拼接痕迹
-✅ 肤色、光影、角度与原图一致
-✅ 保持原图场景、服装、姿态完全不变
-✅ 适合快速生成品牌专属模特图
-⚠️ 注意：换脸后需检查发际线、耳朵、颈部衔接处是否自然`
-            : `面部自然融合，保持原图场景不变，适合品牌模特定制`
-    };
-    return effects[type] || effects['白底主图'];
+return prompts[level] || prompts.basic;
 }
 
 // ===== 生成逻辑 =====
 function canGenerate(level) {
-    // 电商AI绘画强制专家版
-    if ($('fieldSelect').value === '电商AI绘画' && level !== 'expert') {
-        showToast('电商AI绘画仅专家版可用', '⚠️');
-        // 自动切换到专家版
-        document.querySelectorAll('.complexity-card').forEach(c => c.classList.remove('selected'));
-        document.querySelector('.complexity-card[data-level="expert"]').classList.add('selected');
-        currentLevel = 'expert';
-        // 重新检查专家版权限
-        level = 'expert';
-    }
+if (level === 'basic') {
+if (db.todayBasicCount >= MAX_BASIC_DAILY) {
+showToast(`基础版每日限${MAX_BASIC_DAILY}次，请明日再来`, '⚠️');
+return false;
+}
+return true;
+}
 
-    if (level === 'basic') {
-        if (db.todayBasicCount >= MAX_BASIC_DAILY) {
-            showToast(`基础版每日限${MAX_BASIC_DAILY}次，请明日再来`, '⚠️');
-            return false;
-        }
-        return true;
-    }
+if (level === 'advanced') {
+if (db.firstUse.advanced) return true;
+if (db.unlocked.advanced) return true;
+pendingUnlockLevel = 'advanced';
+showUnlockModal('进阶版');
+return false;
+}
 
-    if (level === 'advanced') {
-        if (db.firstUse.advanced) return true;
-        if (db.unlocked.advanced) return true;
-        pendingUnlockLevel = 'advanced';
-        showUnlockModal('进阶版');
-        return false;
-    }
+if (level === 'expert') {
+if (db.firstUse.expert) return true;
+if (db.unlocked.expert) return true;
+pendingUnlockLevel = 'expert';
+showUnlockModal('专家版');
+return false;
+}
 
-    if (level === 'expert') {
-        if (db.firstUse.expert) return true;
-        if (db.unlocked.expert) return true;
-        pendingUnlockLevel = 'expert';
-        showUnlockModal('专家版');
-        return false;
-    }
-
-    return false;
+return false;
 }
 
 function showUnlockModal(versionName) {
-    $('unlockDesc').textContent = `${versionName}需要密码解锁。如需获取密码，请添加QQ：${QQ_NUMBER}`;
-    $('unlockInput').value = '';
-    $('unlockModal').classList.add('active');
+$('unlockDesc').textContent = `${versionName}需要密码解锁。如需获取密码，请添加QQ：${QQ_NUMBER}`;
+$('unlockInput').value = '';
+$('unlockModal').classList.add('active');
 }
 
 function doGenerate() {
-    const field = $('fieldSelect').value;
-    const task = $('taskInput').value.trim();
+const field = $('fieldSelect').value;
+const task = $('taskInput').value.trim();
 
-    if (!task) {
-        showToast('请输入任务描述', '⚠️');
-        $('taskInput').focus();
-        return;
-    }
+if (!task) {
+showToast('请输入任务描述', '⚠️');
+$('taskInput').focus();
+return;
+}
 
-    if (!canGenerate(currentLevel)) return;
+if (!canGenerate(currentLevel)) return;
 
-    if (currentLevel === 'basic') {
-        db.todayBasicCount++;
-    } else if (currentLevel === 'advanced' && db.firstUse.advanced) {
-        db.firstUse.advanced = false;
-    } else if (currentLevel === 'expert' && db.firstUse.expert) {
-        db.firstUse.expert = false;
-    }
+if (currentLevel === 'basic') {
+db.todayBasicCount++;
+} else if (currentLevel === 'advanced' && db.firstUse.advanced) {
+db.firstUse.advanced = false;
+} else if (currentLevel === 'expert' && db.firstUse.expert) {
+db.firstUse.expert = false;
+}
 
-    db.totalGenerated++;
+db.totalGenerated++;
 
-    const prompt = buildPrompt(field, task, currentLevel);
-    const now = new Date();
-    const timeStr = now.toLocaleString('zh-CN');
+const prompt = buildPrompt(field, task, currentLevel);
+const now = new Date();
+const timeStr = now.toLocaleString('zh-CN');
 
-    // 电商AI绘画额外记录平台信息
-    let platform = null;
-    if (field === '电商AI绘画') {
-        platform = $('platformSelect').value;
-    }
+const result = {
+id: Date.now(),
+field, task, level: currentLevel,
+prompt, time: timeStr,
+favorited: false
+};
 
-    const result = {
-        id: Date.now(),
-        field, task, level: currentLevel,
-        prompt, time: timeStr,
-        favorited: false,
-        platform: platform
-    };
+db.history.unshift(result);
+saveDB(db);
 
-    db.history.unshift(result);
-    saveDB(db);
-
-    updateStats();
-    renderResult(result);
-    $('emptyState').classList.add('hidden');
-    showToast('提示词生成成功！', '✨');
+updateStats();
+renderResult(result);
+$('emptyState').classList.add('hidden');
+showToast('提示词生成成功！', '✨');
 }
 
 // ===== 渲染结果 =====
 function renderResult(result) {
-    const container = $('resultsContainer');
-    const levelNames = { basic: '基础版', advanced: '进阶版', expert: '专家版' };
-    const levelBadges = { basic: 'badge-basic', advanced: 'badge-advanced', expert: 'badge-expert' };
-    const platformNames = {
-        doubao: '豆包', jimeng: '即梦', keling: '可灵',
-        tongyi: '通义万相', midjourney: 'Midjourney', sd: 'Stable Diffusion'
-    };
+const container = $('resultsContainer');
+const levelNames = { basic: '基础版', advanced: '进阶版', expert: '专家版' };
+const levelBadges = { basic: 'badge-basic', advanced: 'badge-advanced', expert: 'badge-expert' };
 
-    const card = document.createElement('div');
-    card.className = 'result-card';
-    card.dataset.id = result.id;
+const card = document.createElement('div');
+card.className = 'result-card';
+card.dataset.id = result.id;
 
-    const platformTag = result.platform ? `<span class="result-platform">🎨 ${platformNames[result.platform] || result.platform}</span>` : '';
+card.innerHTML = `
+       <div class="result-header">
+           <div class="result-meta">
+               <span class="result-badge ${levelBadges[result.level]}">${levelNames[result.level]}</span>
+               <span class="result-field">📂 ${result.field}</span>
+               <span class="result-time">🕐 ${result.time}</span>
+           </div>
+           <div class="result-actions">
+               <button class="action-btn" onclick="copyResult(${result.id})">
+                   <span>📋</span> 复制
+               </button>
+               <button class="action-btn ${result.favorited ? 'favorited' : ''}" onclick="toggleFavorite(${result.id})">
+                   <span>${result.favorited ? '❤️' : '🤍'}</span> ${result.favorited ? '已收藏' : '收藏'}
+               </button>
+           </div>
+       </div>
+       <div class="result-content">
+           ${formatPromptToHTML(result.prompt)}
+       </div>
+   `;
 
-    card.innerHTML = `
-        <div class="result-header">
-            <div class="result-meta">
-                <span class="result-badge ${levelBadges[result.level]}">${levelNames[result.level]}</span>
-                <span class="result-field">📂 ${result.field}</span>
-                ${platformTag}
-                <span class="result-time">🕐 ${result.time}</span>
-            </div>
-            <div class="result-actions">
-                <button class="action-btn" onclick="copyResult(${result.id})">
-                    <span>📋</span> 复制
-                </button>
-                <button class="action-btn ${result.favorited ? 'favorited' : ''}" onclick="toggleFavorite(${result.id})">
-                    <span>${result.favorited ? '❤️' : '🤍'}</span> ${result.favorited ? '已收藏' : '收藏'}
-                </button>
-            </div>
-        </div>
-        <div class="result-content">
-            ${formatPromptToHTML(result.prompt)}
-        </div>
-    `;
-
-    container.insertBefore(card, container.firstChild);
+container.insertBefore(card, container.firstChild);
 }
 
 function copyResult(id) {
-    const result = db.history.find(h => h.id === id);
-    if (result) copyToClipboard(result.prompt);
+const result = db.history.find(h => h.id === id);
+if (result) copyToClipboard(result.prompt);
 }
 
 function toggleFavorite(id) {
-    const result = db.history.find(h => h.id === id);
-    if (!result) return;
+const result = db.history.find(h => h.id === id);
+if (!result) return;
 
-    result.favorited = !result.favorited;
+result.favorited = !result.favorited;
 
-    if (result.favorited) {
-        if (!db.favorites.find(f => f.id === id)) {
-            db.favorites.push({...result});
-        }
-    } else {
-        db.favorites = db.favorites.filter(f => f.id !== id);
-    }
+if (result.favorited) {
+if (!db.favorites.find(f => f.id === id)) {
+db.favorites.push({...result});
+}
+} else {
+db.favorites = db.favorites.filter(f => f.id !== id);
+}
 
-    saveDB(db);
+saveDB(db);
 
-    const card = document.querySelector(`.result-card[data-id="${id}"]`);
-    if (card) {
-        const btn = card.querySelector('.action-btn:last-child');
-        btn.classList.toggle('favorited', result.favorited);
-        btn.innerHTML = `<span>${result.favorited ? '❤️' : '🤍'}</span> ${result.favorited ? '已收藏' : '收藏'}`;
-    }
+const card = document.querySelector(`.result-card[data-id="${id}"]`);
+if (card) {
+const btn = card.querySelector('.action-btn:last-child');
+btn.classList.toggle('favorited', result.favorited);
+btn.innerHTML = `<span>${result.favorited ? '❤️' : '🤍'}</span> ${result.favorited ? '已收藏' : '收藏'}`;
+}
 
-    showToast(result.favorited ? '已添加到收藏' : '已取消收藏', result.favorited ? '❤️' : '🤍');
+showToast(result.favorited ? '已添加到收藏' : '已取消收藏', result.favorited ? '❤️' : '🤍');
 }
 
 // ===== 更新统计 =====
 function updateStats() {
-    $('todayCount').textContent = Math.max(0, MAX_BASIC_DAILY - db.todayBasicCount);
-    $('totalCount').textContent = db.totalGenerated;
+$('todayCount').textContent = Math.max(0, MAX_BASIC_DAILY - db.todayBasicCount);
+$('totalCount').textContent = db.totalGenerated;
 
-    if (!db.firstUse.advanced && !db.unlocked.advanced) {
-        $('advancedBadge').textContent = '🔒 已锁定';
-        $('advancedBadge').className = 'complexity-badge badge-locked';
-    } else if (db.unlocked.advanced) {
-        $('advancedBadge').textContent = '✅ 已解锁';
-        $('advancedBadge').className = 'complexity-badge badge-free';
-    }
+if (!db.firstUse.advanced && !db.unlocked.advanced) {
+$('advancedBadge').textContent = '🔒 已锁定';
+$('advancedBadge').className = 'complexity-badge badge-locked';
+} else if (db.unlocked.advanced) {
+$('advancedBadge').textContent = '✅ 已解锁';
+$('advancedBadge').className = 'complexity-badge badge-free';
+}
 
-    if (!db.firstUse.expert && !db.unlocked.expert) {
-        $('expertBadge').textContent = '🔒 已锁定';
-        $('expertBadge').className = 'complexity-badge badge-locked';
-    } else if (db.unlocked.expert) {
-        $('expertBadge').textContent = '✅ 已解锁';
-        $('expertBadge').className = 'complexity-badge badge-free';
-    }
+if (!db.firstUse.expert && !db.unlocked.expert) {
+$('expertBadge').textContent = '🔒 已锁定';
+$('expertBadge').className = 'complexity-badge badge-locked';
+} else if (db.unlocked.expert) {
+$('expertBadge').textContent = '✅ 已解锁';
+$('expertBadge').className = 'complexity-badge badge-free';
+}
 
-    updateTemplateLocks();
+updateTemplateLocks();
 }
 
 // ===== 模板库锁定逻辑 - 全部锁定为专家版 =====
 function updateTemplateLocks() {
-    document.querySelectorAll('.template-card').forEach(card => {
-        // 修复：所有模板都锁定为专家版
-        const isLocked = !db.unlocked.expert && !db.firstUse.expert;
+document.querySelectorAll('.template-card').forEach(card => {
+// 修复：所有模板都锁定为专家版
+const isLocked = !db.unlocked.expert && !db.firstUse.expert;
 
-        if (isLocked) {
-            card.classList.add('locked');
-            if (!card.querySelector('.template-lock-overlay')) {
-                const overlay = document.createElement('div');
-                overlay.className = 'template-lock-overlay';
-                overlay.innerHTML = `
-                    <div class="lock-icon">🔒</div>
-                    <div>专家版解锁后可用</div>
-                `;
-                card.appendChild(overlay);
-            }
-        } else {
-            card.classList.remove('locked');
-            const overlay = card.querySelector('.template-lock-overlay');
-            if (overlay) overlay.remove();
-        }
-    });
+if (isLocked) {
+card.classList.add('locked');
+if (!card.querySelector('.template-lock-overlay')) {
+const overlay = document.createElement('div');
+overlay.className = 'template-lock-overlay';
+overlay.innerHTML = `
+                   <div class="lock-icon">🔒</div>
+                   <div>专家版解锁后可用</div>
+               `;
+card.appendChild(overlay);
+}
+} else {
+card.classList.remove('locked');
+const overlay = card.querySelector('.template-lock-overlay');
+if (overlay) overlay.remove();
+}
+});
 }
 
 // ===== 解锁逻辑 =====
 function doUnlock() {
-    const password = $('unlockInput').value.trim();
-    if (!password) {
-        showToast('请输入密码', '⚠️');
-        return;
-    }
+const password = $('unlockInput').value.trim();
+if (!password) {
+showToast('请输入密码', '⚠️');
+return;
+}
 
-    if (password === SPECIAL_PASSWORD) {
-        db.unlocked[pendingUnlockLevel] = true;
-        saveDB(db);
-        $('unlockModal').classList.remove('active');
-        showToast(`${pendingUnlockLevel === 'advanced' ? '进阶版' : '专家版'}已永久解锁！`, '🔓');
-        updateStats();
-        return;
-    }
+if (password === SPECIAL_PASSWORD) {
+db.unlocked[pendingUnlockLevel] = true;
+saveDB(db);
+$('unlockModal').classList.remove('active');
+showToast(`${pendingUnlockLevel === 'advanced' ? '进阶版' : '专家版'}已永久解锁！`, '🔓');
+updateStats();
+return;
+}
 
-    const poolKey = pendingUnlockLevel === 'advanced' ? 'advanced' : 'expert';
-    const found = db.passwords[poolKey].find(p => p.code === password);
+const poolKey = pendingUnlockLevel === 'advanced' ? 'advanced' : 'expert';
+const found = db.passwords[poolKey].find(p => p.code === password);
 
-    if (!found) {
-        showToast('密码错误，请检查输入', '❌');
-        return;
-    }
+if (!found) {
+showToast('密码错误，请检查输入', '❌');
+return;
+}
 
-    if (found.used >= found.max) {
-        showToast('该密码使用次数已达上限', '⚠️');
-        return;
-    }
+if (found.used >= found.max) {
+showToast('该密码使用次数已达上限', '⚠️');
+return;
+}
 
-    found.used++;
-    db.unlocked[pendingUnlockLevel] = true;
-    saveDB(db);
+found.used++;
+db.unlocked[pendingUnlockLevel] = true;
+saveDB(db);
 
-    $('unlockModal').classList.remove('active');
-    showToast('解锁成功！', '🔓');
-    updateStats();
+$('unlockModal').classList.remove('active');
+showToast('解锁成功！', '🔓');
+updateStats();
 }
 
 // ===== 页面切换 =====
 function showPage(pageName) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
 
-    const page = $(`page-${pageName}`);
-    const btn = document.querySelector(`.nav-btn[data-page="${pageName}"]`);
+const page = $(`page-${pageName}`);
+const btn = document.querySelector(`.nav-btn[data-page="${pageName}"]`);
 
-    if (page) page.classList.add('active');
-    if (btn) btn.classList.add('active');
+if (page) page.classList.add('active');
+if (btn) btn.classList.add('active');
 
-    if (pageName === 'history') renderHistory();
-    if (pageName === 'favorites') renderFavorites();
-    if (pageName === 'admin') renderAdmin();
-    if (pageName === 'templates') updateTemplateLocks();
+if (pageName === 'history') renderHistory();
+if (pageName === 'favorites') renderFavorites();
+if (pageName === 'admin') renderAdmin();
+if (pageName === 'templates') updateTemplateLocks();
 }
 
 // ===== 渲染历史 =====
 function renderHistory() {
-    const container = $('historyList');
-    if (db.history.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state" style="min-height: 300px;">
-                <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">📜</div>
-                <div class="empty-title" style="font-size: 16px;">暂无历史记录</div>
-            </div>`;
-        return;
-    }
+const container = $('historyList');
+if (db.history.length === 0) {
+container.innerHTML = `
+           <div class="empty-state" style="min-height: 300px;">
+               <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">📜</div>
+               <div class="empty-title" style="font-size: 16px;">暂无历史记录</div>
+           </div>`;
+return;
+}
 
-    const levelIcons = { basic: '🌱', advanced: '🚀', expert: '👑' };
-    container.innerHTML = db.history.map(h => `
-        <div class="history-item" onclick="loadHistory(${h.id})">
-            <div class="history-icon" style="background: rgba(139, 92, 246, 0.15);">${levelIcons[h.level]}</div>
-            <div class="history-info">
-                <div class="history-title">${h.field} - ${h.task.substring(0, 30)}...</div>
-                <div class="history-meta">${h.level === 'basic' ? '基础版' : h.level === 'advanced' ? '进阶版' : '专家版'} · ${h.time}</div>
-            </div>
-            <div class="history-actions" onclick="event.stopPropagation()">
-                <button class="icon-btn" onclick="copyResult(${h.id})" title="复制">📋</button>
-                <button class="icon-btn" onclick="toggleFavorite(${h.id})" title="${h.favorited ? '取消收藏' : '收藏'}">${h.favorited ? '❤️' : '🤍'}</button>
-            </div>
-        </div>
-    `).join('');
+const levelIcons = { basic: '🌱', advanced: '🚀', expert: '👑' };
+container.innerHTML = db.history.map(h => `
+       <div class="history-item" onclick="loadHistory(${h.id})">
+           <div class="history-icon" style="background: rgba(139, 92, 246, 0.15);">${levelIcons[h.level]}</div>
+           <div class="history-info">
+               <div class="history-title">${h.field} - ${h.task.substring(0, 30)}...</div>
+               <div class="history-meta">${h.level === 'basic' ? '基础版' : h.level === 'advanced' ? '进阶版' : '专家版'} · ${h.time}</div>
+           </div>
+           <div class="history-actions" onclick="event.stopPropagation()">
+               <button class="icon-btn" onclick="copyResult(${h.id})" title="复制">📋</button>
+               <button class="icon-btn" onclick="toggleFavorite(${h.id})" title="${h.favorited ? '取消收藏' : '收藏'}">${h.favorited ? '❤️' : '🤍'}</button>
+           </div>
+       </div>
+   `).join('');
 }
 
 function loadHistory(id) {
-    const result = db.history.find(h => h.id === id);
-    if (!result) return;
+const result = db.history.find(h => h.id === id);
+if (!result) return;
 
-    $('fieldSelect').value = result.field;
-    $('taskInput').value = result.task;
-    currentLevel = result.level;
+$('fieldSelect').value = result.field;
+$('taskInput').value = result.task;
+currentLevel = result.level;
 
-    document.querySelectorAll('.complexity-card').forEach(c => {
-        c.classList.toggle('selected', c.dataset.level === currentLevel);
-    });
+document.querySelectorAll('.complexity-card').forEach(c => {
+c.classList.toggle('selected', c.dataset.level === currentLevel);
+});
 
-    showPage('home');
-    $('emptyState').classList.add('hidden');
-    $('resultsContainer').innerHTML = '';
-    renderResult(result);
+showPage('home');
+$('emptyState').classList.add('hidden');
+$('resultsContainer').innerHTML = '';
+renderResult(result);
 }
 
 // ===== 渲染收藏 =====
 function renderFavorites() {
-    const container = $('favoritesList');
-    if (db.favorites.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state" style="min-height: 300px;">
-                <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">⭐</div>
-                <div class="empty-title" style="font-size: 16px;">暂无收藏</div>
-            </div>`;
-        return;
-    }
+const container = $('favoritesList');
+if (db.favorites.length === 0) {
+container.innerHTML = `
+           <div class="empty-state" style="min-height: 300px;">
+               <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">⭐</div>
+               <div class="empty-title" style="font-size: 16px;">暂无收藏</div>
+           </div>`;
+return;
+}
 
-    const levelIcons = { basic: '🌱', advanced: '🚀', expert: '👑' };
-    container.innerHTML = db.favorites.map(f => `
-        <div class="history-item" onclick="loadHistory(${f.id})">
-            <div class="history-icon" style="background: rgba(236, 72, 153, 0.15);">${levelIcons[f.level]}</div>
-            <div class="history-info">
-                <div class="history-title">${f.field} - ${f.task.substring(0, 30)}...</div>
-                <div class="history-meta">${f.level === 'basic' ? '基础版' : f.level === 'advanced' ? '进阶版' : '专家版'} · ${f.time}</div>
-            </div>
-            <div class="history-actions" onclick="event.stopPropagation()">
-                <button class="icon-btn" onclick="copyResult(${f.id})" title="复制">📋</button>
-                <button class="icon-btn" onclick="toggleFavorite(${f.id})" title="取消收藏">❤️</button>
-            </div>
-        </div>
-    `).join('');
+const levelIcons = { basic: '🌱', advanced: '🚀', expert: '👑' };
+container.innerHTML = db.favorites.map(f => `
+       <div class="history-item" onclick="loadHistory(${f.id})">
+           <div class="history-icon" style="background: rgba(236, 72, 153, 0.15);">${levelIcons[f.level]}</div>
+           <div class="history-info">
+               <div class="history-title">${f.field} - ${f.task.substring(0, 30)}...</div>
+               <div class="history-meta">${f.level === 'basic' ? '基础版' : f.level === 'advanced' ? '进阶版' : '专家版'} · ${f.time}</div>
+           </div>
+           <div class="history-actions" onclick="event.stopPropagation()">
+               <button class="icon-btn" onclick="copyResult(${f.id})" title="复制">📋</button>
+               <button class="icon-btn" onclick="toggleFavorite(${f.id})" title="取消收藏">❤️</button>
+           </div>
+       </div>
+   `).join('');
 }
 
 // ===== 管理面板 =====
 let adminLoggedIn = false;
 
 function renderAdmin() {
-    if (!adminLoggedIn) {
-        $('adminPanel').innerHTML = `
-            <div class="empty-state" style="min-height: 400px;">
-                <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">🔒</div>
-                <div class="empty-title" style="font-size: 16px;">请输入管理密码</div>
-                <div class="empty-desc" style="margin-top: 12px;">
-                    <input type="password" id="adminPassword" placeholder="管理密码" 
-                        style="padding: 10px 16px; background: var(--bg-primary); border: 1px solid var(--border-glass); 
-                        border-radius: 8px; color: var(--text-primary); width: 200px; text-align: center;">
-                    <br><br>
-                    <button class="generate-btn" id="adminLoginBtn" style="width: 200px;">进入管理</button>
-                </div>
-            </div>`;
+if (!adminLoggedIn) {
+$('adminPanel').innerHTML = `
+           <div class="empty-state" style="min-height: 400px;">
+               <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">🔒</div>
+               <div class="empty-title" style="font-size: 16px;">请输入管理密码</div>
+               <div class="empty-desc" style="margin-top: 12px;">
+                   <input type="password" id="adminPassword" placeholder="管理密码" 
+                       style="padding: 10px 16px; background: var(--bg-primary); border: 1px solid var(--border-glass); 
+                       border-radius: 8px; color: var(--text-primary); width: 200px; text-align: center;">
+                   <br><br>
+                   <button class="generate-btn" id="adminLoginBtn" style="width: 200px;">进入管理</button>
+               </div>
+           </div>`;
 
-        $('adminLoginBtn').onclick = () => {
-            if ($('adminPassword').value === ADMIN_PASSWORD) {
-                adminLoggedIn = true;
-                renderAdmin();
-                showToast('管理面板已解锁', '🔓');
-            } else {
-                showToast('密码错误', '❌');
-            }
-        };
-        return;
-    }
+$('adminLoginBtn').onclick = () => {
+if ($('adminPassword').value === ADMIN_PASSWORD) {
+adminLoggedIn = true;
+renderAdmin();
+showToast('管理面板已解锁', '🔓');
+} else {
+showToast('密码错误', '❌');
+}
+};
+return;
+}
 
-    const advStats = db.passwords.advanced;
-    const expStats = db.passwords.expert;
-    const advTotal = advStats.reduce((s, p) => s + p.used, 0);
-    const expTotal = expStats.reduce((s, p) => s + p.used, 0);
-    const advSold = advStats.filter(p => p.sold).length;
-    const expSold = expStats.filter(p => p.sold).length;
+const advStats = db.passwords.advanced;
+const expStats = db.passwords.expert;
+const advTotal = advStats.reduce((s, p) => s + p.used, 0);
+const expTotal = expStats.reduce((s, p) => s + p.used, 0);
+const advSold = advStats.filter(p => p.sold).length;
+const expSold = expStats.filter(p => p.sold).length;
 
-    $('adminPanel').innerHTML = `
-        <div class="admin-section">
-            <div class="admin-title">📊 数据统计</div>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-card-value">${db.totalGenerated}</div>
-                    <div class="stat-card-label">总生成次数</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-card-value">${db.todayBasicCount}</div>
-                    <div class="stat-card-label">今日基础版使用</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-card-value">${advTotal}</div>
-                    <div class="stat-card-label">进阶版密码使用</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-card-value">${expTotal}</div>
-                    <div class="stat-card-label">专家版密码使用</div>
-                </div>
-            </div>
-        </div>
+$('adminPanel').innerHTML = `
+       <div class="admin-section">
+           <div class="admin-title">📊 数据统计</div>
+           <div class="stats-grid">
+               <div class="stat-card">
+                   <div class="stat-card-value">${db.totalGenerated}</div>
+                   <div class="stat-card-label">总生成次数</div>
+               </div>
+               <div class="stat-card">
+                   <div class="stat-card-value">${db.todayBasicCount}</div>
+                   <div class="stat-card-label">今日基础版使用</div>
+               </div>
+               <div class="stat-card">
+                   <div class="stat-card-value">${advTotal}</div>
+                   <div class="stat-card-label">进阶版密码使用</div>
+               </div>
+               <div class="stat-card">
+                   <div class="stat-card-value">${expTotal}</div>
+                   <div class="stat-card-label">专家版密码使用</div>
+               </div>
+           </div>
+       </div>
 
-        <div class="admin-section">
-            <div class="admin-title">🔐 进阶版密码池 (${advSold}/50 已售)</div>
-            <div style="overflow-x: auto;">
-                <table class="password-table">
-                    <thead>
-                        <tr>
-                            <th>密码</th>
-                            <th>使用次数</th>
-                            <th>进度</th>
-                            <th>状态</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${advStats.map(p => renderPasswordRow(p, 'advanced')).join('')}
-                    </tbody>
-                </table>
-            </div>
-            <div class="add-password-row">
-                <input type="text" id="newAdvPassword" placeholder="输入新密码">
-                <button class="add-btn" onclick="addPassword('advanced')">添加密码</button>
-            </div>
-        </div>
+       <div class="admin-section">
+           <div class="admin-title">🔐 进阶版密码池 (${advSold}/50 已售)</div>
+           <div style="overflow-x: auto;">
+               <table class="password-table">
+                   <thead>
+                       <tr>
+                           <th>密码</th>
+                           <th>使用次数</th>
+                           <th>进度</th>
+                           <th>状态</th>
+                           <th>操作</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                       ${advStats.map(p => renderPasswordRow(p, 'advanced')).join('')}
+                   </tbody>
+               </table>
+           </div>
+           <div class="add-password-row">
+               <input type="text" id="newAdvPassword" placeholder="输入新密码">
+               <button class="add-btn" onclick="addPassword('advanced')">添加密码</button>
+           </div>
+       </div>
 
-        <div class="admin-section">
-            <div class="admin-title">🔐 专家版密码池 (${expSold}/50 已售)</div>
-            <div style="overflow-x: auto;">
-                <table class="password-table">
-                    <thead>
-                        <tr>
-                            <th>密码</th>
-                            <th>使用次数</th>
-                            <th>进度</th>
-                            <th>状态</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${expStats.map(p => renderPasswordRow(p, 'expert')).join('')}
-                    </tbody>
-                </table>
-            </div>
-            <div class="add-password-row">
-                <input type="text" id="newExpPassword" placeholder="输入新密码">
-                <button class="add-btn" onclick="addPassword('expert')">添加密码</button>
-            </div>
-        </div>
+       <div class="admin-section">
+           <div class="admin-title">🔐 专家版密码池 (${expSold}/50 已售)</div>
+           <div style="overflow-x: auto;">
+               <table class="password-table">
+                   <thead>
+                       <tr>
+                           <th>密码</th>
+                           <th>使用次数</th>
+                           <th>进度</th>
+                           <th>状态</th>
+                           <th>操作</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                       ${expStats.map(p => renderPasswordRow(p, 'expert')).join('')}
+                   </tbody>
+               </table>
+           </div>
+           <div class="add-password-row">
+               <input type="text" id="newExpPassword" placeholder="输入新密码">
+               <button class="add-btn" onclick="addPassword('expert')">添加密码</button>
+           </div>
+       </div>
 
-        <div class="admin-section">
-            <div class="admin-title">⚠️ 危险操作</div>
-            <button class="action-btn" onclick="resetAllData()" style="color: var(--accent-red); border-color: var(--accent-red);">
-                🗑️ 重置所有数据
-            </button>
-        </div>
-    `;
+       <div class="admin-section">
+           <div class="admin-title">⚠️ 危险操作</div>
+           <button class="action-btn" onclick="resetAllData()" style="color: var(--accent-red); border-color: var(--accent-red);">
+               🗑️ 重置所有数据
+           </button>
+       </div>
+   `;
 }
 
 function renderPasswordRow(p, type) {
-    const percent = Math.round((p.used / p.max) * 100);
-    let progressClass = 'low';
-    if (percent > 50) progressClass = 'mid';
-    if (percent > 80) progressClass = 'high';
+const percent = Math.round((p.used / p.max) * 100);
+let progressClass = 'low';
+if (percent > 50) progressClass = 'mid';
+if (percent > 80) progressClass = 'high';
 
-    let statusClass = 'status-available';
-    let statusText = '可用';
-    if (p.sold) { statusClass = 'status-sold'; statusText = '已售'; }
-    if (p.used >= p.max) { statusClass = 'status-depleted'; statusText = '耗尽'; }
+let statusClass = 'status-available';
+let statusText = '可用';
+if (p.sold) { statusClass = 'status-sold'; statusText = '已售'; }
+if (p.used >= p.max) { statusClass = 'status-depleted'; statusText = '耗尽'; }
 
-    return `
-        <tr>
-            <td><span class="password-code">${p.code}</span></td>
-            <td>${p.used}/${p.max}</td>
-            <td>
-                <div class="progress-bar">
-                    <div class="progress-fill ${progressClass}" style="width: ${percent}%"></div>
-                </div>
-            </td>
-            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-            <td>
-                <button class="icon-btn" onclick="copyPassword('${p.code}')" title="复制">📋</button>
-                <button class="icon-btn" onclick="toggleSold('${type}', '${p.code}')" title="${p.sold ? '标记未售' : '标记已售'}">${p.sold ? '🔄' : '✓'}</button>
-            </td>
-        </tr>
-    `;
+return `
+       <tr>
+           <td><span class="password-code">${p.code}</span></td>
+           <td>${p.used}/${p.max}</td>
+           <td>
+               <div class="progress-bar">
+                   <div class="progress-fill ${progressClass}" style="width: ${percent}%"></div>
+               </div>
+           </td>
+           <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+           <td>
+               <button class="icon-btn" onclick="copyPassword('${p.code}')" title="复制">📋</button>
+               <button class="icon-btn" onclick="toggleSold('${type}', '${p.code}')" title="${p.sold ? '标记未售' : '标记已售'}">${p.sold ? '🔄' : '✓'}</button>
+           </td>
+       </tr>
+   `;
 }
 
 function copyPassword(code) {
-    copyToClipboard(code);
+copyToClipboard(code);
 }
 
 function toggleSold(type, code) {
-    const p = db.passwords[type].find(x => x.code === code);
-    if (p) { p.sold = !p.sold; saveDB(db); renderAdmin(); }
+const p = db.passwords[type].find(x => x.code === code);
+if (p) { p.sold = !p.sold; saveDB(db); renderAdmin(); }
 }
 
 function addPassword(type) {
-    const inputId = type === 'advanced' ? 'newAdvPassword' : 'newExpPassword';
-    const code = $(inputId).value.trim();
-    if (!code) { showToast('请输入密码', '⚠️'); return; }
+const inputId = type === 'advanced' ? 'newAdvPassword' : 'newExpPassword';
+const code = $(inputId).value.trim();
+if (!code) { showToast('请输入密码', '⚠️'); return; }
 
-    db.passwords[type].push({ code, used: 0, max: MAX_PASSWORD_USES, sold: false });
-    saveDB(db);
-    $(inputId).value = '';
-    renderAdmin();
-    showToast('密码添加成功', '✅');
+db.passwords[type].push({ code, used: 0, max: MAX_PASSWORD_USES, sold: false });
+saveDB(db);
+$(inputId).value = '';
+renderAdmin();
+showToast('密码添加成功', '✅');
 }
 
 function resetAllData() {
-    if (!confirm('确定要重置所有数据吗？此操作不可恢复！')) return;
-    localStorage.removeItem('promptGenDB');
-    db = getDB();
-    adminLoggedIn = false;
-    location.reload();
+if (!confirm('确定要重置所有数据吗？此操作不可恢复！')) return;
+localStorage.removeItem('promptGenDB');
+db = getDB();
+adminLoggedIn = false;
+location.reload();
 }
 
 // ===== 事件绑定 =====
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.addEventListener('click', () => showPage(btn.dataset.page));
-    });
-
-    $('mobileMenuBtn').addEventListener('click', () => {
-        $('configPanel').classList.toggle('open');
-        $('overlay').classList.toggle('active');
-    });
-
-    $('overlay').addEventListener('click', () => {
-        $('configPanel').classList.remove('open');
-        $('overlay').classList.remove('active');
-    });
-
-    document.querySelectorAll('.complexity-card').forEach(card => {
-        card.addEventListener('click', () => {
-            // 电商AI绘画强制专家版
-            if ($('fieldSelect').value === '电商AI绘画' && card.dataset.level !== 'expert') {
-                showToast('电商AI绘画仅支持专家版', '⚠️');
-                return;
-            }
-            document.querySelectorAll('.complexity-card').forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            currentLevel = card.dataset.level;
-        });
-    });
-
-    $('generateBtn').addEventListener('click', doGenerate);
-
-    document.querySelectorAll('.tag').forEach(tag => {
-        tag.addEventListener('click', () => {
-            $('taskInput').value = tag.dataset.task;
-        });
-    });
-
-    // 电商AI绘画标签点击
-    document.querySelectorAll('#ecommerceTagContainer .tag').forEach(tag => {
-        tag.addEventListener('click', () => {
-            $('taskInput').value = tag.dataset.task;
-        });
-    });
-
-    $('clearBtn').addEventListener('click', () => {
-        $('taskInput').value = '';
-        $('taskInput').focus();
-    });
-
-    $('pasteBtn').addEventListener('click', async () => {
-        try {
-            const text = await navigator.clipboard.readText();
-            $('taskInput').value = text;
-        } catch (e) { showToast('无法读取剪贴板', '⚠️'); }
-    });
-
-    // 模板点击 - 全部锁定为专家版
-    document.querySelectorAll('.template-card').forEach(card => {
-        card.addEventListener('click', () => {
-            // 修复：所有模板都锁定为专家版
-            const isLocked = !db.unlocked.expert && !db.firstUse.expert;
-
-            if (isLocked) {
-                pendingUnlockLevel = 'expert';
-                showUnlockModal('专家版');
-                return;
-            }
-
-            $('fieldSelect').value = card.dataset.field;
-            $('taskInput').value = card.dataset.task;
-            currentLevel = card.dataset.level;
-            document.querySelectorAll('.complexity-card').forEach(c => {
-                c.classList.toggle('selected', c.dataset.level === currentLevel);
-            });
-            showPage('home');
-            showToast('模板已加载', '✅');
-        });
-    });
-
-    $('unlockConfirm').addEventListener('click', doUnlock);
-    $('unlockCancel').addEventListener('click', () => {
-        $('unlockModal').classList.remove('active');
-    });
-
-    $('unlockInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') doUnlock();
-    });
-
-    $('copyClose').addEventListener('click', () => {
-        $('copyModal').classList.remove('active');
-    });
-
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) overlay.classList.remove('active');
-        });
-    });
-
-    updateStats();
-    updateTemplateLocks();
-
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('admin') === ADMIN_PASSWORD) {
-        showPage('admin');
-    }
+document.querySelectorAll('.nav-btn').forEach(btn => {
+btn.addEventListener('click', () => showPage(btn.dataset.page));
 });
 
-
-// 初始化
-document.addEventListener('DOMContentLoaded', function() {
-    initDB();
-    updateStats();
-    showPage('home');
-    renderTemplates();
-    renderHistory();
-    renderFavorites();
-
-    // 绑定事件
-    $('generateBtn').addEventListener('click', doGenerate);
-    $('mobileMenuBtn').addEventListener('click', toggleMobileMenu);
-    $('overlay').addEventListener('click', closeMobileMenu);
-
-    // 复杂度选择
-    document.querySelectorAll('.complexity-card').forEach(card => {
-        card.addEventListener('click', () => {
-            document.querySelectorAll('.complexity-card').forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            当前等级 = card.dataset.level;
-        });
-    });
-
-    // 标签点击
-    document.querySelectorAll('.tag').forEach(tag => {
-        tag.addEventListener('click', () => {
-            $('taskInput').value = tag.dataset.task;
-        });
-    });
-
-    // 领域切换
-    $('fieldSelect').addEventListener('change', () => {
-        const field = $('fieldSelect').value;
-        const 标签容器 = $('tagContainer');
-        const ecommerceTagContainer = $('ecommerceTagContainer');
-        const platformSection = $('platformSection');
-
-        如果 (field === '电商AI绘画') {
-            如果 (标签容器) 标签容器.类列表.add('隐藏');
-            如果 (ecommerceTagContainer) ecommerceTagContainer.类列表.移除('隐藏');
-            如果 (platformSection) platformSection.类列表.移除('隐藏');
-            document.querySelectorAll('.complexity-card').forEach(c => c.类列表.移除('selected'));
-            const expertCard = document.querySelector('.complexity-card[data-level="expert"]');
-            如果 (expertCard) expertCard.类列表.add('selected');
-            当前等级 = '专家';
-        } 否则 {
-            如果 (标签容器) 标签容器.类列表.移除('隐藏');
-            如果 (ecommerceTagContainer) ecommerceTagContainer.类列表.add('隐藏');
-            如果 (platformSection) platformSection.类列表.add('隐藏');
-        }
-    });
+$('mobileMenuBtn').addEventListener('click', () => {
+$('configPanel').classList.toggle('open');
+$('overlay').classList.toggle('active');
 });
 
-函数 toggleMobileMenu() {
-    $('configPanel').类列表.切换('open');
-    $(“叠加”.类列表.toggle('show');
+$('overlay').addEventListener('click', () => {
+$('configPanel').classList.remove('open');
+$('overlay').classList.remove('active');
+});
+
+document.querySelectorAll('.complexity-card').forEach(card => {
+card.addEventListener('click', () => {
+document.querySelectorAll('.complexity-card').forEach(c => c.classList.remove('selected'));
+card.classList.add('selected');
+currentLevel = card.dataset.level;
+});
+});
+
+$('generateBtn').addEventListener('click', doGenerate);
+
+document.querySelectorAll('.tag').forEach(tag => {
+tag.addEventListener('click', () => {
+$('taskInput').value = tag.dataset.task;
+});
+});
+
+$('clearBtn').addEventListener('click', () => {
+$('taskInput').value = '';
+$('taskInput').focus();
+});
+
+$('pasteBtn').addEventListener('click', async () => {
+try {
+const text = await navigator.clipboard.readText();
+$('taskInput').value = text;
+} catch (e) { showToast('无法读取剪贴板', '⚠️'); }
+});
+
+// 模板点击 - 全部锁定为专家版
+document.querySelectorAll('.template-card').forEach(card => {
+card.addEventListener('click', () => {
+// 修复：所有模板都锁定为专家版
+const isLocked = !db.unlocked.expert && !db.firstUse.expert;
+
+if (isLocked) {
+pendingUnlockLevel = 'expert';
+showUnlockModal('专家版');
+return;
 }
 
-函数 closeMobileMenu() {
-    $('configPanel').classList.remove('open');
-    $(“叠加”).类列表.移除('show');
+$('fieldSelect').value = card.dataset.field;
+$('taskInput').value = card.dataset.task;
+currentLevel = card.dataset.level;
+document.querySelectorAll('.complexity-card').forEach(c => {
+c.classList.toggle('selected', c.dataset.level === currentLevel);
+});
+showPage('home');
+showToast('模板已加载', '✅');
+});
+});
+
+$('unlockConfirm').addEventListener('click', doUnlock);
+$('unlockCancel').addEventListener('click', () => {
+$('unlockModal').classList.remove('active');
+});
+
+$('unlockInput').addEventListener('keypress', (e) => {
+if (e.key === 'Enter') doUnlock();
+});
+
+$('copyClose').addEventListener('click', () => {
+$('copyModal').classList.remove('active');
+});
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+overlay.addEventListener('click', (e) => {
+if (e.target === overlay) overlay.classList.remove('active');
+});
+});
+
+updateStats();
+updateTemplateLocks();
+
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('admin') === ADMIN_PASSWORD) {
+showPage('admin');
 }
+});
 </script>
 
 
-    <!-- 底部版权信息 -->
-    <footer id="page-footer">
-        <div 类="footer-content">
-            <span 类="footer-copyright">© 2025 微风拂面，细雨蒙蒙</span>
-            <span 类="footer-divider">|</span>
-            <span 类="footer-license">MIT许可证</span>
-            <span 类="footer-divider">|</span>
-            <span 类="footer-qq">QQ：704451222</span>
-        </div>
-    </footer></body>
+<!-- 底部版权信息 -->
+<footer id="page-footer">
+<div class="footer-content">
+<span class="footer-copyright">© 2025 微风拂面，细雨蒙蒙</span>
+<span class="footer-divider">|</span>
+            <a href="https://github.com/cuic7797-debug/prompt-generator/blob/main/LICENSE" target="_blank" class="footer-license">MIT License</a>
+            <span class="footer-license">MIT License</span>
+<span class="footer-divider">|</span>
+<span class="footer-qq">QQ: 704451222</span>
+</div>
+</footer></body>
 </html>
