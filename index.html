@@ -757,13 +757,82 @@ opacity: 1;
 
 /* ===== 移动端 ===== */
 @media (max-width: 768px) {
-.config-panel {
-position: fixed; left: -100%; top: 60px;
-width: 85%; max-width: 360px;
-transition: left 0.3s; z-index: 900;
+    .config-panel {
+        position: fixed;
+        left: -100%;
+        top: 60px;
+        width: 85%;
+        max-width: 360px;
+        transition: left 0.3s ease;
+        z-index: 900;
+        padding: 16px;
+        display: block;
+        visibility: visible;
+        opacity: 1;
+    }
+    .config-panel.open {
+        left: 0 !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    .mobile-menu-btn {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    .nav-links { display: none !important; }
+    .result-panel { padding: 16px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .template-grid { grid-template-columns: 1fr; }
+    .add-password-row { flex-direction: column; }
+    .tag, .complexity-card, .template-card, .action-btn, .nav-btn, .platform-btn {
+        min-height: 44px;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .icon-btn {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+    }
+    .modal {
+        max-width: 92vw;
+        padding: 20px;
+        margin: 10px;
+    }
+    #guidePlatformGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .result-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    .result-meta {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    textarea, .select-field, .modal-input {
+        font-size: 16px;
+    }
+    .generate-btn {
+        padding: 16px;
+        font-size: 16px;
+    }
+    #page-footer {
+        padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    }
+    .history-item {
+        padding: 12px;
+        gap: 10px;
+    }
+    .history-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
 }
-
-.config-panel.open { left: 0; }
 
 .mobile-menu-btn { display: block; }
 
@@ -1088,6 +1157,47 @@ body.keyboard-open #page-footer {
         transform: none;
     }
 }
+
+
+/* ===== 夸克/UC/QQ浏览器兼容性修复 ===== */
+.config-panel {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.config-panel.open {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+.mobile-menu-btn {
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 确保按钮在所有浏览器可点击 */
+button, .tag, .complexity-card, .template-card, .action-btn, .nav-btn, .platform-btn, .generate-btn {
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+}
+
+/* 修复部分浏览器对fixed定位的支持 */
+@supports (-webkit-touch-callout: none) {
+    .config-panel {
+        -webkit-transform: translate3d(0,0,0);
+    }
+}
+
+/* 低版本浏览器兼容 */
+_:-ms-fullscreen, :root .config-panel { position: absolute; }
 </style>
 
 <base target="_blank">
@@ -1095,6 +1205,7 @@ body.keyboard-open #page-footer {
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="format-detection" content="telephone=no">
+<base target="_blank">
 </head>
 <body>
 
@@ -2710,12 +2821,23 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => showPage(btn.dataset.page));
     });
 
-    $('mobileMenuBtn').addEventListener('click', () => {
-        $('configPanel').classList.toggle('open');
-        $('overlay').classList.toggle('active');
+    $('mobileMenuBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var panel = $('configPanel');
+        var overlay = $('overlay');
+        if (panel.classList.contains('open')) {
+            panel.classList.remove('open');
+            overlay.classList.remove('active');
+        } else {
+            panel.classList.add('open');
+            overlay.classList.add('active');
+        }
+        return false;
     });
 
-    $('overlay').addEventListener('click', () => {
+    $('overlay').addEventListener('click', function(e) {
+        e.preventDefault();
         $('configPanel').classList.remove('open');
         $('overlay').classList.remove('active');
     });
@@ -3149,4 +3271,4 @@ function updatePlatformOptions(field) {
 <span class="footer-qq">QQ: 704451222</span>
 </div>
 </footer></body>
-  </html>
+</html>
