@@ -506,7 +506,6 @@ body {
   font-weight: 500;
   margin-top: 4px;
 }
-/* 效果预览占位 */
 .template-preview {
   margin-top: 8px;
   border-radius: 6px;
@@ -551,7 +550,7 @@ body {
   border: 1px solid var(--border-glass);
 }
 
-/* ---- 模板分类筛选 ---- */
+/* ===== 模板分类筛选 ===== */
 .template-filter {
   display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;
 }
@@ -1095,93 +1094,75 @@ body {
       </div>
     </div>
 
-    <!-- 热门标签（紧凑版） -->
+    <!-- 热门标签（完整描述） -->
     <div class="config-section">
       <div class="section-label">💡 热门标签</div>
       <div class="tag-container" id="tagContainer">
-        <span class="tag" data-task="帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒钩子抓注意力，中间干货，结尾CTA。" data-field="内容创作">
-          <span class="tag-left">
-            <span class="tag-main">🎬 抖音爆款脚本</span>
-            <span class="tag-sub">3秒钩子 → 60秒完播 → 结尾转化</span>
-          </span>
+        <span class="tag" data-task="帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒用悬念/痛点/反常识钩子抓住注意力，中间45秒内容要干货密集、有情绪起伏、有金句，结尾12秒用明确的CTA（关注/点赞/评论/转发）引导互动。语气要像朋友聊天一样自然，不要像念稿。适用场景：知识付费、带货、个人IP打造。" data-field="内容创作">
+          <span class="tag-left"><span class="tag-main">🎬 抖音爆款脚本</span><span class="tag-sub">3秒钩子 → 60秒完播 → 结尾转化</span></span>
           <span class="tag-effect">📈 完播率+50%</span>
         </span>
-        <span class="tag" data-task="写一篇小红书种草笔记，推荐[填写产品]。要求：标题带emoji，正文分点写真实感受，带3-5个话题标签，引导互动。" data-field="内容创作">
-          <span class="tag-left">
-            <span class="tag-main">📕 小红书种草</span>
-            <span class="tag-sub">爆款标题 → 真实感受 → 精准标签</span>
-          </span>
+        <span class="tag" data-task="写一篇小红书种草笔记，推荐[填写产品/服务]。要求：标题带emoji+数字+关键词，正文分点列出真实使用感受（至少3个痛点+解决方案），包含3-5个精准话题标签，结尾引导互动（收藏/评论/私信）。语气要亲切像闺蜜推荐，不要像官方广告。适用场景：美妆、家居、食品、知识付费。" data-field="内容创作">
+          <span class="tag-left"><span class="tag-main">📕 小红书种草</span><span class="tag-sub">爆款标题 → 真实感受 → 精准标签</span></span>
           <span class="tag-effect">📈 单篇涨粉500+</span>
         </span>
-        <span class="tag" data-task="写一篇3000字公众号深度文，主题：[填写主题]。要求：故事/数据引入，分3-4小节，案例支撑，结尾升华。" data-field="内容创作">
-          <span class="tag-left">
-            <span class="tag-main">📰 公众号深度文</span>
-            <span class="tag-sub">故事引入 → 层层递进 → 升华圈粉</span>
-          </span>
+        <span class="tag" data-task="帮我写一篇3000字的公众号深度长文，主题：[填写主题]。要求：开头用故事/数据/反常识观点引入，中间分3-4个小节层层递进，每个小节至少有1个真实案例支撑，结尾升华主题并引导关注/在看。语言要有深度但不晦涩，像跟朋友深度聊天。适用场景：行业分析、品牌故事、个人成长。" data-field="内容创作">
+          <span class="tag-left"><span class="tag-main">📰 公众号深度文</span><span class="tag-sub">故事引入 → 层层递进 → 升华圈粉</span></span>
           <span class="tag-effect">📈 转发率+300%</span>
         </span>
-        <span class="tag" data-task="写一个B站视频分镜脚本，主题：[填写主题]。要求：景别、画面、台词、时长、转场完整。" data-field="内容创作">
-          <span class="tag-left">
-            <span class="tag-main">📺 B站视频分镜</span>
-            <span class="tag-sub">景别 → 台词 → 转场 → 一镜到底</span>
-          </span>
+        <span class="tag" data-task="写一个B站视频的详细分镜脚本，主题：[填写主题]，时长：[填写时长]。要求：包含每个镜头的景别（特写/中景/全景）、画面内容、台词/旁白（标注语气）、时长、转场方式。风格参考：影视飓风/老师好我叫何同学。适用场景：科普、测评、Vlog。" data-field="内容创作">
+          <span class="tag-left"><span class="tag-main">📺 B站视频分镜</span><span class="tag-sub">景别 → 台词 → 转场 → 一镜到底</span></span>
           <span class="tag-effect">📈 完播率+40%</span>
         </span>
-        <span class="tag" data-task="写5条朋友圈产品文案，产品：[填写产品]。要求：故事型/痛点型/场景型/证言型/限时型各1条。" data-field="营销增长">
-          <span class="tag-left">
-            <span class="tag-main">💬 朋友圈文案</span>
-            <span class="tag-sub">5种成交风格 × 1条，不刷屏但卖货</span>
-          </span>
+        <span class="tag" data-task="写5条朋友圈产品文案，产品：[填写产品]。要求：5条风格不同——故事型（讲用户故事）、痛点型（戳中用户焦虑）、场景型（描绘使用场景）、证言型（用户好评截图）、限时型（制造紧迫感）。每条配适合的emoji，字数控制在60字以内，不刷屏但有吸引力。适用场景：微商、代理、个人IP。" data-field="营销增长">
+          <span class="tag-left"><span class="tag-main">💬 朋友圈文案</span><span class="tag-sub">5种成交风格 × 1条</span></span>
           <span class="tag-effect">📈 咨询率+200%</span>
         </span>
-        <span class="tag" data-task="写一份直播带货话术，产品：[填写产品]。要求：暖场+介绍+促单+互动全流程。" data-field="营销增长">
-          <span class="tag-left">
-            <span class="tag-main">🎯 直播带货话术</span>
-            <span class="tag-sub">暖场 → 种草 → 促单 → 答疑闭环</span>
-          </span>
+        <span class="tag" data-task="写一份完整的直播带货话术，产品：[填写产品]。要求：包含以下完整流程——①开场暖场（欢迎+福利预告）②产品介绍（卖点+使用场景）③价格揭晓（制造惊喜感）④催促下单（限时限量+倒计时）⑤互动答疑（常见问题+话术）。每个环节要有具体台词，语气要有感染力。适用场景：抖音/快手/淘宝直播。" data-field="营销增长">
+          <span class="tag-left"><span class="tag-main">🎯 直播带货话术</span><span class="tag-sub">暖场 → 种草 → 促单 → 答疑闭环</span></span>
           <span class="tag-effect">📈 转化率+150%</span>
         </span>
-        <span class="tag" data-task="产品白底主图" data-field="电商AI绘画">
-          <span class="tag-left">
-            <span class="tag-main">📦 电商白底主图</span>
-            <span class="tag-sub">纯白背景 · 黄金构图 · 点击率翻倍</span>
-          </span>
+        <span class="tag" data-task="产品白底主图，纯白无影背景，产品居中构图，商业产品摄影风格，极简主义，左侧45度柔光箱打光，右侧反光板补光，产品占画面70%，留白区域适合添加文案，8K超高清，超写实，细节清晰，色彩准确。适用平台：淘宝/京东/拼多多主图、直通车图。" data-field="电商AI绘画">
+          <span class="tag-left"><span class="tag-main">📦 电商白底主图</span><span class="tag-sub">纯白背景 · 黄金构图 · 点击率翻倍</span></span>
           <span class="tag-effect">📈 CTR+80%</span>
         </span>
-        <span class="tag" data-task="产品场景图" data-field="电商AI绘画">
-          <span class="tag-left">
-            <span class="tag-main">🏠 产品场景图</span>
-            <span class="tag-sub">生活氛围 · 自然光影 · 代入感拉满</span>
-          </span>
+        <span class="tag" data-task="产品场景图，真实生活场景展示，生活方式摄影风格，自然窗光或柔光，避免硬阴影，三分法构图，产品为视觉焦点，环境烘托氛围，生活化道具搭配，适度虚化背景突出产品，8K高清，色彩自然，画面通透。适用场景：商品详情页场景图、社交媒体种草图。" data-field="电商AI绘画">
+          <span class="tag-left"><span class="tag-main">🏠 产品场景图</span><span class="tag-sub">生活氛围 · 自然光影 · 代入感拉满</span></span>
           <span class="tag-effect">📈 转化率+60%</span>
         </span>
-        <span class="tag" data-task="写一份PPT大纲，主题：[填写主题]。要求：封面+3-5个章节+每章3个要点+总结页。" data-field="职场办公">
-          <span class="tag-left">
-            <span class="tag-main">📊 PPT大纲生成</span>
-            <span class="tag-sub">结构 → 金句 → 数据 → 一页封神</span>
-          </span>
+        <span class="tag" data-task="写一份PPT大纲，主题：[填写主题]。要求：封面页（主标题+副标题+汇报人+日期）+ 3-5个核心章节（每章3个要点）+ 数据/案例支撑页 + 总结页（核心结论+下一步行动）。每页要有金句或核心观点，数据要有可视化建议。适用场景：工作汇报、项目提案、商业计划书。" data-field="职场办公">
+          <span class="tag-left"><span class="tag-main">📊 PPT大纲生成</span><span class="tag-sub">结构 → 金句 → 数据 → 一页封神</span></span>
           <span class="tag-effect">📈 汇报通过率+90%</span>
         </span>
-        <span class="tag" data-task="写一封正式商务邮件，收件人：[填写]，主题：[填写]，要点：[填写]。" data-field="职场办公">
-          <span class="tag-left">
-            <span class="tag-main">✉️ 商务邮件模板</span>
-            <span class="tag-sub">正式/半正式/催办，专业得体</span>
-          </span>
+        <span class="tag" data-task="写一封正式商务邮件，收件人：[填写]，主题：[填写]，要点：[填写]。风格可选：正式邮件（敬语+完整格式）、半正式邮件（简洁但礼貌）、催办邮件（紧急+明确截止时间）。包含：称呼+开场白+核心内容+行动要求+结束语+签名档。适用场景：客户沟通、供应商联络、内部汇报。" data-field="职场办公">
+          <span class="tag-left"><span class="tag-main">✉️ 商务邮件模板</span><span class="tag-sub">正式/半正式/催办</span></span>
           <span class="tag-effect">📈 回复率+120%</span>
         </span>
       </div>
     </div>
 
-    <!-- 电商标签（AI绘画专用） -->
+    <!-- 电商标签（AI绘画专用 - 完整描述） -->
     <div class="config-section" id="ecommerceTagSection" style="display:none;">
       <div class="section-label">🛍️ 电商图片类型</div>
       <div class="tag-container" id="ecommerceTagContainer">
-        <span class="tag" data-task="产品白底主图"><span class="tag-left"><span class="tag-main">📦 产品白底主图</span></span></span>
-        <span class="tag" data-task="产品场景图"><span class="tag-left"><span class="tag-main">🏠 产品场景图</span></span></span>
-        <span class="tag" data-task="模特穿搭图"><span class="tag-left"><span class="tag-main">👗 模特穿搭图</span></span></span>
-        <span class="tag" data-task="促销海报图"><span class="tag-left"><span class="tag-main">🎉 促销海报图</span></span></span>
-        <span class="tag" data-task="详情页长图"><span class="tag-left"><span class="tag-main">📄 详情页长图</span></span></span>
-        <span class="tag" data-task="AI换脸模特图"><span class="tag-left"><span class="tag-main">🧑 AI换脸模特图</span></span></span>
+        <span class="tag" data-task="产品白底主图，纯白无影背景，产品居中构图，商业产品摄影风格，极简主义，左侧45度柔光箱打光，右侧反光板补光，产品占画面70%，留白区域适合添加文案，8K超高清，超写实，细节清晰，色彩准确。适用平台：淘宝/京东/拼多多主图、直通车图。">
+          <span class="tag-left"><span class="tag-main">📦 产品白底主图</span></span>
+        </span>
+        <span class="tag" data-task="产品场景图，真实生活场景展示，生活方式摄影风格，自然窗光或柔光，避免硬阴影，三分法构图，产品为视觉焦点，环境烘托氛围，生活化道具搭配，适度虚化背景突出产品，8K高清，色彩自然，画面通透。适用场景：商品详情页场景图、社交媒体种草图。">
+          <span class="tag-left"><span class="tag-main">🏠 产品场景图</span></span>
+        </span>
+        <span class="tag" data-task="模特穿搭图，亚洲年轻女性模特，身高165-170cm，身材匀称，穿着服装，时尚街拍风格，城市街道或咖啡馆场景，自然行走/侧身/坐姿展示服装版型和细节，自然光或模拟自然光，全身或七分构图，背景简洁不抢镜，8K高清，皮肤质感真实，服装纹理清晰。适用场景：服装详情页主图、小红书穿搭分享。">
+          <span class="tag-left"><span class="tag-main">👗 模特穿搭图</span></span>
+        </span>
+        <span class="tag" data-task="促销海报图，产品大促氛围展示，电商促销海报风格，视觉冲击力强，红色/橙色/金色促销色调，放射状或渐变背景，光效粒子点缀，产品居中放大，上方或侧面预留大标题文案区域（30%画面空间），8K高清，色彩饱和度高，对比强烈。适用场景：活动banner、首页海报、朋友圈促销图。">
+          <span class="tag-left"><span class="tag-main">🎉 促销海报图</span></span>
+        </span>
+        <span class="tag" data-task="详情页长图，产品多卖点展示，电商详情页设计风格，信息层次清晰，包含五大模块：①首屏产品大图+核心卖点标题 ②细节特写（材质/纹理/工艺） ③使用场景图（人物互动/效果对比） ④参数说明（规格/功能图解/认证标识） ⑤品牌背书（品牌故事/用户评价/售后保障）。8K超高清，风格统一。适用场景：淘宝/京东/拼多多详情页。">
+          <span class="tag-left"><span class="tag-main">📄 详情页长图</span></span>
+        </span>
+        <span class="tag" data-task="AI换脸模特图，亚洲面孔年轻女性模特，五官精致，气质清新，展示产品（美妆/护肤/配饰），美妆广告大片风格，正面特写/45度侧脸/半身像，影棚级专业打光（蝴蝶光或环形光），自然清新妆容突出产品使用区域，纯色渐变或极简背景，8K超高清，皮肤质感细腻真实。适用场景：美妆详情页、护肤广告、配饰展示。">
+          <span class="tag-left"><span class="tag-main">🧑 AI换脸模特图</span></span>
+        </span>
       </div>
     </div>
 
@@ -1207,7 +1188,7 @@ body {
           <div class="complexity-icon">👑</div>
           <div class="complexity-info">
             <div class="complexity-name">专家版 <span class="complexity-badge badge-invite" id="expertBadge">🔥 内测邀请码</span></div>
-            <div class="complexity-desc">全要素深度提示词，100%完整度</div>
+            <div class="complexity-desc">全要素深度提示词 + 思维链，100%完整度</div>
           </div>
         </div>
       </div>
@@ -1259,7 +1240,6 @@ body {
       <h2 style="font-size:17px;margin-bottom:4px;">📚 模板库</h2>
       <p style="color:var(--text-muted);font-size:11px;margin-bottom:12px;">🔒 专家版解锁后可全部使用</p>
 
-      <!-- 信任背书 -->
       <div class="template-hero">
         <div class="left">
           <span class="badge">🔥 热卖</span>
@@ -1367,7 +1347,7 @@ body {
   </div>
 </div>
 
-<!-- ===== 引导弹窗（复制后显示平台选择） ===== -->
+<!-- ===== 引导弹窗 ===== -->
 <div class="modal-overlay" id="guideModal">
   <div class="modal" style="max-width:500px;">
     <div style="text-align:center;margin-bottom:14px;">
@@ -1450,9 +1430,6 @@ const PLATFORM_DATA = {
 const PLATFORM_URL_MAP = {};
 PLATFORM_DATA.text.forEach(p => PLATFORM_URL_MAP[p.value] = p.url);
 PLATFORM_DATA.image.forEach(p => PLATFORM_URL_MAP[p.value] = p.url);
-const PLATFORM_ICON_MAP = {};
-PLATFORM_DATA.text.forEach(p => PLATFORM_ICON_MAP[p.value] = p.icon);
-PLATFORM_DATA.image.forEach(p => PLATFORM_ICON_MAP[p.value] = p.icon);
 
 // ============================================================
 // 数据库
@@ -1603,72 +1580,118 @@ function showGuideModal() {
 }
 
 // ============================================================
-// 提示词生成
+// 核心：提示词生成 - 三个版本差异化（文本类）
 // ============================================================
 function buildPrompt(field, task, level) {
-  const basePrompts = {
-    basic: '【角色定位】\n你是一位专业的' + field + '领域AI助手，擅长处理各类' + field + '相关任务。\n\n【任务描述】\n' + task + '\n\n【基本要求】\n1. 提供清晰、实用的解决方案\n2. 使用专业但易懂的语言\n3. 确保内容准确、完整',
-    advanced: '【角色定位】\n你是一位资深的' + field + '领域专家，拥有10年以上行业经验，精通' + field + '的核心理论与实践方法。\n\n【核心能力】\n- 深度理解' + field + '领域的专业知识体系\n- 具备解决复杂' + field + '问题的分析能力\n- 熟悉行业最佳实践和标准流程\n- 能够将复杂概念转化为可执行方案\n\n【任务分析】\n' + task + '\n\n【执行框架】\n1. 需求理解：明确任务目标和约束条件\n2. 方案设计：制定系统化的解决策略\n3. 详细执行：分步骤展开具体实施\n4. 质量检查：验证输出是否符合要求\n\n【输出要求】\n- 结构清晰，逻辑严谨\n- 包含具体 actionable 的建议\n- 适当使用示例说明\n- 标注关键注意事项',
-    expert: '【角色定位】\n你是一位' + field + '领域的顶级专家顾问，拥有15年以上跨行业实战经验，曾服务过多家世界500强企业。你不仅是技术专家，更是战略思想家，能够从宏观和微观两个维度审视问题。\n\n【专业能力矩阵】\n- 战略层面：行业趋势洞察、商业模式设计、竞争格局分析\n- 战术层面：流程优化、方法论应用、工具链搭建\n- 执行层面：细节把控、质量标准制定、风险预判\n\n【思维特征】\n- 系统性思维：善于发现事物间的关联和规律\n- 批判性思维：不盲从权威，基于证据做判断\n- 创新思维：在传统方法基础上寻求突破\n- 用户思维：始终站在最终使用者角度思考\n\n【任务深度分析】\n' + task + '\n\n【执行框架】\n第一阶段：诊断与定义\n1. 明确核心问题和边界条件\n2. 识别关键利益相关者\n3. 梳理现有资源和约束\n4. 设定可衡量的成功标准\n\n第二阶段：研究与分析\n1. 收集相关背景信息和数据\n2. 应用适当的分析框架\n3. 识别潜在风险和机会\n4. 形成初步假设\n\n第三阶段：方案设计\n1. 制定多个备选方案\n2. 评估各方案的优劣势\n3. 选择最优路径并细化\n4. 制定实施路线图\n\n第四阶段：交付与迭代\n1. 输出高质量交付物\n2. 收集反馈并优化\n3. 提供后续支持建议\n4. 总结经验教训\n\n【质量控制标准】\n- 准确性：所有数据和事实经过验证\n- 完整性：覆盖任务的所有维度\n- 可操作性：每个建议都有明确的执行路径\n- 创新性：在可行范围内提供新颖视角\n\n【示例参考】\n在回答过程中，适当引用行业经典案例或最佳实践作为参考。\n\n【迭代优化机制】\n- 主动询问是否需要深入某个特定方向\n- 提供多个版本供选择（简要版/详细版）\n- 根据反馈实时调整输出策略\n\n【输出规范】\n- 使用Markdown格式\n- 重要观点使用加粗标注\n- 复杂概念配合简单示例\n- 结尾提供"下一步行动建议"'
-  };
-  return basePrompts[level] || basePrompts.basic;
+  // 基础版：角色+任务+基本要求（30%）
+  const basic = '【角色定位】\n你是一位专业的' + field + '领域AI助手，擅长处理各类' + field + '相关任务。\n\n【任务描述】\n' + task + '\n\n【基本要求】\n1. 提供清晰、实用的解决方案\n2. 使用专业但易懂的语言\n3. 确保内容准确、完整';
+
+  // 进阶版：角色+核心能力+执行框架（60%）
+  const advanced = '【角色定位】\n你是一位资深的' + field + '领域专家，拥有10年以上行业经验，精通' + field + '的核心理论与实践方法。\n\n【核心能力】\n- 深度理解' + field + '领域的专业知识体系\n- 具备解决复杂' + field + '问题的分析能力\n- 熟悉行业最佳实践和标准流程\n- 能够将复杂概念转化为可执行方案\n\n【任务分析】\n' + task + '\n\n【执行框架】\n1. 需求理解：明确任务目标和约束条件\n2. 方案设计：制定系统化的解决策略\n3. 详细执行：分步骤展开具体实施\n4. 质量检查：验证输出是否符合要求\n\n【输出要求】\n- 结构清晰，逻辑严谨\n- 包含具体 actionable 的建议\n- 适当使用示例说明\n- 标注关键注意事项';
+
+  // 专家版：全要素+思维链+多维视角（100%）
+  const expert = '【角色定位】\n你是一位' + field + '领域的顶级专家顾问，拥有15年以上跨行业实战经验，曾服务过多家世界500强企业。你不仅是技术专家，更是战略思想家，能够从宏观和微观两个维度审视问题。\n\n【专业能力矩阵】\n- 战略层面：行业趋势洞察、商业模式设计、竞争格局分析\n- 战术层面：流程优化、方法论应用、工具链搭建\n- 执行层面：细节把控、质量标准制定、风险预判\n\n【思维特征】\n- 系统性思维：善于发现事物间的关联和规律\n- 批判性思维：不盲从权威，基于证据做判断\n- 创新思维：在传统方法基础上寻求突破\n- 用户思维：始终站在最终使用者角度思考\n\n【任务深度分析】\n' + task + '\n\n【执行框架】\n第一阶段：诊断与定义\n1. 明确核心问题和边界条件\n2. 识别关键利益相关者\n3. 梳理现有资源和约束\n4. 设定可衡量的成功标准\n\n第二阶段：研究与分析\n1. 收集相关背景信息和数据\n2. 应用适当的分析框架\n3. 识别潜在风险和机会\n4. 形成初步假设\n\n第三阶段：方案设计\n1. 制定多个备选方案\n2. 评估各方案的优劣势\n3. 选择最优路径并细化\n4. 制定实施路线图\n\n第四阶段：交付与迭代\n1. 输出高质量交付物\n2. 收集反馈并优化\n3. 提供后续支持建议\n4. 总结经验教训\n\n【质量控制标准】\n- 准确性：所有数据和事实经过验证\n- 完整性：覆盖任务的所有维度\n- 可操作性：每个建议都有明确的执行路径\n- 创新性：在可行范围内提供新颖视角\n\n【示例参考】\n在回答过程中，适当引用行业经典案例或最佳实践作为参考。\n\n【迭代优化机制】\n- 主动询问是否需要深入某个特定方向\n- 提供多个版本供选择（简要版/详细版）\n- 根据反馈实时调整输出策略\n\n【输出规范】\n- 使用Markdown格式\n- 重要观点使用加粗标注\n- 复杂概念配合简单示例\n- 结尾提供"下一步行动建议"';
+
+  if (level === 'basic') return basic;
+  if (level === 'advanced') return advanced;
+  return expert;
 }
 
+// ============================================================
+// 核心：电商AI绘画提示词 - 三个版本差异化
+// ============================================================
 function buildEcommercePrompt(task, level, platform) {
   const isEn = ['Midjourney','Stable Diffusion'].includes(platform);
   const lang = isEn ? 'en' : 'zh';
-  const params = {
-    '豆包': { style: '写实风格，细节丰富', param: '' },
-    '即梦': { style: '高质量人像，细腻质感', param: '' },
-    '可灵': { style: '动态感，电影级光影', param: '' },
-    '通义万相': { style: '东方美学，细腻纹理', param: '' },
-    'Midjourney': { style: 'professional product photography, ultra detailed', param: ' --ar 1:1 --q 2 --s 250' },
-    'Stable Diffusion': { style: 'masterpiece, best quality', param: ', (masterpiece:1.2)' }
-  };
-  const p = params[platform] || params['豆包'];
 
-  const types = {
+  // 平台风格参数
+  const platformStyle = {
+    '豆包': { style: '写实风格，细节丰富', param: '' },
+    '即梦': { style: '高质量人像，细腻皮肤质感，时尚摄影', param: '' },
+    '可灵': { style: '动态感，电影级光影，视频帧风格', param: '' },
+    '通义万相': { style: '东方美学，国风元素，细腻纹理', param: '' },
+    'Midjourney': { style: 'professional product photography, ultra detailed', param: ' --ar 1:1 --q 2 --s 250' },
+    'Stable Diffusion': { style: 'masterpiece, best quality, highly detailed', param: ', (masterpiece:1.2), (best quality:1.2)' }
+  };
+  const p = platformStyle[platform] || platformStyle['豆包'];
+
+  // 各类型基础模板（只有主体+风格+光线+质量，基础版用）
+  const baseTemplates = {
     '产品白底主图': {
-      zh: '【主体】' + task + '，纯白无影背景，居中构图\n【风格】商业产品摄影，极简主义，' + p.style + '\n【光线】左侧45度柔光箱，右侧反光板补光\n【构图】正面平视，产品占70%，留白加文案\n【质量】8K超高清，超写实，色彩准确',
-      en: 'Product photography of ' + task + ', pure white seamless background, centered, ' + p.style + ', left 45-degree softbox lighting, reflector fill, front eye-level, 8K ultra HD' + p.param
+      zh: '【主体】' + task + '，纯白无影背景，产品居中构图\n【风格】商业产品摄影，极简主义，' + p.style + '\n【光线】左侧45度柔光箱，右侧反光板补光\n【构图】正面平视角度，产品占画面70%\n【质量】8K超高清，超写实，细节清晰，色彩准确',
+      en: 'Product photography of ' + task + ', pure white seamless background, centered composition, commercial minimalist style, ' + p.style + ', left 45-degree softbox lighting, right reflector fill, front eye-level angle, product occupies 70% of frame, 8K ultra HD, hyper-realistic, sharp details, accurate colors' + p.param
     },
     '产品场景图': {
-      zh: '【主体】' + task + '，真实生活场景\n【风格】生活方式摄影，自然光感，温馨氛围，' + p.style + '\n【构图】三分法，产品为焦点，环境烘托\n【质量】8K高清，色彩自然，画面通透',
-      en: 'Lifestyle photography of ' + task + ', natural lighting, warm atmosphere, ' + p.style + ', rule of thirds, 8K HD' + p.param
+      zh: '【主体】' + task + '，真实生活场景展示\n【风格】生活方式摄影，自然光感，温馨氛围，' + p.style + '\n【光线】自然窗光或柔光，避免硬阴影\n【构图】三分法构图，产品为视觉焦点，环境烘托氛围\n【质量】8K高清，色彩自然，画面通透',
+      en: 'Lifestyle photography of ' + task + ' in authentic real-life setting, natural lighting, warm atmosphere, ' + p.style + ', soft window light, rule of thirds composition, product as focal point, 8K HD, natural colors' + p.param
     },
     '模特穿搭图': {
-      zh: '【主体】亚洲女模，身高168cm，穿着' + task + '\n【风格】时尚街拍，' + p.style + '\n【构图】全身或七分身，自然行走姿势\n【质量】8K高清，面料纹理清晰，色彩准确',
-      en: 'Asian female model wearing ' + task + ', fashion street style, ' + p.style + ', full body shot, 8K HD' + p.param
+      zh: '【主体】亚洲年轻女性模特，身高165-170cm，身材匀称，穿着' + task + '\n【风格】时尚街拍/lookbook风格，' + p.style + '\n【场景】城市街道/咖啡馆/简约室内\n【姿势】自然行走/侧身/坐姿，展示服装版型和细节\n【光线】自然光或模拟自然光，柔和均匀\n【构图】全身或七分身，背景简洁\n【质量】8K高清，皮肤质感真实，服装纹理清晰，色彩还原准确',
+      en: 'Asian female model, 165-170cm, wearing ' + task + ', fashion street style lookbook photography, ' + p.style + ', urban street or cafe setting, natural walking pose, natural soft lighting, full body or 7/8 shot, 8K HD, realistic skin texture, clear fabric details' + p.param
     },
     '促销海报图': {
-      zh: '【主体】' + task + '，大促氛围\n【风格】电商促销海报，视觉冲击，' + p.style + '\n【元素】红/金促销色调，放射背景，光效粒子\n【构图】产品居中放大，预留30%文案区\n【质量】8K高清，高饱和，对比强烈',
-      en: 'Promotional poster for ' + task + ', sale atmosphere, ' + p.style + ', red/gold colors, radial background, 8K HD' + p.param
+      zh: '【主体】' + task + '，大促氛围，醒目展示\n【风格】电商促销海报，视觉冲击力强，' + p.style + '\n【元素】红色/橙色/金色促销色调，放射状或渐变背景\n【构图】产品居中放大，上方或侧面预留大标题文案区域\n【光线】戏剧性打光，产品高光突出，背景暗角聚焦\n【质量】8K高清，色彩饱和度高，对比强烈',
+      en: 'Promotional poster for ' + task + ', e-commerce sale atmosphere, strong visual impact, ' + p.style + ', red orange gold promotional colors, radial or gradient background, product centered and enlarged, dramatic lighting, 8K HD, high saturation, strong contrast' + p.param
     },
     '详情页长图': {
-      zh: '【主体】' + task + '，多卖点展示\n【风格】电商详情页，信息层次清晰，' + p.style + '\n【模块】首屏大图+细节特写+场景图+参数+背书\n【质量】8K超高清，风格统一',
-      en: 'Product detail page for ' + task + ', ' + p.style + ', hero + details + scene + specs, 8K HD' + p.param
+      zh: '【主体】' + task + '，多卖点展示，图文排版\n【风格】电商详情页设计，信息层次清晰，' + p.style + '\n【模块1】首屏：产品大图+核心卖点标题\n【模块2】细节展示：产品特写，材质纹理，工艺细节\n【模块3】场景展示：使用场景，人物互动，效果对比\n【模块4】参数说明：规格尺寸，功能图解，认证标识\n【模块5】品牌背书：品牌故事，用户评价，售后保障\n【质量】8K超高清，每模块独立构图，整体风格统一',
+      en: 'E-commerce product detail page design for ' + task + ', multi-selling point display, clear information hierarchy, ' + p.style + ', hero banner with product and core benefits, detail close-ups showing material texture, lifestyle usage scenarios, specification infographic, brand story section, 8K ultra HD, consistent style across all modules' + p.param
     },
     'AI换脸模特图': {
-      zh: '【主体】亚洲面孔女模，精致五官，展示' + task + '\n【风格】美妆广告大片，' + p.style + '\n【光线】影棚蝴蝶光，突出面部立体感\n【质量】8K超高清，皮肤质感细腻',
-      en: 'Asian female model showcasing ' + task + ', beauty advertising, ' + p.style + ', butterfly lighting, 8K ultra HD' + p.param
+      zh: '【主体】亚洲面孔年轻女性，五官精致，气质清新，展示' + task + '\n【风格】美妆/护肤/配饰广告大片，' + p.style + '\n【角度】正面特写/45度侧脸/半身像，多角度展示产品使用效果\n【光线】影棚级专业打光，蝴蝶光或环形光，突出面部立体感\n【妆容】自然清新妆容，突出产品使用区域\n【背景】纯色渐变或极简场景\n【质量】8K超高清，皮肤质感细腻真实，产品细节清晰可见',
+      en: 'Asian female model, delicate features, fresh temperament, showcasing ' + task + ', beauty/skincare/accessory advertising photography, ' + p.style + ', front close-up and 45-degree profile, professional studio lighting with butterfly or ring light, natural fresh makeup, solid gradient or minimal background, 8K ultra HD, realistic skin texture, clear product details' + p.param
     }
   };
 
-  let prompt = types[task] ? types[task][lang] : types['产品白底主图'][lang];
-  if (level !== 'basic') {
-    prompt += isEn ? ', advanced composition, professional post-processing' : '\n【进阶】优化光影层次，增强材质质感';
+  // 获取基础模板
+  const base = baseTemplates[task] || baseTemplates['产品白底主图'];
+  let prompt = base[lang];
+
+  // ===== 根据复杂度追加不同内容 =====
+  if (level === 'basic') {
+    // 基础版：只有基础内容，无额外追加
+    // 如果是英文，不追加任何内容
+    if (lang === 'en') {
+      // 英文基础版保持原样
+    }
+    // 基础版不做任何追加
   }
+
+  if (level === 'advanced') {
+    // 进阶版：追加构图+色彩+平台适配
+    const advZh = '\n\n【进阶优化】\n- 构图优化：严格遵循三分法或黄金螺旋，确保视觉焦点突出\n- 色彩管理：统一色调，增强产品与背景的色彩对比\n- 平台适配：针对' + platform + '平台特性优化参数配置\n- 细节增强：强化材质纹理和光影层次感';
+    const advEn = ', advanced composition with rule of thirds, color managed workflow, platform-specific optimization for ' + platform + ', enhanced material texture and lighting hierarchy';
+    prompt += (lang === 'zh') ? advZh : advEn;
+  }
+
+  if (level === 'expert') {
+    // 专家版：追加完整专业级参数+多版本输出+商业应用
+    const expZh = '\n\n【专家级深度优化】\n- 光影层次：三层布光（主光+辅光+轮廓光），营造立体感和高级感\n- 色彩科学：使用色彩分级技术，统一整体调性，符合品牌视觉规范\n- 材质刻画：超写实材质渲染，包含微观纹理（如皮肤毛孔、织物经纬）\n- 平台参数：针对' + platform + '平台输出最佳参数配置（分辨率/比例/风格权重）\n- 多版本输出：提供3种不同构图/光影方案供A/B测试使用\n- 商业质检：符合电商平台图片审核规范（白底/清晰度/比例要求）\n- 场景适配：根据产品定位匹配3种不同消费场景版本\n\n【输出规格】\n- 格式：PNG/JPEG 透明背景可选\n- 分辨率：建议 2048×2048px（主图）/ 1200×1600px（详情页）\n- 色彩空间：sRGB / Display P3 双版本\n- 文件大小：控制在 2MB 以内保证加载速度';
+    const expEn = ', expert-level composition with advanced lighting setup (key+fill+rim light), color grading for brand consistency, hyper-realistic material rendering including micro-textures, platform-specific output optimization for ' + platform + ' (resolution/ratio/style weight), 3 different composition variations for A/B testing, e-commerce platform compliance (white background/clarity/ratio requirements), 3 scenario-adapted versions based on product positioning, output: PNG/JPEG with transparent background option, resolution 2048x2048px for main image, color space sRGB/Display P3 dual version, file size under 2MB';
+    prompt += (lang === 'zh') ? expZh : expEn;
+  }
+
+  // 最终：如果是中文，在最前面加上平台标识
+  if (lang === 'zh') {
+    prompt = '【平台】' + platform + '\n' + prompt;
+  } else {
+    prompt = '[Platform: ' + platform + '] ' + prompt;
+  }
+
   return prompt;
 }
 
 // ============================================================
-// 生成逻辑
+// 获取当前领域
 // ============================================================
 function getCurrentField() {
   const active = document.querySelector('.field-card.active');
   return active ? active.dataset.field : '内容创作';
 }
 
+// ============================================================
+// 生成逻辑
+// ============================================================
 function canGenerate(level) {
   if (level === 'basic') {
     if (db.todayBasicCount >= MAX_BASIC_DAILY) {
@@ -1747,6 +1770,9 @@ function doGenerate() {
   }, 300);
 }
 
+// ============================================================
+// 一键优化（专家版专属 - 输出更专业）
+// ============================================================
 function doOptimize() {
   if (isGenerating) return;
   if (!db.unlocked.expert && !db.firstUse.expert) {
@@ -1765,11 +1791,35 @@ function doOptimize() {
   setTimeout(() => {
     const field = getCurrentField();
     const platform = $('platformSelect').value;
-    const optimized = '【一键优化版】\n\n【原始需求】\n' + task + '\n\n【优化分析】\n1. 需求拆解：转化为可执行指令\n2. 角色定位：匹配最佳AI角色\n3. 输出规范：定义格式和风格\n4. 质量控制：添加验证标准\n\n【优化后提示词】\n你是一位' + field + '领域顶级专家，15年经验。\n\n任务：' + task + '\n\n输出框架：\n1. 执行摘要（100字）\n2. 详细方案（分步骤）\n3. 核心建议（3-5条）\n4. 风险提示\n5. 下一步行动\n\n格式：Markdown，重要内容加粗，总字数2000以内。';
+
+    const optimized = '【一键优化版 · 专家级重构】\n\n' +
+      '【原始需求分析】\n' + task + '\n\n' +
+      '【优化维度】\n' +
+      '1. 需求拆解：将模糊需求转化为可执行的AI指令链\n' +
+      '2. 角色定位：为' + field + '领域匹配最佳AI角色与 persona\n' +
+      '3. 输出规范：定义格式、长度、风格、语气标准\n' +
+      '4. 质量管控：添加多维度验证标准和迭代机制\n' +
+      '5. 场景适配：针对' + platform + '平台特性进行专项优化\n\n' +
+      '【优化后提示词】\n' +
+      '你是一位' + field + '领域的顶级专家，拥有15年以上实战经验，曾服务过多家行业头部企业。\n\n' +
+      '任务：' + task + '\n\n' +
+      '请按以下专业框架输出：\n' +
+      '1. 执行摘要（100字以内，说清核心结论）\n' +
+      '2. 深度分析（分3-5个维度展开，每个维度有数据/案例支撑）\n' +
+      '3. 核心建议（3-5条可立即执行的具体行动）\n' +
+      '4. 风险预警（潜在问题+应对策略）\n' +
+      '5. 下一步行动清单（按优先级排序，含时间节点建议）\n\n' +
+      '输出要求：\n' +
+      '- 使用Markdown格式，层级清晰\n' +
+      '- 重要结论使用加粗标注\n' +
+      '- 复杂数据使用表格呈现\n' +
+      '- 总字数控制在2000-3000字\n' +
+      '- 语言风格：专业严谨但不晦涩，像资深顾问在汇报\n' +
+      '- 结尾附上「关键指标检查表」供自测';
 
     const result = {
       id: Date.now(),
-      field: field + '（优化版）',
+      field: field + '（一键优化·专家版）',
       task: task,
       level: 'expert',
       prompt: optimized,
@@ -2012,7 +2062,7 @@ function showPage(name) {
 }
 
 // ============================================================
-// 模板库（行业/场景细分 + 效果预览占位）
+// 模板库
 // ============================================================
 const templateData = [
   // 食品酒水
@@ -2033,7 +2083,7 @@ const templateData = [
   // 家居生活
   { name: '家居类·香薰蜡烛', field: '电商AI绘画', desc: '烛火摇曳+柔和光影+温馨氛围，家居主图', effect: '📈 转化率+50%', task: '产品场景图', level: 'expert', uses: 1456, tags: ['绘画'], preview: '🕯️ 香薰蜡烛预览' },
   { name: '家居类·床上四件套', field: '电商AI绘画', desc: '柔软质感+褶皱细节+自然光，床品主图', effect: '📈 客单价+45%', task: '产品场景图', level: 'expert', uses: 1234, tags: ['绘画'], preview: '🛏️ 床品预览' },
-  // 写作类模板（保留原有）
+  // 写作类
   { name: '抖音爆款脚本', field: '内容创作', desc: '3秒钩子→60秒干货→结尾CTA，完播率飙升', effect: '📈 完播率+50%', task: '帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒钩子，中间干货，结尾CTA。', level: 'expert', uses: 4123, tags: ['写作', 'hot'], preview: '🎬 抖音爆款脚本示例' },
   { name: '小红书种草笔记', field: '内容创作', desc: '爆款标题+真实体验+精准标签，单篇涨粉500+', effect: '📈 单篇涨粉500+', task: '写一篇小红书种草笔记，推荐[填写产品]。要求：标题带emoji，正文分点写真实感受，带3-5个标签，引导互动。', level: 'expert', uses: 3567, tags: ['写作', 'hot'], preview: '📕 小红书种草示例' },
   { name: '公众号深度长文', field: '内容创作', desc: '故事引入→层层递进→案例支撑→升华圈粉', effect: '📈 转发率+300%', task: '写一篇3000字公众号深度文，主题：[填写主题]。要求：故事/数据引入，分3-4小节，案例支撑，结尾升华。', level: 'expert', uses: 2890, tags: ['写作'], preview: '📰 公众号深度文示例' },
@@ -2064,9 +2114,7 @@ function renderTemplates() {
       <div class="template-field">${t.field}</div>
       <div class="template-desc">${t.desc}</div>
       <div class="template-effect">${t.effect}</div>
-      <div class="template-preview">
-        <span class="preview-icon">📷</span> ${t.preview || '效果预览'}
-      </div>
+      <div class="template-preview"><span class="preview-icon">📷</span> ${t.preview || '效果预览'}</div>
       <div class="template-stats">🔥 ${t.uses}人用过</div>
       <div class="template-tags">${t.tags.map(tg => `<span>#${tg}</span>`).join('')}</div>
       <span class="template-level badge-expert">专家</span>
