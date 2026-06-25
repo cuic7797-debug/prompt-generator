@@ -850,8 +850,52 @@ padding: 8px 12px;
 #app {
 padding-bottom: 42px;
 }
+}
+
+/* ===== 平台按钮样式 ===== */
+.platform-btn {
+background: var(--bg-glass);
+border: 1px solid var(--border-glass);
+border-radius: 12px;
+padding: 14px 8px;
+cursor: pointer;
+transition: all 0.3s;
+text-align: center;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 6px;
+}
+.platform-btn:hover {
+background: rgba(139, 92, 246, 0.15);
+border-color: var(--accent-purple);
+transform: translateY(-2px);
+}
+.platform-btn.active-platform {
+background: rgba(139, 92, 246, 0.2);
+border-color: var(--accent-purple);
+box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+}
+.platform-icon {
+font-size: 24px;
+}
+.platform-name {
+font-size: 12px;
+color: var(--text-primary);
+font-weight: 500;
+}
+
+/* 结果卡片平台标签 */
+.result-platform {
+background: rgba(100, 200, 255, 0.15);
+color: rgba(100, 200, 255, 0.9);
+padding: 2px 8px;
+border-radius: 4px;
+font-size: 11px;
+margin-left: 6px;
 }</style>
 
+<base target="_blank">
 <base target="_blank">
 </head>
 <body>
@@ -891,6 +935,7 @@ padding-bottom: 42px;
 <div class="config-label">🎯 选择领域</div>
 <select class="select-field" id="fieldSelect">
 <option value="通用领域">🌐 通用领域</option>
+<option value="电商AI绘画">🎨 电商AI绘画</option>
 <option value="软件开发">💻 软件开发</option>
 <option value="数据分析">📊 数据分析</option>
 <option value="人工智能">🤖 人工智能</option>
@@ -952,6 +997,26 @@ padding-bottom: 42px;
 <span class="tag" data-task="知乎专业回答">知乎专业回答</span>
 <span class="tag" data-task="朋友圈营销文案">朋友圈营销文案</span>
 </div>
+<div class="tag-container hidden" id="ecommerceTagContainer">
+<span class="tag" data-task="产品白底主图">🔥 产品白底主图</span>
+<span class="tag" data-task="场景氛围图">🏞️ 场景氛围图</span>
+<span class="tag" data-task="模特穿搭图">👗 模特穿搭图</span>
+<span class="tag" data-task="节日促销图">🎁 节日促销图</span>
+<span class="tag" data-task="详情页套图">📱 详情页套图</span>
+<span class="tag" data-task="AI模特换脸">✨ AI模特换脸</span>
+</div>
+</div>
+
+<div class="config-section hidden" id="platformSection">
+<div class="config-label">🎨 选择AI绘画平台</div>
+<select class="select-field" id="platformSelect">
+<option value="doubao">🟢 豆包（字节跳动）</option>
+<option value="jimeng">🔵 即梦（字节跳动）</option>
+<option value="keling">🟣 可灵（快手）</option>
+<option value="tongyi">🟡 通义万相（阿里）</option>
+<option value="midjourney">🟠 Midjourney（国际主流）</option>
+<option value="sd">⚫ Stable Diffusion（本地部署）</option>
+</select>
 </div>
 
 <div class="config-section">
@@ -1015,6 +1080,7 @@ padding-bottom: 42px;
 <div class="empty-title">开始生成您的专属提示词</div>
 <div class="empty-desc">
 在左侧选择领域、输入任务描述，选择复杂度后点击生成按钮。<br>
+选择「电商AI绘画」可生成AI绘画提示词，支持豆包/即梦/可灵/通义万相/Midjourney/Stable Diffusion六大平台。<br>
 基础版每日免费5次，进阶版和专家版首次可免费体验。<br>
 💡 热门平台模板已就绪，直接点击推荐标签快速开始！
 </div>
@@ -1026,7 +1092,7 @@ padding-bottom: 42px;
 <div class="page" id="page-templates">
 <h2 style="margin-bottom: 8px; font-size: 20px;">📚 模板库</h2>
 <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">
-🔒 模板库为专家版专属功能，解锁专家版后即可使用全部23个平台模板
+🔒 模板库为专家版专属功能，解锁专家版后即可使用全部29个平台模板（含6个电商AI绘画模板）
 </p>
 <div class="template-grid" id="templateGrid">
 <div class="template-card" data-field="内容创作" data-task="帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒必须有钩子抓住注意力，中间内容干货密集，结尾有明确的CTA（关注/点赞/评论）。语气要像朋友聊天一样自然，不要像念稿。" data-level="expert">
@@ -1167,6 +1233,42 @@ padding-bottom: 42px;
 <div class="template-desc">写一篇品牌故事文案，品牌：[填写品牌]。要求：包含创始人故事/品牌理念/产品初心/用户价值，情感真挚，能引发共鸣，适合放在官网或公众号。...</div>
 <span class="template-level badge-expert">专家</span>
 </div>
+<div class="template-card" data-field="电商AI绘画" data-task="产品白底主图" data-level="expert">
+<div class="template-name">口红白底主图</div>
+<div class="template-field">电商AI绘画</div>
+<div class="template-desc">YSL小金条21号正红色口红，纯白无影背景，商业产品摄影，左侧45度柔光，8K超高清</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="电商AI绘画" data-task="场景氛围图" data-level="expert">
+<div class="template-name">咖啡场景图</div>
+<div class="template-field">电商AI绘画</div>
+<div class="template-desc">精品咖啡豆，木质桌面，晨光透过窗户，拿铁艺术，温暖生活氛围，16:9宽屏</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="电商AI绘画" data-task="模特穿搭图" data-level="expert">
+<div class="template-name">风衣模特图</div>
+<div class="template-field">电商AI绘画</div>
+<div class="template-desc">亚洲女性模特，卡其色中长款风衣，都市街拍，秋季落叶背景，时尚编辑风格</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="电商AI绘画" data-task="节日促销图" data-level="expert">
+<div class="template-name">圣诞促销图</div>
+<div class="template-field">电商AI绘画</div>
+<div class="template-desc">护肤品礼盒，圣诞树装饰，红金配色，礼物丝带，温暖灯光，节日氛围</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="电商AI绘画" data-task="详情页套图" data-level="expert">
+<div class="template-name">吹风机详情页</div>
+<div class="template-field">电商AI绘画</div>
+<div class="template-desc">负离子吹风机，多角度展示，特写风嘴，手持使用场景，科技感动态效果</div>
+<span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card" data-field="电商AI绘画" data-task="AI模特换脸" data-level="expert">
+<div class="template-name">AI模特换脸</div>
+<div class="template-field">电商AI绘画</div>
+<div class="template-desc">AI生成虚拟模特，自然肤色，无缝融合产品，多角度展示，降低拍摄成本</div>
+<span class="template-level badge-expert">专家</span>
+</div>
 </div>
 </div>
 
@@ -1234,6 +1336,50 @@ style="padding: 10px 16px; background: var(--bg-primary); border: 1px solid var(
 <textarea id="copyTextarea" readonly></textarea>
 <div class="modal-actions">
 <button class="modal-btn modal-btn-secondary" id="copyClose">关闭</button>
+</div>
+</div>
+</div>
+
+<!-- 复制成功引导弹窗 -->
+<div class="modal-overlay" id="guideModal">
+<div class="modal" style="max-width: 480px;">
+<div class="modal-title" style="text-align: center; font-size: 22px; margin-bottom: 6px;">✅ 复制成功</div>
+<div class="modal-desc" style="text-align: center; margin-bottom: 20px;">
+提示词已复制到剪贴板，快去你喜欢的平台试试效果吧
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
+<button class="platform-btn" data-platform="doubao" onclick="openPlatform('doubao')">
+<div class="platform-icon">🟢</div>
+<div class="platform-name">豆包</div>
+</button>
+<button class="platform-btn" data-platform="jimeng" onclick="openPlatform('jimeng')">
+<div class="platform-icon">🔵</div>
+<div class="platform-name">即梦</div>
+</button>
+<button class="platform-btn" data-platform="keling" onclick="openPlatform('keling')">
+<div class="platform-icon">🟣</div>
+<div class="platform-name">可灵</div>
+</button>
+<button class="platform-btn" data-platform="tongyi" onclick="openPlatform('tongyi')">
+<div class="platform-icon">🟡</div>
+<div class="platform-name">通义万相</div>
+</button>
+<button class="platform-btn" data-platform="midjourney" onclick="openPlatform('midjourney')">
+<div class="platform-icon">🟠</div>
+<div class="platform-name">Midjourney</div>
+</button>
+<button class="platform-btn" data-platform="sd" onclick="openPlatform('sd')">
+<div class="platform-icon">⚫</div>
+<div class="platform-name">Stable Diffusion</div>
+</button>
+</div>
+<div style="background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 10px; padding: 12px 16px; margin-bottom: 20px;">
+<div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+<span style="color: var(--accent-purple-light); font-weight: 600;">💡 使用提示：</span>将提示词粘贴到平台的"文生图"输入框，点击生成即可
+</div>
+</div>
+<div class="modal-actions">
+<button class="modal-btn modal-btn-primary" onclick="closeGuideModal()" style="flex: 1;">我知道了</button>
 </div>
 </div>
 </div>
@@ -1357,6 +1503,9 @@ const success = document.execCommand('copy');
 document.body.removeChild(textarea);
 if (success) {
 showToast('已复制到剪贴板！', '📋');
+setTimeout(() => {
+if ($('guideModal')) $('guideModal').classList.add('active');
+}, 300);
 return true;
 }
 } catch (e) {
@@ -1369,8 +1518,139 @@ $('copyModal').classList.add('active');
 return false;
 }
 
+// ===== 电商AI绘画提示词引擎 =====
+function buildEcommercePrompt(task, platform, level) {
+const platforms = {
+doubao: { name: '豆包', lang: 'zh' },
+jimeng: { name: '即梦', lang: 'zh' },
+keling: { name: '可灵', lang: 'zh' },
+tongyi: { name: '通义万相', lang: 'zh' },
+midjourney: { name: 'Midjourney', lang: 'en' },
+sd: { name: 'Stable Diffusion', lang: 'en' }
+};
+
+const p = platforms[platform] || platforms.doubao;
+const isEn = p.lang === 'en';
+
+const typeMap = {
+'产品白底主图': 'white',
+'场景氛围图': 'scene',
+'模特穿搭图': 'model',
+'节日促销图': 'festival',
+'详情页套图': 'detail',
+'AI模特换脸': 'face'
+};
+
+const type = typeMap[task] || 'white';
+
+const subjects = {
+white: isEn ? 'Product on pure white background, professional e-commerce photography' : '产品置于纯白背景，专业电商产品摄影',
+scene: isEn ? 'Product in lifestyle scene, natural lighting' : '产品置于生活场景，自然光线',
+model: isEn ? 'Fashion model wearing product, full body shot' : '时尚模特穿着产品，全身展示',
+festival: isEn ? 'Product with festive decorations, promotional theme' : '产品与节日装饰结合，促销主题',
+detail: isEn ? 'Product detail shots, multiple angles' : '产品多角度细节展示',
+face: isEn ? 'AI model face swap, product showcase' : 'AI模特换脸，产品展示'
+};
+
+const styles = {
+white: isEn ? 'Clean, minimalist, commercial catalog style' : '干净、极简、商业目录风格',
+scene: isEn ? 'Warm, inviting, lifestyle photography' : '温暖、诱人、生活摄影风格',
+model: isEn ? 'High fashion, editorial, elegant' : '高端时尚、编辑风格、优雅',
+festival: isEn ? 'Vibrant, celebratory, eye-catching' : '鲜艳、喜庆、吸引眼球',
+detail: isEn ? 'Sharp focus, macro details, technical' : '锐利对焦、微距细节、技术感',
+face: isEn ? 'Realistic, natural skin, seamless blend' : '真实、自然肤色、无缝融合'
+};
+
+const lighting = {
+white: isEn ? 'Soft diffused studio lighting, no shadows' : '柔和漫射棚拍灯光，无阴影',
+scene: isEn ? 'Natural window light, golden hour' : '自然窗光、黄金时刻',
+model: isEn ? 'Soft beauty lighting, rim light' : '柔和美颜灯光、轮廓光',
+festival: isEn ? 'Warm ambient light, decorative bokeh' : '温暖环境光、装饰光斑',
+detail: isEn ? 'Even LED lighting, macro ring light' : '均匀LED灯光、微距环形灯',
+face: isEn ? 'Soft frontal lighting, skin-friendly' : '柔和正面光、适合肤色'
+};
+
+const quality = isEn
+? '8K, ultra HD, highly detailed, professional photography, best quality, masterpiece'
+: '8K超高清、极度细节、专业摄影、最佳质量、杰作';
+
+const negative = isEn
+? 'blurry, low quality, distorted, deformed, ugly, duplicate, watermark, text, logo, cropped, out of frame'
+: '模糊、低质量、扭曲、变形、丑陋、重复、水印、文字、标志、裁剪、出框';
+
+const sizes = {
+white: '1:1',
+scene: '16:9',
+model: '3:4',
+festival: '1:1',
+detail: '1:1',
+face: '3:4'
+};
+
+const size = sizes[type] || '1:1';
+
+if (level === 'basic') {
+if (isEn) {
+return `${subjects[type]}, ${styles[type]}, ${lighting[type]}, ${quality}`;
+} else {
+return `${subjects[type]}，${styles[type]}，${lighting[type]}，${quality}`;
+}
+}
+
+if (level === 'advanced') {
+if (isEn) {
+return `Subject: ${subjects[type]}
+Style: ${styles[type]}
+Lighting: ${lighting[type]}
+Quality: ${quality}
+Size: ${size}`;
+} else {
+return `主体：${subjects[type]}
+风格：${styles[type]}
+光线：${lighting[type]}
+质量：${quality}
+尺寸：${size}`;
+}
+}
+
+if (level === 'expert') {
+if (isEn) {
+return `Subject: ${subjects[type]}
+Style: ${styles[type]}
+Lighting: ${lighting[type]}
+Composition: Centered, rule of thirds, balanced
+Background: Clean and appropriate for product
+Color: True to product, harmonious palette
+Quality: ${quality}
+Negative Prompt: ${negative}
+Parameters: --ar ${size} --q 2 --s 250 --v 6
+
+Expected Effect: Professional e-commerce product image, ready for listing`;
+} else {
+return `主体：${subjects[type]}
+风格：${styles[type]}
+光线：${lighting[type]}
+构图：居中、三分法、平衡构图
+背景：简洁且适合产品
+色彩：真实还原产品、和谐配色
+质量：${quality}
+负面提示词：${negative}
+参数：--ar ${size} --q 2 --s 250 --v 6
+
+预期效果：专业电商产品图，可直接用于上架`;
+}
+}
+
+return subjects[type];
+}
+
 // ===== 提示词生成 =====
 function buildPrompt(field, task, level) {
+if (field === '电商AI绘画') {
+const platform = $('platformSelect').value || 'doubao';
+return buildEcommercePrompt(task, platform, level);
+}
+
 const prompts = {
 basic: `【角色定位】
 你是一位专业的${field}领域AI助手，擅长处理各类${field}相关任务。
@@ -1534,11 +1814,13 @@ const prompt = buildPrompt(field, task, currentLevel);
 const now = new Date();
 const timeStr = now.toLocaleString('zh-CN');
 
+const platform = field === '电商AI绘画' ? ($('platformSelect').value || 'doubao') : null;
 const result = {
 id: Date.now(),
 field, task, level: currentLevel,
 prompt, time: timeStr,
-favorited: false
+favorited: false,
+platform: platform
 };
 
 db.history.unshift(result);
@@ -1701,6 +1983,25 @@ saveDB(db);
 $('unlockModal').classList.remove('active');
 showToast('解锁成功！', '🔓');
 updateStats();
+}
+
+// ===== 平台跳转 =====
+const platformUrls = {
+doubao: 'https://www.doubao.com/chat/create-image',
+jimeng: 'https://jimeng.jianying.com/ai-tool/image/generate',
+keling: 'https://klingai.com/image-creation',
+tongyi: 'https://tongyi.aliyun.com/wanxiang/',
+midjourney: 'https://www.midjourney.com/explore',
+sd: 'https://stablediffusionweb.com/'
+};
+
+function openPlatform(platformKey) {
+const url = platformUrls[platformKey];
+if (url) window.open(url, '_blank');
+}
+
+function closeGuideModal() {
+$('guideModal').classList.remove('active');
 }
 
 // ===== 页面切换 =====
@@ -1971,6 +2272,28 @@ location.reload();
 
 // ===== 事件绑定 =====
 document.addEventListener('DOMContentLoaded', () => {
+// 领域切换：显示/隐藏电商AI绘画相关控件
+$('fieldSelect').addEventListener('change', () => {
+const field = $('fieldSelect').value;
+const tagContainer = $('tagContainer');
+const ecommerceTagContainer = $('ecommerceTagContainer');
+const platformSection = $('platformSection');
+
+if (field === '电商AI绘画') {
+if (tagContainer) tagContainer.classList.add('hidden');
+if (ecommerceTagContainer) ecommerceTagContainer.classList.remove('hidden');
+if (platformSection) platformSection.classList.remove('hidden');
+document.querySelectorAll('.complexity-card').forEach(c => c.classList.remove('selected'));
+const expertCard = document.querySelector('.complexity-card[data-level="expert"]');
+if (expertCard) expertCard.classList.add('selected');
+currentLevel = 'expert';
+} else {
+if (tagContainer) tagContainer.classList.remove('hidden');
+if (ecommerceTagContainer) ecommerceTagContainer.classList.add('hidden');
+if (platformSection) platformSection.classList.add('hidden');
+}
+});
+
 document.querySelectorAll('.nav-btn').forEach(btn => {
 btn.addEventListener('click', () => showPage(btn.dataset.page));
 });
