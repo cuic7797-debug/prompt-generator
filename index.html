@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>AI提示词生成器</title>
-
 <style>
 /* ===== 基础变量 ===== */
 :root {
@@ -109,7 +108,6 @@ text-transform: uppercase; letter-spacing: 0.5px;
 margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
 }
 
-/* 修复：config-label-row 用于任务描述标签和按钮同行 */
 .config-label-row {
 display: flex;
 align-items: center;
@@ -121,7 +119,6 @@ margin-bottom: 10px;
 margin-bottom: 0;
 }
 
-/* 下拉框 */
 .select-field {
 width: 100%; padding: 12px 14px;
 background: var(--bg-primary);
@@ -138,7 +135,6 @@ outline: none; border-color: var(--accent-purple);
 box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
 }
 
-/* 文本输入区 */
 .textarea-wrapper {
 position: relative;
 }
@@ -161,7 +157,6 @@ box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
 
 textarea::placeholder { color: var(--text-muted); }
 
-/* 修复：按钮放到标签右侧，横着放 */
 .textarea-actions {
 display: flex;
 gap: 6px;
@@ -182,7 +177,6 @@ background: var(--accent-purple);
 color: white;
 }
 
-/* 推荐标签 */
 .tag-container {
 display: flex; flex-wrap: wrap; gap: 8px;
 }
@@ -201,7 +195,6 @@ border-color: var(--accent-purple);
 color: var(--accent-purple-light);
 }
 
-/* 复杂度选择卡片 */
 .complexity-cards {
 display: flex; flex-direction: column; gap: 10px;
 }
@@ -260,7 +253,6 @@ background: rgba(245, 158, 11, 0.2);
 color: var(--accent-amber);
 }
 
-/* 生成按钮 */
 .generate-btn {
 width: 100%; padding: 14px;
 background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
@@ -282,7 +274,6 @@ box-shadow: 0 6px 25px rgba(139, 92, 246, 0.5);
 opacity: 0.5; cursor: not-allowed; transform: none;
 }
 
-/* 使用统计 */
 .usage-stats {
 display: flex; gap: 16px; margin-top: 16px;
 padding-top: 16px; border-top: 1px solid var(--border-glass);
@@ -302,13 +293,11 @@ background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
 font-size: 11px; color: var(--text-muted); margin-top: 2px;
 }
 
-/* ===== 右侧结果区 ===== */
 .result-panel {
 flex: 1; padding: 24px; overflow-y: auto;
 background: var(--bg-primary);
 }
 
-/* 空状态 */
 .empty-state {
 display: flex; flex-direction: column;
 align-items: center; justify-content: center;
@@ -331,7 +320,6 @@ font-size: 20px; font-weight: 600; margin-bottom: 8px;
 color: var(--text-muted); font-size: 14px; max-width: 400px;
 }
 
-/* 结果卡片 */
 .result-card {
 background: var(--bg-card);
 border: 1px solid var(--border-glass);
@@ -392,7 +380,6 @@ border-color: var(--accent-pink);
 color: var(--accent-pink);
 }
 
-/* 提示词内容格式化 */
 .result-content {
 padding: 20px; line-height: 1.8;
 color: var(--text-primary); font-size: 14px;
@@ -433,7 +420,6 @@ color: var(--text-secondary); font-style: italic;
 color: var(--text-primary); font-weight: 600;
 }
 
-/* ===== 模板库 ===== */
 .template-grid {
 display: grid;
 grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -499,7 +485,6 @@ padding: 2px 8px; border-radius: 6px;
 font-size: 10px; font-weight: 600;
 }
 
-/* ===== 历史/收藏列表 ===== */
 .history-list {
 display: flex; flex-direction: column; gap: 12px;
 }
@@ -531,7 +516,6 @@ font-size: 20px; flex-shrink: 0;
 display: flex; gap: 6px;
 }
 
-/* ===== 管理面板 ===== */
 .admin-panel {
 max-width: 900px; margin: 0 auto;
 }
@@ -574,7 +558,6 @@ background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
 font-size: 12px; color: var(--text-muted); margin-top: 6px;
 }
 
-/* 密码表格 */
 .password-table {
 width: 100%; border-collapse: collapse;
 }
@@ -625,7 +608,6 @@ font-size: 11px; font-weight: 600;
 .status-sold { background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); }
 .status-depleted { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
 
-/* 添加密码 */
 .add-password-row {
 display: flex; gap: 10px; margin-top: 16px;
 }
@@ -652,7 +634,6 @@ transition: all 0.2s;
 
 .add-btn:hover { background: var(--accent-purple-light); }
 
-/* ===== 弹窗 ===== */
 .modal-overlay {
 position: fixed; top: 0; left: 0; right: 0; bottom: 0;
 background: rgba(0, 0, 0, 0.7);
@@ -724,7 +705,6 @@ border: 1px solid var(--border-glass);
 
 .modal-btn:hover { transform: translateY(-1px); }
 
-/* 复制弹窗 */
 .copy-modal textarea {
 width: 100%; min-height: 200px;
 padding: 12px; background: var(--bg-primary);
@@ -734,7 +714,6 @@ font-size: 13px; font-family: monospace;
 resize: vertical; margin-bottom: 12px;
 }
 
-/* Toast */
 .toast {
 position: fixed; bottom: 30px; left: 50%;
 transform: translateX(-50%) translateY(100px);
@@ -755,7 +734,24 @@ opacity: 1;
 .toast-icon { font-size: 18px; }
 .toast-text { font-size: 14px; }
 
-/* ===== 移动端 ===== */
+/* ===== 移动端 / 桌面端 ===== */
+@media (min-width: 769px) {
+    .config-panel {
+        position: relative !important;
+        left: 0 !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    .mobile-menu-btn {
+        display: none !important;
+    }
+    .nav-links {
+        display: flex !important;
+    }
+}
+
 @media (max-width: 768px) {
     .config-panel {
         position: fixed;
@@ -834,20 +830,6 @@ opacity: 1;
     }
 }
 
-.mobile-menu-btn { display: block; }
-
-.nav-links { display: none; }
-
-.result-panel { padding: 16px; }
-
-.stats-grid { grid-template-columns: repeat(2, 1fr); }
-
-.template-grid { grid-template-columns: 1fr; }
-
-.add-password-row { flex-direction: column; }
-}
-
-/* 遮罩 */
 .overlay {
 position: fixed; top: 0; left: 0; right: 0; bottom: 0;
 background: rgba(0, 0, 0, 0.5);
@@ -856,13 +838,11 @@ z-index: 800; display: none;
 
 .overlay.active { display: block; }
 
-/* 隐藏 */
 .hidden { display: none !important; }
 
-/* 页面切换 */
 .page { display: none; }
 .page.active { display: block; }
-/* 底部版权 */
+
 #page-footer {
 position: fixed;
 bottom: 0;
@@ -906,7 +886,6 @@ text-decoration: underline;
 color: rgba(255, 255, 255, 0.4);
 font-size: 12px;
 }
-/* 为底部footer留出空间 */
 #app {
 padding-bottom: 50px;
 }
@@ -925,7 +904,6 @@ padding-bottom: 42px;
 }
 }
 
-/* ===== 平台按钮样式 ===== */
 .platform-btn:hover {
     background: rgba(139, 92, 246, 0.15) !important;
     border-color: var(--accent-purple) !important;
@@ -939,7 +917,6 @@ padding-bottom: 42px;
     box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
 }
 
-/* ===== 置顶模板样式 ===== */
 .template-card.pinned {
     border-color: var(--accent-amber);
     background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.03));
@@ -954,7 +931,6 @@ padding-bottom: 42px;
     z-index: 2;
 }
 
-/* ===== 移动端基础优化 ===== */
 html {
     -webkit-text-size-adjust: 100%;
     touch-action: manipulation;
@@ -998,7 +974,6 @@ body.keyboard-open #page-footer {
     border-radius: 2px;
 }
 
-/* ===== 移动端优化 ===== */
 @media (max-width: 768px) {
     .config-panel {
         position: fixed !important; left: -100% !important; top: 60px;
@@ -1158,8 +1133,6 @@ body.keyboard-open #page-footer {
     }
 }
 
-
-/* ===== 夸克/UC/QQ浏览器兼容性修复 ===== */
 .config-panel {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
@@ -1178,7 +1151,6 @@ body.keyboard-open #page-footer {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* 确保按钮在所有浏览器可点击 */
 button, .tag, .complexity-card, .template-card, .action-btn, .nav-btn, .platform-btn, .generate-btn {
     cursor: pointer;
     -webkit-user-select: none;
@@ -1189,27 +1161,18 @@ button, .tag, .complexity-card, .template-card, .action-btn, .nav-btn, .platform
     touch-action: manipulation;
 }
 
-/* 修复部分浏览器对fixed定位的支持 */
 @supports (-webkit-touch-callout: none) {
     .config-panel {
         -webkit-transform: translate3d(0,0,0);
     }
 }
-
-/* 低版本浏览器兼容 */
-_:-ms-fullscreen, :root .config-panel { position: absolute; }
 </style>
 
 <base target="_blank">
-<meta name="theme-color" content="#0f0f1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0f0f1a">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="format-detection" content="telephone=no">
-<base target="_blank">
+<meta name="theme-color" content="#0f0f1a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="format-detection" content="telephone=no">
 </head>
 <body>
 
-<body>
 <!-- 导航栏 -->
 <nav class="navbar">
 <div class="logo">🚀 AI提示词生成器</div>
@@ -1276,43 +1239,26 @@ _:-ms-fullscreen, :root .config-panel { position: absolute; }
 <option value="电商运营">🛒 电商运营</option>
 <option value="物流运输">🚚 物流运输</option>
 <option value="公共安全">🛡️ 公共安全</option>
-            <option value="电商AI绘画">🎨 电商AI绘画</option>
+<option value="电商AI绘画">🎨 电商AI绘画</option>
 </select>
 
-        <div class="config-section" id="platformSection" style="display: none;">
-            <div class="config-label">🤖 选择AI平台</div>
-            <select class="select-field" id="platformSelect">
-                <option value="通用">🌐 通用（不指定平台）</option>
-                <option value="ChatGPT">💬 ChatGPT</option>
-                <option value="Claude">🧠 Claude</option>
-                <option value="文心一言">🇨🇳 文心一言</option>
-                <option value="通义千问">🔷 通义千问</option>
-                <option value="Kimi">📄 Kimi</option>
-                <option value="豆包">🟢 豆包</option>
-                <option value="讯飞星火">⭐ 讯飞星火</option>
-                <option value="智谱清言">🔬 智谱清言</option>
-            </select>
-        </div>
-
+<div class="config-section" id="platformSection" style="display: none;">
+    <div class="config-label">🤖 选择AI平台</div>
+    <select class="select-field" id="platformSelect">
+        <option value="通用">🌐 通用（不指定平台）</option>
+        <option value="ChatGPT">💬 ChatGPT</option>
+        <option value="Claude">🧠 Claude</option>
+        <option value="文心一言">🇨🇳 文心一言</option>
+        <option value="通义千问">🔷 通义千问</option>
+        <option value="Kimi">📄 Kimi</option>
+        <option value="豆包">🟢 豆包</option>
+        <option value="讯飞星火">⭐ 讯飞星火</option>
+        <option value="智谱清言">🔬 智谱清言</option>
+    </select>
 </div>
-        <div class="config-section" id="platformSection" style="display: none;">
-            <div class="config-label">🤖 选择AI平台</div>
-            <select class="select-field" id="platformSelect">
-                <option value="通用">🌐 通用（不指定平台）</option>
-                <option value="ChatGPT">💬 ChatGPT</option>
-                <option value="Claude">🧠 Claude</option>
-                <option value="文心一言">🇨🇳 文心一言</option>
-                <option value="通义千问">🔷 通义千问</option>
-                <option value="Kimi">📄 Kimi</option>
-                <option value="豆包">🟢 豆包</option>
-                <option value="讯飞星火">⭐ 讯飞星火</option>
-                <option value="智谱清言">🔬 智谱清言</option>
-            </select>
-        </div>
-
+</div>
 
 <div class="config-section">
-<!-- 修复：标签和按钮同一行，横排 -->
 <div class="config-label-row">
 <div class="config-label">📝 任务描述</div>
 <div class="textarea-actions">
@@ -1338,30 +1284,18 @@ _:-ms-fullscreen, :root .config-panel { position: absolute; }
 <span class="tag" data-task="写5条朋友圈产品文案，产品：[填写产品]。要求：每条风格不同（故事型/痛点型/场景型/证言型/限时型），每条配适合的emoji，不刷屏但有吸引力。" data-desc="结构：5种风格×1条｜适用：微商/代理/个人IP">💬 朋友圈营销文案</span>
 </div>
 
-        <div class="config-section" id="ecommerceTagSection" style="display: none;">
-            <div class="config-label">🛍️ 电商图片类型</div>
-            <div class="tag-container" id="ecommerceTagContainer">
-                <span class="tag" data-task="产品白底主图">📦 产品白底主图</span>
-                <span class="tag" data-task="产品场景图">🏠 产品场景图</span>
-                <span class="tag" data-task="模特穿搭图">👗 模特穿搭图</span>
-                <span class="tag" data-task="促销海报图">🎉 促销海报图</span>
-                <span class="tag" data-task="详情页长图">📄 详情页长图</span>
-                <span class="tag" data-task="AI换脸模特图">🧑 AI换脸模特图</span>
-            </div>
-        </div>
-
-</div>        <div class="config-section" id="ecommerceTagSection" style="display: none;">
-            <div class="config-label">🛍️ 电商图片类型</div>
-            <div class="tag-container" id="ecommerceTagContainer">
-                <span class="tag" data-task="产品白底主图">📦 产品白底主图</span>
-                <span class="tag" data-task="产品场景图">🏠 产品场景图</span>
-                <span class="tag" data-task="模特穿搭图">👗 模特穿搭图</span>
-                <span class="tag" data-task="促销海报图">🎉 促销海报图</span>
-                <span class="tag" data-task="详情页长图">📄 详情页长图</span>
-                <span class="tag" data-task="AI换脸模特图">🧑 AI换脸模特图</span>
-            </div>
-        </div>
-
+<div class="config-section" id="ecommerceTagSection" style="display: none;">
+    <div class="config-label">🛍️ 电商图片类型</div>
+    <div class="tag-container" id="ecommerceTagContainer">
+        <span class="tag" data-task="产品白底主图">📦 产品白底主图</span>
+        <span class="tag" data-task="产品场景图">🏠 产品场景图</span>
+        <span class="tag" data-task="模特穿搭图">👗 模特穿搭图</span>
+        <span class="tag" data-task="促销海报图">🎉 促销海报图</span>
+        <span class="tag" data-task="详情页长图">📄 详情页长图</span>
+        <span class="tag" data-task="AI换脸模特图">🧑 AI换脸模特图</span>
+    </div>
+</div>
+</div>
 
 <div class="config-section">
 <div class="config-label">⚡ 选择复杂度</div>
@@ -1581,45 +1515,45 @@ _:-ms-fullscreen, :root .config-panel { position: absolute; }
 <div class="template-card" data-field="市场营销" data-task="写一篇品牌故事文案，品牌：[填写品牌]。要求：包含创始人故事/品牌理念/产品初心/用户价值，情感真挚，能引发共鸣，适合放在官网或公众号。" data-level="expert">
 <div class="template-name">品牌故事文案</div>
 <div class="template-field">市场营销</div>
-<div class="template-desc">写一篇品牌故事文案，品牌：[填写品牌]。要求：包含创始人故事/品牌理念/产品初心/用户价值，情感真挚，能引发共鸣，适合放在官网或公众号。...
-        <div class="template-card pinned" data-field="电商AI绘画" data-task="产品白底主图" data-level="expert">
-            <div class="template-name">口红白底主图</div>
-            <div class="template-field">电商AI绘画</div>
-            <div class="template-desc">YSL小金条21号正红色口红，白底产品摄影，极简主义，8K高清，适合淘宝主图</div>
-            <span class="template-level badge-expert">专家</span>
-        </div>
-        <div class="template-card pinned" data-field="电商AI绘画" data-task="产品场景图" data-level="expert">
-            <div class="template-name">咖啡机场景图</div>
-            <div class="template-field">电商AI绘画</div>
-            <div class="template-desc">意式咖啡机，现代简约厨房场景，晨光窗光，温馨生活氛围，适合详情页</div>
-            <span class="template-level badge-expert">专家</span>
-        </div>
-        <div class="template-card pinned" data-field="电商AI绘画" data-task="模特穿搭图" data-level="expert">
-            <div class="template-name">连衣裙模特图</div>
-            <div class="template-field">电商AI绘画</div>
-            <div class="template-desc">法式碎花连衣裙，亚洲模特街拍，自然光，展示版型和面料飘逸感</div>
-            <span class="template-level badge-expert">专家</span>
-        </div>
-        <div class="template-card pinned" data-field="电商AI绘画" data-task="促销海报图" data-level="expert">
-            <div class="template-name">双11促销海报</div>
-            <div class="template-field">电商AI绘画</div>
-            <div class="template-desc">智能手机双11大促海报，红色金色促销氛围，放射背景，预留文案区</div>
-            <span class="template-level badge-expert">专家</span>
-        </div>
-        <div class="template-card pinned" data-field="电商AI绘画" data-task="详情页长图" data-level="expert">
-            <div class="template-name">蓝牙耳机详情页</div>
-            <div class="template-field">电商AI绘画</div>
-            <div class="template-desc">无线蓝牙耳机，多卖点详情页设计，首屏大图+细节展示+场景图+参数</div>
-            <span class="template-level badge-expert">专家</span>
-        </div>
-        <div class="template-card pinned" data-field="电商AI绘画" data-task="AI换脸模特图" data-level="expert">
-            <div class="template-name">护肤品模特图</div>
-            <div class="template-field">电商AI绘画</div>
-            <div class="template-desc">精华液护肤品，亚洲面孔模特特写，影棚级打光，突出肌肤光泽感</div>
-            <span class="template-level badge-expert">专家</span>
-        </div>
-</div>
+<div class="template-desc">写一篇品牌故事文案，品牌：[填写品牌]。要求：包含创始人故事/品牌理念/产品初心/用户价值，情感真挚，能引发共鸣，适合放在官网或公众号。...</div>
 <span class="template-level badge-expert">专家</span>
+</div>
+<!-- 6个置顶电商模板 -->
+<div class="template-card pinned" data-field="电商AI绘画" data-task="产品白底主图" data-level="expert">
+    <div class="template-name">口红白底主图</div>
+    <div class="template-field">电商AI绘画</div>
+    <div class="template-desc">YSL小金条21号正红色口红，白底产品摄影，极简主义，8K高清，适合淘宝主图</div>
+    <span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card pinned" data-field="电商AI绘画" data-task="产品场景图" data-level="expert">
+    <div class="template-name">咖啡机场景图</div>
+    <div class="template-field">电商AI绘画</div>
+    <div class="template-desc">意式咖啡机，现代简约厨房场景，晨光窗光，温馨生活氛围，适合详情页</div>
+    <span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card pinned" data-field="电商AI绘画" data-task="模特穿搭图" data-level="expert">
+    <div class="template-name">连衣裙模特图</div>
+    <div class="template-field">电商AI绘画</div>
+    <div class="template-desc">法式碎花连衣裙，亚洲模特街拍，自然光，展示版型和面料飘逸感</div>
+    <span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card pinned" data-field="电商AI绘画" data-task="促销海报图" data-level="expert">
+    <div class="template-name">双11促销海报</div>
+    <div class="template-field">电商AI绘画</div>
+    <div class="template-desc">智能手机双11大促海报，红色金色促销氛围，放射背景，预留文案区</div>
+    <span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card pinned" data-field="电商AI绘画" data-task="详情页长图" data-level="expert">
+    <div class="template-name">蓝牙耳机详情页</div>
+    <div class="template-field">电商AI绘画</div>
+    <div class="template-desc">无线蓝牙耳机，多卖点详情页设计，首屏大图+细节展示+场景图+参数</div>
+    <span class="template-level badge-expert">专家</span>
+</div>
+<div class="template-card pinned" data-field="电商AI绘画" data-task="AI换脸模特图" data-level="expert">
+    <div class="template-name">护肤品模特图</div>
+    <div class="template-field">电商AI绘画</div>
+    <div class="template-desc">精华液护肤品，亚洲面孔模特特写，影棚级打光，突出肌肤光泽感</div>
+    <span class="template-level badge-expert">专家</span>
 </div>
 </div>
 </div>
@@ -1655,7 +1589,7 @@ _:-ms-fullscreen, :root .config-panel { position: absolute; }
 <div class="empty-desc" style="margin-top: 12px;">
 <input type="password" id="adminPassword" placeholder="管理密码" 
 style="padding: 10px 16px; background: var(--bg-primary); border: 1px solid var(--border-glass); 
-                           border-radius: 8px; color: var(--text-primary); width: 200px; text-align: center;">
+border-radius: 8px; color: var(--text-primary); width: 200px; text-align: center;">
 <br><br>
 <button class="generate-btn" id="adminLoginBtn" style="width: 200px;">进入管理</button>
 </div>
@@ -1685,8 +1619,14 @@ style="padding: 10px 16px; background: var(--bg-primary); border: 1px solid var(
 <div class="modal copy-modal">
 <div class="modal-title">📋 复制内容</div>
 <div class="modal-desc">请长按下方文字全选并复制</div>
+<textarea id="copyTextarea" readonly></textarea>
+<div class="modal-actions">
+<button class="modal-btn modal-btn-secondary" id="copyClose">关闭</button>
+</div>
+</div>
+</div>
 
-<!-- 复制后引导弹窗 -->
+<!-- 引导弹窗 -->
 <div class="modal-overlay" id="guideModal">
     <div class="modal" style="max-width: 480px;">
         <div style="text-align: center; margin-bottom: 20px;">
@@ -1699,24 +1639,7 @@ style="padding: 10px 16px; background: var(--bg-primary); border: 1px solid var(
                 快去你喜欢的平台试试效果吧：
             </div>
             <div id="guidePlatformGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px;">
-                <button class="platform-btn" data-platform="ChatGPT" data-url="https://chat.openai.com" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;">
-                    <span style="font-size: 20px;">💬</span><span>ChatGPT</span>
-                </button>
-                <button class="platform-btn" data-platform="Claude" data-url="https://claude.ai" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;">
-                    <span style="font-size: 20px;">🧠</span><span>Claude</span>
-                </button>
-                <button class="platform-btn" data-platform="Kimi" data-url="https://kimi.moonshot.cn" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;">
-                    <span style="font-size: 20px;">📄</span><span>Kimi</span>
-                </button>
-                <button class="platform-btn" data-platform="豆包" data-url="https://www.doubao.com" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;">
-                    <span style="font-size: 20px;">🟢</span><span>豆包</span>
-                </button>
-                <button class="platform-btn" data-platform="通义千问" data-url="https://tongyi.aliyun.com" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;">
-                    <span style="font-size: 20px;">🔷</span><span>通义千问</span>
-                </button>
-                <button class="platform-btn" data-platform="文心一言" data-url="https://yiyan.baidu.com" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;">
-                    <span style="font-size: 20px;">🇨🇳</span><span>文心一言</span>
-                </button>
+                <!-- 由JS动态填充 -->
             </div>
             <div style="background: rgba(139, 92, 246, 0.08); border-radius: 10px; padding: 12px 14px; border: 1px solid rgba(139, 92, 246, 0.15);">
                 <div style="font-size: 12px; color: var(--accent-purple-light); line-height: 1.6;">
@@ -1730,112 +1653,118 @@ style="padding: 10px 16px; background: var(--bg-primary); border: 1px solid var(
     </div>
 </div>
 
-<textarea id="copyTextarea" readonly></textarea>
-<div class="modal-actions">
-<button class="modal-btn modal-btn-secondary" id="copyClose">关闭</button>
-</div>
-</div>
-</div>
-
 <!-- Toast -->
 <div class="toast" id="toast">
 <span class="toast-icon" id="toastIcon">✅</span>
 <span class="toast-text" id="toastText">操作成功</span>
 </div>
 
+<!-- 底部版权 -->
+<footer id="page-footer">
+<div class="footer-content">
+<span class="footer-copyright">© 2025 微风拂面，细雨蒙蒙</span>
+<span class="footer-divider">|</span>
+<a href="https://github.com/cuic7797-debug/prompt-generator/blob/main/LICENSE" target="_blank" class="footer-license">MIT License</a>
+<span class="footer-divider">|</span>
+<span class="footer-qq">QQ: 704451222</span>
+</div>
+</footer>
 
 <script>
-// ===== 配置 =====
+// ============================================================
+// 所有函数定义（全局）
+// ============================================================
+
+// ---------- 配置 ----------
 const SPECIAL_PASSWORD = '123456888';
 const ADMIN_PASSWORD = 'c123456888';
 const MAX_BASIC_DAILY = 5;
 const MAX_PASSWORD_USES = 100;
 const QQ_NUMBER = '704451222';
 
-// 密码池
 const ADVANCED_PASSWORDS = ['ADV0G5U7SWP', 'ADV146XU8OL', 'ADV31PYMER7', 'ADV48FHNTCI', 'ADV4NKI9HX8', 'ADV4NWT90YJ', 'ADV4XIO6WKP', 'ADV607LQMY3', 'ADV6LH4W5KB', 'ADV7F4LXN8R', 'ADV7N0CUHZ6', 'ADV9IXJFTWB', 'ADV9NGUHQ5L', 'ADVBKZRGLN5', 'ADVE1LC49SQ', 'ADVF3CUB0TR', 'ADVGHY0W3X5', 'ADVHFGXEZ5W', 'ADVI46K2JRB', 'ADVIBGRZK0O', 'ADVIQ3LY48H', 'ADVJSBGWZ7Q', 'ADVJSLC38ZK', 'ADVJWG4R1YK', 'ADVL0YE4QT1', 'ADVLBPT4FRM', 'ADVLGTHK6IO', 'ADVLTN4YXJH', 'ADVLW28B630', 'ADVMJFHR4X0', 'ADVMQYO2BGZ', 'ADVMUBZT5GL', 'ADVN85TPMWK', 'ADVNXO6K4W2', 'ADVPHS1WCKU', 'ADVPUYXJB3N', 'ADVQCIWLM4X', 'ADVQS2BTYFX', 'ADVR5OGPUH0', 'ADVR6C14L9K', 'ADVR8F1HNYQ', 'ADVR8HC7EWM', 'ADVRXGL0O42', 'ADVT5JFWZ0P', 'ADVT9JBO50U', 'ADVU9IKTWGJ', 'ADVWNU0OQH3', 'ADVYP0OIFR7', 'ADVZ6JYMI3W', 'ADVZG5PK4NT'];
 const EXPERT_PASSWORDS = ['EXP097KTRHY', 'EXP0AKHTBJN', 'EXP0DCFQKTZ', 'EXP0QOYIHWK', 'EXP39JQ70WA', 'EXP3OKUCN7G', 'EXP41KD2WF6', 'EXP4CWVONJ8', 'EXP5UKOTR4Y', 'EXP6HV79F1K', 'EXP7BQYG0VW', 'EXP7G6OI5DZ', 'EXP7SCFKVT2', 'EXP8BM4LR7I', 'EXP8M2ALVN1', 'EXP97KT0UL1', 'EXP9L0B184F', 'EXP9LMDR6Y8', 'EXPASLQUGMC', 'EXPBLYJTW30', 'EXPBYDM47W0', 'EXPBZLGTJ8C', 'EXPC0TGZS3M', 'EXPGHKTZI57', 'EXPGYM8C2UH', 'EXPI2KQZ3YV', 'EXPI3Y4MOQU', 'EXPJIO73SQ5', 'EXPLVRKNCTI', 'EXPMACWJIDU', 'EXPMLO5W2V3', 'EXPN0MOJY8K', 'EXPN16RUJQW', 'EXPN3OHT748', 'EXPNCIRU2O4', 'EXPND0ICJ83', 'EXPNRK4GSQA', 'EXPNYFJ63KL', 'EXPRCLYO0JH', 'EXPRCOVK14L', 'EXPRCV0Q1F6', 'EXPRWQM1UTJ', 'EXPSMFG4WCT', 'EXPSUOYG5I1', 'EXPSWKGAMJL', 'EXPT1KAN79B', 'EXPT85YDQWI', 'EXPYFB7WCKR', 'EXPZCMOHIKA', 'EXPZN61WJLB'];
 
-// ===== 数据库 =====
+// ---------- 数据库 ----------
 function getDB() {
-const defaultDB = {
-passwords: {
-advanced: ADVANCED_PASSWORDS.map(p => ({ code: p, used: 0, max: MAX_PASSWORD_USES, sold: false })),
-expert: EXPERT_PASSWORDS.map(p => ({ code: p, used: 0, max: MAX_PASSWORD_USES, sold: false }))
-},
-unlocked: { advanced: false, expert: false },
-usedPasswords: {},
-history: [],
-favorites: [],
-todayBasicCount: 0,
-todayDate: new Date().toDateString(),
-totalGenerated: 0,
-firstUse: { advanced: true, expert: true }
-};
+    const defaultDB = {
+        passwords: {
+            advanced: ADVANCED_PASSWORDS.map(p => ({ code: p, used: 0, max: MAX_PASSWORD_USES, sold: false })),
+            expert: EXPERT_PASSWORDS.map(p => ({ code: p, used: 0, max: MAX_PASSWORD_USES, sold: false }))
+        },
+        unlocked: { advanced: false, expert: false },
+        usedPasswords: {},
+        history: [],
+        favorites: [],
+        todayBasicCount: 0,
+        todayDate: new Date().toDateString(),
+        totalGenerated: 0,
+        firstUse: { advanced: true, expert: true }
+    };
 
-try {
-const saved = localStorage.getItem('promptGenDB');
-if (saved) {
-const parsed = JSON.parse(saved);
-if (parsed.todayDate !== new Date().toDateString()) {
-parsed.todayBasicCount = 0;
-parsed.todayDate = new Date().toDateString();
-}
-return { ...defaultDB, ...parsed };
-}
-} catch (e) { console.error('DB load error:', e); }
-
-return defaultDB;
+    try {
+        const saved = localStorage.getItem('promptGenDB');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.todayDate !== new Date().toDateString()) {
+                parsed.todayBasicCount = 0;
+                parsed.todayDate = new Date().toDateString();
+            }
+            return { ...defaultDB, ...parsed };
+        }
+    } catch (e) { console.error('DB load error:', e); }
+    return defaultDB;
 }
 
 function saveDB(db) {
-try {
-localStorage.setItem('promptGenDB', JSON.stringify(db));
-} catch (e) { console.error('DB save error:', e); }
+    try {
+        localStorage.setItem('promptGenDB', JSON.stringify(db));
+    } catch (e) { console.error('DB save error:', e); }
 }
 
 let db = getDB();
 let currentLevel = 'basic';
 let pendingUnlockLevel = null;
+let adminLoggedIn = false;
 
-// ===== DOM元素 =====
+// ---------- DOM 快捷引用 ----------
 const $ = id => document.getElementById(id);
 
-// ===== 工具函数 =====
+// ---------- Toast ----------
 function showToast(message, icon = '✅') {
-const toast = $('toast');
-$('toastText').textContent = message;
-$('toastIcon').textContent = icon;
-toast.classList.add('show');
-setTimeout(() => toast.classList.remove('show'), 2500);
+    const toast = $('toast');
+    $('toastText').textContent = message;
+    $('toastIcon').textContent = icon;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
 }
 
+// ---------- 格式化提示词 ----------
 function formatPromptToHTML(text) {
-let html = text
-.replace(/&/g, '&amp;')
-.replace(/</g, '&lt;')
-.replace(/>/g, '&gt;');
+    let html = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
 
-html = html.replace(/【(.+?)】/g, '<h3>📌 $1</h3>');
-html = html.replace(/^\d+\.\s(.+)$/gm, '<li>$1</li>');
-html = html.replace(/^-\s(.+)$/gm, '<li>$1</li>');
-html = html.replace(/(<li>.+<\/li>\n?)+/g, '<ul>$&</ul>');
-html = html.replace(/<\/ul>\n*<ul>/g, '');
+    html = html.replace(/【(.+?)】/g, '<h3>📌 $1</h3>');
+    html = html.replace(/^\d+\.\s(.+)$/gm, '<li>$1</li>');
+    html = html.replace(/^-\s(.+)$/gm, '<li>$1</li>');
+    html = html.replace(/(<li>.+<\/li>\n?)+/g, '<ul>$&</ul>');
+    html = html.replace(/<\/ul>\n*<ul>/g, '');
 
-const paragraphs = html.split('\n\n');
-html = paragraphs.map(p => {
-const trimmed = p.trim();
-if (!trimmed) return '';
-if (trimmed.startsWith('<h3>') || trimmed.startsWith('<ul>')) return trimmed;
-return '<p>' + trimmed + '</p>';
-}).join('');
+    const paragraphs = html.split('\n\n');
+    html = paragraphs.map(p => {
+        const trimmed = p.trim();
+        if (!trimmed) return '';
+        if (trimmed.startsWith('<h3>') || trimmed.startsWith('<ul>')) return trimmed;
+        return '<p>' + trimmed + '</p>';
+    }).join('');
 
-html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-
-return html;
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    return html;
 }
 
-// ===== 复制功能（三重保障）=====
+// ---------- 复制功能 ----------
 async function copyToClipboard(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
         try {
@@ -1870,6 +1799,7 @@ async function copyToClipboard(text) {
     return false;
 }
 
+// ---------- 引导弹窗 ----------
 function showGuideModal() {
     const field = $('fieldSelect').value;
     const isEcommerce = field === '电商AI绘画';
@@ -1877,14 +1807,29 @@ function showGuideModal() {
     const grid = $('guidePlatformGrid');
 
     if (isEcommerce) {
-        grid.innerHTML = '<button class="platform-btn" data-platform="豆包" data-url="https://www.doubao.com/chat/create-image" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🟢</span><span>豆包</span></button><button class="platform-btn" data-platform="即梦" data-url="https://jimeng.jianying.com/ai-tool/image/generate" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🔵</span><span>即梦</span></button><button class="platform-btn" data-platform="可灵" data-url="https://klingai.com/image-creation" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🟣</span><span>可灵</span></button><button class="platform-btn" data-platform="通义万相" data-url="https://tongyi.aliyun.com/wanxiang/" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🟡</span><span>通义万相</span></button><button class="platform-btn" data-platform="Midjourney" data-url="https://www.midjourney.com/explore" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🟠</span><span>Midjourney</span></button><button class="platform-btn" data-platform="Stable Diffusion" data-url="https://stablediffusionweb.com/" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">⚫</span><span>Stable Diffusion</span></button>';
+        grid.innerHTML = `
+            <button class="platform-btn" data-platform="豆包" data-url="https://www.doubao.com/chat/create-image" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🟢</span><span>豆包</span></button>
+            <button class="platform-btn" data-platform="即梦" data-url="https://jimeng.jianying.com/ai-tool/image/generate" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🔵</span><span>即梦</span></button>
+            <button class="platform-btn" data-platform="可灵" data-url="https://klingai.com/image-creation" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🟣</span><span>可灵</span></button>
+            <button class="platform-btn" data-platform="通义万相" data-url="https://tongyi.aliyun.com/wanxiang/" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🟡</span><span>通义万相</span></button>
+            <button class="platform-btn" data-platform="Midjourney" data-url="https://www.midjourney.com/explore" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🟠</span><span>Midjourney</span></button>
+            <button class="platform-btn" data-platform="Stable Diffusion" data-url="https://stablediffusionweb.com/" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">⚫</span><span>Stable Diffusion</span></button>
+        `;
     } else {
-        grid.innerHTML = '<button class="platform-btn" data-platform="ChatGPT" data-url="https://chat.openai.com" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">💬</span><span>ChatGPT</span></button><button class="platform-btn" data-platform="Claude" data-url="https://claude.ai" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🧠</span><span>Claude</span></button><button class="platform-btn" data-platform="Kimi" data-url="https://kimi.moonshot.cn" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">📄</span><span>Kimi</span></button><button class="platform-btn" data-platform="豆包" data-url="https://www.doubao.com" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🟢</span><span>豆包</span></button><button class="platform-btn" data-platform="通义千问" data-url="https://tongyi.aliyun.com" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🔷</span><span>通义千问</span></button><button class="platform-btn" data-platform="文心一言" data-url="https://yiyan.baidu.com" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🇨🇳</span><span>文心一言</span></button>';
+        grid.innerHTML = `
+            <button class="platform-btn" data-platform="ChatGPT" data-url="https://chat.openai.com" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">💬</span><span>ChatGPT</span></button>
+            <button class="platform-btn" data-platform="Claude" data-url="https://claude.ai" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🧠</span><span>Claude</span></button>
+            <button class="platform-btn" data-platform="Kimi" data-url="https://kimi.moonshot.cn" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">📄</span><span>Kimi</span></button>
+            <button class="platform-btn" data-platform="豆包" data-url="https://www.doubao.com" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🟢</span><span>豆包</span></button>
+            <button class="platform-btn" data-platform="通义千问" data-url="https://tongyi.aliyun.com" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🔷</span><span>通义千问</span></button>
+            <button class="platform-btn" data-platform="文心一言" data-url="https://yiyan.baidu.com" style="padding: 12px 8px; border-radius: 10px; border: 1px solid var(--border-glass); background: var(--bg-glass); color: var(--text-primary); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px;"><span style="font-size: 20px;">🇨🇳</span><span>文心一言</span></button>
+        `;
     }
 
     document.querySelectorAll('.platform-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            window.open(btn.dataset.url, '_blank');
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            window.open(this.dataset.url, '_blank');
         });
     });
 
@@ -1895,7 +1840,7 @@ function showGuideModal() {
     $('guideModal').classList.add('active');
 }
 
-// ===== 提示词生成 =====
+// ---------- 提示词生成引擎 ----------
 function buildPrompt(field, task, level) {
     const platformSelect = $('platformSelect');
     const platform = platformSelect ? platformSelect.value : '通用';
@@ -1937,126 +1882,27 @@ function buildPrompt(field, task, level) {
     const trait = platformTraits[platform] || platformTraits['通用'];
 
     const basePrompts = {
-        basic: '【角色定位】
-你是一位专业的' + field + '领域AI助手，擅长处理各类' + field + '相关任务。
-
-【任务描述】
-' + task + '
-
-【基本要求】
-1. 提供清晰、实用的解决方案
-2. 使用专业但易懂的语言
-3. 确保内容准确、完整',
-
-        advanced: '【角色定位】
-你是一位资深的' + field + '领域专家，拥有10年以上行业经验，精通' + field + '的核心理论与实践方法。
-
-【核心能力】
-- 深度理解' + field + '领域的专业知识体系
-- 具备解决复杂' + field + '问题的分析能力
-- 熟悉行业最佳实践和标准流程
-- 能够将复杂概念转化为可执行方案
-
-【任务分析】
-' + task + '
-
-【执行框架】
-1. 需求理解：明确任务目标和约束条件
-2. 方案设计：制定系统化的解决策略
-3. 详细执行：分步骤展开具体实施
-4. 质量检查：验证输出是否符合要求
-
-【输出要求】
-- 结构清晰，逻辑严谨
-- 包含具体 actionable 的建议
-- 适当使用示例说明
-- 标注关键注意事项',
-
-        expert: '【角色定位】
-你是一位' + field + '领域的顶级专家顾问，拥有15年以上跨行业实战经验，曾服务过多家世界500强企业。你不仅是技术专家，更是战略思想家，能够从宏观和微观两个维度审视问题。
-
-【专业能力矩阵】
-- 战略层面：行业趋势洞察、商业模式设计、竞争格局分析
-- 战术层面：流程优化、方法论应用、工具链搭建
-- 执行层面：细节把控、质量标准制定、风险预判
-
-【思维特征】
-- 系统性思维：善于发现事物间的关联和规律
-- 批判性思维：不盲从权威，基于证据做判断
-- 创新思维：在传统方法基础上寻求突破
-- 用户思维：始终站在最终使用者角度思考
-
-【任务深度分析】
-' + task + '
-
-【执行框架】
-第一阶段：诊断与定义
-1. 明确核心问题和边界条件
-2. 识别关键利益相关者
-3. 梳理现有资源和约束
-4. 设定可衡量的成功标准
-
-第二阶段：研究与分析
-1. 收集相关背景信息和数据
-2. 应用适当的分析框架
-3. 识别潜在风险和机会
-4. 形成初步假设
-
-第三阶段：方案设计
-1. 制定多个备选方案
-2. 评估各方案的优劣势
-3. 选择最优路径并细化
-4. 制定实施路线图
-
-第四阶段：交付与迭代
-1. 输出高质量交付物
-2. 收集反馈并优化
-3. 提供后续支持建议
-4. 总结经验教训
-
-【质量控制标准】
-- 准确性：所有数据和事实经过验证
-- 完整性：覆盖任务的所有维度
-- 可操作性：每个建议都有明确的执行路径
-- 创新性：在可行范围内提供新颖视角
-
-【示例参考】
-在回答过程中，适当引用行业经典案例或最佳实践作为参考。
-
-【迭代优化机制】
-- 主动询问是否需要深入某个特定方向
-- 提供多个版本供选择（简要版/详细版）
-- 根据反馈实时调整输出策略
-
-【输出规范】
-- 使用Markdown格式
-- 重要观点使用加粗标注
-- 复杂概念配合简单示例
-- 结尾提供"下一步行动建议"'
+        basic: '【角色定位】\n你是一位专业的' + field + '领域AI助手，擅长处理各类' + field + '相关任务。\n\n【任务描述】\n' + task + '\n\n【基本要求】\n1. 提供清晰、实用的解决方案\n2. 使用专业但易懂的语言\n3. 确保内容准确、完整',
+        advanced: '【角色定位】\n你是一位资深的' + field + '领域专家，拥有10年以上行业经验，精通' + field + '的核心理论与实践方法。\n\n【核心能力】\n- 深度理解' + field + '领域的专业知识体系\n- 具备解决复杂' + field + '问题的分析能力\n- 熟悉行业最佳实践和标准流程\n- 能够将复杂概念转化为可执行方案\n\n【任务分析】\n' + task + '\n\n【执行框架】\n1. 需求理解：明确任务目标和约束条件\n2. 方案设计：制定系统化的解决策略\n3. 详细执行：分步骤展开具体实施\n4. 质量检查：验证输出是否符合要求\n\n【输出要求】\n- 结构清晰，逻辑严谨\n- 包含具体 actionable 的建议\n- 适当使用示例说明\n- 标注关键注意事项',
+        expert: '【角色定位】\n你是一位' + field + '领域的顶级专家顾问，拥有15年以上跨行业实战经验，曾服务过多家世界500强企业。你不仅是技术专家，更是战略思想家，能够从宏观和微观两个维度审视问题。\n\n【专业能力矩阵】\n- 战略层面：行业趋势洞察、商业模式设计、竞争格局分析\n- 战术层面：流程优化、方法论应用、工具链搭建\n- 执行层面：细节把控、质量标准制定、风险预判\n\n【思维特征】\n- 系统性思维：善于发现事物间的关联和规律\n- 批判性思维：不盲从权威，基于证据做判断\n- 创新思维：在传统方法基础上寻求突破\n- 用户思维：始终站在最终使用者角度思考\n\n【任务深度分析】\n' + task + '\n\n【执行框架】\n第一阶段：诊断与定义\n1. 明确核心问题和边界条件\n2. 识别关键利益相关者\n3. 梳理现有资源和约束\n4. 设定可衡量的成功标准\n\n第二阶段：研究与分析\n1. 收集相关背景信息和数据\n2. 应用适当的分析框架\n3. 识别潜在风险和机会\n4. 形成初步假设\n\n第三阶段：方案设计\n1. 制定多个备选方案\n2. 评估各方案的优劣势\n3. 选择最优路径并细化\n4. 制定实施路线图\n\n第四阶段：交付与迭代\n1. 输出高质量交付物\n2. 收集反馈并优化\n3. 提供后续支持建议\n4. 总结经验教训\n\n【质量控制标准】\n- 准确性：所有数据和事实经过验证\n- 完整性：覆盖任务的所有维度\n- 可操作性：每个建议都有明确的执行路径\n- 创新性：在可行范围内提供新颖视角\n\n【示例参考】\n在回答过程中，适当引用行业经典案例或最佳实践作为参考。\n\n【迭代优化机制】\n- 主动询问是否需要深入某个特定方向\n- 提供多个版本供选择（简要版/详细版）\n- 根据反馈实时调整输出策略\n\n【输出规范】\n- 使用Markdown格式\n- 重要观点使用加粗标注\n- 复杂概念配合简单示例\n- 结尾提供"下一步行动建议"'
     };
 
     let prompt = basePrompts[level] || basePrompts.basic;
 
     if (platform !== '通用') {
         if (trait.prefix) {
-            prompt = trait.prefix + '
-
-' + prompt;
+            prompt = trait.prefix + '\n\n' + prompt;
         }
         if (trait.suffix) {
-            prompt = prompt + '
-
-' + trait.suffix;
+            prompt = prompt + '\n\n' + trait.suffix;
         }
-        prompt = '【AI平台】' + platform + recommendTag + '
-
-' + prompt;
+        prompt = '【AI平台】' + platform + recommendTag + '\n\n' + prompt;
     }
 
     return prompt;
 }
 
-// ===== 电商AI绘画提示词生成引擎 =====
+// ---------- 电商AI绘画提示词 ----------
 function buildEcommercePrompt(task, level, platform) {
     const isEnglish = ['Midjourney', 'Stable Diffusion'].includes(platform);
     const lang = isEnglish ? 'en' : 'zh';
@@ -2074,86 +1920,35 @@ function buildEcommercePrompt(task, level, platform) {
 
     const imageTypes = {
         '产品白底主图': {
-            zh: '【主体】' + task + '，纯白无影背景，产品居中构图
-【风格】商业产品摄影，极简主义，' + params.style + '
-【光线】左侧45度柔光箱，右侧反光板补光，无阴影
-【构图】正面平视角度，产品占画面70%，留白适合加文案
-【质量】8K超高清，超写实，细节清晰，色彩准确
-【用途】淘宝/京东/拼多多主图，直通车图，商品详情页首图',
+            zh: '【主体】' + task + '，纯白无影背景，产品居中构图\n【风格】商业产品摄影，极简主义，' + params.style + '\n【光线】左侧45度柔光箱，右侧反光板补光，无阴影\n【构图】正面平视角度，产品占画面70%，留白适合加文案\n【质量】8K超高清，超写实，细节清晰，色彩准确\n【用途】淘宝/京东/拼多多主图，直通车图，商品详情页首图',
             en: 'Product photography of ' + task + ', pure white seamless background, centered composition, commercial minimalist style, ' + params.style + ', left 45-degree softbox lighting, right reflector fill, no shadows, front eye-level angle, product occupies 70% of frame, space for text overlay, 8K ultra HD, hyper-realistic, sharp details, accurate colors, e-commerce main image' + params.param
         },
         '产品场景图': {
-            zh: '【主体】' + task + '，真实生活场景展示
-【场景】现代简约家居环境/办公桌面/户外自然场景（根据产品特性选择）
-【风格】生活方式摄影，自然光感，温馨氛围，' + params.style + '
-【光线】自然窗光或柔光，避免硬阴影，营造真实感
-【构图】三分法构图，产品为视觉焦点，环境烘托氛围
-【细节】生活化道具搭配，适度虚化背景，突出产品
-【质量】8K高清，色彩自然，画面通透
-【用途】商品详情页场景图，社交媒体种草图',
+            zh: '【主体】' + task + '，真实生活场景展示\n【场景】现代简约家居环境/办公桌面/户外自然场景（根据产品特性选择）\n【风格】生活方式摄影，自然光感，温馨氛围，' + params.style + '\n【光线】自然窗光或柔光，避免硬阴影，营造真实感\n【构图】三分法构图，产品为视觉焦点，环境烘托氛围\n【细节】生活化道具搭配，适度虚化背景，突出产品\n【质量】8K高清，色彩自然，画面通透\n【用途】商品详情页场景图，社交媒体种草图',
             en: 'Lifestyle photography of ' + task + ' in authentic real-life setting, modern minimalist home/office/outdoor scene, natural lighting, warm atmosphere, ' + params.style + ', soft window light, no harsh shadows, rule of thirds composition, product as focal point, lifestyle props, moderate background blur, 8K HD, natural colors, product detail page lifestyle image' + params.param
         },
         '模特穿搭图': {
-            zh: '【主体】亚洲年轻女性模特，身高165-170cm，身材匀称，穿着' + task + '
-【风格】时尚街拍/lookbook风格，' + params.style + '
-【场景】城市街道/咖啡馆/简约室内（根据服装风格选择）
-【姿势】自然行走/侧身/坐姿，展示服装版型和细节
-【光线】自然光或模拟自然光，柔和均匀，突出面料质感
-【构图】全身或七分身，背景简洁不抢镜
-【质量】8K高清，皮肤质感真实，服装纹理清晰，色彩还原准确
-【用途】服装详情页主图，小红书穿搭分享，淘宝逛逛',
+            zh: '【主体】亚洲年轻女性模特，身高165-170cm，身材匀称，穿着' + task + '\n【风格】时尚街拍/lookbook风格，' + params.style + '\n【场景】城市街道/咖啡馆/简约室内（根据服装风格选择）\n【姿势】自然行走/侧身/坐姿，展示服装版型和细节\n【光线】自然光或模拟自然光，柔和均匀，突出面料质感\n【构图】全身或七分身，背景简洁不抢镜\n【质量】8K高清，皮肤质感真实，服装纹理清晰，色彩还原准确\n【用途】服装详情页主图，小红书穿搭分享，淘宝逛逛',
             en: 'Asian female model, 165-170cm, wearing ' + task + ', fashion street style lookbook photography, ' + params.style + ', urban street or cafe setting, natural walking pose showing clothing silhouette, natural soft lighting, full body or 7/8 shot, clean background, 8K HD, realistic skin texture, clear fabric details, accurate color reproduction, fashion e-commerce' + params.param
         },
         '促销海报图': {
-            zh: '【主体】' + task + '，大促氛围，醒目展示
-【风格】电商促销海报，视觉冲击力强，' + params.style + '
-【元素】红色/橙色/金色促销色调，放射状或渐变背景，光效粒子
-【构图】产品居中放大，上方或侧面预留大标题文案区域
-【光线】戏剧性打光，产品高光突出，背景暗角聚焦
-【文案区】预留30%画面空间给促销文案（如：限时5折、买一送一）
-【质量】8K高清，色彩饱和度高，对比强烈，吸引眼球
-【用途】活动banner，首页海报，朋友圈促销图，直播间背景',
+            zh: '【主体】' + task + '，大促氛围，醒目展示\n【风格】电商促销海报，视觉冲击力强，' + params.style + '\n【元素】红色/橙色/金色促销色调，放射状或渐变背景，光效粒子\n【构图】产品居中放大，上方或侧面预留大标题文案区域\n【光线】戏剧性打光，产品高光突出，背景暗角聚焦\n【文案区】预留30%画面空间给促销文案（如：限时5折、买一送一）\n【质量】8K高清，色彩饱和度高，对比强烈，吸引眼球\n【用途】活动banner，首页海报，朋友圈促销图，直播间背景',
             en: 'Promotional poster for ' + task + ', e-commerce sale atmosphere, strong visual impact, ' + params.style + ', red orange gold promotional colors, radial or gradient background with light effects, product centered and enlarged, 30% space reserved for promotional text, dramatic lighting with product highlights, dark vignette background, 8K HD, high saturation, strong contrast, eye-catching, sale banner' + params.param
         },
         '详情页长图': {
-            zh: '【主体】' + task + '，多卖点展示，图文排版
-【风格】电商详情页设计，信息层次清晰，' + params.style + '
-【模块1】首屏：产品大图+核心卖点标题（如：轻薄透气、持久续航）
-【模块2】细节展示：产品特写，材质纹理，工艺细节
-【模块3】场景展示：使用场景，人物互动，效果对比
-【模块4】参数说明：规格尺寸，功能图解，认证标识
-【模块5】品牌背书：品牌故事，用户评价，售后保障
-【质量】8K超高清，每模块独立构图，整体风格统一
-【用途】淘宝/京东/拼多多详情页长图，独立站产品页',
+            zh: '【主体】' + task + '，多卖点展示，图文排版\n【风格】电商详情页设计，信息层次清晰，' + params.style + '\n【模块1】首屏：产品大图+核心卖点标题（如：轻薄透气、持久续航）\n【模块2】细节展示：产品特写，材质纹理，工艺细节\n【模块3】场景展示：使用场景，人物互动，效果对比\n【模块4】参数说明：规格尺寸，功能图解，认证标识\n【模块5】品牌背书：品牌故事，用户评价，售后保障\n【质量】8K超高清，每模块独立构图，整体风格统一\n【用途】淘宝/京东/拼多多详情页长图，独立站产品页',
             en: 'E-commerce product detail page design for ' + task + ', multi-selling point display, clear information hierarchy, ' + params.style + ', hero banner with product and core benefits, detail close-ups showing material texture, lifestyle usage scenarios, specification infographic, brand story section, 8K ultra HD, consistent style across all modules, product detail page' + params.param
         },
         'AI换脸模特图': {
-            zh: '【主体】亚洲面孔年轻女性，五官精致，气质清新，展示' + task + '
-【风格】美妆/护肤/配饰广告大片，' + params.style + '
-【角度】正面特写/45度侧脸/半身像，多角度展示产品使用效果
-【光线】影棚级专业打光，蝴蝶光或环形光，突出面部立体感
-【妆容】自然清新妆容，突出产品使用区域（如唇妆/眼妆/护肤光泽）
-【背景】纯色渐变或极简场景，不分散注意力
-【质量】8K超高清，皮肤质感细腻真实，产品细节清晰可见
-【用途】美妆详情页，护肤广告，配饰展示，社交媒体种草',
+            zh: '【主体】亚洲面孔年轻女性，五官精致，气质清新，展示' + task + '\n【风格】美妆/护肤/配饰广告大片，' + params.style + '\n【角度】正面特写/45度侧脸/半身像，多角度展示产品使用效果\n【光线】影棚级专业打光，蝴蝶光或环形光，突出面部立体感\n【妆容】自然清新妆容，突出产品使用区域（如唇妆/眼妆/护肤光泽）\n【背景】纯色渐变或极简场景，不分散注意力\n【质量】8K超高清，皮肤质感细腻真实，产品细节清晰可见\n【用途】美妆详情页，护肤广告，配饰展示，社交媒体种草',
             en: 'Asian female model, delicate features, fresh temperament, showcasing ' + task + ', beauty/skincare/accessory advertising photography, ' + params.style + ', front close-up and 45-degree profile, professional studio lighting with butterfly or ring light, natural fresh makeup highlighting product application area, solid gradient or minimal background, 8K ultra HD, realistic skin texture, clear product details, beauty e-commerce' + params.param
         }
     };
 
     const complexityEnhance = {
         basic: { zh: '', en: '' },
-        advanced: { zh: '
-【进阶要求】
-- 添加平台适配参数
-- 优化光影层次
-- 增强材质质感描述', en: ', advanced lighting setup, enhanced material texture, professional post-processing' },
-        expert: { zh: '
-【专家级要求】
-- 添加平台适配参数
-- 优化光影层次与色彩管理
-- 增强材质质感与细节刻画
-- 符合电商平台审核规范
-- 适合A/B测试的多版本方案', en: ', advanced lighting setup, enhanced material texture, professional post-processing, color managed workflow, e-commerce platform compliant, A/B testing ready, multiple variations' + params.param }
+        advanced: { zh: '\n【进阶要求】\n- 添加平台适配参数\n- 优化光影层次\n- 增强材质质感描述', en: ', advanced lighting setup, enhanced material texture, professional post-processing' },
+        expert: { zh: '\n【专家级要求】\n- 添加平台适配参数\n- 优化光影层次与色彩管理\n- 增强材质质感与细节刻画\n- 符合电商平台审核规范\n- 适合A/B测试的多版本方案', en: ', advanced lighting setup, enhanced material texture, professional post-processing, color managed workflow, e-commerce platform compliant, A/B testing ready, multiple variations' + params.param }
     };
 
     const basePrompt = imageTypes[task] || imageTypes['产品白底主图'];
@@ -2164,8 +1959,7 @@ function buildEcommercePrompt(task, level, platform) {
     }
 
     if (lang === 'zh') {
-        prompt = '【平台】' + platform + '
-' + prompt;
+        prompt = '【平台】' + platform + '\n' + prompt;
     } else {
         prompt = '[Platform: ' + platform + '] ' + prompt;
     }
@@ -2173,39 +1967,39 @@ function buildEcommercePrompt(task, level, platform) {
     return prompt;
 }
 
-// ===== 生成逻辑 =====
+// ---------- 生成相关函数 ----------
 function canGenerate(level) {
-if (level === 'basic') {
-if (db.todayBasicCount >= MAX_BASIC_DAILY) {
-showToast(`基础版每日限${MAX_BASIC_DAILY}次，请明日再来`, '⚠️');
-return false;
-}
-return true;
-}
+    if (level === 'basic') {
+        if (db.todayBasicCount >= MAX_BASIC_DAILY) {
+            showToast(`基础版每日限${MAX_BASIC_DAILY}次，请明日再来`, '⚠️');
+            return false;
+        }
+        return true;
+    }
 
-if (level === 'advanced') {
-if (db.firstUse.advanced) return true;
-if (db.unlocked.advanced) return true;
-pendingUnlockLevel = 'advanced';
-showUnlockModal('进阶版');
-return false;
-}
+    if (level === 'advanced') {
+        if (db.firstUse.advanced) return true;
+        if (db.unlocked.advanced) return true;
+        pendingUnlockLevel = 'advanced';
+        showUnlockModal('进阶版');
+        return false;
+    }
 
-if (level === 'expert') {
-if (db.firstUse.expert) return true;
-if (db.unlocked.expert) return true;
-pendingUnlockLevel = 'expert';
-showUnlockModal('专家版');
-return false;
-}
+    if (level === 'expert') {
+        if (db.firstUse.expert) return true;
+        if (db.unlocked.expert) return true;
+        pendingUnlockLevel = 'expert';
+        showUnlockModal('专家版');
+        return false;
+    }
 
-return false;
+    return false;
 }
 
 function showUnlockModal(versionName) {
-$('unlockDesc').textContent = `${versionName}需要密码解锁。如需获取密码，请添加QQ：${QQ_NUMBER}`;
-$('unlockInput').value = '';
-$('unlockModal').classList.add('active');
+    $('unlockDesc').textContent = `${versionName}需要密码解锁。如需获取密码，请添加QQ：${QQ_NUMBER}`;
+    $('unlockInput').value = '';
+    $('unlockModal').classList.add('active');
 }
 
 function doGenerate() {
@@ -2258,7 +2052,6 @@ function doGenerate() {
     showToast('提示词生成成功！', '✨');
 }
 
-// ===== 一键优化功能（专家版专属）=====
 function doOptimize() {
     const task = $('taskInput').value.trim();
     if (!task) {
@@ -2272,35 +2065,7 @@ function doOptimize() {
     const field = $('fieldSelect').value;
     const platform = $('platformSelect').value;
 
-    const optimizedPrompt = '【一键优化版】
-
-【原始需求】
-' + task + '
-
-【优化分析】
-1. 需求拆解：将模糊需求转化为可执行的AI指令
-2. 角色定位：为' + field + '领域匹配最佳AI角色
-3. 输出规范：定义格式、长度、风格标准
-4. 质量控制：添加验证标准和迭代机制
-
-【优化后提示词】
-你是一位' + field + '领域的顶级专家，拥有15年以上实战经验。
-
-任务：' + task + '
-
-请按以下框架输出：
-1. 执行摘要（100字以内）
-2. 详细方案（分步骤，每步骤有具体动作和预期产出）
-3. 关键要点（3-5条核心建议）
-4. 风险提示（潜在问题和应对策略）
-5. 下一步行动（可立即执行的具体事项）
-
-输出要求：
-- 使用Markdown格式
-- 重要内容加粗标注
-- 适当使用表格和列表
-- 总字数控制在2000字以内
-- 语言风格：专业严谨但通俗易懂';
+    const optimizedPrompt = '【一键优化版】\n\n【原始需求】\n' + task + '\n\n【优化分析】\n1. 需求拆解：将模糊需求转化为可执行的AI指令\n2. 角色定位：为' + field + '领域匹配最佳AI角色\n3. 输出规范：定义格式、长度、风格标准\n4. 质量控制：添加验证标准和迭代机制\n\n【优化后提示词】\n你是一位' + field + '领域的顶级专家，拥有15年以上实战经验。\n\n任务：' + task + '\n\n请按以下框架输出：\n1. 执行摘要（100字以内）\n2. 详细方案（分步骤，每步骤有具体动作和预期产出）\n3. 关键要点（3-5条核心建议）\n4. 风险提示（潜在问题和应对策略）\n5. 下一步行动（可立即执行的具体事项）\n\n输出要求：\n- 使用Markdown格式\n- 重要内容加粗标注\n- 适当使用表格和列表\n- 总字数控制在2000字以内\n- 语言风格：专业严谨但通俗易懂';
 
     const now = new Date();
     const timeStr = now.toLocaleString('zh-CN');
@@ -2326,7 +2091,6 @@ function doOptimize() {
     showToast('提示词已一键优化！', '🚀');
 }
 
-// ===== 批量生成模式（专家版专属）=====
 function doBatchGenerate() {
     const task = $('taskInput').value.trim();
     if (!task) {
@@ -2337,8 +2101,7 @@ function doBatchGenerate() {
 
     if (!canGenerate('expert')) return;
 
-    const tasks = task.split('
-').filter(t => t.trim());
+    const tasks = task.split('\n').filter(t => t.trim());
     if (tasks.length < 2) {
         showToast('请至少输入2个任务（每行一个）', '⚠️');
         return;
@@ -2385,74 +2148,74 @@ function doBatchGenerate() {
     showToast('批量生成开始！共' + tasks.length + '个任务', '📦');
 }
 
-
-// ===== 渲染结果 =====
+// ---------- 渲染结果 ----------
 function renderResult(result) {
-const container = $('resultsContainer');
-const levelNames = { basic: '基础版', advanced: '进阶版', expert: '专家版' };
-const levelBadges = { basic: 'badge-basic', advanced: 'badge-advanced', expert: 'badge-expert' };
+    const container = $('resultsContainer');
+    const levelNames = { basic: '基础版', advanced: '进阶版', expert: '专家版' };
+    const levelBadges = { basic: 'badge-basic', advanced: 'badge-advanced', expert: 'badge-expert' };
 
-const card = document.createElement('div');
-card.className = 'result-card';
-card.dataset.id = result.id;
+    const card = document.createElement('div');
+    card.className = 'result-card';
+    card.dataset.id = result.id;
 
-card.innerHTML = `
-       <div class="result-header">
-           <div class="result-meta">
-               <span class="result-badge ${levelBadges[result.level]}">${levelNames[result.level]}</span>
-               <span class="result-field">📂 ${result.field}</span>
-               ${result.platform ? '<span class="result-badge badge-advanced">🎨 ' + result.platform + '</span>' : ''}
-               <span class="result-time">🕐 ${result.time}</span>
-           </div>
-           <div class="result-actions">
-               <button class="action-btn" onclick="copyResult(${result.id})">
-                   <span>📋</span> 复制
-               </button>
-               <button class="action-btn ${result.favorited ? 'favorited' : ''}" onclick="toggleFavorite(${result.id})">
-                   <span>${result.favorited ? '❤️' : '🤍'}</span> ${result.favorited ? '已收藏' : '收藏'}
-               </button>
-           </div>
-       </div>
-       <div class="result-content">
-           ${formatPromptToHTML(result.prompt)}
-       </div>
-   `;
+    card.innerHTML = `
+        <div class="result-header">
+            <div class="result-meta">
+                <span class="result-badge ${levelBadges[result.level]}">${levelNames[result.level]}</span>
+                <span class="result-field">📂 ${result.field}</span>
+                ${result.platform ? '<span class="result-badge badge-advanced">🎨 ' + result.platform + '</span>' : ''}
+                <span class="result-time">🕐 ${result.time}</span>
+            </div>
+            <div class="result-actions">
+                <button class="action-btn" onclick="copyResult(${result.id})">
+                    <span>📋</span> 复制
+                </button>
+                <button class="action-btn ${result.favorited ? 'favorited' : ''}" onclick="toggleFavorite(${result.id})">
+                    <span>${result.favorited ? '❤️' : '🤍'}</span> ${result.favorited ? '已收藏' : '收藏'}
+                </button>
+            </div>
+        </div>
+        <div class="result-content">
+            ${formatPromptToHTML(result.prompt)}
+        </div>
+    `;
 
-container.insertBefore(card, container.firstChild);
+    container.insertBefore(card, container.firstChild);
 }
 
-function copyResult(id) {
-const result = db.history.find(h => h.id === id);
-if (result) copyToClipboard(result.prompt);
-}
+// 这些函数挂在全局供 onclick 调用
+window.copyResult = function(id) {
+    const result = db.history.find(h => h.id === id);
+    if (result) copyToClipboard(result.prompt);
+};
 
-function toggleFavorite(id) {
-const result = db.history.find(h => h.id === id);
-if (!result) return;
+window.toggleFavorite = function(id) {
+    const result = db.history.find(h => h.id === id);
+    if (!result) return;
 
-result.favorited = !result.favorited;
+    result.favorited = !result.favorited;
 
-if (result.favorited) {
-if (!db.favorites.find(f => f.id === id)) {
-db.favorites.push({...result});
-}
-} else {
-db.favorites = db.favorites.filter(f => f.id !== id);
-}
+    if (result.favorited) {
+        if (!db.favorites.find(f => f.id === id)) {
+            db.favorites.push({...result});
+        }
+    } else {
+        db.favorites = db.favorites.filter(f => f.id !== id);
+    }
 
-saveDB(db);
+    saveDB(db);
 
-const card = document.querySelector(`.result-card[data-id="${id}"]`);
-if (card) {
-const btn = card.querySelector('.action-btn:last-child');
-btn.classList.toggle('favorited', result.favorited);
-btn.innerHTML = `<span>${result.favorited ? '❤️' : '🤍'}</span> ${result.favorited ? '已收藏' : '收藏'}`;
-}
+    const card = document.querySelector(`.result-card[data-id="${id}"]`);
+    if (card) {
+        const btn = card.querySelector('.action-btn:last-child');
+        btn.classList.toggle('favorited', result.favorited);
+        btn.innerHTML = `<span>${result.favorited ? '❤️' : '🤍'}</span> ${result.favorited ? '已收藏' : '收藏'}`;
+    }
 
-showToast(result.favorited ? '已添加到收藏' : '已取消收藏', result.favorited ? '❤️' : '🤍');
-}
+    showToast(result.favorited ? '已添加到收藏' : '已取消收藏', result.favorited ? '❤️' : '🤍');
+};
 
-// ===== 更新统计 =====
+// ---------- 更新UI ----------
 function updateFeatureButtons() {
     const isExpert = db.unlocked.expert || db.firstUse.expert;
     const optimizeBtn = $('optimizeBtn');
@@ -2462,595 +2225,353 @@ function updateFeatureButtons() {
 }
 
 function updateStats() {
-$('todayCount').textContent = Math.max(0, MAX_BASIC_DAILY - db.todayBasicCount);
-$('totalCount').textContent = db.totalGenerated;
-updateFeatureButtons();
+    $('todayCount').textContent = Math.max(0, MAX_BASIC_DAILY - db.todayBasicCount);
+    $('totalCount').textContent = db.totalGenerated;
+    updateFeatureButtons();
 
-if (!db.firstUse.advanced && !db.unlocked.advanced) {
-$('advancedBadge').textContent = '🔒 已锁定';
-$('advancedBadge').className = 'complexity-badge badge-locked';
-} else if (db.unlocked.advanced) {
-$('advancedBadge').textContent = '✅ 已解锁';
-$('advancedBadge').className = 'complexity-badge badge-free';
+    if (!db.firstUse.advanced && !db.unlocked.advanced) {
+        $('advancedBadge').textContent = '🔒 已锁定';
+        $('advancedBadge').className = 'complexity-badge badge-locked';
+    } else if (db.unlocked.advanced) {
+        $('advancedBadge').textContent = '✅ 已解锁';
+        $('advancedBadge').className = 'complexity-badge badge-free';
+    }
+
+    if (!db.firstUse.expert && !db.unlocked.expert) {
+        $('expertBadge').textContent = '🔒 已锁定';
+        $('expertBadge').className = 'complexity-badge badge-locked';
+    } else if (db.unlocked.expert) {
+        $('expertBadge').textContent = '✅ 已解锁';
+        $('expertBadge').className = 'complexity-badge badge-free';
+    }
+
+    updateTemplateLocks();
 }
 
-if (!db.firstUse.expert && !db.unlocked.expert) {
-$('expertBadge').textContent = '🔒 已锁定';
-$('expertBadge').className = 'complexity-badge badge-locked';
-} else if (db.unlocked.expert) {
-$('expertBadge').textContent = '✅ 已解锁';
-$('expertBadge').className = 'complexity-badge badge-free';
-}
-
-updateTemplateLocks();
-}
-
-// ===== 模板库锁定逻辑 - 全部锁定为专家版 =====
 function updateTemplateLocks() {
-document.querySelectorAll('.template-card').forEach(card => {
-// 修复：所有模板都锁定为专家版
-const isLocked = !db.unlocked.expert && !db.firstUse.expert;
-
-if (isLocked) {
-card.classList.add('locked');
-if (!card.querySelector('.template-lock-overlay')) {
-const overlay = document.createElement('div');
-overlay.className = 'template-lock-overlay';
-overlay.innerHTML = `
-                   <div class="lock-icon">🔒</div>
-                   <div>专家版解锁后可用</div>
-               `;
-card.appendChild(overlay);
-}
-} else {
-card.classList.remove('locked');
-const overlay = card.querySelector('.template-lock-overlay');
-if (overlay) overlay.remove();
-}
-});
+    document.querySelectorAll('.template-card').forEach(card => {
+        const isLocked = !db.unlocked.expert && !db.firstUse.expert;
+        if (isLocked) {
+            card.classList.add('locked');
+            if (!card.querySelector('.template-lock-overlay')) {
+                const overlay = document.createElement('div');
+                overlay.className = 'template-lock-overlay';
+                overlay.innerHTML = `
+                    <div class="lock-icon">🔒</div>
+                    <div>专家版解锁后可用</div>
+                `;
+                card.appendChild(overlay);
+            }
+        } else {
+            card.classList.remove('locked');
+            const overlay = card.querySelector('.template-lock-overlay');
+            if (overlay) overlay.remove();
+        }
+    });
 }
 
-// ===== 解锁逻辑 =====
+// ---------- 解锁逻辑 ----------
 function doUnlock() {
-const password = $('unlockInput').value.trim();
-if (!password) {
-showToast('请输入密码', '⚠️');
-return;
+    const password = $('unlockInput').value.trim();
+    if (!password) {
+        showToast('请输入密码', '⚠️');
+        return;
+    }
+
+    if (password === SPECIAL_PASSWORD) {
+        db.unlocked[pendingUnlockLevel] = true;
+        saveDB(db);
+        $('unlockModal').classList.remove('active');
+        showToast(`${pendingUnlockLevel === 'advanced' ? '进阶版' : '专家版'}已永久解锁！`, '🔓');
+        updateStats();
+        return;
+    }
+
+    const poolKey = pendingUnlockLevel === 'advanced' ? 'advanced' : 'expert';
+    const found = db.passwords[poolKey].find(p => p.code === password);
+
+    if (!found) {
+        showToast('密码错误，请检查输入', '❌');
+        return;
+    }
+
+    if (found.used >= found.max) {
+        showToast('该密码使用次数已达上限', '⚠️');
+        return;
+    }
+
+    found.used++;
+    db.unlocked[pendingUnlockLevel] = true;
+    saveDB(db);
+
+    $('unlockModal').classList.remove('active');
+    showToast('解锁成功！', '🔓');
+    updateStats();
 }
 
-if (password === SPECIAL_PASSWORD) {
-db.unlocked[pendingUnlockLevel] = true;
-saveDB(db);
-$('unlockModal').classList.remove('active');
-showToast(`${pendingUnlockLevel === 'advanced' ? '进阶版' : '专家版'}已永久解锁！`, '🔓');
-updateStats();
-return;
-}
-
-const poolKey = pendingUnlockLevel === 'advanced' ? 'advanced' : 'expert';
-const found = db.passwords[poolKey].find(p => p.code === password);
-
-if (!found) {
-showToast('密码错误，请检查输入', '❌');
-return;
-}
-
-if (found.used >= found.max) {
-showToast('该密码使用次数已达上限', '⚠️');
-return;
-}
-
-found.used++;
-db.unlocked[pendingUnlockLevel] = true;
-saveDB(db);
-
-$('unlockModal').classList.remove('active');
-showToast('解锁成功！', '🔓');
-updateStats();
-}
-
-// ===== 页面切换 =====
+// ---------- 页面导航 ----------
 function showPage(pageName) {
-document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
 
-const page = $(`page-${pageName}`);
-const btn = document.querySelector(`.nav-btn[data-page="${pageName}"]`);
+    const page = $(`page-${pageName}`);
+    const btn = document.querySelector(`.nav-btn[data-page="${pageName}"]`);
 
-if (page) page.classList.add('active');
-if (btn) btn.classList.add('active');
+    if (page) page.classList.add('active');
+    if (btn) btn.classList.add('active');
 
-if (pageName === 'history') renderHistory();
-if (pageName === 'favorites') renderFavorites();
-if (pageName === 'admin') renderAdmin();
-if (pageName === 'templates') updateTemplateLocks();
+    if (pageName === 'history') renderHistory();
+    if (pageName === 'favorites') renderFavorites();
+    if (pageName === 'admin') renderAdmin();
+    if (pageName === 'templates') updateTemplateLocks();
 }
 
-// ===== 渲染历史 =====
 function renderHistory() {
-const container = $('historyList');
-if (db.history.length === 0) {
-container.innerHTML = `
-           <div class="empty-state" style="min-height: 300px;">
-               <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">📜</div>
-               <div class="empty-title" style="font-size: 16px;">暂无历史记录</div>
-           </div>`;
-return;
+    const container = $('historyList');
+    if (db.history.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state" style="min-height: 300px;">
+                <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">📜</div>
+                <div class="empty-title" style="font-size: 16px;">暂无历史记录</div>
+            </div>`;
+        return;
+    }
+
+    const levelIcons = { basic: '🌱', advanced: '🚀', expert: '👑' };
+    container.innerHTML = db.history.map(h => `
+        <div class="history-item" onclick="loadHistory(${h.id})">
+            <div class="history-icon" style="background: rgba(139, 92, 246, 0.15);">${levelIcons[h.level]}</div>
+            <div class="history-info">
+                <div class="history-title">${h.field} - ${h.task.substring(0, 30)}...</div>
+                <div class="history-meta">${h.level === 'basic' ? '基础版' : h.level === 'advanced' ? '进阶版' : '专家版'} · ${h.time}</div>
+            </div>
+            <div class="history-actions" onclick="event.stopPropagation()">
+                <button class="icon-btn" onclick="copyResult(${h.id})" title="复制">📋</button>
+                <button class="icon-btn" onclick="toggleFavorite(${h.id})" title="${h.favorited ? '取消收藏' : '收藏'}">${h.favorited ? '❤️' : '🤍'}</button>
+            </div>
+        </div>
+    `).join('');
 }
 
-const levelIcons = { basic: '🌱', advanced: '🚀', expert: '👑' };
-container.innerHTML = db.history.map(h => `
-       <div class="history-item" onclick="loadHistory(${h.id})">
-           <div class="history-icon" style="background: rgba(139, 92, 246, 0.15);">${levelIcons[h.level]}</div>
-           <div class="history-info">
-               <div class="history-title">${h.field} - ${h.task.substring(0, 30)}...</div>
-               <div class="history-meta">${h.level === 'basic' ? '基础版' : h.level === 'advanced' ? '进阶版' : '专家版'} · ${h.time}</div>
-           </div>
-           <div class="history-actions" onclick="event.stopPropagation()">
-               <button class="icon-btn" onclick="copyResult(${h.id})" title="复制">📋</button>
-               <button class="icon-btn" onclick="toggleFavorite(${h.id})" title="${h.favorited ? '取消收藏' : '收藏'}">${h.favorited ? '❤️' : '🤍'}</button>
-           </div>
-       </div>
-   `).join('');
-}
+window.loadHistory = function(id) {
+    const result = db.history.find(h => h.id === id);
+    if (!result) return;
 
-function loadHistory(id) {
-const result = db.history.find(h => h.id === id);
-if (!result) return;
+    $('fieldSelect').value = result.field;
+    $('taskInput').value = result.task;
+    currentLevel = result.level;
 
-$('fieldSelect').value = result.field;
-$('taskInput').value = result.task;
-currentLevel = result.level;
+    document.querySelectorAll('.complexity-card').forEach(c => {
+        c.classList.toggle('selected', c.dataset.level === currentLevel);
+    });
 
-document.querySelectorAll('.complexity-card').forEach(c => {
-c.classList.toggle('selected', c.dataset.level === currentLevel);
-});
-
-showPage('home');
-$('emptyState').classList.add('hidden');
-$('resultsContainer').innerHTML = '';
-renderResult(result);
-}
-
-// ===== 渲染收藏 =====
-function renderFavorites() {
-const container = $('favoritesList');
-if (db.favorites.length === 0) {
-container.innerHTML = `
-           <div class="empty-state" style="min-height: 300px;">
-               <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">⭐</div>
-               <div class="empty-title" style="font-size: 16px;">暂无收藏</div>
-           </div>`;
-return;
-}
-
-const levelIcons = { basic: '🌱', advanced: '🚀', expert: '👑' };
-container.innerHTML = db.favorites.map(f => `
-       <div class="history-item" onclick="loadHistory(${f.id})">
-           <div class="history-icon" style="background: rgba(236, 72, 153, 0.15);">${levelIcons[f.level]}</div>
-           <div class="history-info">
-               <div class="history-title">${f.field} - ${f.task.substring(0, 30)}...</div>
-               <div class="history-meta">${f.level === 'basic' ? '基础版' : f.level === 'advanced' ? '进阶版' : '专家版'} · ${f.time}</div>
-           </div>
-           <div class="history-actions" onclick="event.stopPropagation()">
-               <button class="icon-btn" onclick="copyResult(${f.id})" title="复制">📋</button>
-               <button class="icon-btn" onclick="toggleFavorite(${f.id})" title="取消收藏">❤️</button>
-           </div>
-       </div>
-   `).join('');
-}
-
-// ===== 管理面板 =====
-let adminLoggedIn = false;
-
-function renderAdmin() {
-if (!adminLoggedIn) {
-$('adminPanel').innerHTML = `
-           <div class="empty-state" style="min-height: 400px;">
-               <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">🔒</div>
-               <div class="empty-title" style="font-size: 16px;">请输入管理密码</div>
-               <div class="empty-desc" style="margin-top: 12px;">
-                   <input type="password" id="adminPassword" placeholder="管理密码" 
-                       style="padding: 10px 16px; background: var(--bg-primary); border: 1px solid var(--border-glass); 
-                       border-radius: 8px; color: var(--text-primary); width: 200px; text-align: center;">
-                   <br><br>
-                   <button class="generate-btn" id="adminLoginBtn" style="width: 200px;">进入管理</button>
-               </div>
-           </div>`;
-
-$('adminLoginBtn').onclick = () => {
-if ($('adminPassword').value === ADMIN_PASSWORD) {
-adminLoggedIn = true;
-renderAdmin();
-showToast('管理面板已解锁', '🔓');
-} else {
-showToast('密码错误', '❌');
-}
+    showPage('home');
+    $('emptyState').classList.add('hidden');
+    $('resultsContainer').innerHTML = '';
+    renderResult(result);
 };
-return;
+
+function renderFavorites() {
+    const container = $('favoritesList');
+    if (db.favorites.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state" style="min-height: 300px;">
+                <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">⭐</div>
+                <div class="empty-title" style="font-size: 16px;">暂无收藏</div>
+            </div>`;
+        return;
+    }
+
+    const levelIcons = { basic: '🌱', advanced: '🚀', expert: '👑' };
+    container.innerHTML = db.favorites.map(f => `
+        <div class="history-item" onclick="loadHistory(${f.id})">
+            <div class="history-icon" style="background: rgba(236, 72, 153, 0.15);">${levelIcons[f.level]}</div>
+            <div class="history-info">
+                <div class="history-title">${f.field} - ${f.task.substring(0, 30)}...</div>
+                <div class="history-meta">${f.level === 'basic' ? '基础版' : f.level === 'advanced' ? '进阶版' : '专家版'} · ${f.time}</div>
+            </div>
+            <div class="history-actions" onclick="event.stopPropagation()">
+                <button class="icon-btn" onclick="copyResult(${f.id})" title="复制">📋</button>
+                <button class="icon-btn" onclick="toggleFavorite(${f.id})" title="取消收藏">❤️</button>
+            </div>
+        </div>
+    `).join('');
 }
 
-const advStats = db.passwords.advanced;
-const expStats = db.passwords.expert;
-const advTotal = advStats.reduce((s, p) => s + p.used, 0);
-const expTotal = expStats.reduce((s, p) => s + p.used, 0);
-const advSold = advStats.filter(p => p.sold).length;
-const expSold = expStats.filter(p => p.sold).length;
+// ---------- 管理面板 ----------
+function renderAdmin() {
+    if (!adminLoggedIn) {
+        $('adminPanel').innerHTML = `
+            <div class="empty-state" style="min-height: 400px;">
+                <div class="empty-icon" style="width: 60px; height: 60px; font-size: 28px;">🔒</div>
+                <div class="empty-title" style="font-size: 16px;">请输入管理密码</div>
+                <div class="empty-desc" style="margin-top: 12px;">
+                    <input type="password" id="adminPassword" placeholder="管理密码" 
+                        style="padding: 10px 16px; background: var(--bg-primary); border: 1px solid var(--border-glass); 
+                        border-radius: 8px; color: var(--text-primary); width: 200px; text-align: center;">
+                    <br><br>
+                    <button class="generate-btn" id="adminLoginBtn" style="width: 200px;">进入管理</button>
+                </div>
+            </div>`;
 
-$('adminPanel').innerHTML = `
-       <div class="admin-section">
-           <div class="admin-title">📊 数据统计</div>
-           <div class="stats-grid">
-               <div class="stat-card">
-                   <div class="stat-card-value">${db.totalGenerated}</div>
-                   <div class="stat-card-label">总生成次数</div>
-               </div>
-               <div class="stat-card">
-                   <div class="stat-card-value">${db.todayBasicCount}</div>
-                   <div class="stat-card-label">今日基础版使用</div>
-               </div>
-               <div class="stat-card">
-                   <div class="stat-card-value">${advTotal}</div>
-                   <div class="stat-card-label">进阶版密码使用</div>
-               </div>
-               <div class="stat-card">
-                   <div class="stat-card-value">${expTotal}</div>
-                   <div class="stat-card-label">专家版密码使用</div>
-               </div>
-           </div>
-       </div>
+        $('adminLoginBtn').onclick = () => {
+            if ($('adminPassword').value === ADMIN_PASSWORD) {
+                adminLoggedIn = true;
+                renderAdmin();
+                showToast('管理面板已解锁', '🔓');
+            } else {
+                showToast('密码错误', '❌');
+            }
+        };
+        return;
+    }
 
-       <div class="admin-section">
-           <div class="admin-title">🔐 进阶版密码池 (${advSold}/50 已售)</div>
-           <div style="overflow-x: auto;">
-               <table class="password-table">
-                   <thead>
-                       <tr>
-                           <th>密码</th>
-                           <th>使用次数</th>
-                           <th>进度</th>
-                           <th>状态</th>
-                           <th>操作</th>
-                       </tr>
-                   </thead>
-                   <tbody>
-                       ${advStats.map(p => renderPasswordRow(p, 'advanced')).join('')}
-                   </tbody>
-               </table>
-           </div>
-           <div class="add-password-row">
-               <input type="text" id="newAdvPassword" placeholder="输入新密码">
-               <button class="add-btn" onclick="addPassword('advanced')">添加密码</button>
-           </div>
-       </div>
+    const advStats = db.passwords.advanced;
+    const expStats = db.passwords.expert;
+    const advTotal = advStats.reduce((s, p) => s + p.used, 0);
+    const expTotal = expStats.reduce((s, p) => s + p.used, 0);
+    const advSold = advStats.filter(p => p.sold).length;
+    const expSold = expStats.filter(p => p.sold).length;
 
-       <div class="admin-section">
-           <div class="admin-title">🔐 专家版密码池 (${expSold}/50 已售)</div>
-           <div style="overflow-x: auto;">
-               <table class="password-table">
-                   <thead>
-                       <tr>
-                           <th>密码</th>
-                           <th>使用次数</th>
-                           <th>进度</th>
-                           <th>状态</th>
-                           <th>操作</th>
-                       </tr>
-                   </thead>
-                   <tbody>
-                       ${expStats.map(p => renderPasswordRow(p, 'expert')).join('')}
-                   </tbody>
-               </table>
-           </div>
-           <div class="add-password-row">
-               <input type="text" id="newExpPassword" placeholder="输入新密码">
-               <button class="add-btn" onclick="addPassword('expert')">添加密码</button>
-           </div>
-       </div>
+    $('adminPanel').innerHTML = `
+        <div class="admin-section">
+            <div class="admin-title">📊 数据统计</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-value">${db.totalGenerated}</div>
+                    <div class="stat-card-label">总生成次数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-value">${db.todayBasicCount}</div>
+                    <div class="stat-card-label">今日基础版使用</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-value">${advTotal}</div>
+                    <div class="stat-card-label">进阶版密码使用</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-value">${expTotal}</div>
+                    <div class="stat-card-label">专家版密码使用</div>
+                </div>
+            </div>
+        </div>
 
-       <div class="admin-section">
-           <div class="admin-title">⚠️ 危险操作</div>
-           <button class="action-btn" onclick="resetAllData()" style="color: var(--accent-red); border-color: var(--accent-red);">
-               🗑️ 重置所有数据
-           </button>
-       </div>
-   `;
+        <div class="admin-section">
+            <div class="admin-title">🔐 进阶版密码池 (${advSold}/50 已售)</div>
+            <div style="overflow-x: auto;">
+                <table class="password-table">
+                    <thead>
+                        <tr>
+                            <th>密码</th>
+                            <th>使用次数</th>
+                            <th>进度</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${advStats.map(p => renderPasswordRow(p, 'advanced')).join('')}
+                    </tbody>
+                </table>
+            </div>
+            <div class="add-password-row">
+                <input type="text" id="newAdvPassword" placeholder="输入新密码">
+                <button class="add-btn" onclick="addPassword('advanced')">添加密码</button>
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <div class="admin-title">🔐 专家版密码池 (${expSold}/50 已售)</div>
+            <div style="overflow-x: auto;">
+                <table class="password-table">
+                    <thead>
+                        <tr>
+                            <th>密码</th>
+                            <th>使用次数</th>
+                            <th>进度</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${expStats.map(p => renderPasswordRow(p, 'expert')).join('')}
+                    </tbody>
+                </table>
+            </div>
+            <div class="add-password-row">
+                <input type="text" id="newExpPassword" placeholder="输入新密码">
+                <button class="add-btn" onclick="addPassword('expert')">添加密码</button>
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <div class="admin-title">⚠️ 危险操作</div>
+            <button class="action-btn" onclick="resetAllData()" style="color: var(--accent-red); border-color: var(--accent-red);">
+                🗑️ 重置所有数据
+            </button>
+        </div>
+    `;
 }
 
 function renderPasswordRow(p, type) {
-const percent = Math.round((p.used / p.max) * 100);
-let progressClass = 'low';
-if (percent > 50) progressClass = 'mid';
-if (percent > 80) progressClass = 'high';
+    const percent = Math.round((p.used / p.max) * 100);
+    let progressClass = 'low';
+    if (percent > 50) progressClass = 'mid';
+    if (percent > 80) progressClass = 'high';
 
-let statusClass = 'status-available';
-let statusText = '可用';
-if (p.sold) { statusClass = 'status-sold'; statusText = '已售'; }
-if (p.used >= p.max) { statusClass = 'status-depleted'; statusText = '耗尽'; }
+    let statusClass = 'status-available';
+    let statusText = '可用';
+    if (p.sold) { statusClass = 'status-sold'; statusText = '已售'; }
+    if (p.used >= p.max) { statusClass = 'status-depleted'; statusText = '耗尽'; }
 
-return `
-       <tr>
-           <td><span class="password-code">${p.code}</span></td>
-           <td>${p.used}/${p.max}</td>
-           <td>
-               <div class="progress-bar">
-                   <div class="progress-fill ${progressClass}" style="width: ${percent}%"></div>
-               </div>
-           </td>
-           <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-           <td>
-               <button class="icon-btn" onclick="copyPassword('${p.code}')" title="复制">📋</button>
-               <button class="icon-btn" onclick="toggleSold('${type}', '${p.code}')" title="${p.sold ? '标记未售' : '标记已售'}">${p.sold ? '🔄' : '✓'}</button>
-           </td>
-       </tr>
-   `;
+    return `
+        <tr>
+            <td><span class="password-code">${p.code}</span></td>
+            <td>${p.used}/${p.max}</td>
+            <td>
+                <div class="progress-bar">
+                    <div class="progress-fill ${progressClass}" style="width: ${percent}%"></div>
+                </div>
+            </td>
+            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+            <td>
+                <button class="icon-btn" onclick="copyPassword('${p.code}')" title="复制">📋</button>
+                <button class="icon-btn" onclick="toggleSold('${type}', '${p.code}')" title="${p.sold ? '标记未售' : '标记已售'}">${p.sold ? '🔄' : '✓'}</button>
+            </td>
+        </tr>
+    `;
 }
 
-function copyPassword(code) {
-copyToClipboard(code);
-}
+window.copyPassword = function(code) {
+    copyToClipboard(code);
+};
 
-function toggleSold(type, code) {
-const p = db.passwords[type].find(x => x.code === code);
-if (p) { p.sold = !p.sold; saveDB(db); renderAdmin(); }
-}
+window.toggleSold = function(type, code) {
+    const p = db.passwords[type].find(x => x.code === code);
+    if (p) { p.sold = !p.sold; saveDB(db); renderAdmin(); }
+};
 
-function addPassword(type) {
-const inputId = type === 'advanced' ? 'newAdvPassword' : 'newExpPassword';
-const code = $(inputId).value.trim();
-if (!code) { showToast('请输入密码', '⚠️'); return; }
+window.addPassword = function(type) {
+    const inputId = type === 'advanced' ? 'newAdvPassword' : 'newExpPassword';
+    const code = $(inputId).value.trim();
+    if (!code) { showToast('请输入密码', '⚠️'); return; }
 
-db.passwords[type].push({ code, used: 0, max: MAX_PASSWORD_USES, sold: false });
-saveDB(db);
-$(inputId).value = '';
-renderAdmin();
-showToast('密码添加成功', '✅');
-}
+    db.passwords[type].push({ code, used: 0, max: MAX_PASSWORD_USES, sold: false });
+    saveDB(db);
+    $(inputId).value = '';
+    renderAdmin();
+    showToast('密码添加成功', '✅');
+};
 
-function resetAllData() {
-if (!confirm('确定要重置所有数据吗？此操作不可恢复！')) return;
-localStorage.removeItem('promptGenDB');
-db = getDB();
-adminLoggedIn = false;
-location.reload();
-}
+window.resetAllData = function() {
+    if (!confirm('确定要重置所有数据吗？此操作不可恢复！')) return;
+    localStorage.removeItem('promptGenDB');
+    db = getDB();
+    adminLoggedIn = false;
+    location.reload();
+};
 
-// ===== 事件绑定 =====
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.addEventListener('click', () => showPage(btn.dataset.page));
-    });
-
-    $('mobileMenuBtn').addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var panel = $('configPanel');
-        var overlay = $('overlay');
-        if (panel.classList.contains('open')) {
-            panel.classList.remove('open');
-            overlay.classList.remove('active');
-        } else {
-            panel.classList.add('open');
-            overlay.classList.add('active');
-        }
-        return false;
-    });
-
-    $('overlay').addEventListener('click', function(e) {
-        e.preventDefault();
-        $('configPanel').classList.remove('open');
-        $('overlay').classList.remove('active');
-    });
-
-    document.querySelectorAll('.complexity-card').forEach(card => {
-        card.addEventListener('click', () => {
-            document.querySelectorAll('.complexity-card').forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            currentLevel = card.dataset.level;
-        });
-    });
-
-    $('generateBtn').addEventListener('click', doGenerate);
-    $('optimizeBtn').addEventListener('click', doOptimize);
-    $('batchBtn').addEventListener('click', doBatchGenerate);
-
-    document.querySelectorAll('.tag').forEach(tag => {
-        tag.addEventListener('click', () => {
-            $('taskInput').value = tag.dataset.task;
-        });
-    });
-
-    document.querySelectorAll('#ecommerceTagContainer .tag').forEach(tag => {
-        tag.addEventListener('click', () => {
-            $('taskInput').value = tag.dataset.task;
-        });
-    });
-
-    $('clearBtn').addEventListener('click', () => {
-        $('taskInput').value = '';
-        $('taskInput').focus();
-    });
-
-    $('pasteBtn').addEventListener('click', async () => {
-        try {
-            const text = await navigator.clipboard.readText();
-            $('taskInput').value = text;
-        } catch (e) { showToast('无法读取剪贴板', '⚠️'); }
-    });
-
-    $('fieldSelect').addEventListener('change', () => {
-        const field = $('fieldSelect').value;
-        const isEcommerce = field === '电商AI绘画';
-
-        $('platformSection').style.display = 'block';
-        updatePlatformOptions(field);
-
-        if (isEcommerce) {
-            currentLevel = 'expert';
-            document.querySelectorAll('.complexity-card').forEach(c => {
-                c.classList.toggle('selected', c.dataset.level === 'expert');
-            });
-            $('ecommerceTagSection').style.display = 'block';
-            $('tagContainer').parentElement.style.display = 'none';
-        } else {
-            $('ecommerceTagSection').style.display = 'none';
-            $('tagContainer').parentElement.style.display = 'block';
-        }
-    });
-
-    document.querySelectorAll('.template-card').forEach(card => {
-        card.addEventListener('click', () => {
-            const isLocked = !db.unlocked.expert && !db.firstUse.expert;
-
-            if (isLocked && card.dataset.level === 'expert') {
-                pendingUnlockLevel = 'expert';
-                showUnlockModal('专家版');
-                return;
-            }
-
-            const field = card.dataset.field;
-            $('fieldSelect').value = field;
-            $('taskInput').value = card.dataset.task;
-            currentLevel = card.dataset.level;
-
-            updatePlatformOptions(field);
-
-            if (field === '电商AI绘画') {
-                $('platformSection').style.display = 'block';
-                $('ecommerceTagSection').style.display = 'block';
-                $('tagContainer').parentElement.style.display = 'none';
-            } else {
-                $('platformSection').style.display = 'block';
-                $('ecommerceTagSection').style.display = 'none';
-                $('tagContainer').parentElement.style.display = 'block';
-            }
-
-            document.querySelectorAll('.complexity-card').forEach(c => {
-                c.classList.toggle('selected', c.dataset.level === currentLevel);
-            });
-            showPage('home');
-            showToast('模板已加载', '✅');
-        });
-    });
-
-    $('unlockConfirm').addEventListener('click', doUnlock);
-    $('unlockCancel').addEventListener('click', () => {
-        $('unlockModal').classList.remove('active');
-    });
-    $('unlockInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') doUnlock();
-    });
-
-    $('copyClose').addEventListener('click', () => {
-        $('copyModal').classList.remove('active');
-    });
-
-    $('guideCloseBtn').addEventListener('click', () => {
-        $('guideModal').classList.remove('active');
-    });
-
-    $('guideModal').addEventListener('click', (e) => {
-        if (e.target === $('guideModal')) {
-            $('guideModal').classList.remove('active');
-        }
-    });
-
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) overlay.classList.remove('active');
-        });
-    });
-
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', (e) => {
-        const now = Date.now();
-        if (now - lastTouchEnd <= 300) {
-            e.preventDefault();
-        }
-        lastTouchEnd = now;
-    }, { passive: false });
-
-    document.querySelectorAll('.config-panel, .result-panel').forEach(el => {
-        el.style.webkitOverflowScrolling = 'touch';
-    });
-
-    let touchStartX = 0;
-    const configPanel = $('configPanel');
-    document.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-    }, { passive: true });
-
-    document.addEventListener('touchmove', (e) => {
-        if (!configPanel.classList.contains('open')) return;
-        const touchX = e.touches[0].clientX;
-        const diff = touchStartX - touchX;
-        if (diff > 50 && touchStartX < 100) {
-            configPanel.classList.remove('open');
-            $('overlay').classList.remove('active');
-        }
-    }, { passive: true });
-
-    window.addEventListener('resize', () => {
-        if (window.innerHeight < 500) {
-            document.body.classList.add('keyboard-open');
-        } else {
-            document.body.classList.remove('keyboard-open');
-        }
-    });
-
-    updateStats();
-    updateTemplateLocks();
-    updateFeatureButtons();
-    updatePlatformOptions($('fieldSelect').value);
-
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('admin') === ADMIN_PASSWORD) {
-        showPage('admin');
-    }
-});
-
-$('mobileMenuBtn').addEventListener('click', () => {
-    $('configPanel').classList.toggle('open');
-    $('overlay').classList.toggle('active');
-});
-
-$('overlay').addEventListener('click', () => {
-    $('configPanel').classList.remove('open');
-    $('overlay').classList.remove('active');
-});
-
-// 移动端：点击导航按钮后自动关闭侧边栏
-document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-            $('configPanel').classList.remove('open');
-            $('overlay').classList.remove('active');
-        }
-    });
-});
-
-// 领域切换事件
-$('fieldSelect').addEventListener('change', () => {
-    const field = $('fieldSelect').value;
-    const isEcommerce = field === '电商AI绘画';
-
-    $('platformSection').style.display = 'block';
-    updatePlatformOptions(field);
-
-    if (isEcommerce) {
-        currentLevel = 'expert';
-        document.querySelectorAll('.complexity-card').forEach(c => {
-            c.classList.toggle('selected', c.dataset.level === 'expert');
-        });
-        $('ecommerceTagSection').style.display = 'block';
-        $('tagContainer').parentElement.style.display = 'none';
-    } else {
-        $('ecommerceTagSection').style.display = 'none';
-        $('tagContainer').parentElement.style.display = 'block';
-    }
-});
-
-// 根据领域更新平台选项
+// ---------- 平台选项更新 ----------
 function updatePlatformOptions(field) {
     const platformSelect = $('platformSelect');
     const ecommercePlatforms = [
@@ -3077,198 +2598,242 @@ function updatePlatformOptions(field) {
     platformSelect.innerHTML = platforms.map(p => '<option value="' + p.value + '">' + p.text + '</option>').join('');
 }
 
-// 电商标签点击事件
-document.querySelectorAll('#ecommerceTagContainer .tag').forEach(tag => {
-    tag.addEventListener('click', () => {
-        $('taskInput').value = tag.dataset.task;
+// ============================================================
+// DOMContentLoaded – 所有事件绑定和初始化
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ---------- 导航 ----------
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            showPage(this.dataset.page);
+            // 移动端关闭侧边栏
+            if (window.innerWidth <= 768) {
+                $('configPanel').classList.remove('open');
+                $('overlay').classList.remove('active');
+            }
+        });
     });
-});
 
-// 一键优化和批量生成按钮事件
-$('optimizeBtn').addEventListener('click', doOptimize);
-$('batchBtn').addEventListener('click', doBatchGenerate);
+    // ---------- 移动端侧边栏 ----------
+    const mobileBtn = $('mobileMenuBtn');
+    const overlay = $('overlay');
+    const configPanel = $('configPanel');
 
-// 引导弹窗关闭事件
-$('guideCloseBtn').addEventListener('click', () => {
-    $('guideModal').classList.remove('active');
-});
-
-$('guideModal').addEventListener('click', (e) => {
-    if (e.target === $('guideModal')) {
-        $('guideModal').classList.remove('active');
-    }
-});
-
-document.querySelectorAll('.complexity-card').forEach(card => {
-card.addEventListener('click', () => {
-document.querySelectorAll('.complexity-card').forEach(c => c.classList.remove('selected'));
-card.classList.add('selected');
-currentLevel = card.dataset.level;
-});
-});
-
-$('generateBtn').addEventListener('click', doGenerate);
-
-document.querySelectorAll('.tag').forEach(tag => {
-tag.addEventListener('click', () => {
-$('taskInput').value = tag.dataset.task;
-});
-});
-
-$('clearBtn').addEventListener('click', () => {
-$('taskInput').value = '';
-$('taskInput').focus();
-});
-
-$('pasteBtn').addEventListener('click', async () => {
-try {
-const text = await navigator.clipboard.readText();
-$('taskInput').value = text;
-} catch (e) { showToast('无法读取剪贴板', '⚠️'); }
-});
-
-// 模板点击 - 全部锁定为专家版
-document.querySelectorAll('.template-card').forEach(card => {
-card.addEventListener('click', () => {
-// 修复：所有模板都锁定为专家版
-const isLocked = !db.unlocked.expert && !db.firstUse.expert;
-
-if (isLocked) {
-pendingUnlockLevel = 'expert';
-showUnlockModal('专家版');
-return;
-}
-
-const field = card.dataset.field;
-$('fieldSelect').value = field;
-$('taskInput').value = card.dataset.task;
-currentLevel = card.dataset.level;
-
-updatePlatformOptions(field);
-
-if (field === '电商AI绘画') {
-    $('platformSection').style.display = 'block';
-    $('ecommerceTagSection').style.display = 'block';
-    $('tagContainer').parentElement.style.display = 'none';
-} else {
-    $('platformSection').style.display = 'block';
-    $('ecommerceTagSection').style.display = 'none';
-    $('tagContainer').parentElement.style.display = 'block';
-}
-
-document.querySelectorAll('.complexity-card').forEach(c => {
-c.classList.toggle('selected', c.dataset.level === currentLevel);
-});
-showPage('home');
-showToast('模板已加载', '✅');
-});
-});
-
-$('unlockConfirm').addEventListener('click', doUnlock);
-$('unlockCancel').addEventListener('click', () => {
-$('unlockModal').classList.remove('active');
-});
-
-$('unlockInput').addEventListener('keypress', (e) => {
-if (e.key === 'Enter') doUnlock();
-});
-
-$('copyClose').addEventListener('click', () => {
-$('copyModal').classList.remove('active');
-});
-
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-overlay.addEventListener('click', (e) => {
-if (e.target === overlay) overlay.classList.remove('active');
-});
-});
-
-// 移动端优化
-let lastTouchEnd = 0;
-document.addEventListener('touchend', (e) => {
-    const now = Date.now();
-    if (now - lastTouchEnd <= 300) {
+    mobileBtn.addEventListener('click', function(e) {
         e.preventDefault();
-    }
-    lastTouchEnd = now;
-}, { passive: false });
+        e.stopPropagation();
+        configPanel.classList.toggle('open');
+        overlay.classList.toggle('active');
+        return false;
+    });
 
-document.querySelectorAll('.config-panel, .result-panel').forEach(el => {
-    el.style.webkitOverflowScrolling = 'touch';
-});
-
-let touchStartX = 0;
-const configPanel = $('configPanel');
-document.addEventListener('touchstart', (e) => {
-    touchStartX = e.touches[0].clientX;
-}, { passive: true });
-
-document.addEventListener('touchmove', (e) => {
-    if (!configPanel.classList.contains('open')) return;
-    const touchX = e.touches[0].clientX;
-    const diff = touchStartX - touchX;
-    if (diff > 50 && touchStartX < 100) {
+    overlay.addEventListener('click', function() {
         configPanel.classList.remove('open');
-        $('overlay').classList.remove('active');
-    }
-}, { passive: true });
+        overlay.classList.remove('active');
+    });
 
-window.addEventListener('resize', () => {
-    if (window.innerHeight < 500) {
-        document.body.classList.add('keyboard-open');
-    } else {
-        document.body.classList.remove('keyboard-open');
+    // ---------- 复杂度卡片 ----------
+    document.querySelectorAll('.complexity-card').forEach(card => {
+        card.addEventListener('click', function() {
+            document.querySelectorAll('.complexity-card').forEach(c => c.classList.remove('selected'));
+            this.classList.add('selected');
+            currentLevel = this.dataset.level;
+        });
+    });
+
+    // ---------- 生成按钮 ----------
+    $('generateBtn').addEventListener('click', doGenerate);
+    $('optimizeBtn').addEventListener('click', doOptimize);
+    $('batchBtn').addEventListener('click', doBatchGenerate);
+
+    // ---------- 推荐标签 ----------
+    document.querySelectorAll('.tag:not(#ecommerceTagContainer .tag)').forEach(tag => {
+        tag.addEventListener('click', function() {
+            $('taskInput').value = this.dataset.task;
+        });
+    });
+
+    // ---------- 电商标签 ----------
+    document.querySelectorAll('#ecommerceTagContainer .tag').forEach(tag => {
+        tag.addEventListener('click', function() {
+            $('taskInput').value = this.dataset.task;
+        });
+    });
+
+    // ---------- 清空 / 粘贴 ----------
+    $('clearBtn').addEventListener('click', function() {
+        $('taskInput').value = '';
+        $('taskInput').focus();
+    });
+
+    $('pasteBtn').addEventListener('click', async function() {
+        try {
+            const text = await navigator.clipboard.readText();
+            $('taskInput').value = text;
+        } catch (e) {
+            showToast('无法读取剪贴板', '⚠️');
+        }
+    });
+
+    // ---------- 领域切换 ----------
+    $('fieldSelect').addEventListener('change', function() {
+        const field = this.value;
+        const isEcommerce = field === '电商AI绘画';
+
+        $('platformSection').style.display = 'block';
+        updatePlatformOptions(field);
+
+        if (isEcommerce) {
+            currentLevel = 'expert';
+            document.querySelectorAll('.complexity-card').forEach(c => {
+                c.classList.toggle('selected', c.dataset.level === 'expert');
+            });
+            $('ecommerceTagSection').style.display = 'block';
+            $('tagContainer').parentElement.style.display = 'none';
+        } else {
+            $('ecommerceTagSection').style.display = 'none';
+            $('tagContainer').parentElement.style.display = 'block';
+        }
+    });
+
+    // ---------- 模板点击 ----------
+    document.querySelectorAll('.template-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const isLocked = !db.unlocked.expert && !db.firstUse.expert;
+
+            if (isLocked) {
+                pendingUnlockLevel = 'expert';
+                showUnlockModal('专家版');
+                return;
+            }
+
+            const field = this.dataset.field;
+            $('fieldSelect').value = field;
+            $('taskInput').value = this.dataset.task;
+            currentLevel = this.dataset.level;
+
+            updatePlatformOptions(field);
+
+            if (field === '电商AI绘画') {
+                $('platformSection').style.display = 'block';
+                $('ecommerceTagSection').style.display = 'block';
+                $('tagContainer').parentElement.style.display = 'none';
+            } else {
+                $('platformSection').style.display = 'block';
+                $('ecommerceTagSection').style.display = 'none';
+                $('tagContainer').parentElement.style.display = 'block';
+            }
+
+            document.querySelectorAll('.complexity-card').forEach(c => {
+                c.classList.toggle('selected', c.dataset.level === currentLevel);
+            });
+            showPage('home');
+            showToast('模板已加载', '✅');
+        });
+    });
+
+    // ---------- 解锁弹窗 ----------
+    $('unlockConfirm').addEventListener('click', doUnlock);
+    $('unlockCancel').addEventListener('click', function() {
+        $('unlockModal').classList.remove('active');
+    });
+    $('unlockInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') doUnlock();
+    });
+
+    // ---------- 复制弹窗 ----------
+    $('copyClose').addEventListener('click', function() {
+        $('copyModal').classList.remove('active');
+    });
+
+    // ---------- 引导弹窗 ----------
+    $('guideCloseBtn').addEventListener('click', function() {
+        $('guideModal').classList.remove('active');
+    });
+    $('guideModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('active');
+        }
+    });
+
+    // ---------- 关闭弹窗（点击遮罩） ----------
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('active');
+        });
+    });
+
+    // ---------- 移动端触摸优化 ----------
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            e.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, { passive: false });
+
+    // 滚动优化
+    document.querySelectorAll('.config-panel, .result-panel').forEach(el => {
+        el.style.webkitOverflowScrolling = 'touch';
+    });
+
+    // 左滑关闭侧边栏
+    let touchStartX = 0;
+    document.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    document.addEventListener('touchmove', function(e) {
+        if (!configPanel.classList.contains('open')) return;
+        const touchX = e.touches[0].clientX;
+        const diff = touchStartX - touchX;
+        if (diff > 50 && touchStartX < 100) {
+            configPanel.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+    }, { passive: true });
+
+    // 键盘适配
+    window.addEventListener('resize', function() {
+        if (window.innerHeight < 500) {
+            document.body.classList.add('keyboard-open');
+        } else {
+            document.body.classList.remove('keyboard-open');
+        }
+    });
+
+    // ---------- 初始化 ----------
+    // 显示平台选择区
+    const initialField = $('fieldSelect').value;
+    $('platformSection').style.display = 'block';
+    updatePlatformOptions(initialField);
+
+    // 如果初始是电商，自动切换到专家并显示电商标签
+    if (initialField === '电商AI绘画') {
+        currentLevel = 'expert';
+        document.querySelectorAll('.complexity-card').forEach(c => {
+            c.classList.toggle('selected', c.dataset.level === 'expert');
+        });
+        $('ecommerceTagSection').style.display = 'block';
+        $('tagContainer').parentElement.style.display = 'none';
     }
+
+    // 更新统计和模板锁
+    updateStats();
+    updateTemplateLocks();
+    updateFeatureButtons();
+
+    // 管理员快捷入口（URL参数）
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') === ADMIN_PASSWORD) {
+        showPage('admin');
+    }
+
+    console.log('✅ AI提示词生成器已初始化完成');
 });
 
-updateStats();
-updateTemplateLocks();
-updateFeatureButtons();
-updatePlatformOptions($('fieldSelect').value);
-
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('admin') === ADMIN_PASSWORD) {
-showPage('admin');
-}
-});
-
-
-function updatePlatformOptions(field) {
-    const platformSelect = $('platformSelect');
-    const ecommercePlatforms = [
-        { value: '豆包', text: '🟢 豆包' },
-        { value: '即梦', text: '🔵 即梦' },
-        { value: '可灵', text: '🟣 可灵' },
-        { value: '通义万相', text: '🟡 通义万相' },
-        { value: 'Midjourney', text: '🟠 Midjourney' },
-        { value: 'Stable Diffusion', text: '⚫ Stable Diffusion' }
-    ];
-    const textPlatforms = [
-        { value: '通用', text: '🌐 通用（不指定平台）' },
-        { value: 'ChatGPT', text: '💬 ChatGPT' },
-        { value: 'Claude', text: '🧠 Claude' },
-        { value: '文心一言', text: '🇨🇳 文心一言' },
-        { value: '通义千问', text: '🔷 通义千问' },
-        { value: 'Kimi', text: '📄 Kimi' },
-        { value: '豆包', text: '🟢 豆包' },
-        { value: '讯飞星火', text: '⭐ 讯飞星火' },
-        { value: '智谱清言', text: '🔬 智谱清言' }
-    ];
-
-    const platforms = field === '电商AI绘画' ? ecommercePlatforms : textPlatforms;
-    platformSelect.innerHTML = platforms.map(p => `<option value="${p.value}">${p.text}</option>`).join('');
-}
 </script>
-
-
-<!-- 底部版权信息 -->
-<footer id="page-footer">
-<div class="footer-content">
-<span class="footer-copyright">© 2025 微风拂面，细雨蒙蒙</span>
-<span class="footer-divider">|</span>
-            <a href="https://github.com/cuic7797-debug/prompt-generator/blob/main/LICENSE" target="_blank" class="footer-license">MIT License</a>
-<span class="footer-divider">|</span>
-<span class="footer-qq">QQ: 704451222</span>
-</div>
-</footer></body>
+</body>
 </html>
