@@ -10,7 +10,7 @@
   --bg-primary: #0b0b14;
   --bg-secondary: #13131f;
   --bg-card: rgba(20, 20, 35, 0.85);
-  --bg-glass: rgba(255, 255, 255, 0.04);
+  --bg-glass: rgba(255, 255, 255, 0.05);
   --border-glass: rgba(255, 255, 255, 0.07);
   --text-primary: #eaeaf2;
   --text-secondary: #9999b5;
@@ -84,7 +84,7 @@ body {
 
 /* ===== 左侧配置面板 ===== */
 .config-panel {
-  width: 360px; min-width: 360px;
+  width: 380px; min-width: 380px;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border-glass);
   padding: 20px 18px;
@@ -100,9 +100,9 @@ body {
 
 .section-label {
   font-size: 12px; font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 0.6px;
-  margin-bottom: 10px;
+  color: var(--text-secondary);
+  letter-spacing: 0.4px;
+  margin-bottom: 8px;
   display: flex; align-items: center; gap: 6px;
 }
 
@@ -139,7 +139,7 @@ body {
   color: var(--text-primary);
 }
 
-/* ---- AI平台下拉 ---- */
+/* ---- AI平台下拉（国内优先） ---- */
 .platform-select-wrap {
   position: relative;
 }
@@ -160,17 +160,18 @@ body {
   box-shadow: 0 0 0 3px rgba(124,92,252,0.12);
 }
 .platform-select-wrap select option { background: var(--bg-secondary); color: var(--text-primary); }
+.platform-select-wrap select optgroup { background: var(--bg-secondary); color: var(--text-secondary); font-weight: 600; }
 
 /* ---- 任务描述 ---- */
 .textarea-wrap { position: relative; }
 .textarea-wrap textarea {
   width: 100%; min-height: 100px;
-  padding: 12px 14px;
+  padding: 10px 14px;
   background: var(--bg-primary);
   border: 1px solid var(--border-glass);
   border-radius: 8px;
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.6;
   resize: vertical;
   transition: all 0.25s;
@@ -183,46 +184,69 @@ body {
 .textarea-wrap textarea::placeholder { color: var(--text-muted); }
 
 .textarea-actions {
-  display: flex; gap: 4px; margin-top: 6px; justify-content: flex-end;
+  display: flex; gap: 4px; margin-top: 4px; justify-content: flex-end;
 }
 .icon-btn {
-  width: 30px; height: 30px;
+  width: 28px; height: 28px;
   border-radius: 6px; border: none;
   background: var(--bg-glass);
   color: var(--text-secondary);
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12px;
   transition: all 0.2s;
   display: flex; align-items: center; justify-content: center;
 }
 .icon-btn:hover { background: var(--accent-purple); color: white; }
 
-/* ---- 热门标签 ---- */
+/* ---- 热门标签（紧凑版） ---- */
 .tag-container {
-  display: flex; flex-wrap: wrap; gap: 6px;
+  display: flex; flex-direction: column;
+  gap: 4px;
 }
 .tag {
-  padding: 5px 12px; border-radius: 16px;
+  padding: 6px 12px;
+  border-radius: 8px;
   background: var(--bg-glass);
   border: 1px solid var(--border-glass);
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: 12px;
   cursor: pointer;
   transition: all 0.2s;
   line-height: 1.4;
-  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+}
+.tag .tag-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 120px;
+}
+.tag .tag-main {
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 12px;
+  white-space: nowrap;
 }
 .tag .tag-sub {
-  display: block;
-  font-size: 9px;
+  font-size: 10px;
   color: var(--text-muted);
-  margin-top: 1px;
+}
+.tag .tag-effect {
+  font-size: 10px;
+  color: var(--accent-green);
+  font-weight: 500;
+  white-space: nowrap;
 }
 .tag:hover {
-  background: rgba(124,92,252,0.12);
+  background: rgba(124,92,252,0.10);
   border-color: var(--accent-purple);
-  color: var(--text-primary);
 }
+.tag:hover .tag-main { color: var(--accent-purple-light); }
 
 /* ---- 复杂度卡片 ---- */
 .complexity-cards {
@@ -270,7 +294,7 @@ body {
   font-size: 9px; font-weight: 600;
 }
 .badge-free { background: rgba(28,212,168,0.15); color: var(--accent-green); }
-.badge-locked { background: rgba(245,179,66,0.15); color: var(--accent-amber); }
+.badge-locked { background: rgba(124,92,252,0.15); color: var(--accent-purple-light); }
 .badge-invite { background: rgba(245,179,66,0.2); color: var(--accent-amber); animation: pulse-badge 2s infinite; }
 @keyframes pulse-badge {
   0%, 100% { opacity: 1; }
@@ -279,7 +303,7 @@ body {
 
 /* ---- 生成按钮 ---- */
 .btn-row {
-  display: flex; gap: 8px; margin-top: 4px;
+  display: flex; gap: 6px; margin-top: 4px;
 }
 .generate-btn {
   flex:1; padding: 12px;
@@ -299,8 +323,8 @@ body {
 
 /* ---- 使用统计 ---- */
 .usage-stats {
-  display: flex; gap: 16px; margin-top: 14px;
-  padding-top: 14px; border-top: 1px solid var(--border-glass);
+  display: flex; gap: 16px; margin-top: 12px;
+  padding-top: 12px; border-top: 1px solid var(--border-glass);
 }
 .stat-item { text-align: center; flex:1; }
 .stat-value {
@@ -321,10 +345,11 @@ body {
   padding: 6px 10px;
   margin-top: 10px;
 }
+.invite-remaining strong { font-size: 16px; }
 
 /* ===== 右侧结果区 ===== */
 .result-panel {
-  flex:1; padding: 24px 32px; overflow-y: auto;
+  flex:1; padding: 20px 28px; overflow-y: auto;
   background: var(--bg-primary);
   min-height: calc(100dvh - 56px);
 }
@@ -332,17 +357,17 @@ body {
 .empty-state {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  min-height: 460px; text-align: center;
+  min-height: 400px; text-align: center;
 }
 .empty-icon {
-  width: 72px; height: 72px;
-  border-radius: 18px;
+  width: 64px; height: 64px;
+  border-radius: 16px;
   background: linear-gradient(135deg, rgba(124,92,252,0.15), rgba(232,97,168,0.1));
   display: flex; align-items: center; justify-content: center;
-  font-size: 32px; margin-bottom: 18px;
+  font-size: 28px; margin-bottom: 16px;
 }
-.empty-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
-.empty-desc { color: var(--text-muted); font-size: 13px; max-width: 420px; line-height: 1.7; }
+.empty-title { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
+.empty-desc { color: var(--text-muted); font-size: 13px; max-width: 400px; line-height: 1.6; }
 
 /* ---- 结果卡片 ---- */
 .result-card {
@@ -350,69 +375,69 @@ body {
   border: 1px solid var(--border-glass);
   border-radius: var(--radius-card);
   overflow: hidden;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   backdrop-filter: blur(8px);
   animation: fadeUp 0.4s ease;
   box-shadow: var(--shadow-card);
 }
 @keyframes fadeUp {
-  from { opacity:0; transform:translateY(16px); }
+  from { opacity:0; transform:translateY(14px); }
   to { opacity:1; transform:translateY(0); }
 }
 
 .result-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 18px;
+  padding: 12px 16px;
   background: rgba(124,92,252,0.05);
   border-bottom: 1px solid var(--border-glass);
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 .result-meta {
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
 }
 .result-badge {
-  padding: 3px 10px; border-radius: 6px;
-  font-size: 11px; font-weight: 600;
+  padding: 2px 8px; border-radius: 6px;
+  font-size: 10px; font-weight: 600;
 }
 .badge-basic { background: rgba(28,212,168,0.15); color: var(--accent-green); }
 .badge-advanced { background: rgba(124,92,252,0.15); color: var(--accent-purple-light); }
 .badge-expert { background: rgba(245,179,66,0.15); color: var(--accent-amber); }
-.result-field { font-size: 12px; color: var(--text-secondary); }
-.result-time { font-size: 11px; color: var(--text-muted); }
+.result-field { font-size: 11px; color: var(--text-secondary); }
+.result-time { font-size: 10px; color: var(--text-muted); }
 
-.result-actions { display: flex; gap: 6px; }
+.result-actions { display: flex; gap: 4px; }
 .action-btn {
-  padding: 4px 12px; border-radius: 6px;
+  padding: 3px 10px; border-radius: 6px;
   border: 1px solid var(--border-glass);
   background: var(--bg-glass);
   color: var(--text-secondary);
-  font-size: 12px; cursor: pointer;
+  font-size: 11px; cursor: pointer;
   transition: all 0.2s;
-  display: flex; align-items: center; gap: 4px;
+  display: flex; align-items: center; gap: 3px;
 }
 .action-btn:hover { background: var(--accent-purple); color: white; border-color: var(--accent-purple); }
 .action-btn.favorited { background: rgba(232,97,168,0.15); border-color: var(--accent-pink); color: var(--accent-pink); }
 
 .result-content {
-  padding: 18px 20px;
-  line-height: 1.8;
+  padding: 16px 18px;
+  line-height: 1.7;
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 13px;
 }
 .result-content h3 {
-  font-size: 14px; font-weight: 600;
+  font-size: 13px; font-weight: 600;
   color: var(--accent-purple-light);
-  margin: 18px 0 8px;
+  margin: 16px 0 6px;
   display: flex; align-items: center; gap: 6px;
 }
 .result-content h3:first-child { margin-top: 0; }
-.result-content ul { margin: 6px 0; padding-left: 18px; }
-.result-content li { margin: 4px 0; color: var(--text-secondary); }
+.result-content ul { margin: 4px 0; padding-left: 16px; }
+.result-content li { margin: 3px 0; color: var(--text-secondary); }
 .result-content li::marker { color: var(--accent-purple); }
-.result-content p { margin: 8px 0; color: var(--text-secondary); }
+.result-content p { margin: 6px 0; color: var(--text-secondary); }
 .result-content blockquote {
-  margin: 10px 0; padding: 10px 14px;
+  margin: 8px 0; padding: 8px 12px;
   border-left: 3px solid var(--accent-purple);
   background: rgba(124,92,252,0.04);
   border-radius: 0 6px 6px 0;
@@ -463,30 +488,59 @@ body {
   background: rgba(11,11,20,0.75);
   border-radius: var(--radius-card);
   display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 6px;
-  font-size: 12px; color: var(--text-muted);
+  flex-direction: column; gap: 4px;
+  font-size: 11px; color: var(--text-muted);
 }
-.template-lock-overlay .lock-icon { font-size: 20px; }
+.template-lock-overlay .lock-icon { font-size: 18px; }
 
-.template-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-.template-field { font-size: 11px; color: var(--accent-purple-light); margin-bottom: 6px; }
+.template-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.template-field { font-size: 10px; color: var(--accent-purple-light); margin-bottom: 4px; }
 .template-desc {
-  font-size: 12px; color: var(--text-muted);
+  font-size: 12px; color: var(--text-secondary);
   line-height: 1.5;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
+.template-effect {
+  font-size: 11px;
+  color: var(--accent-green);
+  font-weight: 500;
+  margin-top: 4px;
+}
+/* 效果预览占位 */
+.template-preview {
+  margin-top: 8px;
+  border-radius: 6px;
+  background: var(--bg-primary);
+  border: 1px dashed var(--border-glass);
+  padding: 6px 10px;
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: center;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.3s;
+}
+.template-card:hover .template-preview {
+  border-color: var(--accent-purple);
+  background: rgba(124,92,252,0.04);
+}
+.template-preview .preview-icon { font-size: 16px; }
+
 .template-stats {
   font-size: 10px; color: var(--text-muted);
-  margin-top: 8px;
-  display: flex; gap: 12px;
+  margin-top: 6px;
+  display: flex; gap: 10px;
 }
 .template-level {
-  display: inline-block; margin-top: 6px;
+  display: inline-block; margin-top: 4px;
   padding: 1px 8px; border-radius: 4px;
   font-size: 9px; font-weight: 600;
 }
 .template-tags {
-  display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px;
+  display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px;
 }
 .template-tags span {
   font-size: 9px;
@@ -497,41 +551,78 @@ body {
   border: 1px solid var(--border-glass);
 }
 
-/* ===== 模板分类筛选 ===== */
+/* ---- 模板分类筛选 ---- */
 .template-filter {
-  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px;
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;
 }
 .filter-btn {
   padding: 4px 14px; border-radius: 16px;
   border: 1px solid var(--border-glass);
   background: var(--bg-glass);
   color: var(--text-secondary);
-  font-size: 12px; cursor: pointer;
+  font-size: 11px; cursor: pointer;
   transition: all 0.2s;
 }
 .filter-btn:hover { border-color: var(--accent-purple); color: var(--text-primary); }
 .filter-btn.active { background: rgba(124,92,252,0.15); border-color: var(--accent-purple); color: var(--accent-purple-light); }
 
-/* ===== 历史/收藏 ===== */
-.history-list { display: flex; flex-direction: column; gap: 10px; }
-.history-item {
-  display: flex; align-items: center; gap: 14px;
-  padding: 12px 16px;
-  background: var(--bg-card);
+/* 模板库信任背书 */
+.template-hero {
+  background: linear-gradient(135deg, rgba(124,92,252,0.06), rgba(232,97,168,0.04));
   border: 1px solid var(--border-glass);
   border-radius: 10px;
+  padding: 10px 16px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.template-hero .left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.template-hero .badge {
+  background: rgba(124,92,252,0.15);
+  color: var(--accent-purple-light);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+.template-hero .count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.template-hero .count span { color: var(--accent-amber); }
+.template-hero .sub {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ===== 历史/收藏 ===== */
+.history-list { display: flex; flex-direction: column; gap: 8px; }
+.history-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
 }
 .history-item:hover { border-color: var(--accent-purple); background: rgba(124,92,252,0.04); }
 .history-icon {
-  width: 38px; height: 38px; border-radius: 8px;
+  width: 34px; height: 34px; border-radius: 6px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 16px; flex-shrink: 0;
+  font-size: 14px; flex-shrink: 0;
 }
 .history-info { flex:1; }
-.history-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
-.history-meta { font-size: 11px; color: var(--text-muted); }
+.history-title { font-size: 12px; font-weight: 500; margin-bottom: 1px; }
+.history-meta { font-size: 10px; color: var(--text-muted); }
 
 /* ===== 弹窗 ===== */
 .modal-overlay {
@@ -549,16 +640,16 @@ body {
 .modal {
   background: var(--bg-secondary);
   border: 1px solid var(--border-glass);
-  border-radius: 18px;
-  padding: 28px 32px;
-  max-width: 440px; width: 92%;
+  border-radius: 16px;
+  padding: 24px 28px;
+  max-width: 500px; width: 92%;
   box-shadow: 0 16px 64px rgba(0,0,0,0.6);
   transform: scale(0.92); transition: transform 0.3s;
 }
 .modal-overlay.active .modal { transform: scale(1); }
 
-.modal-title { font-size: 19px; font-weight: 600; margin-bottom: 4px; }
-.modal-desc { color: var(--text-muted); font-size: 13px; margin-bottom: 18px; line-height: 1.6; }
+.modal-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+.modal-desc { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.6; }
 
 .modal-input {
   width: 100%; padding: 10px 14px;
@@ -566,12 +657,12 @@ body {
   border: 1px solid var(--border-glass);
   border-radius: 8px;
   color: var(--text-primary);
-  font-size: 14px;
-  margin-bottom: 14px;
+  font-size: 13px;
+  margin-bottom: 12px;
 }
 .modal-input:focus { outline: none; border-color: var(--accent-purple); }
 
-.modal-actions { display: flex; gap: 10px; }
+.modal-actions { display: flex; gap: 8px; }
 .modal-btn {
   flex:1; padding: 10px;
   border-radius: 8px; border: none;
@@ -587,45 +678,66 @@ body {
   background: rgba(245,179,66,0.06);
   border: 1px solid rgba(245,179,66,0.12);
   border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 14px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.modal-invite-box .label { font-size: 12px; color: var(--text-secondary); }
-.modal-invite-box .value { font-size: 16px; font-weight: 700; color: var(--accent-amber); }
+.modal-invite-box .label { font-size: 11px; color: var(--text-secondary); }
+.modal-invite-box .value { font-size: 15px; font-weight: 700; color: var(--accent-amber); }
 
 /* ---- 复制弹窗 ---- */
 .copy-modal textarea {
-  width:100%; min-height:160px;
-  padding:12px;
+  width:100%; min-height:140px;
+  padding:10px;
   background:var(--bg-primary);
   border:1px solid var(--border-glass);
   border-radius:8px;
   color:var(--text-primary);
-  font-size:13px;
+  font-size:12px;
   font-family:monospace;
   resize:vertical;
-  margin-bottom:12px;
+  margin-bottom:10px;
 }
 
-/* ---- 引导弹窗 ---- */
+/* ---- 引导弹窗（平台选择） ---- */
 #guidePlatformGrid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+#guidePlatformGrid.platform-grid-2col {
+  grid-template-columns: repeat(2, 1fr);
 }
 .platform-btn {
-  padding: 10px 6px; border-radius: 8px;
+  padding: 10px 6px;
+  border-radius: 8px;
   border: 1px solid var(--border-glass);
   background: var(--bg-glass);
   color: var(--text-primary);
   cursor: pointer;
-  font-size: 12px; font-weight: 500;
+  font-size: 12px;
+  font-weight: 500;
   transition: all 0.2s;
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
 }
-.platform-btn:hover { background: rgba(124,92,252,0.12); border-color: var(--accent-purple); }
-.platform-btn.highlighted { background: rgba(124,92,252,0.18); border-color: var(--accent-purple); box-shadow: 0 0 20px rgba(124,92,252,0.15); }
+.platform-btn:hover {
+  background: rgba(124,92,252,0.12);
+  border-color: var(--accent-purple);
+  transform: translateY(-2px);
+}
+.platform-btn.highlighted {
+  background: rgba(124,92,252,0.18);
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 20px rgba(124,92,252,0.15);
+}
+.platform-btn .icon { font-size: 20px; }
+.platform-btn .name { font-size: 11px; }
 
 /* ===== Toast ===== */
 .toast {
@@ -633,16 +745,16 @@ body {
   transform: translateX(-50%) translateY(80px);
   background: var(--bg-secondary);
   border: 1px solid var(--border-glass);
-  padding: 10px 20px; border-radius: 10px;
-  display: flex; align-items: center; gap: 8px;
+  padding: 8px 18px; border-radius: 8px;
+  display: flex; align-items: center; gap: 6px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.5);
   z-index: 3000;
   opacity: 0;
   transition: all 0.35s;
 }
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-.toast-icon { font-size: 16px; }
-.toast-text { font-size: 13px; }
+.toast-icon { font-size: 14px; }
+.toast-text { font-size: 12px; }
 
 /* ===== 遮罩 ===== */
 .overlay {
@@ -664,25 +776,165 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid var(--border-glass);
-  padding: 8px 20px;
-  padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  padding: 6px 20px;
+  padding-bottom: calc(6px + env(safe-area-inset-bottom));
   z-index: 100;
   text-align: center;
 }
 .footer-content {
   display: flex; align-items: center; justify-content: center;
-  gap: 12px; flex-wrap: wrap;
+  gap: 10px; flex-wrap: wrap;
 }
-.footer-copyright { color: rgba(255,255,255,0.35); font-size: 11px; }
-.footer-divider { color: rgba(255,255,255,0.1); font-size: 11px; }
+.footer-copyright { color: rgba(255,255,255,0.35); font-size: 10px; }
+.footer-divider { color: rgba(255,255,255,0.1); font-size: 10px; }
 .footer-license {
   color: rgba(100,200,255,0.5);
-  font-size: 11px;
+  font-size: 10px;
   text-decoration: none;
   transition: color 0.3s;
 }
 .footer-license:hover { color: rgba(100,200,255,0.9); text-decoration: underline; }
-.footer-qq { color: rgba(255,255,255,0.3); font-size: 11px; }
+.footer-qq { color: rgba(255,255,255,0.3); font-size: 10px; }
+
+/* ===== 管理面板 ===== */
+.admin-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.admin-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-card);
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+.admin-card h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+.admin-stat-box {
+  text-align: center;
+  padding: 12px;
+  background: var(--bg-glass);
+  border-radius: 8px;
+  border: 1px solid var(--border-glass);
+}
+.admin-stat-box .num {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent-purple-light);
+}
+.admin-stat-box .lbl {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.password-table-wrap {
+  overflow-x: auto;
+  margin-top: 8px;
+}
+.password-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.password-table th {
+  text-align: left;
+  padding: 6px 8px;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  border-bottom: 1px solid var(--border-glass);
+}
+.password-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-glass);
+  vertical-align: middle;
+}
+.password-table .code {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  background: var(--bg-primary);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+.password-table .status-avail { color: var(--accent-green); }
+.password-table .status-sold { color: var(--accent-amber); }
+.password-table .status-depleted { color: var(--accent-red); }
+
+.admin-action-btn {
+  padding: 1px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-glass);
+  background: var(--bg-glass);
+  color: var(--text-secondary);
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.admin-action-btn:hover {
+  background: var(--accent-purple);
+  color: white;
+  border-color: var(--accent-purple);
+}
+
+/* 折叠面板 */
+.collapse-toggle {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+.collapse-toggle:hover { color: var(--text-primary); }
+.collapse-toggle .arrow { transition: transform 0.25s; }
+.collapse-toggle .arrow.open { transform: rotate(90deg); }
+.collapse-body { overflow: hidden; transition: max-height 0.3s ease; max-height: 0; }
+.collapse-body.open { max-height: 600px; }
+
+.add-pwd-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.add-pwd-row input {
+  flex: 1;
+  min-width: 140px;
+  padding: 6px 10px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-glass);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 12px;
+}
+.add-pwd-row input:focus { outline: none; border-color: var(--accent-purple); }
+.add-pwd-row button {
+  padding: 6px 16px;
+  background: var(--accent-purple);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.add-pwd-row button:hover { background: var(--accent-purple-light); }
 
 /* ===== 移动端 ===== */
 @media (max-width: 768px) {
@@ -694,7 +946,7 @@ body {
     max-width: 340px;
     height: calc(100dvh - 56px);
     z-index: 900;
-    padding: 16px;
+    padding: 14px;
     border-right: none;
     border-radius: 0 16px 16px 0;
     box-shadow: 8px 0 40px rgba(0,0,0,0.5);
@@ -704,39 +956,46 @@ body {
   .mobile-menu-btn { display: block !important; }
   .nav-links { display: none !important; }
 
-  .result-panel { padding: 16px; }
+  .result-panel { padding: 14px; }
   .field-grid { grid-template-columns: 1fr 1fr; }
   .template-grid { grid-template-columns: 1fr; }
   .btn-row { flex-direction: column; }
-  .generate-btn { padding: 14px; font-size: 15px; }
+  .generate-btn { padding: 14px; font-size: 14px; }
 
-  .tag .tag-sub { display: none; }
+  .tag { padding: 4px 10px; font-size: 11px; }
+  .tag .tag-main { font-size: 11px; }
+  .tag .tag-sub { font-size: 9px; }
+  .tag .tag-effect { font-size: 9px; }
 
-  .modal { padding: 20px; max-width: 94vw; }
+  .modal { padding: 18px 20px; max-width: 94vw; }
   #guidePlatformGrid { grid-template-columns: repeat(2, 1fr) !important; }
+  #guidePlatformGrid.platform-grid-2col { grid-template-columns: repeat(2, 1fr) !important; }
 
-  .result-header { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .result-header { flex-direction: column; align-items: flex-start; gap: 4px; }
   .result-meta { flex-wrap: wrap; gap: 4px; }
 
-  textarea, .select-field, .modal-input { font-size: 16px; }
+  textarea, .select-field, .modal-input { font-size: 15px; }
 
-  .stats-grid { grid-template-columns: repeat(2,1fr); }
-  .add-password-row { flex-direction: column; }
+  .admin-stats { grid-template-columns: repeat(2,1fr); }
+  .add-pwd-row { flex-direction: column; }
 
-  #page-footer { padding: 6px 12px; }
-  .footer-copyright, .footer-license, .footer-qq, .footer-divider { font-size: 10px; }
+  .template-hero { flex-direction: column; align-items: flex-start; }
+  .template-hero .left { flex-wrap: wrap; }
+
+  #page-footer { padding: 4px 12px; }
+  .footer-copyright, .footer-license, .footer-qq, .footer-divider { font-size: 9px; }
 }
 
 @media (max-width: 480px) {
-  .navbar { padding: 0 12px; height: 50px; }
-  .logo { font-size: 15px; }
-  .main-container { margin-top: 50px; }
-  .config-panel { top: 50px; height: calc(100dvh - 50px); }
+  .navbar { padding: 0 12px; height: 48px; }
+  .logo { font-size: 14px; }
+  .main-container { margin-top: 48px; }
+  .config-panel { top: 48px; height: calc(100dvh - 48px); }
   .field-grid { grid-template-columns: 1fr 1fr; gap: 4px; }
-  .field-card { padding: 6px 8px; font-size: 11px; }
+  .field-card { padding: 6px 4px; font-size: 11px; }
   .field-card .icon { font-size: 15px; }
-  .result-panel { padding: 12px; }
-  .result-content { padding: 12px 14px; font-size: 13px; }
+  .result-panel { padding: 10px; }
+  .result-content { padding: 10px 12px; font-size: 12px; }
 }
 
 /* ===== 滚动条 ===== */
@@ -788,27 +1047,43 @@ body {
       </div>
     </div>
 
-    <!-- AI平台 -->
+    <!-- AI平台（国内优先） -->
     <div class="config-section" id="platformSection" style="display:block;">
-      <div class="section-label">🤖 AI平台</div>
+      <div class="section-label">🤖 选择AI平台</div>
       <div class="platform-select-wrap">
         <select class="select-field" id="platformSelect">
-          <option value="通用">🌐 通用</option>
-          <option value="ChatGPT">💬 ChatGPT</option>
-          <option value="Claude">🧠 Claude</option>
-          <option value="文心一言">🇨🇳 文心一言</option>
-          <option value="通义千问">🔷 通义千问</option>
-          <option value="Kimi">📄 Kimi</option>
-          <option value="豆包">🟢 豆包</option>
-          <option value="讯飞星火">⭐ 讯飞星火</option>
-          <option value="智谱清言">🔬 智谱清言</option>
+          <optgroup label="🇨🇳 国内主流">
+            <option value="文心一言">🇨🇳 文心一言</option>
+            <option value="通义千问">🔷 通义千问</option>
+            <option value="Kimi">📄 Kimi</option>
+            <option value="豆包">🟢 豆包</option>
+            <option value="讯飞星火">⭐ 讯飞星火</option>
+            <option value="智谱清言">🔬 智谱清言</option>
+            <option value="DeepSeek">🧊 DeepSeek</option>
+            <option value="百小应">🤝 百小应</option>
+          </optgroup>
+          <optgroup label="🌐 国际主流">
+            <option value="ChatGPT">💬 ChatGPT</option>
+            <option value="Claude">🧠 Claude</option>
+            <option value="Gemini">✨ Gemini</option>
+            <option value="Copilot">🛠️ Copilot</option>
+            <option value="Perplexity">🔍 Perplexity</option>
+            <option value="Grok">🤖 Grok</option>
+          </optgroup>
+          <optgroup label="🎨 绘画专用">
+            <option value="即梦">🔵 即梦</option>
+            <option value="可灵">🟣 可灵</option>
+            <option value="通义万相">🟡 通义万相</option>
+            <option value="Midjourney">🟠 Midjourney</option>
+            <option value="Stable Diffusion">⚫ Stable Diffusion</option>
+          </optgroup>
         </select>
       </div>
     </div>
 
     <!-- 任务描述 -->
     <div class="config-section">
-      <div class="section-label" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <div class="section-label" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
         <span>📝 任务描述</span>
         <span style="display:flex;gap:4px;">
           <button class="icon-btn" id="clearBtn" title="清空">🗑️</button>
@@ -820,20 +1095,80 @@ body {
       </div>
     </div>
 
-    <!-- 热门标签 -->
+    <!-- 热门标签（紧凑版） -->
     <div class="config-section">
       <div class="section-label">💡 热门标签</div>
       <div class="tag-container" id="tagContainer">
-        <span class="tag" data-task="帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒钩子抓注意力，中间干货，结尾CTA。" data-field="内容创作"><span>🎬 抖音爆款脚本</span><span class="tag-sub">钩子+干货+CTA</span></span>
-        <span class="tag" data-task="写一篇小红书种草笔记，推荐[填写产品]。要求：标题带emoji，正文分点写真实感受，带3-5个话题标签，引导互动。" data-field="内容创作"><span>📕 小红书种草</span><span class="tag-sub">痛点+感受+标签</span></span>
-        <span class="tag" data-task="写一篇3000字公众号深度文，主题：[填写主题]。要求：故事/数据引入，分3-4小节，案例支撑，结尾升华。" data-field="内容创作"><span>📰 公众号深度文</span><span class="tag-sub">故事+3论点+升华</span></span>
-        <span class="tag" data-task="写一个B站视频分镜脚本，主题：[填写主题]。要求：景别、画面、台词、时长、转场完整。" data-field="内容创作"><span>📺 B站视频分镜</span><span class="tag-sub">景别+台词+转场</span></span>
-        <span class="tag" data-task="写5条朋友圈产品文案，产品：[填写产品]。要求：故事型/痛点型/场景型/证言型/限时型各1条。" data-field="营销增长"><span>💬 朋友圈文案</span><span class="tag-sub">5种风格×1条</span></span>
-        <span class="tag" data-task="写一份直播带货话术，产品：[填写产品]。要求：暖场+介绍+促单+互动全流程。" data-field="营销增长"><span>🎯 直播带货话术</span><span class="tag-sub">开场+促单+答疑</span></span>
-        <span class="tag" data-task="产品白底主图" data-field="电商AI绘画"><span>📦 电商白底主图</span><span class="tag-sub">纯白背景·居中构图</span></span>
-        <span class="tag" data-task="产品场景图" data-field="电商AI绘画"><span>🏠 产品场景图</span><span class="tag-sub">生活氛围·自然光</span></span>
-        <span class="tag" data-task="写一份PPT大纲，主题：[填写主题]。要求：封面+3-5个章节+每章3个要点+总结页。" data-field="职场办公"><span>📊 PPT大纲生成</span><span class="tag-sub">结构+金句+数据</span></span>
-        <span class="tag" data-task="写一封正式商务邮件，收件人：[填写]，主题：[填写]，要点：[填写]。" data-field="职场办公"><span>✉️ 商务邮件模板</span><span class="tag-sub">正式/半正式/催办</span></span>
+        <span class="tag" data-task="帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒钩子抓注意力，中间干货，结尾CTA。" data-field="内容创作">
+          <span class="tag-left">
+            <span class="tag-main">🎬 抖音爆款脚本</span>
+            <span class="tag-sub">3秒钩子 → 60秒完播 → 结尾转化</span>
+          </span>
+          <span class="tag-effect">📈 完播率+50%</span>
+        </span>
+        <span class="tag" data-task="写一篇小红书种草笔记，推荐[填写产品]。要求：标题带emoji，正文分点写真实感受，带3-5个话题标签，引导互动。" data-field="内容创作">
+          <span class="tag-left">
+            <span class="tag-main">📕 小红书种草</span>
+            <span class="tag-sub">爆款标题 → 真实感受 → 精准标签</span>
+          </span>
+          <span class="tag-effect">📈 单篇涨粉500+</span>
+        </span>
+        <span class="tag" data-task="写一篇3000字公众号深度文，主题：[填写主题]。要求：故事/数据引入，分3-4小节，案例支撑，结尾升华。" data-field="内容创作">
+          <span class="tag-left">
+            <span class="tag-main">📰 公众号深度文</span>
+            <span class="tag-sub">故事引入 → 层层递进 → 升华圈粉</span>
+          </span>
+          <span class="tag-effect">📈 转发率+300%</span>
+        </span>
+        <span class="tag" data-task="写一个B站视频分镜脚本，主题：[填写主题]。要求：景别、画面、台词、时长、转场完整。" data-field="内容创作">
+          <span class="tag-left">
+            <span class="tag-main">📺 B站视频分镜</span>
+            <span class="tag-sub">景别 → 台词 → 转场 → 一镜到底</span>
+          </span>
+          <span class="tag-effect">📈 完播率+40%</span>
+        </span>
+        <span class="tag" data-task="写5条朋友圈产品文案，产品：[填写产品]。要求：故事型/痛点型/场景型/证言型/限时型各1条。" data-field="营销增长">
+          <span class="tag-left">
+            <span class="tag-main">💬 朋友圈文案</span>
+            <span class="tag-sub">5种成交风格 × 1条，不刷屏但卖货</span>
+          </span>
+          <span class="tag-effect">📈 咨询率+200%</span>
+        </span>
+        <span class="tag" data-task="写一份直播带货话术，产品：[填写产品]。要求：暖场+介绍+促单+互动全流程。" data-field="营销增长">
+          <span class="tag-left">
+            <span class="tag-main">🎯 直播带货话术</span>
+            <span class="tag-sub">暖场 → 种草 → 促单 → 答疑闭环</span>
+          </span>
+          <span class="tag-effect">📈 转化率+150%</span>
+        </span>
+        <span class="tag" data-task="产品白底主图" data-field="电商AI绘画">
+          <span class="tag-left">
+            <span class="tag-main">📦 电商白底主图</span>
+            <span class="tag-sub">纯白背景 · 黄金构图 · 点击率翻倍</span>
+          </span>
+          <span class="tag-effect">📈 CTR+80%</span>
+        </span>
+        <span class="tag" data-task="产品场景图" data-field="电商AI绘画">
+          <span class="tag-left">
+            <span class="tag-main">🏠 产品场景图</span>
+            <span class="tag-sub">生活氛围 · 自然光影 · 代入感拉满</span>
+          </span>
+          <span class="tag-effect">📈 转化率+60%</span>
+        </span>
+        <span class="tag" data-task="写一份PPT大纲，主题：[填写主题]。要求：封面+3-5个章节+每章3个要点+总结页。" data-field="职场办公">
+          <span class="tag-left">
+            <span class="tag-main">📊 PPT大纲生成</span>
+            <span class="tag-sub">结构 → 金句 → 数据 → 一页封神</span>
+          </span>
+          <span class="tag-effect">📈 汇报通过率+90%</span>
+        </span>
+        <span class="tag" data-task="写一封正式商务邮件，收件人：[填写]，主题：[填写]，要点：[填写]。" data-field="职场办公">
+          <span class="tag-left">
+            <span class="tag-main">✉️ 商务邮件模板</span>
+            <span class="tag-sub">正式/半正式/催办，专业得体</span>
+          </span>
+          <span class="tag-effect">📈 回复率+120%</span>
+        </span>
       </div>
     </div>
 
@@ -841,12 +1176,12 @@ body {
     <div class="config-section" id="ecommerceTagSection" style="display:none;">
       <div class="section-label">🛍️ 电商图片类型</div>
       <div class="tag-container" id="ecommerceTagContainer">
-        <span class="tag" data-task="产品白底主图">📦 产品白底主图</span>
-        <span class="tag" data-task="产品场景图">🏠 产品场景图</span>
-        <span class="tag" data-task="模特穿搭图">👗 模特穿搭图</span>
-        <span class="tag" data-task="促销海报图">🎉 促销海报图</span>
-        <span class="tag" data-task="详情页长图">📄 详情页长图</span>
-        <span class="tag" data-task="AI换脸模特图">🧑 AI换脸模特图</span>
+        <span class="tag" data-task="产品白底主图"><span class="tag-left"><span class="tag-main">📦 产品白底主图</span></span></span>
+        <span class="tag" data-task="产品场景图"><span class="tag-left"><span class="tag-main">🏠 产品场景图</span></span></span>
+        <span class="tag" data-task="模特穿搭图"><span class="tag-left"><span class="tag-main">👗 模特穿搭图</span></span></span>
+        <span class="tag" data-task="促销海报图"><span class="tag-left"><span class="tag-main">🎉 促销海报图</span></span></span>
+        <span class="tag" data-task="详情页长图"><span class="tag-left"><span class="tag-main">📄 详情页长图</span></span></span>
+        <span class="tag" data-task="AI换脸模特图"><span class="tag-left"><span class="tag-main">🧑 AI换脸模特图</span></span></span>
       </div>
     </div>
 
@@ -857,15 +1192,15 @@ body {
         <div class="complexity-card selected" data-level="basic">
           <div class="complexity-icon">🌱</div>
           <div class="complexity-info">
-            <div class="complexity-name">基础版 <span class="complexity-badge badge-free">免费</span></div>
-            <div class="complexity-desc">角色+任务+基本要求，30%完整度</div>
+            <div class="complexity-name">基础版 <span class="complexity-badge badge-free">每日5次免费</span></div>
+            <div class="complexity-desc">角色 + 任务 + 基本要求，30%完整度</div>
           </div>
         </div>
         <div class="complexity-card" data-level="advanced">
           <div class="complexity-icon">🚀</div>
           <div class="complexity-info">
             <div class="complexity-name">进阶版 <span class="complexity-badge badge-locked" id="advancedBadge">体验1次</span></div>
-            <div class="complexity-desc">角色+核心能力+执行框架，60%完整度</div>
+            <div class="complexity-desc">角色 + 核心能力 + 执行框架，60%完整度</div>
           </div>
         </div>
         <div class="complexity-card" data-level="expert">
@@ -882,19 +1217,19 @@ body {
     <div class="btn-row">
       <button class="generate-btn" id="generateBtn"><span>✨</span> 生成提示词</button>
     </div>
-    <div class="btn-row" style="margin-top:6px;">
+    <div class="btn-row" style="margin-top:4px;">
       <button class="generate-btn optimize" id="optimizeBtn" style="display:none;"><span>🚀</span> 一键优化</button>
       <button class="generate-btn batch" id="batchBtn" style="display:none;"><span>📦</span> 批量生成</button>
     </div>
 
     <!-- 邀请码剩余 -->
-    <div class="invite-remaining" id="inviteRemaining">🔥 今日内测邀请码剩余：<strong id="inviteCount">20</strong> 枚</div>
+    <div class="invite-remaining">🔥 今日内测邀请码剩余：<strong id="inviteCount">20</strong> 枚</div>
 
     <!-- 统计 -->
     <div class="usage-stats">
       <div class="stat-item">
         <div class="stat-value" id="todayCount">5</div>
-        <div class="stat-label">今日剩余</div>
+        <div class="stat-label">今日免费剩余</div>
       </div>
       <div class="stat-item">
         <div class="stat-value" id="totalCount">0</div>
@@ -913,7 +1248,7 @@ body {
         <div class="empty-title">开始生成您的专属提示词</div>
         <div class="empty-desc">
           选择场景 → 输入任务 → 选择复杂度 → 点击生成<br>
-          基础版每日5次 · 进阶版体验1次 · 专家版需内测邀请码
+          基础版每日5次免费 · 进阶版体验1次 · 专家版需内测邀请码
         </div>
       </div>
       <div id="resultsContainer"></div>
@@ -921,8 +1256,19 @@ body {
 
     <!-- 模板库 -->
     <div class="page" id="page-templates">
-      <h2 style="font-size:18px;margin-bottom:4px;">📚 模板库</h2>
-      <p style="color:var(--text-muted);font-size:12px;margin-bottom:14px;">🔒 专家版解锁后可全部使用</p>
+      <h2 style="font-size:17px;margin-bottom:4px;">📚 模板库</h2>
+      <p style="color:var(--text-muted);font-size:11px;margin-bottom:12px;">🔒 专家版解锁后可全部使用</p>
+
+      <!-- 信任背书 -->
+      <div class="template-hero">
+        <div class="left">
+          <span class="badge">🔥 热卖</span>
+          <span class="count"><span>400+</span> 全品类模板</span>
+          <span class="sub">· 持续更新 · 即拿即用</span>
+        </div>
+        <span style="font-size:11px;color:var(--text-muted);">📷 每款配效果预览</span>
+      </div>
+
       <div class="template-filter" id="templateFilter">
         <button class="filter-btn active" data-filter="all">全部</button>
         <button class="filter-btn" data-filter="hot">🔥 热门</button>
@@ -936,37 +1282,37 @@ body {
 
     <!-- 历史 -->
     <div class="page" id="page-history">
-      <h2 style="font-size:18px;margin-bottom:16px;">📜 生成历史</h2>
+      <h2 style="font-size:17px;margin-bottom:14px;">📜 生成历史</h2>
       <div class="history-list" id="historyList">
-        <div class="empty-state" style="min-height:200px;">
-          <div class="empty-icon" style="width:48px;height:48px;font-size:24px;">📜</div>
-          <div class="empty-title" style="font-size:15px;">暂无历史记录</div>
+        <div class="empty-state" style="min-height:180px;">
+          <div class="empty-icon" style="width:44px;height:44px;font-size:22px;">📜</div>
+          <div class="empty-title" style="font-size:14px;">暂无历史记录</div>
         </div>
       </div>
     </div>
 
     <!-- 收藏 -->
     <div class="page" id="page-favorites">
-      <h2 style="font-size:18px;margin-bottom:16px;">⭐ 我的收藏</h2>
+      <h2 style="font-size:17px;margin-bottom:14px;">⭐ 我的收藏</h2>
       <div class="history-list" id="favoritesList">
-        <div class="empty-state" style="min-height:200px;">
-          <div class="empty-icon" style="width:48px;height:48px;font-size:24px;">⭐</div>
-          <div class="empty-title" style="font-size:15px;">暂无收藏</div>
+        <div class="empty-state" style="min-height:180px;">
+          <div class="empty-icon" style="width:44px;height:44px;font-size:22px;">⭐</div>
+          <div class="empty-title" style="font-size:14px;">暂无收藏</div>
         </div>
       </div>
     </div>
 
     <!-- 管理 -->
     <div class="page" id="page-admin">
-      <div class="admin-panel" id="adminPanel">
-        <div class="empty-state" style="min-height:300px;">
-          <div class="empty-icon" style="width:48px;height:48px;font-size:24px;">🔒</div>
-          <div class="empty-title" style="font-size:15px;">管理面板</div>
-          <div class="empty-desc" style="margin-top:10px;">
+      <div class="admin-wrap" id="adminPanel">
+        <div class="empty-state" style="min-height:260px;">
+          <div class="empty-icon" style="width:44px;height:44px;font-size:22px;">🔒</div>
+          <div class="empty-title" style="font-size:14px;">管理面板</div>
+          <div class="empty-desc" style="margin-top:8px;">
             <input type="password" id="adminPassword" placeholder="管理密码" 
-              style="padding:8px 14px;background:var(--bg-primary);border:1px solid var(--border-glass);border-radius:8px;color:var(--text-primary);width:200px;text-align:center;font-size:13px;">
+              style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-glass);border-radius:6px;color:var(--text-primary);width:180px;text-align:center;font-size:12px;">
             <br><br>
-            <button class="generate-btn" id="adminLoginBtn" style="width:200px;padding:10px;">进入管理</button>
+            <button class="generate-btn" id="adminLoginBtn" style="width:180px;padding:8px;font-size:13px;">进入管理</button>
           </div>
         </div>
       </div>
@@ -974,16 +1320,16 @@ body {
   </main>
 </div>
 
-<!-- ===== 解锁弹窗（内测邀请码风格） ===== -->
+<!-- ===== 解锁弹窗 ===== -->
 <div class="modal-overlay" id="unlockModal">
   <div class="modal">
-    <div style="text-align:center;margin-bottom:12px;">
-      <span style="font-size:36px;">🔥</span>
+    <div style="text-align:center;margin-bottom:10px;">
+      <span style="font-size:32px;">🔥</span>
     </div>
-    <div class="modal-title" style="text-align:center;">内测邀请码</div>
-    <div class="modal-desc" style="text-align:center;font-size:13px;">
-      专家版目前为<strong style="color:var(--accent-amber);">限量内测</strong>阶段<br>
-      每日发放 <strong>20</strong> 枚邀请码
+    <div class="modal-title" style="text-align:center;">获取内测邀请码</div>
+    <div class="modal-desc" style="text-align:center;font-size:12px;">
+      专家版为限量内测阶段<br>
+      每个邀请码可使用 <strong>100次</strong>
     </div>
 
     <div class="modal-invite-box">
@@ -991,13 +1337,14 @@ body {
       <span class="value" id="modalInviteRemaining">20</span>
     </div>
 
-    <div style="background:rgba(124,92,252,0.06);border-radius:8px;padding:12px 14px;margin-bottom:14px;">
-      <div style="font-size:12px;color:var(--text-secondary);">👇 领取方式</div>
-      <div style="font-size:14px;font-weight:500;margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <div style="background:rgba(124,92,252,0.06);border-radius:6px;padding:10px 12px;margin-bottom:12px;">
+      <div style="font-size:11px;color:var(--text-secondary);">👇 获取方式</div>
+      <div style="font-size:13px;font-weight:500;margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
         <span>添加QQ：</span>
-        <span style="color:var(--accent-purple-light);font-weight:700;font-size:16px;">704451222</span>
-        <span style="font-size:12px;color:var(--text-muted);">发送“领取邀请码”</span>
+        <span style="color:var(--accent-purple-light);font-weight:700;font-size:15px;">704451222</span>
+        <span style="font-size:11px;color:var(--text-muted);">咨询购买</span>
       </div>
+      <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">💡 添加时备注「提示词邀请码」</div>
     </div>
 
     <input type="text" class="modal-input" id="unlockInput" placeholder="请输入邀请码">
@@ -1020,19 +1367,19 @@ body {
   </div>
 </div>
 
-<!-- ===== 引导弹窗 ===== -->
+<!-- ===== 引导弹窗（复制后显示平台选择） ===== -->
 <div class="modal-overlay" id="guideModal">
-  <div class="modal" style="max-width:480px;">
-    <div style="text-align:center;margin-bottom:16px;">
-      <div style="font-size:42px;margin-bottom:8px;">✅</div>
+  <div class="modal" style="max-width:500px;">
+    <div style="text-align:center;margin-bottom:14px;">
+      <div style="font-size:38px;margin-bottom:6px;">✅</div>
       <div class="modal-title" style="margin-bottom:2px;">复制成功！</div>
-      <div style="color:var(--text-muted);font-size:13px;">提示词已复制到剪贴板</div>
+      <div style="color:var(--text-muted);font-size:12px;">提示词已复制到剪贴板</div>
     </div>
-    <div style="margin-bottom:16px;">
-      <div style="font-size:12px;color:var(--text-secondary);text-align:center;margin-bottom:10px;">选择平台试试效果：</div>
-      <div id="guidePlatformGrid"></div>
-      <div style="background:rgba(124,92,252,0.06);border-radius:8px;padding:10px 12px;border:1px solid rgba(124,92,252,0.08);">
-        <div style="font-size:11px;color:var(--accent-purple-light);line-height:1.5;">💡 粘贴到平台输入框，点击生成即可</div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:11px;color:var(--text-secondary);text-align:center;margin-bottom:8px;">选择平台粘贴使用：</div>
+      <div id="guidePlatformGrid" class="platform-grid-3col"></div>
+      <div style="background:rgba(124,92,252,0.06);border-radius:6px;padding:8px 10px;border:1px solid rgba(124,92,252,0.08);">
+        <div style="font-size:10px;color:var(--accent-purple-light);line-height:1.5;">💡 点击平台按钮即可打开官网，粘贴提示词开始生成</div>
       </div>
     </div>
     <div class="modal-actions">
@@ -1070,12 +1417,49 @@ const MAX_PASSWORD_USES = 100;
 const QQ_NUMBER = '704451222';
 const DAILY_INVITE_LIMIT = 20;
 
-const ADVANCED_PASSWORDS = ['ADV0G5U7SWP','ADV146XU8OL','ADV31PYMER7','ADV48FHNTCI','ADV4NKI9HX8','ADV4NWT90YJ','ADV4XIO6WKP','ADV607LQMY3','ADV6LH4W5KB','ADV7F4LXN8R','ADV7N0CUHZ6','ADV9IXJFTWB','ADV9NGUHQ5L','ADVBKZRGLN5','ADVE1LC49SQ','ADVF3CUB0TR','ADVGHY0W3X5','ADVHFGXEZ5W','ADVI46K2JRB','ADVIBGRZK0O','ADVIQ3LY48H','ADVJSBGWZ7Q','ADVJSLC38ZK','ADVJWG4R1YK','ADVL0YE4QT1','ADVLBPT4FRM','ADVLGTHK6IO','ADVLTN4YXJH','ADVLW28B630','ADVMJFHR4X0','ADVMQYO2BGZ','ADVMUBZT5GL','ADVN85TPMWK','ADVNXO6K4W2','ADVPHS1WCKU','ADVPUYXJB3N','ADVQCIWLM4X','ADVQS2BTYFX','ADVR5OGPUH0','ADVR6C14L9K','ADVR8F1HNYQ','ADVR8HC7EWM','ADVRXGL0O42','ADVT5JFWZ0P','ADVT9JBO50U','ADVU9IKTWGJ','ADVWNU0OQH3','ADVYP0OIFR7','ADVZ6JYMI3W','ADVZG5PK4NT'];
-const EXPERT_PASSWORDS = ['EXP097KTRHY','EXP0AKHTBJN','EXP0DCFQKTZ','EXP0QOYIHWK','EXP39JQ70WA','EXP3OKUCN7G','EXP41KD2WF6','EXP4CWVONJ8','EXP5UKOTR4Y','EXP6HV79F1K','EXP7BQYG0VW','EXP7G6OI5DZ','EXP7SCFKVT2','EXP8BM4LR7I','EXP8M2ALVN1','EXP97KT0UL1','EXP9L0B184F','EXP9LMDR6Y8','EXPASLQUGMC','EXPBLYJTW30','EXPBYDM47W0','EXPBZLGTJ8C','EXPC0TGZS3M','EXPGHKTZI57','EXPGYM8C2UH','EXPI2KQZ3YV','EXPI3Y4MOQU','EXPJIO73SQ5','EXPLVRKNCTI','EXPMACWJIDU','EXPMLO5W2V3','EXPN0MOJY8K','EXPN16RUJQW','EXPN3OHT748','EXPNCIRU2O4','EXPND0ICJ83','EXPNRK4GSQA','EXPNYFJ63KL','EXPRCLYO0JH','EXPRCOVK14L','EXPRCV0Q1F6','EXPRWQM1UTJ','EXPSMFG4WCT','EXPSUOYG5I1','EXPSWKGAMJL','EXPT1KAN79B','EXPT85YDQWI','EXPYFB7WCKR','EXPZCMOHIKA','EXPZN61WJLB'];
+// ============================================================
+// 平台数据
+// ============================================================
+const PLATFORM_DATA = {
+  text: [
+    { value: '文心一言', icon: '🇨🇳', url: 'https://yiyan.baidu.com', label: '文心一言' },
+    { value: '通义千问', icon: '🔷', url: 'https://tongyi.aliyun.com', label: '通义千问' },
+    { value: 'Kimi', icon: '📄', url: 'https://kimi.moonshot.cn', label: 'Kimi' },
+    { value: '豆包', icon: '🟢', url: 'https://www.doubao.com', label: '豆包' },
+    { value: '讯飞星火', icon: '⭐', url: 'https://xinghuo.xfyun.cn', label: '讯飞星火' },
+    { value: '智谱清言', icon: '🔬', url: 'https://chatglm.cn', label: '智谱清言' },
+    { value: 'DeepSeek', icon: '🧊', url: 'https://chat.deepseek.com', label: 'DeepSeek' },
+    { value: '百小应', icon: '🤝', url: 'https://yiyan.baidu.com', label: '百小应' },
+    { value: 'ChatGPT', icon: '💬', url: 'https://chat.openai.com', label: 'ChatGPT' },
+    { value: 'Claude', icon: '🧠', url: 'https://claude.ai', label: 'Claude' },
+    { value: 'Gemini', icon: '✨', url: 'https://gemini.google.com', label: 'Gemini' },
+    { value: 'Copilot', icon: '🛠️', url: 'https://copilot.microsoft.com', label: 'Copilot' },
+    { value: 'Perplexity', icon: '🔍', url: 'https://www.perplexity.ai', label: 'Perplexity' },
+    { value: 'Grok', icon: '🤖', url: 'https://grok.x.ai', label: 'Grok' }
+  ],
+  image: [
+    { value: '豆包', icon: '🟢', url: 'https://www.doubao.com/chat/create-image', label: '豆包' },
+    { value: '即梦', icon: '🔵', url: 'https://jimeng.jianying.com/ai-tool/image/generate', label: '即梦' },
+    { value: '可灵', icon: '🟣', url: 'https://klingai.com/image-creation', label: '可灵' },
+    { value: '通义万相', icon: '🟡', url: 'https://tongyi.aliyun.com/wanxiang/', label: '通义万相' },
+    { value: 'Midjourney', icon: '🟠', url: 'https://www.midjourney.com/explore', label: 'Midjourney' },
+    { value: 'Stable Diffusion', icon: '⚫', url: 'https://stablediffusionweb.com/', label: 'Stable Diffusion' }
+  ]
+};
+
+const PLATFORM_URL_MAP = {};
+PLATFORM_DATA.text.forEach(p => PLATFORM_URL_MAP[p.value] = p.url);
+PLATFORM_DATA.image.forEach(p => PLATFORM_URL_MAP[p.value] = p.url);
+const PLATFORM_ICON_MAP = {};
+PLATFORM_DATA.text.forEach(p => PLATFORM_ICON_MAP[p.value] = p.icon);
+PLATFORM_DATA.image.forEach(p => PLATFORM_ICON_MAP[p.value] = p.icon);
 
 // ============================================================
 // 数据库
 // ============================================================
+const ADVANCED_PASSWORDS = ['ADV0G5U7SWP','ADV146XU8OL','ADV31PYMER7','ADV48FHNTCI','ADV4NKI9HX8','ADV4NWT90YJ','ADV4XIO6WKP','ADV607LQMY3','ADV6LH4W5KB','ADV7F4LXN8R','ADV7N0CUHZ6','ADV9IXJFTWB','ADV9NGUHQ5L','ADVBKZRGLN5','ADVE1LC49SQ','ADVF3CUB0TR','ADVGHY0W3X5','ADVHFGXEZ5W','ADVI46K2JRB','ADVIBGRZK0O','ADVIQ3LY48H','ADVJSBGWZ7Q','ADVJSLC38ZK','ADVJWG4R1YK','ADVL0YE4QT1','ADVLBPT4FRM','ADVLGTHK6IO','ADVLTN4YXJH','ADVLW28B630','ADVMJFHR4X0','ADVMQYO2BGZ','ADVMUBZT5GL','ADVN85TPMWK','ADVNXO6K4W2','ADVPHS1WCKU','ADVPUYXJB3N','ADVQCIWLM4X','ADVQS2BTYFX','ADVR5OGPUH0','ADVR6C14L9K','ADVR8F1HNYQ','ADVR8HC7EWM','ADVRXGL0O42','ADVT5JFWZ0P','ADVT9JBO50U','ADVU9IKTWGJ','ADVWNU0OQH3','ADVYP0OIFR7','ADVZ6JYMI3W','ADVZG5PK4NT'];
+const EXPERT_PASSWORDS = ['EXP097KTRHY','EXP0AKHTBJN','EXP0DCFQKTZ','EXP0QOYIHWK','EXP39JQ70WA','EXP3OKUCN7G','EXP41KD2WF6','EXP4CWVONJ8','EXP5UKOTR4Y','EXP6HV79F1K','EXP7BQYG0VW','EXP7G6OI5DZ','EXP7SCFKVT2','EXP8BM4LR7I','EXP8M2ALVN1','EXP97KT0UL1','EXP9L0B184F','EXP9LMDR6Y8','EXPASLQUGMC','EXPBLYJTW30','EXPBYDM47W0','EXPBZLGTJ8C','EXPC0TGZS3M','EXPGHKTZI57','EXPGYM8C2UH','EXPI2KQZ3YV','EXPI3Y4MOQU','EXPJIO73SQ5','EXPLVRKNCTI','EXPMACWJIDU','EXPMLO5W2V3','EXPN0MOJY8K','EXPN16RUJQW','EXPN3OHT748','EXPNCIRU2O4','EXPND0ICJ83','EXPNRK4GSQA','EXPNYFJ63KL','EXPRCLYO0JH','EXPRCOVK14L','EXPRCV0Q1F6','EXPRWQM1UTJ','EXPSMFG4WCT','EXPSUOYG5I1','EXPSWKGAMJL','EXPT1KAN79B','EXPT85YDQWI','EXPYFB7WCKR','EXPZCMOHIKA','EXPZN61WJLB'];
+
 function getDB() {
   const defaultDB = {
     passwords: {
@@ -1132,7 +1516,7 @@ function showToast(msg, icon = '✅') {
   $('toastIcon').textContent = icon;
   t.classList.add('show');
   clearTimeout(t._hide);
-  t._hide = setTimeout(() => t.classList.remove('show'), 2600);
+  t._hide = setTimeout(() => t.classList.remove('show'), 2400);
 }
 
 function formatPromptHTML(text) {
@@ -1154,7 +1538,7 @@ function formatPromptHTML(text) {
 }
 
 // ============================================================
-// 复制（带引导弹窗）
+// 复制
 // ============================================================
 async function copyToClipboard(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1181,58 +1565,58 @@ function showGuideModal() {
   const currentPlatform = $('platformSelect').value;
   const grid = $('guidePlatformGrid');
 
+  let platforms;
   if (isEcommerce) {
-    grid.innerHTML = `
-      <button class="platform-btn" data-url="https://www.doubao.com/chat/create-image">🟢 豆包</button>
-      <button class="platform-btn" data-url="https://jimeng.jianying.com/ai-tool/image/generate">🔵 即梦</button>
-      <button class="platform-btn" data-url="https://klingai.com/image-creation">🟣 可灵</button>
-      <button class="platform-btn" data-url="https://tongyi.aliyun.com/wanxiang/">🟡 通义万相</button>
-      <button class="platform-btn" data-url="https://www.midjourney.com/explore">🟠 Midjourney</button>
-      <button class="platform-btn" data-url="https://stablediffusionweb.com/">⚫ Stable Diffusion</button>
-    `;
+    platforms = PLATFORM_DATA.image;
   } else {
-    grid.innerHTML = `
-      <button class="platform-btn" data-url="https://chat.openai.com">💬 ChatGPT</button>
-      <button class="platform-btn" data-url="https://claude.ai">🧠 Claude</button>
-      <button class="platform-btn" data-url="https://kimi.moonshot.cn">📄 Kimi</button>
-      <button class="platform-btn" data-url="https://www.doubao.com">🟢 豆包</button>
-      <button class="platform-btn" data-url="https://tongyi.aliyun.com">🔷 通义千问</button>
-      <button class="platform-btn" data-url="https://yiyan.baidu.com">🇨🇳 文心一言</button>
-    `;
+    const cn = ['文心一言','通义千问','Kimi','豆包','讯飞星火','智谱清言','DeepSeek','百小应'];
+    const cnList = PLATFORM_DATA.text.filter(p => cn.includes(p.value));
+    const intlList = PLATFORM_DATA.text.filter(p => !cn.includes(p.value));
+    platforms = [...cnList, ...intlList];
   }
 
+  grid.innerHTML = platforms.map(p => `
+    <button class="platform-btn" data-url="${p.url}" data-value="${p.value}">
+      <span class="icon">${p.icon}</span>
+      <span class="name">${p.label}</span>
+    </button>
+  `).join('');
+
   grid.querySelectorAll('.platform-btn').forEach(btn => {
-    btn.addEventListener('click', () => window.open(btn.dataset.url, '_blank'));
-    btn.classList.toggle('highlighted', btn.textContent.trim().includes(currentPlatform));
+    const val = btn.dataset.value;
+    if (val === currentPlatform) btn.classList.add('highlighted');
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      window.open(this.dataset.url, '_blank');
+    });
   });
+
+  if (platforms.length > 6) {
+    grid.classList.remove('platform-grid-2col');
+    grid.classList.add('platform-grid-3col');
+  } else {
+    grid.classList.remove('platform-grid-3col');
+    grid.classList.add('platform-grid-2col');
+  }
 
   $('guideModal').classList.add('active');
 }
 
 // ============================================================
-// 提示词生成（净化版：不包含平台优化指令）
+// 提示词生成
 // ============================================================
 function buildPrompt(field, task, level) {
-  const platform = $('platformSelect').value;
-
   const basePrompts = {
     basic: '【角色定位】\n你是一位专业的' + field + '领域AI助手，擅长处理各类' + field + '相关任务。\n\n【任务描述】\n' + task + '\n\n【基本要求】\n1. 提供清晰、实用的解决方案\n2. 使用专业但易懂的语言\n3. 确保内容准确、完整',
     advanced: '【角色定位】\n你是一位资深的' + field + '领域专家，拥有10年以上行业经验，精通' + field + '的核心理论与实践方法。\n\n【核心能力】\n- 深度理解' + field + '领域的专业知识体系\n- 具备解决复杂' + field + '问题的分析能力\n- 熟悉行业最佳实践和标准流程\n- 能够将复杂概念转化为可执行方案\n\n【任务分析】\n' + task + '\n\n【执行框架】\n1. 需求理解：明确任务目标和约束条件\n2. 方案设计：制定系统化的解决策略\n3. 详细执行：分步骤展开具体实施\n4. 质量检查：验证输出是否符合要求\n\n【输出要求】\n- 结构清晰，逻辑严谨\n- 包含具体 actionable 的建议\n- 适当使用示例说明\n- 标注关键注意事项',
     expert: '【角色定位】\n你是一位' + field + '领域的顶级专家顾问，拥有15年以上跨行业实战经验，曾服务过多家世界500强企业。你不仅是技术专家，更是战略思想家，能够从宏观和微观两个维度审视问题。\n\n【专业能力矩阵】\n- 战略层面：行业趋势洞察、商业模式设计、竞争格局分析\n- 战术层面：流程优化、方法论应用、工具链搭建\n- 执行层面：细节把控、质量标准制定、风险预判\n\n【思维特征】\n- 系统性思维：善于发现事物间的关联和规律\n- 批判性思维：不盲从权威，基于证据做判断\n- 创新思维：在传统方法基础上寻求突破\n- 用户思维：始终站在最终使用者角度思考\n\n【任务深度分析】\n' + task + '\n\n【执行框架】\n第一阶段：诊断与定义\n1. 明确核心问题和边界条件\n2. 识别关键利益相关者\n3. 梳理现有资源和约束\n4. 设定可衡量的成功标准\n\n第二阶段：研究与分析\n1. 收集相关背景信息和数据\n2. 应用适当的分析框架\n3. 识别潜在风险和机会\n4. 形成初步假设\n\n第三阶段：方案设计\n1. 制定多个备选方案\n2. 评估各方案的优劣势\n3. 选择最优路径并细化\n4. 制定实施路线图\n\n第四阶段：交付与迭代\n1. 输出高质量交付物\n2. 收集反馈并优化\n3. 提供后续支持建议\n4. 总结经验教训\n\n【质量控制标准】\n- 准确性：所有数据和事实经过验证\n- 完整性：覆盖任务的所有维度\n- 可操作性：每个建议都有明确的执行路径\n- 创新性：在可行范围内提供新颖视角\n\n【示例参考】\n在回答过程中，适当引用行业经典案例或最佳实践作为参考。\n\n【迭代优化机制】\n- 主动询问是否需要深入某个特定方向\n- 提供多个版本供选择（简要版/详细版）\n- 根据反馈实时调整输出策略\n\n【输出规范】\n- 使用Markdown格式\n- 重要观点使用加粗标注\n- 复杂概念配合简单示例\n- 结尾提供"下一步行动建议"'
   };
-
-  let prompt = basePrompts[level] || basePrompts.basic;
-
-  // 【核心改动】不再附加平台优化指令，保持提示词干净
-  // 只在卡片上标注适用平台，内容本身纯净
-
-  return prompt;
+  return basePrompts[level] || basePrompts.basic;
 }
 
 function buildEcommercePrompt(task, level, platform) {
   const isEn = ['Midjourney','Stable Diffusion'].includes(platform);
   const lang = isEn ? 'en' : 'zh';
-
   const params = {
     '豆包': { style: '写实风格，细节丰富', param: '' },
     '即梦': { style: '高质量人像，细腻质感', param: '' },
@@ -1274,25 +1658,21 @@ function buildEcommercePrompt(task, level, platform) {
   if (level !== 'basic') {
     prompt += isEn ? ', advanced composition, professional post-processing' : '\n【进阶】优化光影层次，增强材质质感';
   }
-  // 不附加平台前缀，保持干净
   return prompt;
 }
 
 // ============================================================
-// 获取当前领域
+// 生成逻辑
 // ============================================================
 function getCurrentField() {
   const active = document.querySelector('.field-card.active');
   return active ? active.dataset.field : '内容创作';
 }
 
-// ============================================================
-// 生成逻辑
-// ============================================================
 function canGenerate(level) {
   if (level === 'basic') {
     if (db.todayBasicCount >= MAX_BASIC_DAILY) {
-      showToast(`基础版每日限${MAX_BASIC_DAILY}次，明日再来`, '⚠️');
+      showToast(`基础版每日限${MAX_BASIC_DAILY}次免费，明日再来`, '⚠️');
       return false;
     }
     return true;
@@ -1313,7 +1693,6 @@ function canGenerate(level) {
 }
 
 function showUnlockModal(versionName) {
-  // 更新剩余邀请码
   const remaining = Math.max(0, DAILY_INVITE_LIMIT - (db.inviteUsedToday || 0));
   $('modalInviteRemaining').textContent = remaining;
   $('unlockModal').classList.add('active');
@@ -1331,7 +1710,6 @@ function doGenerate() {
   btn.disabled = true;
   btn.innerHTML = '<span>⏳</span> 生成中...';
 
-  // 模拟异步（实际是同步的，但让UI有反馈）
   setTimeout(() => {
     if (currentLevel === 'basic') db.todayBasicCount++;
     else if (currentLevel === 'advanced' && db.firstUse.advanced) db.firstUse.advanced = false;
@@ -1369,14 +1747,15 @@ function doGenerate() {
   }, 300);
 }
 
-// ============================================================
-// 一键优化 / 批量生成
-// ============================================================
 function doOptimize() {
   if (isGenerating) return;
+  if (!db.unlocked.expert && !db.firstUse.expert) {
+    pendingUnlockLevel = 'expert';
+    showUnlockModal('专家版');
+    return;
+  }
   const task = $('taskInput').value.trim();
   if (!task) { showToast('请输入需要优化的任务', '⚠️'); return; }
-  if (!canGenerate('expert')) return;
 
   isGenerating = true;
   const btn = $('optimizeBtn');
@@ -1415,9 +1794,13 @@ function doOptimize() {
 
 function doBatchGenerate() {
   if (isGenerating) return;
+  if (!db.unlocked.expert && !db.firstUse.expert) {
+    pendingUnlockLevel = 'expert';
+    showUnlockModal('专家版');
+    return;
+  }
   const task = $('taskInput').value.trim();
   if (!task) { showToast('请输入任务（每行一个）', '⚠️'); return; }
-  if (!canGenerate('expert')) return;
 
   const tasks = task.split('\n').filter(t => t.trim());
   if (tasks.length < 2) { showToast('至少2个任务，每行一个', '⚠️'); return; }
@@ -1484,7 +1867,7 @@ function renderResult(result) {
       <div class="result-meta">
         <span class="result-badge ${levelBadges[result.level]}">${levelNames[result.level]}</span>
         <span class="result-field">📂 ${result.field}</span>
-        ${result.platform ? '<span class="result-badge" style="background:rgba(124,92,252,0.1);color:var(--accent-purple-light);font-size:11px;">🎯 ' + result.platform + '</span>' : ''}
+        ${result.platform ? '<span class="result-badge" style="background:rgba(124,92,252,0.1);color:var(--accent-purple-light);font-size:10px;">🎯 ' + result.platform + '</span>' : ''}
         <span class="result-time">🕐 ${result.time}</span>
       </div>
       <div class="result-actions">
@@ -1582,7 +1965,6 @@ function doUnlock() {
   const pwd = $('unlockInput').value.trim();
   if (!pwd) { showToast('请输入邀请码', '⚠️'); return; }
 
-  // 检查今日剩余
   const remaining = Math.max(0, DAILY_INVITE_LIMIT - (db.inviteUsedToday || 0));
   if (remaining <= 0 && pwd !== SPECIAL_PASSWORD) {
     showToast('今日邀请码已发完，明日再来', '⚠️');
@@ -1630,25 +2012,36 @@ function showPage(name) {
 }
 
 // ============================================================
-// 模板库渲染
+// 模板库（行业/场景细分 + 效果预览占位）
 // ============================================================
 const templateData = [
-  { name: '抖音爆款脚本', field: '内容创作', desc: '60秒口播，钩子+干货+CTA，适合带货/个人IP', task: '帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒钩子，中间干货，结尾CTA。', level: 'expert', uses: 2834, tags: ['写作', '热门'] },
-  { name: '小红书种草笔记', field: '内容创作', desc: '标题带emoji，分点写感受，带话题标签引导互动', task: '写一篇小红书种草笔记，推荐[填写产品]。要求：标题带emoji，正文分点写真实感受，带3-5个标签，引导互动。', level: 'expert', uses: 2156, tags: ['写作', '热门'] },
-  { name: '公众号深度长文', field: '内容创作', desc: '故事/数据引入，分3-4小节，案例支撑，结尾升华', task: '写一篇3000字公众号深度文，主题：[填写主题]。要求：故事/数据引入，分3-4小节，案例支撑，结尾升华。', level: 'expert', uses: 1872, tags: ['写作'] },
-  { name: 'B站视频分镜', field: '内容创作', desc: '景别+画面+台词+时长+转场，完整分镜脚本', task: '写一个B站视频分镜脚本，主题：[填写主题]。要求：景别、画面、台词、时长、转场完整。', level: 'expert', uses: 1543, tags: ['写作'] },
-  { name: '朋友圈文案5条', field: '营销增长', desc: '故事型/痛点型/场景型/证言型/限时型各1条', task: '写5条朋友圈产品文案，产品：[填写产品]。要求：故事型/痛点型/场景型/证言型/限时型各1条。', level: 'expert', uses: 1321, tags: ['营销', '热门'] },
-  { name: '直播带货话术', field: '营销增长', desc: '暖场+介绍+促单+互动，全流程台词', task: '写一份直播带货话术，产品：[填写产品]。要求：暖场+介绍+促单+互动全流程。', level: 'expert', uses: 1087, tags: ['营销'] },
-  { name: 'PPT大纲生成', field: '职场办公', desc: '封面+3-5章节+每章3要点+总结页', task: '写一份PPT大纲，主题：[填写主题]。要求：封面+3-5个章节+每章3个要点+总结页。', level: 'expert', uses: 967, tags: ['办公'] },
-  { name: '商务邮件模板', field: '职场办公', desc: '正式/半正式/催办，多种场景适配', task: '写一封正式商务邮件，收件人：[填写]，主题：[填写]，要点：[填写]。', level: 'expert', uses: 845, tags: ['办公'] },
-  { name: '电商白底主图', field: '电商AI绘画', desc: '纯白背景，居中构图，适合淘宝/京东主图', task: '产品白底主图', level: 'expert', uses: 3120, tags: ['绘画', '热门'] },
-  { name: '产品场景图', field: '电商AI绘画', desc: '生活氛围，自然光，适合详情页场景图', task: '产品场景图', level: 'expert', uses: 2567, tags: ['绘画', '热门'] },
-  { name: '模特穿搭图', field: '电商AI绘画', desc: '亚洲模特街拍，展示版型和面料', task: '模特穿搭图', level: 'expert', uses: 1890, tags: ['绘画'] },
-  { name: '促销海报图', field: '电商AI绘画', desc: '红金促销色调，放射背景，预留文案区', task: '促销海报图', level: 'expert', uses: 1432, tags: ['绘画'] },
-  { name: '详情页长图', field: '电商AI绘画', desc: '首屏+细节+场景+参数+背书，五模块', task: '详情页长图', level: 'expert', uses: 1123, tags: ['绘画'] },
-  { name: 'AI换脸模特图', field: '电商AI绘画', desc: '美妆广告大片，影棚蝴蝶光', task: 'AI换脸模特图', level: 'expert', uses: 876, tags: ['绘画'] },
-  { name: '抖音带货脚本', field: '内容创作', desc: '3秒痛点钩子+15秒卖点+5秒限时促单', task: '写一个抖音带货短视频脚本，产品：[填写产品]。要求：3秒痛点钩子，15秒展示卖点，5秒限时促单。', level: 'expert', uses: 2345, tags: ['写作', '热门'] },
-  { name: '知乎专业回答', field: '内容创作', desc: '结论先行+数据论证+总结，1500字以上', task: '写一个知乎高质量回答，问题：[填写问题]。要求：结论先行，数据论证，总结引导赞同。', level: 'expert', uses: 1678, tags: ['写作'] },
+  // 食品酒水
+  { name: '酒水类·精酿啤酒', field: '电商AI绘画', desc: '琥珀色酒液+细腻泡沫+冰爽质感，精酿啤酒场景图', effect: '📈 详情页转化率+65%', task: '产品场景图', level: 'expert', uses: 3120, tags: ['绘画', 'hot'], preview: '🍺 精酿啤酒场景预览' },
+  { name: '食品类·烘焙甜品', field: '电商AI绘画', desc: '松软面包+诱人色泽+精致摆盘，甜品主图', effect: '📈 CTR提升75%', task: '产品白底主图', level: 'expert', uses: 2834, tags: ['绘画', 'hot'], preview: '🍰 烘焙甜品预览' },
+  { name: '饮品类·咖啡特写', field: '电商AI绘画', desc: '咖啡油脂+蒸汽缭绕+高级质感，精品咖啡主图', effect: '📈 客单价提升40%', task: '产品白底主图', level: 'expert', uses: 2156, tags: ['绘画'], preview: '☕ 精品咖啡预览' },
+  // 美妆护肤
+  { name: '美妆类·口红试色', field: '电商AI绘画', desc: '唇部特写+丝绒质感+色号对比，美妆主图', effect: '📈 点击率翻倍', task: 'AI换脸模特图', level: 'expert', uses: 2678, tags: ['绘画', 'hot'], preview: '💄 口红试色预览' },
+  { name: '护肤类·精华液', field: '电商AI绘画', desc: '滴管精华+水润光泽+高级简约，护肤主图', effect: '📈 转化率+55%', task: '产品白底主图', level: 'expert', uses: 1890, tags: ['绘画'], preview: '✨ 精华液预览' },
+  { name: '香水类·瓶身艺术', field: '电商AI绘画', desc: '瓶身光影+奢华背景+氛围感，香水主图', effect: '📈 品牌溢价+60%', task: '产品场景图', level: 'expert', uses: 1432, tags: ['绘画'], preview: '🌸 香水瓶身预览' },
+  // 服装配饰
+  { name: '服装类·连衣裙', field: '电商AI绘画', desc: '法式碎花+裙摆飘逸+自然光，穿搭主图', effect: '📈 点击率+85%', task: '模特穿搭图', level: 'expert', uses: 3456, tags: ['绘画', 'hot'], preview: '👗 连衣裙穿搭预览' },
+  { name: '配饰类·腕表', field: '电商AI绘画', desc: '金属质感+表盘细节+商务场景，腕表主图', effect: '📈 客单价提升50%', task: '产品场景图', level: 'expert', uses: 2103, tags: ['绘画'], preview: '⌚ 腕表场景预览' },
+  { name: '鞋履类·运动鞋', field: '电商AI绘画', desc: '鞋面材质+动态光影+街头场景，潮鞋主图', effect: '📈 转化率+70%', task: '产品场景图', level: 'expert', uses: 1976, tags: ['绘画'], preview: '👟 运动鞋预览' },
+  // 3C数码
+  { name: '数码类·耳机', field: '电商AI绘画', desc: '金属质感+线材细节+极简背景，数码主图', effect: '📈 CTR提升60%', task: '产品白底主图', level: 'expert', uses: 2345, tags: ['绘画'], preview: '🎧 耳机预览' },
+  { name: '数码类·手机壳', field: '电商AI绘画', desc: '高清打印+边缘细节+场景展示，手机壳主图', effect: '📈 详情页停留+120%', task: '产品场景图', level: 'expert', uses: 1678, tags: ['绘画'], preview: '📱 手机壳预览' },
+  // 家居生活
+  { name: '家居类·香薰蜡烛', field: '电商AI绘画', desc: '烛火摇曳+柔和光影+温馨氛围，家居主图', effect: '📈 转化率+50%', task: '产品场景图', level: 'expert', uses: 1456, tags: ['绘画'], preview: '🕯️ 香薰蜡烛预览' },
+  { name: '家居类·床上四件套', field: '电商AI绘画', desc: '柔软质感+褶皱细节+自然光，床品主图', effect: '📈 客单价+45%', task: '产品场景图', level: 'expert', uses: 1234, tags: ['绘画'], preview: '🛏️ 床品预览' },
+  // 写作类模板（保留原有）
+  { name: '抖音爆款脚本', field: '内容创作', desc: '3秒钩子→60秒干货→结尾CTA，完播率飙升', effect: '📈 完播率+50%', task: '帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒钩子，中间干货，结尾CTA。', level: 'expert', uses: 4123, tags: ['写作', 'hot'], preview: '🎬 抖音爆款脚本示例' },
+  { name: '小红书种草笔记', field: '内容创作', desc: '爆款标题+真实体验+精准标签，单篇涨粉500+', effect: '📈 单篇涨粉500+', task: '写一篇小红书种草笔记，推荐[填写产品]。要求：标题带emoji，正文分点写真实感受，带3-5个标签，引导互动。', level: 'expert', uses: 3567, tags: ['写作', 'hot'], preview: '📕 小红书种草示例' },
+  { name: '公众号深度长文', field: '内容创作', desc: '故事引入→层层递进→案例支撑→升华圈粉', effect: '📈 转发率+300%', task: '写一篇3000字公众号深度文，主题：[填写主题]。要求：故事/数据引入，分3-4小节，案例支撑，结尾升华。', level: 'expert', uses: 2890, tags: ['写作'], preview: '📰 公众号深度文示例' },
+  { name: 'B站视频分镜', field: '内容创作', desc: '景别+台词+转场+时长，一镜到底的完整脚本', effect: '📈 完播率+40%', task: '写一个B站视频分镜脚本，主题：[填写主题]。要求：景别、画面、台词、时长、转场完整。', level: 'expert', uses: 2456, tags: ['写作'], preview: '📺 B站分镜示例' },
+  { name: '朋友圈文案5条', field: '营销增长', desc: '故事/痛点/场景/证言/限时，5种成交风格', effect: '📈 咨询率+200%', task: '写5条朋友圈产品文案，产品：[填写产品]。要求：故事型/痛点型/场景型/证言型/限时型各1条。', level: 'expert', uses: 3210, tags: ['营销', 'hot'], preview: '💬 朋友圈文案示例' },
+  { name: '直播带货话术', field: '营销增长', desc: '暖场→种草→促单→答疑，完整的成交闭环', effect: '📈 转化率+150%', task: '写一份直播带货话术，产品：[填写产品]。要求：暖场+介绍+促单+互动全流程。', level: 'expert', uses: 2789, tags: ['营销'], preview: '🎯 直播话术示例' },
+  { name: 'PPT大纲生成', field: '职场办公', desc: '封面+3-5章节+每章3要点+总结页，逻辑清晰', effect: '📈 汇报通过率+90%', task: '写一份PPT大纲，主题：[填写主题]。要求：封面+3-5个章节+每章3个要点+总结页。', level: 'expert', uses: 1987, tags: ['办公'], preview: '📊 PPT大纲示例' },
+  { name: '商务邮件模板', field: '职场办公', desc: '正式/半正式/催办三种场景，专业得体', effect: '📈 回复率+120%', task: '写一封正式商务邮件，收件人：[填写]，主题：[填写]，要点：[填写]。', level: 'expert', uses: 1654, tags: ['办公'], preview: '✉️ 商务邮件示例' },
 ];
 
 let currentTemplateFilter = 'all';
@@ -1659,18 +2052,21 @@ function renderTemplates() {
   if (currentTemplateFilter !== 'all') {
     filtered = templateData.filter(t => t.tags.includes(currentTemplateFilter));
   }
-  // 置顶热门
-  const pinned = filtered.filter(t => t.tags.includes('热门'));
-  const rest = filtered.filter(t => !t.tags.includes('热门'));
+  const pinned = filtered.filter(t => t.tags.includes('hot'));
+  const rest = filtered.filter(t => !t.tags.includes('hot'));
   const sorted = [...pinned, ...rest];
 
   const isLocked = !db.unlocked.expert && !db.firstUse.expert;
   grid.innerHTML = sorted.map(t => `
-    <div class="template-card ${isLocked ? 'locked' : ''} ${t.tags.includes('热门') ? 'pinned' : ''}" 
+    <div class="template-card ${isLocked ? 'locked' : ''} ${t.tags.includes('hot') ? 'pinned' : ''}" 
          data-field="${t.field}" data-task="${t.task}" data-level="${t.level}">
       <div class="template-name">${t.name}</div>
       <div class="template-field">${t.field}</div>
       <div class="template-desc">${t.desc}</div>
+      <div class="template-effect">${t.effect}</div>
+      <div class="template-preview">
+        <span class="preview-icon">📷</span> ${t.preview || '效果预览'}
+      </div>
       <div class="template-stats">🔥 ${t.uses}人用过</div>
       <div class="template-tags">${t.tags.map(tg => `<span>#${tg}</span>`).join('')}</div>
       <span class="template-level badge-expert">专家</span>
@@ -1678,7 +2074,6 @@ function renderTemplates() {
     </div>
   `).join('');
 
-  // 绑定点击事件
   grid.querySelectorAll('.template-card').forEach(card => {
     card.addEventListener('click', function() {
       if (this.classList.contains('locked')) {
@@ -1688,14 +2083,11 @@ function renderTemplates() {
       }
       const field = this.dataset.field;
       const task = this.dataset.task;
-      // 自动切换领域
       document.querySelectorAll('.field-card').forEach(f => f.classList.toggle('active', f.dataset.field === field));
       $('taskInput').value = task;
       currentLevel = this.dataset.level;
       document.querySelectorAll('.complexity-card').forEach(c => c.classList.toggle('selected', c.dataset.level === currentLevel));
-      // 切换平台选项
       updatePlatformOptions(field);
-      // 显示/隐藏电商标签
       const isEcommerce = field === '电商AI绘画';
       $('ecommerceTagSection').style.display = isEcommerce ? 'block' : 'none';
       showPage('home');
@@ -1710,7 +2102,7 @@ function renderTemplates() {
 function renderHistory() {
   const container = $('historyList');
   if (db.history.length === 0) {
-    container.innerHTML = `<div class="empty-state" style="min-height:200px;"><div class="empty-icon" style="width:48px;height:48px;font-size:24px;">📜</div><div class="empty-title" style="font-size:15px;">暂无历史</div></div>`;
+    container.innerHTML = `<div class="empty-state" style="min-height:160px;"><div class="empty-icon" style="width:40px;height:40px;font-size:20px;">📜</div><div class="empty-title" style="font-size:13px;">暂无历史</div></div>`;
     return;
   }
   const icons = { basic:'🌱', advanced:'🚀', expert:'👑' };
@@ -1718,7 +2110,7 @@ function renderHistory() {
     <div class="history-item" onclick="loadHistory(${h.id})">
       <div class="history-icon" style="background:rgba(124,92,252,0.1);">${icons[h.level]}</div>
       <div class="history-info">
-        <div class="history-title">${h.field} - ${h.task.substring(0,28)}...</div>
+        <div class="history-title">${h.field} - ${h.task.substring(0,26)}...</div>
         <div class="history-meta">${h.level==='basic'?'基础':h.level==='advanced'?'进阶':'专家'} · ${h.time}</div>
       </div>
       <div class="history-actions" onclick="event.stopPropagation()">
@@ -1746,7 +2138,7 @@ window.loadHistory = function(id) {
 function renderFavorites() {
   const container = $('favoritesList');
   if (db.favorites.length === 0) {
-    container.innerHTML = `<div class="empty-state" style="min-height:200px;"><div class="empty-icon" style="width:48px;height:48px;font-size:24px;">⭐</div><div class="empty-title" style="font-size:15px;">暂无收藏</div></div>`;
+    container.innerHTML = `<div class="empty-state" style="min-height:160px;"><div class="empty-icon" style="width:40px;height:40px;font-size:20px;">⭐</div><div class="empty-title" style="font-size:13px;">暂无收藏</div></div>`;
     return;
   }
   const icons = { basic:'🌱', advanced:'🚀', expert:'👑' };
@@ -1754,7 +2146,7 @@ function renderFavorites() {
     <div class="history-item" onclick="loadHistory(${f.id})">
       <div class="history-icon" style="background:rgba(232,97,168,0.1);">${icons[f.level]}</div>
       <div class="history-info">
-        <div class="history-title">${f.field} - ${f.task.substring(0,28)}...</div>
+        <div class="history-title">${f.field} - ${f.task.substring(0,26)}...</div>
         <div class="history-meta">${f.level==='basic'?'基础':f.level==='advanced'?'进阶':'专家'} · ${f.time}</div>
       </div>
       <div class="history-actions" onclick="event.stopPropagation()">
@@ -1771,20 +2163,25 @@ function renderFavorites() {
 function renderAdmin() {
   if (!adminLoggedIn) {
     $('adminPanel').innerHTML = `
-      <div class="empty-state" style="min-height:300px;">
-        <div class="empty-icon" style="width:48px;height:48px;font-size:24px;">🔒</div>
-        <div class="empty-title" style="font-size:15px;">管理面板</div>
-        <div class="empty-desc" style="margin-top:10px;">
+      <div class="empty-state" style="min-height:260px;">
+        <div class="empty-icon" style="width:44px;height:44px;font-size:22px;">🔒</div>
+        <div class="empty-title" style="font-size:14px;">管理面板</div>
+        <div class="empty-desc" style="margin-top:8px;">
           <input type="password" id="adminPassword" placeholder="管理密码" 
-            style="padding:8px 14px;background:var(--bg-primary);border:1px solid var(--border-glass);border-radius:8px;color:var(--text-primary);width:200px;text-align:center;font-size:13px;">
+            style="padding:6px 12px;background:var(--bg-primary);border:1px solid var(--border-glass);border-radius:6px;color:var(--text-primary);width:180px;text-align:center;font-size:12px;">
           <br><br>
-          <button class="generate-btn" id="adminLoginBtn" style="width:200px;padding:10px;">进入管理</button>
+          <button class="generate-btn" id="adminLoginBtn" style="width:180px;padding:8px;font-size:13px;">进入管理</button>
         </div>
       </div>`;
-    $('adminLoginBtn').onclick = () => {
-      if ($('adminPassword').value === ADMIN_PASSWORD) { adminLoggedIn = true; renderAdmin(); showToast('已进入管理', '🔓'); }
+    const loginBtn = $('adminLoginBtn');
+    const pwdInput = $('adminPassword');
+    loginBtn.onclick = () => {
+      if (pwdInput.value === ADMIN_PASSWORD) { adminLoggedIn = true; renderAdmin(); showToast('已进入管理', '🔓'); }
       else showToast('密码错误', '❌');
     };
+    pwdInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') loginBtn.click();
+    });
     return;
   }
 
@@ -1795,29 +2192,110 @@ function renderAdmin() {
   const advSold = adv.filter(p => p.sold).length;
   const expSold = exp.filter(p => p.sold).length;
 
+  function pwdRows(arr, type) {
+    return arr.map((p, idx) => `
+      <tr>
+        <td><span class="code">${p.code}</span></td>
+        <td>${p.used}/${p.max}</td>
+        <td>${p.sold ? '已售' : '可用'}</td>
+        <td>
+          <button class="admin-action-btn" onclick="copyPwd('${p.code}')">📋 复制</button>
+          <button class="admin-action-btn" onclick="toggleSold('${type}','${p.code}')">${p.sold ? '🔄 标记可用' : '✓ 标记已售'}</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
   $('adminPanel').innerHTML = `
-    <div style="max-width:900px;margin:0 auto;">
-      <div style="background:var(--bg-card);border:1px solid var(--border-glass);border-radius:14px;padding:20px;margin-bottom:18px;">
-        <h3 style="font-size:16px;margin-bottom:14px;">📊 数据统计</h3>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;">
-          <div style="text-align:center;padding:12px;background:var(--bg-glass);border-radius:8px;"><div style="font-size:22px;font-weight:700;color:var(--accent-purple-light);">${db.totalGenerated}</div><div style="font-size:11px;color:var(--text-muted);">总生成</div></div>
-          <div style="text-align:center;padding:12px;background:var(--bg-glass);border-radius:8px;"><div style="font-size:22px;font-weight:700;color:var(--accent-green);">${db.todayBasicCount}</div><div style="font-size:11px;color:var(--text-muted);">今日基础版</div></div>
-          <div style="text-align:center;padding:12px;background:var(--bg-glass);border-radius:8px;"><div style="font-size:22px;font-weight:700;color:var(--accent-amber);">${advTotal}</div><div style="font-size:11px;color:var(--text-muted);">进阶版使用</div></div>
-          <div style="text-align:center;padding:12px;background:var(--bg-glass);border-radius:8px;"><div style="font-size:22px;font-weight:700;color:var(--accent-pink);">${expTotal}</div><div style="font-size:11px;color:var(--text-muted);">专家版使用</div></div>
+    <div class="admin-card">
+      <h3>📊 数据总览</h3>
+      <div class="admin-stats">
+        <div class="admin-stat-box"><div class="num">${db.totalGenerated}</div><div class="lbl">总生成数</div></div>
+        <div class="admin-stat-box"><div class="num">${db.todayBasicCount}</div><div class="lbl">今日基础版</div></div>
+        <div class="admin-stat-box"><div class="num">${advTotal}</div><div class="lbl">进阶版使用</div></div>
+        <div class="admin-stat-box"><div class="num">${expTotal}</div><div class="lbl">专家版使用</div></div>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <h3>
+        <span>🔐 进阶版密码池 (${advSold}/50 已售)</span>
+        <span style="flex:1;"></span>
+        <span class="collapse-toggle" onclick="toggleCollapse('advCollapse')">
+          <span class="arrow" id="advCollapseArrow">▶</span> 添加密码
+        </span>
+      </h3>
+      <div class="collapse-body" id="advCollapse">
+        <div class="add-pwd-row">
+          <input type="text" id="newAdvPwd" placeholder="输入新密码">
+          <button onclick="addPwd('advanced')">➕ 添加</button>
         </div>
       </div>
-      <div style="background:var(--bg-card);border:1px solid var(--border-glass);border-radius:14px;padding:20px;margin-bottom:18px;">
-        <h3 style="font-size:15px;margin-bottom:12px;">🔐 进阶版密码池 (${advSold}/50)</h3>
-        <div style="overflow-x:auto;font-size:12px;">${adv.map(p => `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border-glass);"><span style="font-family:monospace;">${p.code}</span><span>${p.used}/${p.max}</span><span>${p.sold?'已售':'可用'}</span></div>`).join('')}</div>
+      <div class="password-table-wrap">
+        <table class="password-table">
+          <thead><tr><th>密码</th><th>使用次数</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody>${pwdRows(adv, 'advanced')}</tbody>
+        </table>
       </div>
-      <div style="background:var(--bg-card);border:1px solid var(--border-glass);border-radius:14px;padding:20px;margin-bottom:18px;">
-        <h3 style="font-size:15px;margin-bottom:12px;">🔐 专家版密码池 (${expSold}/50)</h3>
-        <div style="overflow-x:auto;font-size:12px;">${exp.map(p => `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border-glass);"><span style="font-family:monospace;">${p.code}</span><span>${p.used}/${p.max}</span><span>${p.sold?'已售':'可用'}</span></div>`).join('')}</div>
+    </div>
+
+    <div class="admin-card">
+      <h3>
+        <span>🔐 专家版密码池 (${expSold}/50 已售)</span>
+        <span style="flex:1;"></span>
+        <span class="collapse-toggle" onclick="toggleCollapse('expCollapse')">
+          <span class="arrow" id="expCollapseArrow">▶</span> 添加密码
+        </span>
+      </h3>
+      <div class="collapse-body" id="expCollapse">
+        <div class="add-pwd-row">
+          <input type="text" id="newExpPwd" placeholder="输入新密码">
+          <button onclick="addPwd('expert')">➕ 添加</button>
+        </div>
       </div>
-      <button onclick="if(confirm('确定重置所有数据？')){localStorage.removeItem('promptGenDB');location.reload();}" style="padding:8px 16px;border-radius:6px;border:1px solid var(--accent-red);background:transparent;color:var(--accent-red);cursor:pointer;font-size:12px;">🗑️ 重置所有数据</button>
+      <div class="password-table-wrap">
+        <table class="password-table">
+          <thead><tr><th>密码</th><th>使用次数</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody>${pwdRows(exp, 'expert')}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <h3>⚠️ 危险操作</h3>
+      <button class="admin-action-btn" onclick="if(confirm('确定重置所有数据？')){localStorage.removeItem('promptGenDB');location.reload();}" style="color:var(--accent-red);border-color:var(--accent-red);padding:4px 14px;">🗑️ 重置所有数据</button>
     </div>
   `;
 }
+
+window.toggleCollapse = function(id) {
+  const body = $(id);
+  const arrow = $(id + 'Arrow');
+  if (body) {
+    body.classList.toggle('open');
+    if (arrow) arrow.classList.toggle('open');
+  }
+};
+
+window.copyPwd = function(code) {
+  copyToClipboard(code);
+};
+
+window.toggleSold = function(type, code) {
+  const p = db.passwords[type].find(x => x.code === code);
+  if (p) { p.sold = !p.sold; saveDB(db); renderAdmin(); showToast(p.sold ? '已标记为已售' : '已标记为可用', '✅'); }
+};
+
+window.addPwd = function(type) {
+  const inputId = type === 'advanced' ? 'newAdvPwd' : 'newExpPwd';
+  const code = $(inputId).value.trim();
+  if (!code) { showToast('请输入密码', '⚠️'); return; }
+  db.passwords[type].push({ code, used: 0, max: MAX_PASSWORD_USES, sold: false });
+  saveDB(db);
+  $(inputId).value = '';
+  renderAdmin();
+  showToast('密码添加成功', '✅');
+};
 
 // ============================================================
 // 平台选项更新
@@ -1825,25 +2303,32 @@ function renderAdmin() {
 function updatePlatformOptions(field) {
   const sel = $('platformSelect');
   const isEcommerce = field === '电商AI绘画';
-  const opts = isEcommerce ? [
-    { value:'豆包', text:'🟢 豆包' },
-    { value:'即梦', text:'🔵 即梦' },
-    { value:'可灵', text:'🟣 可灵' },
-    { value:'通义万相', text:'🟡 通义万相' },
-    { value:'Midjourney', text:'🟠 Midjourney' },
-    { value:'Stable Diffusion', text:'⚫ Stable Diffusion' }
-  ] : [
-    { value:'通用', text:'🌐 通用' },
-    { value:'ChatGPT', text:'💬 ChatGPT' },
-    { value:'Claude', text:'🧠 Claude' },
-    { value:'文心一言', text:'🇨🇳 文心一言' },
-    { value:'通义千问', text:'🔷 通义千问' },
-    { value:'Kimi', text:'📄 Kimi' },
-    { value:'豆包', text:'🟢 豆包' },
-    { value:'讯飞星火', text:'⭐ 讯飞星火' },
-    { value:'智谱清言', text:'🔬 智谱清言' }
-  ];
-  sel.innerHTML = opts.map(o => `<option value="${o.value}">${o.text}</option>`).join('');
+
+  let html = '';
+  if (isEcommerce) {
+    html = `<optgroup label="🎨 绘画专用">`;
+    PLATFORM_DATA.image.forEach(p => {
+      html += `<option value="${p.value}">${p.icon} ${p.label}</option>`;
+    });
+    html += `</optgroup>`;
+  } else {
+    const cn = ['文心一言','通义千问','Kimi','豆包','讯飞星火','智谱清言','DeepSeek','百小应'];
+    const cnList = PLATFORM_DATA.text.filter(p => cn.includes(p.value));
+    const intlList = PLATFORM_DATA.text.filter(p => !cn.includes(p.value));
+
+    if (cnList.length) {
+      html += `<optgroup label="🇨🇳 国内主流">`;
+      cnList.forEach(p => { html += `<option value="${p.value}">${p.icon} ${p.label}</option>`; });
+      html += `</optgroup>`;
+    }
+    if (intlList.length) {
+      html += `<optgroup label="🌐 国际主流">`;
+      intlList.forEach(p => { html += `<option value="${p.value}">${p.icon} ${p.label}</option>`; });
+      html += `</optgroup>`;
+    }
+  }
+  sel.innerHTML = html;
+  sel.selectedIndex = 0;
 }
 
 // ============================================================
@@ -1851,7 +2336,6 @@ function updatePlatformOptions(field) {
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
 
-  // ---- 领域切换 ----
   document.querySelectorAll('.field-card').forEach(card => {
     card.addEventListener('click', function() {
       document.querySelectorAll('.field-card').forEach(f => f.classList.remove('active'));
@@ -1860,7 +2344,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const isEcommerce = field === '电商AI绘画';
       updatePlatformOptions(field);
       $('ecommerceTagSection').style.display = isEcommerce ? 'block' : 'none';
-      // 如果是AI绘画，自动切换到专家版
       if (isEcommerce) {
         currentLevel = 'expert';
         document.querySelectorAll('.complexity-card').forEach(c => c.classList.toggle('selected', c.dataset.level === 'expert'));
@@ -1868,7 +2351,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // ---- 模板筛选 ----
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -1878,7 +2360,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // ---- 复杂度 ----
   document.querySelectorAll('.complexity-card').forEach(card => {
     card.addEventListener('click', function() {
       document.querySelectorAll('.complexity-card').forEach(c => c.classList.remove('selected'));
@@ -1887,12 +2368,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // ---- 生成 ----
   $('generateBtn').addEventListener('click', doGenerate);
   $('optimizeBtn').addEventListener('click', doOptimize);
   $('batchBtn').addEventListener('click', doBatchGenerate);
 
-  // ---- 标签 ----
   document.querySelectorAll('.tag:not(#ecommerceTagContainer .tag)').forEach(tag => {
     tag.addEventListener('click', function() {
       const field = this.dataset.field || '内容创作';
@@ -1914,13 +2393,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // ---- 清空/粘贴 ----
   $('clearBtn').addEventListener('click', () => { $('taskInput').value = ''; $('taskInput').focus(); });
   $('pasteBtn').addEventListener('click', async () => {
     try { const t = await navigator.clipboard.readText(); $('taskInput').value = t; } catch(e) { showToast('无法读取剪贴板', '⚠️'); }
   });
 
-  // ---- 导航 ----
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       showPage(this.dataset.page);
@@ -1928,7 +2405,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // ---- 移动端侧边栏 ----
   $('mobileMenuBtn').addEventListener('click', function(e) {
     e.stopPropagation();
     $('configPanel').classList.toggle('open');
@@ -1939,24 +2415,19 @@ document.addEventListener('DOMContentLoaded', function() {
     $('overlay').classList.remove('active');
   });
 
-  // ---- 解锁弹窗 ----
   $('unlockConfirm').addEventListener('click', doUnlock);
   $('unlockCancel').addEventListener('click', () => $('unlockModal').classList.remove('active'));
   $('unlockInput').addEventListener('keypress', e => { if (e.key === 'Enter') doUnlock(); });
 
-  // ---- 复制弹窗 ----
   $('copyClose').addEventListener('click', () => $('copyModal').classList.remove('active'));
 
-  // ---- 引导弹窗 ----
   $('guideCloseBtn').addEventListener('click', () => $('guideModal').classList.remove('active'));
   $('guideModal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
 
-  // ---- 模态框遮罩关闭 ----
   document.querySelectorAll('.modal-overlay').forEach(ov => {
     ov.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
   });
 
-  // ---- iOS触摸优化 ----
   let lastTouchEnd = 0;
   document.addEventListener('touchend', function(e) {
     const now = Date.now();
@@ -1976,13 +2447,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }, { passive: true });
 
-  // ---- 底部许可证 ----
   $('licenseLink').addEventListener('click', function(e) {
     e.preventDefault();
     window.open('https://opensource.org/licenses/MIT', '_blank');
   });
 
-  // ---- 初始化 ----
   const initialField = getCurrentField();
   updatePlatformOptions(initialField);
   updateStats();
@@ -1990,7 +2459,6 @@ document.addEventListener('DOMContentLoaded', function() {
   updateTemplateLocks();
   updateFeatureButtons();
 
-  // 检查URL管理员参数
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('admin') === ADMIN_PASSWORD) { showPage('admin'); }
 
