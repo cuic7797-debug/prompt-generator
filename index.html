@@ -630,7 +630,6 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: rgba(124,92,252,0.4); }
 .hidden { display: none !important; }
 </style>
-<base target="_blank">
 </head>
 <body>
 
@@ -892,7 +891,7 @@ body {
   </div>
 </div>
 
-<!-- 其他模态框（编辑次数、复制、引导）与之前相同，为节省篇幅略，但功能保留 -->
+<!-- 其他模态框 -->
 <div class="modal-overlay" id="editMaxModal"><div class="modal" style="max-width:400px;"><div class="modal-title">✏️ 修改使用次数上限</div><div class="modal-desc" id="editMaxDesc">当前密码：<strong id="editMaxCode"></strong><br>当前上限：<span id="editMaxCurrent"></span> 次</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;"><button class="modal-btn modal-btn-secondary" onclick="setEditMax(30)" style="flex:0 0 auto;padding:6px 14px;font-size:12px;">30次</button><button class="modal-btn modal-btn-secondary" onclick="setEditMax(50)" style="flex:0 0 auto;padding:6px 14px;font-size:12px;">50次</button><button class="modal-btn modal-btn-secondary" onclick="setEditMax(100)" style="flex:0 0 auto;padding:6px 14px;font-size:12px;">100次</button><button class="modal-btn modal-btn-secondary" onclick="setEditMax(200)" style="flex:0 0 auto;padding:6px 14px;font-size:12px;">200次</button><button class="modal-btn modal-btn-secondary" onclick="setEditMax(0)" style="flex:0 0 auto;padding:6px 14px;font-size:12px;">♾️ 无限</button></div><div style="display:flex;gap:6px;"><input type="number" id="editMaxInput" placeholder="自定义" style="flex:1;padding:6px 10px;background:var(--bg-primary);border:1px solid var(--border-glass);border-radius:6px;color:var(--text-primary);font-size:13px;"><button class="modal-btn modal-btn-primary" onclick="confirmEditMax()" style="flex:0 0 auto;padding:6px 16px;font-size:13px;">确认</button></div><div class="modal-actions" style="margin-top:10px;"><button class="modal-btn modal-btn-secondary" onclick="closeEditMax()" style="font-size:13px;">取消</button></div></div></div>
 <div class="modal-overlay" id="copyModal"><div class="modal copy-modal"><div class="modal-title">📋 复制内容</div><div class="modal-desc">长按下方文字全选复制</div><textarea id="copyTextarea" readonly></textarea><div class="modal-actions"><button class="modal-btn modal-btn-primary" id="copyClose">关闭</button></div></div></div>
 <div class="modal-overlay" id="guideModal"><div class="modal" style="max-width:520px;"><div style="text-align:center;margin-bottom:12px;"><div style="font-size:36px;margin-bottom:4px;">✅</div><div class="modal-title" style="margin-bottom:1px;">复制成功！</div><div style="color:var(--text-muted);font-size:12px;">提示词已复制到剪贴板</div></div><div style="margin-bottom:12px;"><div style="font-size:11px;color:var(--text-secondary);text-align:center;margin-bottom:6px;">选择平台粘贴使用：</div><div id="guidePlatformGrid" class="platform-grid-3col"></div><div style="background:rgba(124,92,252,0.06);border-radius:6px;padding:8px 10px;border:1px solid rgba(124,92,252,0.08);"><div style="font-size:10px;color:var(--accent-purple-light);line-height:1.4;">💡 点击平台按钮即可打开官网</div></div></div><div class="modal-actions"><button class="modal-btn modal-btn-primary" id="guideCloseBtn">我知道了</button></div></div></div>
@@ -1027,8 +1026,6 @@ function getDB() {
 }
 
 function saveDB(db) {
-  if (db.history && db.history.length > 50) db.history = db.history.slice(0, 50);
-  if (db.favorites && db.favorites.length > 100) db.favorites = db.favorites.slice(0, 100);
   try { localStorage.setItem('promptGenDB', JSON.stringify(db)); } catch (e) {}
 }
 
@@ -1397,7 +1394,6 @@ function doGenerate() {
     var emptyState = $('emptyState');
     if (emptyState) emptyState.classList.add('hidden');
     
-    // 专家版生成完成庆祝
     if (currentLevel === 'expert') {
       showToast('🎉 专家版专属提示词已生成！', '👑');
     } else {
@@ -1409,7 +1405,7 @@ function doGenerate() {
   }
 }
 
-// ---- 专家润色（原一键优化） ----
+// ---- 专家润色 ----
 function doOptimize() {
   if (isGenerating) return;
   if (!db.unlocked.expert && !db.firstUse.expert) {
@@ -1462,7 +1458,7 @@ function doOptimize() {
   }, 500);
 }
 
-// ---- 批量创作（原批量生成） ----
+// ---- 批量创作 ----
 function doBatchGenerate() {
   if (isGenerating) return;
   if (!db.unlocked.expert && !db.firstUse.expert) {
@@ -1555,7 +1551,6 @@ function renderResult(result) {
   
   var platformHtml = result.platform ? '<span class="result-badge" style="background:rgba(124,92,252,0.1);color:var(--accent-purple-light);font-size:10px;">🎯 ' + result.platform + '</span>' : '';
   
-  // 版本对比摘要（专家版特有）
   var compareHtml = '';
   if (result.level === 'expert') {
     var vc = getVersionCompare('expert');
@@ -1638,7 +1633,6 @@ function updateFeatureButtons() {
     if (opt) { opt.className = 'generate-btn optimize locked'; opt.innerHTML = '<span>🔒</span> 专家润色 · 专家版专属'; opt.disabled = true; }
     if (bat) { bat.className = 'generate-btn batch locked'; bat.innerHTML = '<span>🔒</span> 批量创作 · 专家版专属'; bat.disabled = true; }
   }
-  // 更新专家版折叠状态
   updateExpertCollapse();
 }
 
@@ -1875,9 +1869,7 @@ function renderTemplates() {
           else fCards[fc].classList.remove('active');
         }
         var taskInput = $('taskInput');
-        var drawerTask = $('drawer_taskInput');
         if (taskInput) taskInput.value = task;
-        if (drawerTask) drawerTask.value = task;
         currentLevel = this.getAttribute('data-level');
         var cCards = document.querySelectorAll('.complexity-card');
         for (var cc = 0; cc < cCards.length; cc++) {
@@ -1888,7 +1880,6 @@ function renderTemplates() {
         var isEcommerce = (field === '电商AI绘画');
         var ecomSec = $('ecommerceTagSection');
         if (ecomSec) ecomSec.style.display = isEcommerce ? 'block' : 'none';
-        // 手机端自动打开抽屉
         if (window.innerWidth <= 768) {
           var drawer = document.getElementById('mobileDrawer');
           var overlay = document.getElementById('mobileDrawerOverlay');
@@ -1949,9 +1940,7 @@ function loadHistory(id) {
     else fCards[j].classList.remove('active');
   }
   var taskInput = $('taskInput');
-  var drawerTask = $('drawer_taskInput');
   if (taskInput) taskInput.value = result.task;
-  if (drawerTask) drawerTask.value = result.task;
   currentLevel = result.level;
   var cCards = document.querySelectorAll('.complexity-card');
   for (var k = 0; k < cCards.length; k++) {
@@ -1965,7 +1954,6 @@ function loadHistory(id) {
   var container = $('resultsContainer');
   if (container) container.innerHTML = '';
   renderResult(result);
-  // 手机端自动打开抽屉
   if (window.innerWidth <= 768) {
     var drawer = document.getElementById('mobileDrawer');
     var overlay = document.getElementById('mobileDrawerOverlay');
@@ -2179,7 +2167,7 @@ function closeEditMax() { closeModal('editMaxModal'); editMaxTarget = null; }
 // ---- 平台选项 ----
 function updatePlatformOptions(field) {
   var sel = $('platformSelect');
-  var drawerSel = $('drawer_platformSelect');
+  if (!sel) return;
   var isEcommerce = (field === '电商AI绘画');
   var html = '';
   if (isEcommerce) {
@@ -2210,24 +2198,16 @@ function updatePlatformOptions(field) {
       html += '</optgroup>';
     }
   }
-  if (sel) sel.innerHTML = html;
-  if (drawerSel) drawerSel.innerHTML = html;
+  sel.innerHTML = html;
   var key = 'last_platform_' + field;
-  var lastVal = '';
-  try { lastVal = localStorage.getItem(key); } catch (e) {}
-  if (lastVal) {
-    if (sel) {
+  try {
+    var lastVal = localStorage.getItem(key);
+    if (lastVal) {
       var opts = sel.options;
-      for (var n = 0; n < opts.length; n++) { if (opts[n].value === lastVal) { sel.value = lastVal; break; } }
+      for (var n = 0; n < opts.length; n++) { if (opts[n].value === lastVal) { sel.value = lastVal; return; } }
     }
-    if (drawerSel) {
-      var dopts = drawerSel.options;
-      for (var n2 = 0; n2 < dopts.length; n2++) { if (dopts[n2].value === lastVal) { drawerSel.value = lastVal; break; } }
-    }
-  } else {
-    if (sel) sel.selectedIndex = 0;
-    if (drawerSel) drawerSel.selectedIndex = 0;
-  }
+  } catch (e) {}
+  sel.selectedIndex = 0;
 }
 
 // ---- 标签数据 ----
@@ -2304,20 +2284,17 @@ function initMobileUI() {
   if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
   if (drawerHandle) drawerHandle.addEventListener('click', closeDrawer);
 
-  // 悬浮生成按钮
   var floatingGen = $('floatingGenBtn');
   if (floatingGen) {
     floatingGen.addEventListener('click', function() {
       if (typeof doGenerate === 'function') {
         doGenerate();
-        // 反馈触感
         this.style.transform = 'scale(0.8)';
         setTimeout(function() { floatingGen.style.transform = ''; }, 200);
       }
     });
   }
 
-  // 底部标签点击
   var bottomBtns = document.querySelectorAll('.bottom-bar .bb-btn');
   for (var i = 0; i < bottomBtns.length; i++) {
     (function(btn) {
@@ -2328,12 +2305,10 @@ function initMobileUI() {
     })(bottomBtns[i]);
   }
 
-  // 点击抽屉内配置项自动关闭
   document.addEventListener('click', function(e) {
     if (window.innerWidth <= 768) {
       var target = e.target.closest('.field-card, .tag, .complexity-card, .generate-btn, .field-grid, .tag-container');
       if (target && drawer && drawer.classList.contains('open')) {
-        // 如果是生成按钮或者场景选择，稍微延迟关闭以便用户看到反馈
         if (target.classList.contains('generate-btn')) return;
         if (target.closest('.field-card') || target.closest('.tag') || target.closest('.complexity-card')) {
           setTimeout(closeDrawer, 250);
@@ -2342,76 +2317,68 @@ function initMobileUI() {
     }
   });
 
-  // 抽屉内容克隆（从configPanel复制）
   var drawerContent = $('drawerContent');
   var configPanel = $('configPanel');
   if (drawerContent && configPanel) {
     var clone = configPanel.cloneNode(true);
     clone.id = 'drawerConfigClone';
-    // 移除id避免冲突，但保留class
+    // 关键修复：保留重要元素的id，以便事件绑定生效
+    var importantIds = ['generateBtn', 'optimizeBtn', 'batchBtn', 'clearBtn', 'pasteBtn', 'taskInput', 'platformSelect'];
     clone.querySelectorAll('[id]').forEach(function(el) {
-      // 保留重要id的克隆，但加上后缀避免冲突
       var oldId = el.id;
       if (oldId && oldId !== 'drawerConfigClone') {
-        el.id = 'drawer_' + oldId;
+        // 如果是重要id，保留原id（不添加前缀）
+        if (importantIds.indexOf(oldId) !== -1) {
+          // 保留原id，但需要确保不重复
+        } else {
+          el.id = 'drawer_' + oldId;
+        }
       }
     });
-    // 移除configPanel自身的id引用
     drawerContent.innerHTML = '';
     drawerContent.appendChild(clone);
-  }
-
-  // ===== 修复：抽屉与原始面板数据双向同步 =====
-  function syncDrawerInputs() {
-    var origTask = $('taskInput');
-    var drawerTask = $('drawer_taskInput');
-    if (origTask && drawerTask) {
-      origTask.addEventListener('input', function() { drawerTask.value = origTask.value; });
-      drawerTask.addEventListener('input', function() { origTask.value = drawerTask.value; });
+    
+    // 重新绑定抽屉内重要按钮的事件
+    var drawerGenBtn = document.getElementById('generateBtn');
+    if (drawerGenBtn) {
+      drawerGenBtn.addEventListener('click', doGenerate);
     }
-    var origPlat = $('platformSelect');
-    var drawerPlat = $('drawer_platformSelect');
-    if (origPlat && drawerPlat) {
-      origPlat.addEventListener('change', function() { drawerPlat.value = origPlat.value; });
-      drawerPlat.addEventListener('change', function() { origPlat.value = drawerPlat.value; });
+    var drawerOptBtn = document.getElementById('optimizeBtn');
+    if (drawerOptBtn) {
+      drawerOptBtn.addEventListener('click', doOptimize);
     }
-  }
-  syncDrawerInputs();
-
-  // ===== 修复：为抽屉内克隆按钮补充事件绑定 =====
-  var dGen = $('drawer_generateBtn');
-  if (dGen) dGen.addEventListener('click', doGenerate);
-  var dOpt = $('drawer_optimizeBtn');
-  if (dOpt) dOpt.addEventListener('click', doOptimize);
-  var dBat = $('drawer_batchBtn');
-  if (dBat) dBat.addEventListener('click', doBatchGenerate);
-  var dClear = $('drawer_clearBtn');
-  if (dClear) dClear.addEventListener('click', function() {
-    var inp = $('drawer_taskInput');
-    var orig = $('taskInput');
-    if (inp) { inp.value = ''; inp.focus(); }
-    if (orig) { orig.value = ''; }
-  });
-  var dPaste = $('drawer_pasteBtn');
-  if (dPaste) {
-    dPaste.addEventListener('click', function() {
-      if (navigator.clipboard && navigator.clipboard.readText) {
-        navigator.clipboard.readText().then(function(text) {
-          var inp = $('drawer_taskInput');
-          var orig = $('taskInput');
-          if (inp) inp.value = text;
-          if (orig) orig.value = text;
-        }).catch(function() { showToast('无法读取剪贴板', '⚠️'); });
-      } else { showToast('无法读取剪贴板', '⚠️'); }
-    });
-  }
-  var dPlat = $('drawer_platformSelect');
-  if (dPlat) {
-    dPlat.addEventListener('change', function() {
-      var field = getCurrentField();
-      var key = 'last_platform_' + field;
-      try { localStorage.setItem(key, this.value); } catch (e) {}
-    });
+    var drawerBatchBtn = document.getElementById('batchBtn');
+    if (drawerBatchBtn) {
+      drawerBatchBtn.addEventListener('click', doBatchGenerate);
+    }
+    var drawerClearBtn = document.getElementById('clearBtn');
+    if (drawerClearBtn) {
+      drawerClearBtn.addEventListener('click', function() {
+        var taskInput = document.getElementById('taskInput');
+        if (taskInput) { taskInput.value = ''; taskInput.focus(); }
+      });
+    }
+    var drawerPasteBtn = document.getElementById('pasteBtn');
+    if (drawerPasteBtn) {
+      drawerPasteBtn.addEventListener('click', function() {
+        if (navigator.clipboard && navigator.clipboard.readText) {
+          navigator.clipboard.readText().then(function(text) {
+            var taskInput = document.getElementById('taskInput');
+            if (taskInput) taskInput.value = text;
+          }).catch(function() { showToast('无法读取剪贴板', '⚠️'); });
+        } else { showToast('无法读取剪贴板', '⚠️'); }
+      });
+    }
+    // 重新绑定抽屉内的专家折叠
+    var drawerExpertCollapse = document.getElementById('expertCollapse');
+    if (drawerExpertCollapse) {
+      drawerExpertCollapse.addEventListener('click', function(e) {
+        var header = e.target.closest('.collapse-header');
+        if (header) {
+          toggleExpertCollapse();
+        }
+      });
+    }
   }
 }
 
@@ -2419,12 +2386,17 @@ function initMobileUI() {
 function initApp() {
   console.log('🔵 初始化开始...');
 
-  // 检查是否通过URL参数进入管理
+  // 检查URL参数进入管理
   try {
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === ADMIN_PASSWORD) {
       adminLoggedIn = true;
-      showPage('admin');
+      // 切换到管理页面并渲染
+      var adminPage = document.getElementById('page-admin');
+      if (adminPage) {
+        showPage('admin');
+        renderAdmin();
+      }
     }
   } catch (e) {}
 
@@ -2471,9 +2443,7 @@ function initApp() {
   var clearBtn = $('clearBtn');
   if (clearBtn) clearBtn.addEventListener('click', function() {
     var taskInput = $('taskInput');
-    var drawerTask = $('drawer_taskInput');
     if (taskInput) { taskInput.value = ''; taskInput.focus(); }
-    if (drawerTask) { drawerTask.value = ''; }
   });
   var pasteBtn = $('pasteBtn');
   if (pasteBtn) {
@@ -2481,9 +2451,7 @@ function initApp() {
       if (navigator.clipboard && navigator.clipboard.readText) {
         navigator.clipboard.readText().then(function(text) {
           var taskInput = $('taskInput');
-          var drawerTask = $('drawer_taskInput');
           if (taskInput) taskInput.value = text;
-          if (drawerTask) drawerTask.value = text;
         }).catch(function() { showToast('无法读取剪贴板', '⚠️'); });
       } else { showToast('无法读取剪贴板', '⚠️'); }
     });
@@ -2510,7 +2478,6 @@ function initApp() {
             else cCards[cc].classList.remove('selected');
           }
         }
-        // 手机端自动关闭抽屉（延迟）
         if (window.innerWidth <= 768) {
           setTimeout(function() {
             var drawer = $('mobileDrawer');
@@ -2545,7 +2512,7 @@ function initApp() {
     })(complexityCards[d]);
   }
 
-  // 标签点击（委托）
+  // 标签点击委托
   document.addEventListener('click', function(e) {
     var tag = e.target.closest('.tag');
     if (!tag) return;
@@ -2574,7 +2541,6 @@ function initApp() {
         }
       }
     }
-    // 手机端自动关闭抽屉
     if (window.innerWidth <= 768) {
       setTimeout(function() {
         var drawer = $('mobileDrawer');
@@ -2586,7 +2552,7 @@ function initApp() {
     }
   });
 
-  // 导航按钮（桌面）
+  // 桌面导航按钮
   var navBtns = document.querySelectorAll('.nav-btn');
   for (var i = 0; i < navBtns.length; i++) {
     (function(btn) {
@@ -2621,10 +2587,8 @@ function initApp() {
   var licenseLink = $('licenseLink');
   if (licenseLink) licenseLink.addEventListener('click', function(e) { e.preventDefault(); window.open('https://opensource.org/licenses/MIT', '_blank'); });
 
-  // 手机UI
   initMobileUI();
 
-  // 初始状态
   var initialField = getCurrentField();
   updatePlatformOptions(initialField);
   updateStats();
