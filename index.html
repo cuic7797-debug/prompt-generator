@@ -1915,6 +1915,11 @@ body {
     <div class="modal-desc" style="text-align:center;font-size:13px;">
       获取专家版邀请码，解锁全部高级功能
     </div>
+    <!-- ===== 这里补全了 modalInviteRemaining ===== -->
+    <div class="modal-invite-box">
+      <span class="label">📌 今日剩余</span>
+      <span class="value" id="modalInviteRemaining">20</span>
+    </div>
     <div style="background:rgba(124,92,252,0.06);border-radius:8px;padding:14px 16px;margin-bottom:14px;border:1px solid rgba(124,92,252,0.1);">
       <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;font-weight:600;">🎁 专家版专属权益</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;">
@@ -2017,17 +2022,17 @@ body {
 // ============================================================
 // 配置
 // ============================================================
-const SPECIAL_PASSWORD = '123456888';
-const ADMIN_PASSWORD = 'c123456888';
-const MAX_BASIC_DAILY = 5;
-const MAX_PASSWORD_USES = 100;
-const QQ_NUMBER = '704451222';
-const DAILY_INVITE_LIMIT = 20;
+var SPECIAL_PASSWORD = '123456888';
+var ADMIN_PASSWORD = 'c123456888';
+var MAX_BASIC_DAILY = 5;
+var MAX_PASSWORD_USES = 100;
+var QQ_NUMBER = '704451222';
+var DAILY_INVITE_LIMIT = 20;
 
 // ============================================================
 // 平台数据
 // ============================================================
-const PLATFORM_DATA = {
+var PLATFORM_DATA = {
   text: [
     { value: '文心一言', icon: '🇨🇳', url: 'https://yiyan.baidu.com', label: '文心一言' },
     { value: '通义千问', icon: '🔷', url: 'https://tongyi.aliyun.com', label: '通义千问' },
@@ -2054,23 +2059,8 @@ const PLATFORM_DATA = {
   ]
 };
 
-const PLATFORM_URL_MAP = {};
-PLATFORM_DATA.text.forEach(p => PLATFORM_URL_MAP[p.value] = p.url);
-PLATFORM_DATA.image.forEach(p => PLATFORM_URL_MAP[p.value] = p.url);
-
 // ============================================================
-// 安全 DOM 获取
-// ============================================================
-function $(id) {
-  var el = document.getElementById(id);
-  if (!el) {
-    console.warn('Element not found:', id);
-  }
-  return el;
-}
-
-// ============================================================
-// 数据库（带错误兜底）
+// 数据库
 // ============================================================
 var ADVANCED_PASSWORDS = ['ADV0G5U7SWP','ADV146XU8OL','ADV31PYMER7','ADV48FHNTCI','ADV4NKI9HX8','ADV4NWT90YJ','ADV4XIO6WKP','ADV607LQMY3','ADV6LH4W5KB','ADV7F4LXN8R','ADV7N0CUHZ6','ADV9IXJFTWB','ADV9NGUHQ5L','ADVBKZRGLN5','ADVE1LC49SQ','ADVF3CUB0TR','ADVGHY0W3X5','ADVHFGXEZ5W','ADVI46K2JRB','ADVIBGRZK0O','ADVIQ3LY48H','ADVJSBGWZ7Q','ADVJSLC38ZK','ADVJWG4R1YK','ADVL0YE4QT1','ADVLBPT4FRM','ADVLGTHK6IO','ADVLTN4YXJH','ADVLW28B630','ADVMJFHR4X0','ADVMQYO2BGZ','ADVMUBZT5GL','ADVN85TPMWK','ADVNXO6K4W2','ADVPHS1WCKU','ADVPUYXJB3N','ADVQCIWLM4X','ADVQS2BTYFX','ADVR5OGPUH0','ADVR6C14L9K','ADVR8F1HNYQ','ADVR8HC7EWM','ADVRXGL0O42','ADVT5JFWZ0P','ADVT9JBO50U','ADVU9IKTWGJ','ADVWNU0OQH3','ADVYP0OIFR7','ADVZ6JYMI3W','ADVZG5PK4NT'];
 var EXPERT_PASSWORDS = ['EXP097KTRHY','EXP0AKHTBJN','EXP0DCFQKTZ','EXP0QOYIHWK','EXP39JQ70WA','EXP3OKUCN7G','EXP41KD2WF6','EXP4CWVONJ8','EXP5UKOTR4Y','EXP6HV79F1K','EXP7BQYG0VW','EXP7G6OI5DZ','EXP7SCFKVT2','EXP8BM4LR7I','EXP8M2ALVN1','EXP97KT0UL1','EXP9L0B184F','EXP9LMDR6Y8','EXPASLQUGMC','EXPBLYJTW30','EXPBYDM47W0','EXPBZLGTJ8C','EXPC0TGZS3M','EXPGHKTZI57','EXPGYM8C2UH','EXPI2KQZ3YV','EXPI3Y4MOQU','EXPJIO73SQ5','EXPLVRKNCTI','EXPMACWJIDU','EXPMLO5W2V3','EXPN0MOJY8K','EXPN16RUJQW','EXPN3OHT748','EXPNCIRU2O4','EXPND0ICJ83','EXPNRK4GSQA','EXPNYFJ63KL','EXPRCLYO0JH','EXPRCOVK14L','EXPRCV0Q1F6','EXPRWQM1UTJ','EXPSMFG4WCT','EXPSUOYG5I1','EXPSWKGAMJL','EXPT1KAN79B','EXPT85YDQWI','EXPYFB7WCKR','EXPZCMOHIKA','EXPZN61WJLB'];
@@ -2137,7 +2127,18 @@ var passwordSearchQuery = '';
 var currentTemplateFilter = 'all';
 
 // ============================================================
-// 弹窗管理（统一）
+// 安全 DOM 获取
+// ============================================================
+function $(id) {
+  var el = document.getElementById(id);
+  if (!el) {
+    console.warn('Element not found:', id);
+  }
+  return el;
+}
+
+// ============================================================
+// 弹窗管理
 // ============================================================
 function openModal(modalId) {
   var modal = $(modalId);
@@ -2313,7 +2314,7 @@ function showGuideModal() {
 }
 
 // ============================================================
-// 提示词生成
+// 提示词生成（三级差异）
 // ============================================================
 function buildPrompt(field, task, level) {
   var basic = '【角色定位】\n你是一位专业的' + field + '领域AI助手。\n\n【任务描述】\n' + task + '\n\n【基本要求】\n1. 输出清晰、实用的解决方案\n2. 使用专业但易懂的语言\n3. 确保内容准确、完整';
@@ -2410,7 +2411,9 @@ function canGenerate(level) {
 function showUnlockModal(versionName) {
   var remaining = Math.max(0, DAILY_INVITE_LIMIT - (db.inviteUsedToday || 0));
   var inviteRemaining = $('modalInviteRemaining');
-  if (inviteRemaining) inviteRemaining.textContent = remaining;
+  if (inviteRemaining) {
+    inviteRemaining.textContent = remaining;
+  }
   openModal('unlockModal');
 }
 
@@ -3308,7 +3311,7 @@ function closeEditMax() {
 }
 
 // ============================================================
-// 平台选项更新
+// 平台选项更新（含记忆）
 // ============================================================
 function updatePlatformOptions(field) {
   var sel = $('platformSelect');
@@ -3373,7 +3376,7 @@ function updatePlatformOptions(field) {
 }
 
 // ============================================================
-// 弹窗事件绑定
+// 初始化
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -3645,7 +3648,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // 点击右侧结果区关闭配置面板（手机端）
   var resultPanel = $('resultPanel');
   if (resultPanel) {
     resultPanel.addEventListener('click', function(e) {
