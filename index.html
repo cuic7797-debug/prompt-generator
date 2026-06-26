@@ -629,9 +629,57 @@ body {
 ::-webkit-scrollbar-thumb { background: rgba(124,92,252,0.25); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(124,92,252,0.4); }
 .hidden { display: none !important; }
+
+/* ===== v2.0 新增样式 ===== */
+#particleCanvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 0; opacity: 0.4; }
+[data-theme="light"] { --bg-primary: #f5f5f7; --bg-secondary: #ffffff; --bg-card: rgba(255,255,255,0.92); --bg-glass: rgba(0,0,0,0.03); --border-glass: rgba(0,0,0,0.08); --text-primary: #1d1d1f; --text-secondary: #666668; --text-muted: #99999d; --shadow-card: 0 4px 24px rgba(0,0,0,0.08); }
+@media (prefers-color-scheme: light) { [data-theme="system"] { --bg-primary: #f5f5f7; --bg-secondary: #ffffff; --bg-card: rgba(255,255,255,0.92); --bg-glass: rgba(0,0,0,0.03); --border-glass: rgba(0,0,0,0.08); --text-primary: #1d1d1f; --text-secondary: #666668; --text-muted: #99999d; --shadow-card: 0 4px 24px rgba(0,0,0,0.08); } }
+.theme-toggle { width: 32px; height: 32px; border-radius: 8px; background: var(--bg-glass); border: 1px solid var(--border-glass); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s; }
+.theme-toggle:hover { color: var(--text-primary); background: rgba(124,92,252,0.1); }
+.ripple { position: absolute; border-radius: 50%; background: rgba(124,92,252,0.3); transform: scale(0); animation: ripple-anim 0.6s linear; pointer-events: none; }
+@keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
+.generate-btn .ripple { background: rgba(255,255,255,0.3); }
+.variable-tag { display: inline-block; background: rgba(124,92,252,0.15); color: var(--accent-purple-light); padding: 1px 6px; border-radius: 4px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px dashed rgba(124,92,252,0.3); transition: all 0.2s; }
+.variable-tag:hover { background: rgba(124,92,252,0.25); border-style: solid; }
+.variable-tag.empty { background: rgba(245,179,66,0.15); color: var(--accent-amber); border-color: rgba(245,179,66,0.3); }
+.quality-bar { display: flex; align-items: center; gap: 8px; margin: 8px 0; font-size: 11px; }
+.quality-bar .q-label { color: var(--text-muted); min-width: 60px; }
+.quality-bar .q-track { flex: 1; height: 4px; background: var(--bg-glass); border-radius: 2px; overflow: hidden; }
+.quality-bar .q-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+.quality-bar .q-fill.high { background: var(--accent-green); }
+.quality-bar .q-fill.medium { background: var(--accent-amber); }
+.quality-bar .q-fill.low { background: var(--accent-red); }
+.typewriter-cursor::after { content: '▋'; animation: blink 1s step-end infinite; color: var(--accent-purple); margin-left: 2px; }
+@keyframes blink { 50% { opacity: 0; } }
+.settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.settings-card { padding: 14px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 10px; cursor: pointer; transition: all 0.2s; text-align: center; font-size: 13px; }
+.settings-card:hover { border-color: var(--accent-purple); background: rgba(124,92,252,0.08); }
+.settings-card .s-icon { font-size: 22px; margin-bottom: 4px; }
+.settings-card .s-label { font-weight: 500; color: var(--text-primary); }
+.settings-card .s-desc { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+.achievement-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+.achievement-item { padding: 12px 8px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 10px; text-align: center; transition: all 0.2s; opacity: 0.5; filter: grayscale(0.8); }
+.achievement-item.unlocked { opacity: 1; filter: grayscale(0); border-color: rgba(212,168,83,0.3); background: rgba(212,168,83,0.05); }
+.achievement-item .a-icon { font-size: 28px; margin-bottom: 4px; }
+.achievement-item .a-name { font-size: 11px; font-weight: 600; color: var(--text-primary); }
+.achievement-item .a-desc { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
+.heatmap { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; max-width: 280px; margin: 0 auto; }
+.heatmap-cell { width: 28px; height: 28px; border-radius: 4px; background: var(--bg-glass); border: 1px solid var(--border-glass); transition: all 0.2s; }
+.heatmap-cell.level-1 { background: rgba(124,92,252,0.2); border-color: rgba(124,92,252,0.3); }
+.heatmap-cell.level-2 { background: rgba(124,92,252,0.4); border-color: rgba(124,92,252,0.5); }
+.heatmap-cell.level-3 { background: rgba(124,92,252,0.6); border-color: rgba(124,92,252,0.7); }
+.heatmap-cell.level-4 { background: rgba(124,92,252,0.85); border-color: var(--accent-purple); }
+@keyframes celebrate { 0% { transform: scale(0) rotate(0deg); opacity: 1; } 100% { transform: scale(1.5) rotate(180deg); opacity: 0; } }
+.celebrate-particle { position: fixed; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 5000; animation: celebrate 0.8s ease-out forwards; }
+.page { display: none; }
+.page.active { display: block; }
+@media (max-width:768px) { .settings-grid { grid-template-columns: 1fr; } }
+
 </style>
+<base target="_blank">
 </head>
 <body>
+<canvas id="particleCanvas"></canvas>
 
 <!-- ===== 导航栏 ===== -->
 <nav class="navbar">
@@ -641,8 +689,11 @@ body {
     <button class="nav-btn" data-page="templates">📚 模板库</button>
     <button class="nav-btn" data-page="history">📜 历史</button>
     <button class="nav-btn" data-page="favorites">⭐ 收藏</button>
+    <button class="nav-btn" data-page="dashboard">📊 数据</button>
+    <button class="nav-btn" data-page="settings">⚙️ 设置</button>
   </div>
   <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" title="切换主题">🌙</button>
     <div class="nav-stats">
       <span>今日剩余 <span class="num" id="navTodayCount">5</span></span>
       <span>·</span>
@@ -718,12 +769,16 @@ body {
       <div class="section-label" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
         <span>📝 任务描述</span>
         <span style="display:flex;gap:3px;">
+          <button class="icon-btn" id="voiceInputBtn" title="语音输入" style="width:28px;height:28px;border-radius:6px;border:none;background:var(--bg-glass);color:var(--text-secondary);cursor:pointer;font-size:12px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;">🎤</button>
           <button class="icon-btn" id="clearBtn" title="清空" style="width:28px;height:28px;border-radius:6px;border:none;background:var(--bg-glass);color:var(--text-secondary);cursor:pointer;font-size:12px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;">🗑️</button>
           <button class="icon-btn" id="pasteBtn" title="粘贴" style="width:28px;height:28px;border-radius:6px;border:none;background:var(--bg-glass);color:var(--text-secondary);cursor:pointer;font-size:12px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;">📋</button>
         </span>
       </div>
       <div class="textarea-wrap">
         <textarea id="taskInput" placeholder="描述你需要的任务，例如：帮我写一个60秒的抖音口播脚本..."></textarea>
+      </div>
+      <div id="variableHint" style="font-size:11px;color:var(--text-muted);margin-top:4px;display:none;">
+        💡 点击 <span style="color:var(--accent-purple-light);">[变量]</span> 可快速替换
       </div>
     </div>
     <div class="config-section">
@@ -993,7 +1048,12 @@ function getDB() {
     expertGenerated: 0,
     firstUse: { advanced: true, expert: true },
     inviteUsedToday: 0,
-    inviteDate: ''
+    inviteDate: '',
+    theme: 'dark',
+    achievements: {},
+    dailyStats: {},
+    lastField: '通用',
+    version: CONFIG.VERSION
   };
   var i;
   for (i = 0; i < ADVANCED_PASSWORDS.length; i++) {
@@ -1005,7 +1065,7 @@ function getDB() {
   defaultDB.todayDate = new Date().toDateString();
   defaultDB.inviteDate = new Date().toDateString();
   try {
-    var saved = localStorage.getItem('promptGenDB');
+    var saved = localStorage.getItem('promptGenDB_v2');
     if (saved) {
       var parsed = JSON.parse(saved);
       if (parsed.todayDate !== new Date().toDateString()) {
@@ -1026,6 +1086,8 @@ function getDB() {
 }
 
 function saveDB(db) {
+  if (db.history && db.history.length > 50) db.history = db.history.slice(0, 50);
+  if (db.favorites && db.favorites.length > 100) db.favorites = db.favorites.slice(0, 100);
   try { localStorage.setItem('promptGenDB', JSON.stringify(db)); } catch (e) {}
 }
 
@@ -1396,10 +1458,14 @@ function doGenerate() {
     
     // 专家版生成完成庆祝
     if (currentLevel === 'expert') {
+      var rect = btn ? btn.getBoundingClientRect() : { left: 0, top: 0 };
+      celebrate(rect.left + rect.width / 2, rect.top + rect.height / 2);
       showToast('🎉 专家版专属提示词已生成！', '👑');
     } else {
       showToast('提示词生成成功！', '✨');
     }
+
+    checkAchievements();
 
     isGenerating = false;
     if (btn) { btn.disabled = false; btn.innerHTML = '<span>✨</span> 生成提示词'; }
@@ -1872,7 +1938,9 @@ function renderTemplates() {
           else fCards[fc].classList.remove('active');
         }
         var taskInput = $('taskInput');
+        var drawerTask = $('drawer_taskInput');
         if (taskInput) taskInput.value = task;
+        if (drawerTask) drawerTask.value = task;
         currentLevel = this.getAttribute('data-level');
         var cCards = document.querySelectorAll('.complexity-card');
         for (var cc = 0; cc < cCards.length; cc++) {
@@ -1944,7 +2012,9 @@ function loadHistory(id) {
     else fCards[j].classList.remove('active');
   }
   var taskInput = $('taskInput');
+  var drawerTask = $('drawer_taskInput');
   if (taskInput) taskInput.value = result.task;
+  if (drawerTask) drawerTask.value = result.task;
   currentLevel = result.level;
   var cCards = document.querySelectorAll('.complexity-card');
   for (var k = 0; k < cCards.length; k++) {
@@ -2172,7 +2242,7 @@ function closeEditMax() { closeModal('editMaxModal'); editMaxTarget = null; }
 // ---- 平台选项 ----
 function updatePlatformOptions(field) {
   var sel = $('platformSelect');
-  if (!sel) return;
+  var drawerSel = $('drawer_platformSelect');
   var isEcommerce = (field === '电商AI绘画');
   var html = '';
   if (isEcommerce) {
@@ -2203,16 +2273,24 @@ function updatePlatformOptions(field) {
       html += '</optgroup>';
     }
   }
-  sel.innerHTML = html;
+  if (sel) sel.innerHTML = html;
+  if (drawerSel) drawerSel.innerHTML = html;
   var key = 'last_platform_' + field;
-  try {
-    var lastVal = localStorage.getItem(key);
-    if (lastVal) {
+  var lastVal = '';
+  try { lastVal = localStorage.getItem(key); } catch (e) {}
+  if (lastVal) {
+    if (sel) {
       var opts = sel.options;
-      for (var n = 0; n < opts.length; n++) { if (opts[n].value === lastVal) { sel.value = lastVal; return; } }
+      for (var n = 0; n < opts.length; n++) { if (opts[n].value === lastVal) { sel.value = lastVal; break; } }
     }
-  } catch (e) {}
-  sel.selectedIndex = 0;
+    if (drawerSel) {
+      var dopts = drawerSel.options;
+      for (var n2 = 0; n2 < dopts.length; n2++) { if (dopts[n2].value === lastVal) { drawerSel.value = lastVal; break; } }
+    }
+  } else {
+    if (sel) sel.selectedIndex = 0;
+    if (drawerSel) drawerSel.selectedIndex = 0;
+  }
 }
 
 // ---- 标签数据 ----
@@ -2345,6 +2423,59 @@ function initMobileUI() {
     drawerContent.innerHTML = '';
     drawerContent.appendChild(clone);
   }
+
+  // ===== 修复：抽屉与原始面板数据双向同步 =====
+  function syncDrawerInputs() {
+    var origTask = $('taskInput');
+    var drawerTask = $('drawer_taskInput');
+    if (origTask && drawerTask) {
+      origTask.addEventListener('input', function() { drawerTask.value = origTask.value; });
+      drawerTask.addEventListener('input', function() { origTask.value = drawerTask.value; });
+    }
+    var origPlat = $('platformSelect');
+    var drawerPlat = $('drawer_platformSelect');
+    if (origPlat && drawerPlat) {
+      origPlat.addEventListener('change', function() { drawerPlat.value = origPlat.value; });
+      drawerPlat.addEventListener('change', function() { origPlat.value = drawerPlat.value; });
+    }
+  }
+  syncDrawerInputs();
+
+  // ===== 修复：为抽屉内克隆按钮补充事件绑定 =====
+  var dGen = $('drawer_generateBtn');
+  if (dGen) dGen.addEventListener('click', doGenerate);
+  var dOpt = $('drawer_optimizeBtn');
+  if (dOpt) dOpt.addEventListener('click', doOptimize);
+  var dBat = $('drawer_batchBtn');
+  if (dBat) dBat.addEventListener('click', doBatchGenerate);
+  var dClear = $('drawer_clearBtn');
+  if (dClear) dClear.addEventListener('click', function() {
+    var inp = $('drawer_taskInput');
+    var orig = $('taskInput');
+    if (inp) { inp.value = ''; inp.focus(); }
+    if (orig) { orig.value = ''; }
+  });
+  var dPaste = $('drawer_pasteBtn');
+  if (dPaste) {
+    dPaste.addEventListener('click', function() {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText().then(function(text) {
+          var inp = $('drawer_taskInput');
+          var orig = $('taskInput');
+          if (inp) inp.value = text;
+          if (orig) orig.value = text;
+        }).catch(function() { showToast('无法读取剪贴板', '⚠️'); });
+      } else { showToast('无法读取剪贴板', '⚠️'); }
+    });
+  }
+  var dPlat = $('drawer_platformSelect');
+  if (dPlat) {
+    dPlat.addEventListener('change', function() {
+      var field = getCurrentField();
+      var key = 'last_platform_' + field;
+      try { localStorage.setItem(key, this.value); } catch (e) {}
+    });
+  }
 }
 
 // ---- 主初始化 ----
@@ -2403,7 +2534,9 @@ function initApp() {
   var clearBtn = $('clearBtn');
   if (clearBtn) clearBtn.addEventListener('click', function() {
     var taskInput = $('taskInput');
+    var drawerTask = $('drawer_taskInput');
     if (taskInput) { taskInput.value = ''; taskInput.focus(); }
+    if (drawerTask) { drawerTask.value = ''; }
   });
   var pasteBtn = $('pasteBtn');
   if (pasteBtn) {
@@ -2411,7 +2544,9 @@ function initApp() {
       if (navigator.clipboard && navigator.clipboard.readText) {
         navigator.clipboard.readText().then(function(text) {
           var taskInput = $('taskInput');
+          var drawerTask = $('drawer_taskInput');
           if (taskInput) taskInput.value = text;
+          if (drawerTask) drawerTask.value = text;
         }).catch(function() { showToast('无法读取剪贴板', '⚠️'); });
       } else { showToast('无法读取剪贴板', '⚠️'); }
     });
