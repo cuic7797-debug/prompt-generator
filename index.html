@@ -329,7 +329,7 @@ body {
 }
 .icon-btn:hover { background: var(--accent-purple); color: white; }
 
-/* ---- 热门标签（两列网格） ---- */
+/* ---- 热门标签（两列网格，保留完整描述） ---- */
 .tag-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1185,7 +1185,7 @@ body {
   <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
 </nav>
 
-<!-- ===== 手机端导航面板（右侧滑出） ===== -->
+<!-- ===== 手机端导航面板 ===== -->
 <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
 <div class="mobile-nav-panel" id="mobileNavPanel">
   <div class="mobile-nav-brand">
@@ -1216,6 +1216,7 @@ body {
 
   <!-- ===== 左侧配置面板 ===== -->
   <aside class="config-panel" id="configPanel">
+
     <!-- 领域分类 -->
     <div class="config-section">
       <div class="section-label">🎯 选择场景</div>
@@ -1279,47 +1280,47 @@ body {
       </div>
     </div>
 
-    <!-- 热门标签（两列） -->
+    <!-- 热门标签（保留完整任务描述） -->
     <div class="config-section">
       <div class="section-label">💡 热门标签</div>
       <div class="tag-container" id="tagContainer">
-        <span class="tag" data-task="帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒钩子，中间干货，结尾CTA。" data-field="内容创作">
+        <span class="tag" data-task="帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒用悬念/痛点/反常识钩子抓住注意力，中间45秒内容要干货密集、有情绪起伏、有金句，结尾12秒用明确的CTA（关注/点赞/评论/转发）引导互动。语气要像朋友聊天一样自然，不要像念稿。适用场景：知识付费、带货、个人IP打造。" data-field="内容创作">
           <span class="tag-left"><span class="tag-main">🎬 抖音爆款脚本</span><span class="tag-sub">3秒钩子 → 60秒完播 → 结尾转化</span></span>
           <span class="tag-effect">📈 完播率+50%</span>
         </span>
-        <span class="tag" data-task="写一篇小红书种草笔记，推荐[填写产品]。要求：标题带emoji，正文分点写真实感受，带3-5个标签。" data-field="内容创作">
+        <span class="tag" data-task="写一篇小红书种草笔记，推荐[填写产品/服务]。要求：标题带emoji+数字+关键词，正文分点列出真实使用感受（至少3个痛点+解决方案），包含3-5个精准话题标签，结尾引导互动（收藏/评论/私信）。语气要亲切像闺蜜推荐，不要像官方广告。适用场景：美妆、家居、食品、知识付费。" data-field="内容创作">
           <span class="tag-left"><span class="tag-main">📕 小红书种草</span><span class="tag-sub">爆款标题 → 真实感受 → 精准标签</span></span>
           <span class="tag-effect">📈 单篇涨粉500+</span>
         </span>
-        <span class="tag" data-task="写一篇3000字公众号深度文，主题：[填写主题]。要求：故事/数据引入，分3-4小节，案例支撑，结尾升华。" data-field="内容创作">
+        <span class="tag" data-task="帮我写一篇3000字的公众号深度长文，主题：[填写主题]。要求：开头用故事/数据/反常识观点引入，中间分3-4个小节层层递进，每个小节至少有1个真实案例支撑，结尾升华主题并引导关注/在看。语言要有深度但不晦涩，像跟朋友深度聊天。适用场景：行业分析、品牌故事、个人成长。" data-field="内容创作">
           <span class="tag-left"><span class="tag-main">📰 公众号深度文</span><span class="tag-sub">故事引入 → 层层递进 → 升华圈粉</span></span>
           <span class="tag-effect">📈 转发率+300%</span>
         </span>
-        <span class="tag" data-task="写一个B站视频分镜脚本，主题：[填写主题]。要求：景别、画面、台词、时长、转场完整。" data-field="内容创作">
+        <span class="tag" data-task="写一个B站视频的详细分镜脚本，主题：[填写主题]，时长：[填写时长]。要求：包含每个镜头的景别（特写/中景/全景）、画面内容、台词/旁白（标注语气）、时长、转场方式。风格参考：影视飓风/老师好我叫何同学。适用场景：科普、测评、Vlog。" data-field="内容创作">
           <span class="tag-left"><span class="tag-main">📺 B站视频分镜</span><span class="tag-sub">景别 → 台词 → 转场 → 一镜到底</span></span>
           <span class="tag-effect">📈 完播率+40%</span>
         </span>
-        <span class="tag" data-task="写5条朋友圈产品文案，产品：[填写产品]。要求：故事型/痛点型/场景型/证言型/限时型各1条。" data-field="营销增长">
+        <span class="tag" data-task="写5条朋友圈产品文案，产品：[填写产品]。要求：5条风格不同——故事型（讲用户故事）、痛点型（戳中用户焦虑）、场景型（描绘使用场景）、证言型（用户好评截图）、限时型（制造紧迫感）。每条配适合的emoji，字数控制在60字以内，不刷屏但有吸引力。适用场景：微商、代理、个人IP。" data-field="营销增长">
           <span class="tag-left"><span class="tag-main">💬 朋友圈文案</span><span class="tag-sub">5种成交风格 × 1条</span></span>
           <span class="tag-effect">📈 咨询率+200%</span>
         </span>
-        <span class="tag" data-task="写一份直播带货话术，产品：[填写产品]。要求：暖场+介绍+促单+互动全流程。" data-field="营销增长">
+        <span class="tag" data-task="写一份完整的直播带货话术，产品：[填写产品]。要求：包含以下完整流程——①开场暖场（欢迎+福利预告）②产品介绍（卖点+使用场景）③价格揭晓（制造惊喜感）④催促下单（限时限量+倒计时）⑤互动答疑（常见问题+话术）。每个环节要有具体台词，语气要有感染力。适用场景：抖音/快手/淘宝直播。" data-field="营销增长">
           <span class="tag-left"><span class="tag-main">🎯 直播带货话术</span><span class="tag-sub">暖场 → 种草 → 促单 → 答疑闭环</span></span>
           <span class="tag-effect">📈 转化率+150%</span>
         </span>
-        <span class="tag" data-task="产品白底主图，纯白无影背景，居中构图，8K超高清。" data-field="电商AI绘画">
-          <span class="tag-left"><span class="tag-main">📦 电商白底主图</span><span class="tag-sub">纯白背景 · 黄金构图</span></span>
+        <span class="tag" data-task="产品白底主图，纯白无影背景，产品居中构图，商业产品摄影风格，极简主义，左侧45度柔光箱打光，右侧反光板补光，产品占画面70%，留白区域适合添加文案，8K超高清，超写实，细节清晰，色彩准确。适用平台：淘宝/京东/拼多多主图、直通车图。" data-field="电商AI绘画">
+          <span class="tag-left"><span class="tag-main">📦 电商白底主图</span><span class="tag-sub">纯白背景 · 黄金构图 · 点击率翻倍</span></span>
           <span class="tag-effect">📈 CTR+80%</span>
         </span>
-        <span class="tag" data-task="产品场景图，真实生活场景，自然光，三分法构图。" data-field="电商AI绘画">
-          <span class="tag-left"><span class="tag-main">🏠 产品场景图</span><span class="tag-sub">生活氛围 · 自然光影</span></span>
+        <span class="tag" data-task="产品场景图，真实生活场景展示，生活方式摄影风格，自然窗光或柔光，避免硬阴影，三分法构图，产品为视觉焦点，环境烘托氛围，生活化道具搭配，适度虚化背景突出产品，8K高清，色彩自然，画面通透。适用场景：商品详情页场景图、社交媒体种草图。" data-field="电商AI绘画">
+          <span class="tag-left"><span class="tag-main">🏠 产品场景图</span><span class="tag-sub">生活氛围 · 自然光影 · 代入感拉满</span></span>
           <span class="tag-effect">📈 转化率+60%</span>
         </span>
-        <span class="tag" data-task="写一份PPT大纲，主题：[填写主题]。要求：封面+3-5章节+每章3要点+总结页。" data-field="职场办公">
-          <span class="tag-left"><span class="tag-main">📊 PPT大纲生成</span><span class="tag-sub">结构 → 金句 → 数据</span></span>
+        <span class="tag" data-task="写一份PPT大纲，主题：[填写主题]。要求：封面页（主标题+副标题+汇报人+日期）+ 3-5个核心章节（每章3个要点）+ 数据/案例支撑页 + 总结页（核心结论+下一步行动）。每页要有金句或核心观点，数据要有可视化建议。适用场景：工作汇报、项目提案、商业计划书。" data-field="职场办公">
+          <span class="tag-left"><span class="tag-main">📊 PPT大纲生成</span><span class="tag-sub">结构 → 金句 → 数据 → 一页封神</span></span>
           <span class="tag-effect">📈 汇报通过率+90%</span>
         </span>
-        <span class="tag" data-task="写一封正式商务邮件，收件人：[填写]，主题：[填写]，要点：[填写]。" data-field="职场办公">
+        <span class="tag" data-task="写一封正式商务邮件，收件人：[填写]，主题：[填写]，要点：[填写]。风格可选：正式邮件（敬语+完整格式）、半正式邮件（简洁但礼貌）、催办邮件（紧急+明确截止时间）。包含：称呼+开场白+核心内容+行动要求+结束语+签名档。适用场景：客户沟通、供应商联络、内部汇报。" data-field="职场办公">
           <span class="tag-left"><span class="tag-main">✉️ 商务邮件模板</span><span class="tag-sub">正式/半正式/催办</span></span>
           <span class="tag-effect">📈 回复率+120%</span>
         </span>
@@ -1330,12 +1331,12 @@ body {
     <div class="config-section" id="ecommerceTagSection" style="display:none;">
       <div class="section-label">🛍️ 电商图片类型</div>
       <div class="tag-container" id="ecommerceTagContainer">
-        <span class="tag" data-task="产品白底主图，纯白无影背景，居中构图，8K超高清。"><span class="tag-left"><span class="tag-main">📦 产品白底主图</span></span></span>
-        <span class="tag" data-task="产品场景图，真实生活场景，自然光，三分法构图。"><span class="tag-left"><span class="tag-main">🏠 产品场景图</span></span></span>
-        <span class="tag" data-task="模特穿搭图，亚洲女模，时尚街拍风格，全身构图。"><span class="tag-left"><span class="tag-main">👗 模特穿搭图</span></span></span>
-        <span class="tag" data-task="促销海报图，红金促销色调，放射背景，预留文案区。"><span class="tag-left"><span class="tag-main">🎉 促销海报图</span></span></span>
-        <span class="tag" data-task="详情页长图，首屏+细节+场景+参数+背书五模块。"><span class="tag-left"><span class="tag-main">📄 详情页长图</span></span></span>
-        <span class="tag" data-task="AI换脸模特图，亚洲面孔，影棚蝴蝶光，8K超高清。"><span class="tag-left"><span class="tag-main">🧑 AI换脸模特图</span></span></span>
+        <span class="tag" data-task="产品白底主图，纯白无影背景，产品居中构图，商业产品摄影风格，极简主义，左侧45度柔光箱打光，右侧反光板补光，产品占画面70%，留白区域适合添加文案，8K超高清，超写实，细节清晰，色彩准确。适用平台：淘宝/京东/拼多多主图、直通车图。"><span class="tag-left"><span class="tag-main">📦 产品白底主图</span></span></span>
+        <span class="tag" data-task="产品场景图，真实生活场景展示，生活方式摄影风格，自然窗光或柔光，避免硬阴影，三分法构图，产品为视觉焦点，环境烘托氛围，生活化道具搭配，适度虚化背景突出产品，8K高清，色彩自然，画面通透。适用场景：商品详情页场景图、社交媒体种草图。"><span class="tag-left"><span class="tag-main">🏠 产品场景图</span></span></span>
+        <span class="tag" data-task="模特穿搭图，亚洲年轻女性模特，身高165-170cm，身材匀称，穿着服装，时尚街拍风格，城市街道或咖啡馆场景，自然行走/侧身/坐姿展示服装版型和细节，自然光或模拟自然光，全身或七分构图，背景简洁不抢镜，8K高清，皮肤质感真实，服装纹理清晰。适用场景：服装详情页主图、小红书穿搭分享。"><span class="tag-left"><span class="tag-main">👗 模特穿搭图</span></span></span>
+        <span class="tag" data-task="促销海报图，产品大促氛围展示，电商促销海报风格，视觉冲击力强，红色/橙色/金色促销色调，放射状或渐变背景，光效粒子点缀，产品居中放大，上方或侧面预留大标题文案区域（30%画面空间），8K高清，色彩饱和度高，对比强烈。适用场景：活动banner、首页海报、朋友圈促销图。"><span class="tag-left"><span class="tag-main">🎉 促销海报图</span></span></span>
+        <span class="tag" data-task="详情页长图，产品多卖点展示，电商详情页设计风格，信息层次清晰，包含五大模块：①首屏产品大图+核心卖点标题 ②细节特写（材质/纹理/工艺） ③使用场景图（人物互动/效果对比） ④参数说明（规格/功能图解/认证标识） ⑤品牌背书（品牌故事/用户评价/售后保障）。8K超高清，风格统一。适用场景：淘宝/京东/拼多多详情页。"><span class="tag-left"><span class="tag-main">📄 详情页长图</span></span></span>
+        <span class="tag" data-task="AI换脸模特图，亚洲面孔年轻女性模特，五官精致，气质清新，展示产品（美妆/护肤/配饰），美妆广告大片风格，正面特写/45度侧脸/半身像，影棚级专业打光（蝴蝶光或环形光），自然清新妆容突出产品使用区域，纯色渐变或极简背景，8K超高清，皮肤质感细腻真实。适用场景：美妆详情页、护肤广告、配饰展示。"><span class="tag-left"><span class="tag-main">🧑 AI换脸模特图</span></span></span>
       </div>
     </div>
 
