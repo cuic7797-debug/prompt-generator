@@ -212,7 +212,7 @@ body {
   display: flex; margin-top: 60px; min-height: calc(100dvh - 60px);
 }
 
-/* ===== 左侧配置面板（电脑端加宽） ===== */
+/* ===== 左侧配置面板 ===== */
 .config-panel {
   width: 460px;
   min-width: 460px;
@@ -329,7 +329,7 @@ body {
 }
 .icon-btn:hover { background: var(--accent-purple); color: white; }
 
-/* ---- 热门标签（两列网格，保留完整描述） ---- */
+/* ---- 热门标签 ---- */
 .tag-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -377,12 +377,12 @@ body {
 }
 .tag:hover .tag-main { color: var(--accent-purple-light); }
 
-/* ---- 复杂度卡片 ---- */
+/* ---- 复杂度卡片（价值对比版） ---- */
 .complexity-cards {
   display: flex; flex-direction: column; gap: 8px;
 }
 .complexity-card {
-  display: flex; align-items: center; gap: 14px;
+  display: flex; align-items: stretch; gap: 14px;
   padding: 14px 18px;
   background: var(--bg-glass);
   border: 2px solid transparent;
@@ -404,6 +404,7 @@ body {
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
   font-size: 18px; flex-shrink: 0;
+  margin-top: 2px;
 }
 .complexity-card[data-level="basic"] .complexity-icon { background: rgba(28,212,168,0.15); }
 .complexity-card[data-level="advanced"] .complexity-icon { background: rgba(124,92,252,0.15); }
@@ -414,9 +415,22 @@ body {
   font-size: 14px; font-weight: 600;
   color: var(--text-primary);
   display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
 }
 .complexity-desc {
   font-size: 12px; color: var(--text-muted); margin-top: 2px;
+}
+.complexity-features {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+.complexity-features .highlight {
+  color: var(--accent-green);
+}
+.complexity-features .lock {
+  color: var(--accent-amber);
 }
 .complexity-badge {
   padding: 2px 10px; border-radius: 8px;
@@ -449,6 +463,12 @@ body {
 
 .generate-btn.optimize { background: linear-gradient(135deg, #f5b342, #f56b6b); box-shadow: 0 4px 16px rgba(245,107,107,0.25); }
 .generate-btn.batch { background: linear-gradient(135deg, #1cd4a8, #3b8bff); box-shadow: 0 4px 16px rgba(28,212,168,0.25); }
+.generate-btn.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+.generate-btn.locked:hover { transform: none; box-shadow: none; }
 
 /* ---- 使用统计 ---- */
 .usage-stats {
@@ -531,6 +551,15 @@ body {
 .badge-basic { background: rgba(28,212,168,0.15); color: var(--accent-green); }
 .badge-advanced { background: rgba(124,92,252,0.15); color: var(--accent-purple-light); }
 .badge-expert { background: rgba(245,179,66,0.15); color: var(--accent-amber); }
+
+.result-level-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--bg-glass);
+  color: var(--text-muted);
+  border: 1px solid var(--border-glass);
+}
 .result-field { font-size: 12px; color: var(--text-secondary); }
 .result-time { font-size: 11px; color: var(--text-muted); }
 
@@ -572,6 +601,14 @@ body {
   color: var(--text-secondary);
 }
 .result-content strong { color: var(--text-primary); }
+.result-word-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-glass);
+  text-align: right;
+}
 
 /* ===== 模板库 ===== */
 .template-grid {
@@ -599,6 +636,7 @@ body {
   cursor: not-allowed;
 }
 .template-card.locked:hover { transform: none; border-color: var(--border-glass); }
+.template-card.locked .template-preview { opacity: 0.4; }
 
 .template-card.pinned {
   border-color: var(--accent-amber);
@@ -1033,6 +1071,7 @@ body {
   gap: 10px;
   margin-top: 12px;
   flex-wrap: wrap;
+  align-items: center;
 }
 .add-pwd-row input {
   flex: 1;
@@ -1045,6 +1084,15 @@ body {
   font-size: 13px;
 }
 .add-pwd-row input:focus { outline: none; border-color: var(--accent-purple); }
+.add-pwd-row select {
+  padding: 8px 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-glass);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 13px;
+  cursor: pointer;
+}
 .add-pwd-row button {
   padding: 8px 20px;
   background: var(--accent-purple);
@@ -1089,7 +1137,6 @@ body {
   }
   .config-panel.open { left: 0 !important; }
 
-  /* 手机端字体放大 */
   .section-label { font-size: 15px; }
   .field-card { padding: 10px 8px; font-size: 14px; }
   .field-card .icon { font-size: 20px; }
@@ -1103,6 +1150,7 @@ body {
   .complexity-card { padding: 14px 16px; }
   .complexity-name { font-size: 15px; }
   .complexity-desc { font-size: 13px; }
+  .complexity-features { font-size: 12px; }
   .generate-btn { font-size: 17px; padding: 16px; }
   .stat-value { font-size: 22px; }
   .stat-label { font-size: 12px; }
@@ -1280,7 +1328,7 @@ body {
       </div>
     </div>
 
-    <!-- 热门标签（保留完整任务描述） -->
+    <!-- 热门标签 -->
     <div class="config-section">
       <div class="section-label">💡 热门标签</div>
       <div class="tag-container" id="tagContainer">
@@ -1340,29 +1388,45 @@ body {
       </div>
     </div>
 
-    <!-- 复杂度 -->
+    <!-- 复杂度（价值对比版） -->
     <div class="config-section">
       <div class="section-label">⚡ 选择复杂度</div>
       <div class="complexity-cards" id="complexityCards">
         <div class="complexity-card selected" data-level="basic">
           <div class="complexity-icon">🌱</div>
           <div class="complexity-info">
-            <div class="complexity-name">基础版 <span class="complexity-badge badge-free">每日5次免费</span></div>
-            <div class="complexity-desc">角色 + 任务 + 基本要求，30%完整度</div>
+            <div class="complexity-name">
+              基础版
+              <span class="complexity-badge badge-free">每日5次免费</span>
+            </div>
+            <div class="complexity-desc">📄 80-120字 · 角色 + 任务 + 3条要求</div>
+            <div class="complexity-features">✅ 快速获取灵感 · 日常简单任务</div>
           </div>
         </div>
         <div class="complexity-card" data-level="advanced">
           <div class="complexity-icon">🚀</div>
           <div class="complexity-info">
-            <div class="complexity-name">进阶版 <span class="complexity-badge badge-locked" id="advancedBadge">体验1次</span></div>
-            <div class="complexity-desc">角色 + 核心能力 + 执行框架，60%完整度</div>
+            <div class="complexity-name">
+              进阶版
+              <span class="complexity-badge badge-locked" id="advancedBadge">体验1次</span>
+            </div>
+            <div class="complexity-desc">📄 180-250字 · +核心能力 + 执行框架</div>
+            <div class="complexity-features">✅ 详细方案 · 工作汇报 · 项目策划 <span class="highlight">⭐ 比基础版多：核心能力拆解 + 分步执行框架</span></div>
           </div>
         </div>
         <div class="complexity-card" data-level="expert">
           <div class="complexity-icon">👑</div>
           <div class="complexity-info">
-            <div class="complexity-name">专家版 <span class="complexity-badge badge-invite" id="expertBadge">🔥 内测邀请码</span></div>
-            <div class="complexity-desc">全要素深度提示词 + 思维链，100%完整度</div>
+            <div class="complexity-name">
+              专家版
+              <span class="complexity-badge badge-invite" id="expertBadge">🔥 内测邀请码</span>
+            </div>
+            <div class="complexity-desc">📄 320-400字 · +思维链 + 多版本方案 + 质检标准</div>
+            <div class="complexity-features">
+              ✅ 商业级应用 · 专业内容创作 · 企业级方案
+              <span class="highlight">⭐ 比进阶版多：思维链推导 + 多版本输出 + 完整质检</span>
+              <br><span class="lock">🔒 专属权益：一键优化 + 批量生成 + 模板库</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1373,8 +1437,8 @@ body {
       <button class="generate-btn" id="generateBtn"><span>✨</span> 生成提示词</button>
     </div>
     <div class="btn-row" style="margin-top:6px;">
-      <button class="generate-btn optimize" id="optimizeBtn" style="display:none;"><span>🚀</span> 一键优化</button>
-      <button class="generate-btn batch" id="batchBtn" style="display:none;"><span>📦</span> 批量生成</button>
+      <button class="generate-btn optimize locked" id="optimizeBtn" style="display:flex;"><span>🔒</span> 一键优化 · 专家版专属</button>
+      <button class="generate-btn batch locked" id="batchBtn" style="display:flex;"><span>🔒</span> 批量生成 · 专家版专属</button>
     </div>
 
     <div class="invite-remaining">🔥 今日内测邀请码剩余：<strong id="inviteCount">20</strong> 枚</div>
@@ -1407,12 +1471,12 @@ body {
 
     <div class="page" id="page-templates">
       <h2 style="font-size:18px;margin-bottom:6px;">📚 模板库</h2>
-      <p style="color:var(--text-muted);font-size:12px;margin-bottom:14px;">🔒 专家版解锁后可全部使用</p>
+      <p style="color:var(--text-muted);font-size:12px;margin-bottom:14px;">🔒 专家版解锁后可全部使用 · 持续扩充中</p>
       <div class="template-hero">
         <div class="left">
           <span class="badge">🔥 热卖</span>
-          <span class="count"><span>400+</span> 全品类模板</span>
-          <span class="sub">· 持续更新 · 即拿即用</span>
+          <span class="count"><span>20+</span> 精品模板</span>
+          <span class="sub">· 持续扩充中 · 每周更新</span>
         </div>
         <span style="font-size:12px;color:var(--text-muted);">📷 每款配效果预览</span>
       </div>
@@ -1492,6 +1556,28 @@ body {
     <div class="modal-actions">
       <button class="modal-btn modal-btn-secondary" id="unlockCancel">取消</button>
       <button class="modal-btn modal-btn-primary" id="unlockConfirm">立即解锁</button>
+    </div>
+  </div>
+</div>
+
+<!-- 修改密码次数弹窗 -->
+<div class="modal-overlay" id="editMaxModal">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-title">✏️ 修改使用次数上限</div>
+    <div class="modal-desc" id="editMaxDesc">当前密码：<strong id="editMaxCode"></strong><br>当前上限：<span id="editMaxCurrent"></span> 次</div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+      <button class="modal-btn modal-btn-secondary" onclick="setEditMax(30)" style="flex:0 0 auto; padding:8px 16px;">30次</button>
+      <button class="modal-btn modal-btn-secondary" onclick="setEditMax(50)" style="flex:0 0 auto; padding:8px 16px;">50次</button>
+      <button class="modal-btn modal-btn-secondary" onclick="setEditMax(100)" style="flex:0 0 auto; padding:8px 16px;">100次</button>
+      <button class="modal-btn modal-btn-secondary" onclick="setEditMax(200)" style="flex:0 0 auto; padding:8px 16px;">200次</button>
+      <button class="modal-btn modal-btn-secondary" onclick="setEditMax(0)" style="flex:0 0 auto; padding:8px 16px;">♾️ 无限</button>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <input type="number" id="editMaxInput" placeholder="自定义次数" style="flex:1; padding:8px 12px; background:var(--bg-primary); border:1px solid var(--border-glass); border-radius:6px; color:var(--text-primary); font-size:14px;">
+      <button class="modal-btn modal-btn-primary" onclick="confirmEditMax()" style="flex:0 0 auto; padding:8px 20px;">确认</button>
+    </div>
+    <div class="modal-actions" style="margin-top:12px;">
+      <button class="modal-btn modal-btn-secondary" onclick="closeEditMax()">取消</button>
     </div>
   </div>
 </div>
@@ -1639,6 +1725,7 @@ let currentLevel = 'basic';
 let pendingUnlockLevel = null;
 let adminLoggedIn = false;
 let isGenerating = false;
+let editMaxTarget = null;
 
 const $ = id => document.getElementById(id);
 
@@ -1654,7 +1741,7 @@ function showToast(msg, icon = '✅') {
   t._hide = setTimeout(() => t.classList.remove('show'), 2400);
 }
 
-function formatPromptHTML(text) {
+function formatPromptHTML(text, wordCount) {
   let html = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   html = html.replace(/【(.+?)】/g, '<h3>📌 $1</h3>');
   html = html.replace(/^\d+\.\s(.+)$/gm, '<li>$1</li>');
@@ -1669,6 +1756,9 @@ function formatPromptHTML(text) {
     return '<p>' + t + '</p>';
   }).join('');
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  if (wordCount) {
+    html += '<div class="result-word-count">📄 约 ' + wordCount + ' 字</div>';
+  }
   return html;
 }
 
@@ -1738,18 +1828,28 @@ function showGuideModal() {
 }
 
 // ============================================================
-// 提示词生成（三级差异化）
+// 提示词生成（三级差异化 + 字数控制）
 // ============================================================
 function buildPrompt(field, task, level) {
-  const basic = '【角色定位】\n你是一位专业的' + field + '领域AI助手，擅长处理各类' + field + '相关任务。\n\n【任务描述】\n' + task + '\n\n【基本要求】\n1. 提供清晰、实用的解决方案\n2. 使用专业但易懂的语言\n3. 确保内容准确、完整';
+  // 基础版：80-120字
+  const basic = '【角色定位】\n你是一位专业的' + field + '领域AI助手。\n\n【任务描述】\n' + task + '\n\n【基本要求】\n1. 输出清晰、实用的解决方案\n2. 使用专业但易懂的语言\n3. 确保内容准确、完整';
 
-  const advanced = '【角色定位】\n你是一位资深的' + field + '领域专家，拥有10年以上行业经验，精通' + field + '的核心理论与实践方法。\n\n【核心能力】\n- 深度理解' + field + '领域的专业知识体系\n- 具备解决复杂' + field + '问题的分析能力\n- 熟悉行业最佳实践和标准流程\n- 能够将复杂概念转化为可执行方案\n\n【任务分析】\n' + task + '\n\n【执行框架】\n1. 需求理解：明确任务目标和约束条件\n2. 方案设计：制定系统化的解决策略\n3. 详细执行：分步骤展开具体实施\n4. 质量检查：验证输出是否符合要求\n\n【输出要求】\n- 结构清晰，逻辑严谨\n- 包含具体 actionable 的建议\n- 适当使用示例说明\n- 标注关键注意事项';
+  // 进阶版：180-250字
+  const advanced = '【角色定位】\n你是一位资深的' + field + '领域专家，拥有10年以上行业经验。\n\n【核心能力】\n- 深度理解' + field + '领域的专业知识体系\n- 具备解决复杂' + field + '问题的分析能力\n- 熟悉行业最佳实践和标准流程\n\n【任务分析】\n' + task + '\n\n【执行框架】\n1. 需求理解：明确任务目标和约束条件\n2. 方案设计：制定系统化的解决策略\n3. 详细执行：分步骤展开具体实施\n4. 质量检查：验证输出是否符合要求\n\n【输出要求】\n- 结构清晰，逻辑严谨\n- 包含具体可执行的建议\n- 标注关键注意事项';
 
-  const expert = '【角色定位】\n你是一位' + field + '领域的顶级专家顾问，拥有15年以上跨行业实战经验，曾服务过多家世界500强企业。你不仅是技术专家，更是战略思想家，能够从宏观和微观两个维度审视问题。\n\n【专业能力矩阵】\n- 战略层面：行业趋势洞察、商业模式设计、竞争格局分析\n- 战术层面：流程优化、方法论应用、工具链搭建\n- 执行层面：细节把控、质量标准制定、风险预判\n\n【思维特征】\n- 系统性思维：善于发现事物间的关联和规律\n- 批判性思维：不盲从权威，基于证据做判断\n- 创新思维：在传统方法基础上寻求突破\n- 用户思维：始终站在最终使用者角度思考\n\n【任务深度分析】\n' + task + '\n\n【执行框架】\n第一阶段：诊断与定义\n1. 明确核心问题和边界条件\n2. 识别关键利益相关者\n3. 梳理现有资源和约束\n4. 设定可衡量的成功标准\n\n第二阶段：研究与分析\n1. 收集相关背景信息和数据\n2. 应用适当的分析框架\n3. 识别潜在风险和机会\n4. 形成初步假设\n\n第三阶段：方案设计\n1. 制定多个备选方案\n2. 评估各方案的优劣势\n3. 选择最优路径并细化\n4. 制定实施路线图\n\n第四阶段：交付与迭代\n1. 输出高质量交付物\n2. 收集反馈并优化\n3. 提供后续支持建议\n4. 总结经验教训\n\n【质量控制标准】\n- 准确性：所有数据和事实经过验证\n- 完整性：覆盖任务的所有维度\n- 可操作性：每个建议都有明确的执行路径\n- 创新性：在可行范围内提供新颖视角\n\n【示例参考】\n在回答过程中，适当引用行业经典案例或最佳实践作为参考。\n\n【迭代优化机制】\n- 主动询问是否需要深入某个特定方向\n- 提供多个版本供选择（简要版/详细版）\n- 根据反馈实时调整输出策略\n\n【输出规范】\n- 使用Markdown格式\n- 重要观点使用加粗标注\n- 复杂概念配合简单示例\n- 结尾提供"下一步行动建议"';
+  // 专家版：320-400字
+  const expert = '【角色定位】\n你是一位' + field + '领域的顶级专家顾问，拥有15年以上跨行业实战经验，曾服务过多家行业头部企业。\n\n【专业能力矩阵】\n- 战略层面：行业趋势洞察、商业模式设计\n- 战术层面：流程优化、方法论应用、工具链搭建\n- 执行层面：细节把控、质量标准制定、风险预判\n\n【思维特征】\n- 系统性思维：善于发现事物间的关联和规律\n- 批判性思维：基于证据做判断，不盲从权威\n- 用户思维：始终站在最终使用者角度思考\n\n【任务深度分析】\n' + task + '\n\n【执行框架】\n第一阶段：诊断与定义\n1. 明确核心问题和边界条件\n2. 识别关键利益相关者\n3. 梳理现有资源和约束\n\n第二阶段：方案设计\n1. 制定多个备选方案\n2. 评估各方案的优劣势\n3. 选择最优路径并细化\n\n第三阶段：交付与迭代\n1. 输出高质量交付物\n2. 收集反馈并优化\n3. 提供后续支持建议\n\n【质量控制标准】\n- 准确性：所有数据和事实经过验证\n- 完整性：覆盖任务的所有维度\n- 可操作性：每个建议都有明确的执行路径\n\n【输出规范】\n- 使用Markdown格式\n- 重要观点使用加粗标注\n- 结尾提供"下一步行动建议"';
 
   if (level === 'basic') return basic;
   if (level === 'advanced') return advanced;
   return expert;
+}
+
+function countWords(text) {
+  // 中文字数 + 英文单词数
+  const zh = text.match(/[\u4e00-\u9fa5]/g) || [];
+  const en = text.match(/[a-zA-Z]+/g) || [];
+  return zh.length + en.length;
 }
 
 function buildEcommercePrompt(task, level, platform) {
@@ -1758,60 +1858,48 @@ function buildEcommercePrompt(task, level, platform) {
 
   const platformStyle = {
     '豆包': { style: '写实风格，细节丰富', param: '' },
-    '即梦': { style: '高质量人像，细腻皮肤质感，时尚摄影', param: '' },
-    '可灵': { style: '动态感，电影级光影，视频帧风格', param: '' },
-    '通义万相': { style: '东方美学，国风元素，细腻纹理', param: '' },
-    'Midjourney': { style: 'professional product photography, ultra detailed', param: ' --ar 1:1 --q 2 --s 250' },
-    'Stable Diffusion': { style: 'masterpiece, best quality, highly detailed', param: ', (masterpiece:1.2), (best quality:1.2)' }
+    '即梦': { style: '高质量人像，细腻皮肤质感', param: '' },
+    '可灵': { style: '动态感，电影级光影', param: '' },
+    '通义万相': { style: '东方美学，国风元素', param: '' },
+    'Midjourney': { style: 'professional product photography', param: ' --ar 1:1 --q 2 --s 250' },
+    'Stable Diffusion': { style: 'masterpiece, best quality', param: ', (masterpiece:1.2)' }
   };
   const p = platformStyle[platform] || platformStyle['豆包'];
 
   const baseTemplates = {
     '产品白底主图': {
-      zh: '【主体】' + task + '，纯白无影背景，产品居中构图\n【风格】商业产品摄影，极简主义，' + p.style + '\n【光线】左侧45度柔光箱，右侧反光板补光\n【构图】正面平视角度，产品占画面70%\n【质量】8K超高清，超写实，细节清晰，色彩准确',
-      en: 'Product photography of ' + task + ', pure white seamless background, centered composition, commercial minimalist style, ' + p.style + ', left 45-degree softbox lighting, right reflector fill, front eye-level angle, product occupies 70% of frame, 8K ultra HD, hyper-realistic, sharp details, accurate colors' + p.param
+      zh: '【主体】' + task + '，纯白无影背景，居中构图\n【风格】商业产品摄影，极简主义，' + p.style + '\n【光线】左侧45度柔光箱，右侧反光板补光\n【质量】8K超高清，超写实，色彩准确',
+      en: 'Product photography of ' + task + ', white seamless background, centered, ' + p.style + ', softbox lighting, 8K ultra HD' + p.param
     },
     '产品场景图': {
-      zh: '【主体】' + task + '，真实生活场景展示\n【风格】生活方式摄影，自然光感，温馨氛围，' + p.style + '\n【光线】自然窗光或柔光，避免硬阴影\n【构图】三分法构图，产品为视觉焦点，环境烘托氛围\n【质量】8K高清，色彩自然，画面通透',
-      en: 'Lifestyle photography of ' + task + ' in authentic real-life setting, natural lighting, warm atmosphere, ' + p.style + ', soft window light, rule of thirds composition, product as focal point, 8K HD, natural colors' + p.param
+      zh: '【主体】' + task + '，真实生活场景\n【风格】生活方式摄影，自然光感，温馨氛围，' + p.style + '\n【构图】三分法，产品为焦点\n【质量】8K高清，色彩自然',
+      en: 'Lifestyle photography of ' + task + ', natural lighting, ' + p.style + ', rule of thirds, 8K HD' + p.param
     },
     '模特穿搭图': {
-      zh: '【主体】亚洲年轻女性模特，身高165-170cm，身材匀称，穿着' + task + '\n【风格】时尚街拍/lookbook风格，' + p.style + '\n【场景】城市街道/咖啡馆/简约室内\n【姿势】自然行走/侧身/坐姿，展示服装版型和细节\n【光线】自然光或模拟自然光，柔和均匀\n【构图】全身或七分身，背景简洁\n【质量】8K高清，皮肤质感真实，服装纹理清晰，色彩还原准确',
-      en: 'Asian female model, 165-170cm, wearing ' + task + ', fashion street style lookbook photography, ' + p.style + ', urban street or cafe setting, natural walking pose, natural soft lighting, full body or 7/8 shot, 8K HD, realistic skin texture, clear fabric details' + p.param
+      zh: '【主体】亚洲女模，身高168cm，穿着' + task + '\n【风格】时尚街拍，' + p.style + '\n【构图】全身或七分，自然行走姿势\n【质量】8K高清，面料纹理清晰',
+      en: 'Asian female model wearing ' + task + ', fashion street style, ' + p.style + ', full body, 8K HD' + p.param
     },
     '促销海报图': {
-      zh: '【主体】' + task + '，大促氛围，醒目展示\n【风格】电商促销海报，视觉冲击力强，' + p.style + '\n【元素】红色/橙色/金色促销色调，放射状或渐变背景\n【构图】产品居中放大，上方或侧面预留大标题文案区域\n【光线】戏剧性打光，产品高光突出，背景暗角聚焦\n【质量】8K高清，色彩饱和度高，对比强烈',
-      en: 'Promotional poster for ' + task + ', e-commerce sale atmosphere, strong visual impact, ' + p.style + ', red orange gold promotional colors, radial or gradient background, product centered and enlarged, dramatic lighting, 8K HD, high saturation, strong contrast' + p.param
+      zh: '【主体】' + task + '，大促氛围\n【风格】电商促销海报，' + p.style + '\n【元素】红/金促销色调，放射背景\n【构图】产品居中放大，预留文案区',
+      en: 'Promotional poster for ' + task + ', sale atmosphere, ' + p.style + ', red/gold colors, 8K HD' + p.param
     },
     '详情页长图': {
-      zh: '【主体】' + task + '，多卖点展示，图文排版\n【风格】电商详情页设计，信息层次清晰，' + p.style + '\n【模块1】首屏：产品大图+核心卖点标题\n【模块2】细节展示：产品特写，材质纹理，工艺细节\n【模块3】场景展示：使用场景，人物互动，效果对比\n【模块4】参数说明：规格尺寸，功能图解，认证标识\n【模块5】品牌背书：品牌故事，用户评价，售后保障\n【质量】8K超高清，每模块独立构图，整体风格统一',
-      en: 'E-commerce product detail page design for ' + task + ', multi-selling point display, clear information hierarchy, ' + p.style + ', hero banner with product and core benefits, detail close-ups showing material texture, lifestyle usage scenarios, specification infographic, brand story section, 8K ultra HD, consistent style across all modules' + p.param
+      zh: '【主体】' + task + '，多卖点展示\n【风格】电商详情页，信息层次清晰，' + p.style + '\n【模块】首屏大图+细节特写+场景图+参数',
+      en: 'Product detail page for ' + task + ', ' + p.style + ', hero + details + scene + specs, 8K HD' + p.param
     },
     'AI换脸模特图': {
-      zh: '【主体】亚洲面孔年轻女性，五官精致，气质清新，展示' + task + '\n【风格】美妆/护肤/配饰广告大片，' + p.style + '\n【角度】正面特写/45度侧脸/半身像，多角度展示产品使用效果\n【光线】影棚级专业打光，蝴蝶光或环形光，突出面部立体感\n【妆容】自然清新妆容，突出产品使用区域\n【背景】纯色渐变或极简场景\n【质量】8K超高清，皮肤质感细腻真实，产品细节清晰可见',
-      en: 'Asian female model, delicate features, fresh temperament, showcasing ' + task + ', beauty/skincare/accessory advertising photography, ' + p.style + ', front close-up and 45-degree profile, professional studio lighting with butterfly or ring light, natural fresh makeup, solid gradient or minimal background, 8K ultra HD, realistic skin texture, clear product details' + p.param
+      zh: '【主体】亚洲女模，精致五官，展示' + task + '\n【风格】美妆广告大片，' + p.style + '\n【光线】影棚蝴蝶光，突出面部立体感\n【质量】8K超高清，皮肤质感细腻',
+      en: 'Asian female model showcasing ' + task + ', beauty advertising, ' + p.style + ', butterfly lighting, 8K ultra HD' + p.param
     }
   };
 
-  const base = baseTemplates[task] || baseTemplates['产品白底主图'];
-  let prompt = base[lang];
+  let prompt = baseTemplates[task] ? baseTemplates[task][lang] : baseTemplates['产品白底主图'][lang];
 
   if (level === 'advanced') {
-    const advZh = '\n\n【进阶优化】\n- 构图优化：严格遵循三分法或黄金螺旋，确保视觉焦点突出\n- 色彩管理：统一色调，增强产品与背景的色彩对比\n- 平台适配：针对' + platform + '平台特性优化参数配置\n- 细节增强：强化材质纹理和光影层次感';
-    const advEn = ', advanced composition with rule of thirds, color managed workflow, platform-specific optimization for ' + platform + ', enhanced material texture and lighting hierarchy';
-    prompt += (lang === 'zh') ? advZh : advEn;
+    prompt += isEn ? ', advanced composition, professional lighting' : '\n【进阶】优化构图与光影层次，增强材质质感';
   }
-
   if (level === 'expert') {
-    const expZh = '\n\n【专家级深度优化】\n- 光影层次：三层布光（主光+辅光+轮廓光），营造立体感和高级感\n- 色彩科学：使用色彩分级技术，统一整体调性，符合品牌视觉规范\n- 材质刻画：超写实材质渲染，包含微观纹理（如皮肤毛孔、织物经纬）\n- 平台参数：针对' + platform + '平台输出最佳参数配置（分辨率/比例/风格权重）\n- 多版本输出：提供3种不同构图/光影方案供A/B测试使用\n- 商业质检：符合电商平台图片审核规范（白底/清晰度/比例要求）\n- 场景适配：根据产品定位匹配3种不同消费场景版本\n\n【输出规格】\n- 格式：PNG/JPEG 透明背景可选\n- 分辨率：建议 2048×2048px（主图）/ 1200×1600px（详情页）\n- 色彩空间：sRGB / Display P3 双版本\n- 文件大小：控制在 2MB 以内保证加载速度';
-    const expEn = ', expert-level composition with advanced lighting setup (key+fill+rim light), color grading for brand consistency, hyper-realistic material rendering including micro-textures, platform-specific output optimization for ' + platform + ' (resolution/ratio/style weight), 3 different composition variations for A/B testing, e-commerce platform compliance (white background/clarity/ratio requirements), 3 scenario-adapted versions based on product positioning, output: PNG/JPEG with transparent background option, resolution 2048x2048px for main image, color space sRGB/Display P3 dual version, file size under 2MB';
-    prompt += (lang === 'zh') ? expZh : expEn;
-  }
-
-  if (lang === 'zh') {
-    prompt = '【平台】' + platform + '\n' + prompt;
-  } else {
-    prompt = '[Platform: ' + platform + '] ' + prompt;
+    prompt += isEn ? ', expert-level composition, 3 lighting setup, color grading, commercial-grade quality' : '\n【专家级】三层布光+色彩分级+超写实材质+商业质检标准';
   }
 
   return prompt;
@@ -1880,6 +1968,7 @@ function doGenerate() {
       prompt = buildPrompt(field, task, currentLevel);
     }
 
+    const wordCount = countWords(prompt);
     const now = new Date();
     const timeStr = now.toLocaleString('zh-CN');
     const result = {
@@ -1887,7 +1976,8 @@ function doGenerate() {
       field, task, level: currentLevel,
       prompt, time: timeStr,
       favorited: false,
-      platform: platform !== '通用' ? platform : null
+      platform: platform !== '通用' ? platform : null,
+      wordCount: wordCount
     };
 
     db.history.unshift(result);
@@ -1923,39 +2013,34 @@ function doOptimize() {
     const platform = $('platformSelect').value;
 
     const optimized = '【一键优化版 · 专家级重构】\n\n' +
-      '【原始需求分析】\n' + task + '\n\n' +
-      '【优化维度】\n' +
-      '1. 需求拆解：将模糊需求转化为可执行的AI指令链\n' +
-      '2. 角色定位：为' + field + '领域匹配最佳AI角色与 persona\n' +
-      '3. 输出规范：定义格式、长度、风格、语气标准\n' +
-      '4. 质量管控：添加多维度验证标准和迭代机制\n' +
-      '5. 场景适配：针对' + platform + '平台特性进行专项优化\n\n' +
+      '【原始需求】\n' + task + '\n\n' +
+      '【优化方案】\n' +
+      '1. 需求拆解：转化为可执行的AI指令\n' +
+      '2. 角色定位：匹配' + field + '领域最佳AI角色\n' +
+      '3. 输出规范：定义格式、风格、语气标准\n' +
+      '4. 质量管控：添加验证标准\n\n' +
       '【优化后提示词】\n' +
-      '你是一位' + field + '领域的顶级专家，拥有15年以上实战经验，曾服务过多家行业头部企业。\n\n' +
+      '你是一位' + field + '领域的顶级专家，拥有15年以上实战经验。\n\n' +
       '任务：' + task + '\n\n' +
-      '请按以下专业框架输出：\n' +
-      '1. 执行摘要（100字以内，说清核心结论）\n' +
-      '2. 深度分析（分3-5个维度展开，每个维度有数据/案例支撑）\n' +
-      '3. 核心建议（3-5条可立即执行的具体行动）\n' +
-      '4. 风险预警（潜在问题+应对策略）\n' +
-      '5. 下一步行动清单（按优先级排序，含时间节点建议）\n\n' +
-      '输出要求：\n' +
-      '- 使用Markdown格式，层级清晰\n' +
-      '- 重要结论使用加粗标注\n' +
-      '- 复杂数据使用表格呈现\n' +
-      '- 总字数控制在2000-3000字\n' +
-      '- 语言风格：专业严谨但不晦涩，像资深顾问在汇报\n' +
-      '- 结尾附上「关键指标检查表」供自测';
+      '请按以下框架输出：\n' +
+      '1. 核心结论（1句话）\n' +
+      '2. 分步方案（3-5步，每步有具体行动）\n' +
+      '3. 关键建议（3条）\n' +
+      '4. 风险提示\n' +
+      '5. 下一步行动\n\n' +
+      '格式：Markdown，重要内容加粗，总字数控制在2000字以内';
 
+    const wordCount = countWords(optimized);
     const result = {
       id: Date.now(),
-      field: field + '（一键优化·专家版）',
+      field: field + '（优化版）',
       task: task,
       level: 'expert',
       prompt: optimized,
       time: new Date().toLocaleString('zh-CN'),
       favorited: false,
-      platform: platform !== '通用' ? platform : null
+      platform: platform !== '通用' ? platform : null,
+      wordCount: wordCount
     };
 
     db.history.unshift(result);
@@ -2003,6 +2088,7 @@ function doBatchGenerate() {
       } else {
         prompt = buildPrompt(field, t.trim(), 'expert');
       }
+      const wordCount = countWords(prompt);
       const result = {
         id: Date.now() + idx,
         field: field + '（批量' + (idx+1) + '/' + tasks.length + '）',
@@ -2011,7 +2097,8 @@ function doBatchGenerate() {
         prompt: prompt,
         time: now.toLocaleString('zh-CN'),
         favorited: false,
-        platform: platform !== '通用' ? platform : null
+        platform: platform !== '通用' ? platform : null,
+        wordCount: wordCount
       };
       db.history.unshift(result);
       db.totalGenerated++;
@@ -2039,6 +2126,12 @@ function renderResult(result) {
   const levelNames = { basic:'基础版', advanced:'进阶版', expert:'专家版' };
   const levelBadges = { basic:'badge-basic', advanced:'badge-advanced', expert:'badge-expert' };
 
+  const levelTags = {
+    basic: '📄 约' + (result.wordCount || 80) + '字 · 基础规格',
+    advanced: '📋 含执行框架 · 约' + (result.wordCount || 200) + '字',
+    expert: '🧠 含思维链+多版本 · 约' + (result.wordCount || 350) + '字'
+  };
+
   const card = document.createElement('div');
   card.className = 'result-card';
   card.dataset.id = result.id;
@@ -2046,6 +2139,7 @@ function renderResult(result) {
     <div class="result-header">
       <div class="result-meta">
         <span class="result-badge ${levelBadges[result.level]}">${levelNames[result.level]}</span>
+        <span class="result-level-tag">${levelTags[result.level] || ''}</span>
         <span class="result-field">📂 ${result.field}</span>
         ${result.platform ? '<span class="result-badge" style="background:rgba(124,92,252,0.1);color:var(--accent-purple-light);font-size:11px;">🎯 ' + result.platform + '</span>' : ''}
         <span class="result-time">🕐 ${result.time}</span>
@@ -2055,7 +2149,7 @@ function renderResult(result) {
         <button class="action-btn ${result.favorited?'favorited':''}" onclick="toggleFavorite(${result.id})">${result.favorited?'❤️':'🤍'} ${result.favorited?'已收藏':'收藏'}</button>
       </div>
     </div>
-    <div class="result-content">${formatPromptHTML(result.prompt)}</div>
+    <div class="result-content">${formatPromptHTML(result.prompt, result.wordCount)}</div>
   `;
   container.insertBefore(card, container.firstChild);
 }
@@ -2088,8 +2182,22 @@ function updateFeatureButtons() {
   const isExpert = db.unlocked.expert || db.firstUse.expert;
   const opt = $('optimizeBtn');
   const bat = $('batchBtn');
-  if (opt) opt.style.display = isExpert ? 'block' : 'none';
-  if (bat) bat.style.display = isExpert ? 'block' : 'none';
+
+  if (isExpert) {
+    opt.className = 'generate-btn optimize';
+    opt.innerHTML = '<span>🚀</span> 一键优化';
+    opt.disabled = false;
+    bat.className = 'generate-btn batch';
+    bat.innerHTML = '<span>📦</span> 批量生成';
+    bat.disabled = false;
+  } else {
+    opt.className = 'generate-btn optimize locked';
+    opt.innerHTML = '<span>🔒</span> 一键优化 · 专家版专属';
+    opt.disabled = true;
+    bat.className = 'generate-btn batch locked';
+    bat.innerHTML = '<span>🔒</span> 批量生成 · 专家版专属';
+    bat.disabled = true;
+  }
 }
 
 function updateStats() {
@@ -2207,19 +2315,19 @@ function showPage(name) {
 // 模板库
 // ============================================================
 const templateData = [
-  { name: '酒水类·精酿啤酒', field: '电商AI绘画', desc: '琥珀色酒液+细腻泡沫+冰爽质感，精酿啤酒场景图', effect: '📈 详情页转化率+65%', task: '产品场景图', level: 'expert', uses: 3120, tags: ['绘画', 'hot'], preview: '🍺 精酿啤酒场景预览' },
-  { name: '食品类·烘焙甜品', field: '电商AI绘画', desc: '松软面包+诱人色泽+精致摆盘，甜品主图', effect: '📈 CTR提升75%', task: '产品白底主图', level: 'expert', uses: 2834, tags: ['绘画', 'hot'], preview: '🍰 烘焙甜品预览' },
-  { name: '饮品类·咖啡特写', field: '电商AI绘画', desc: '咖啡油脂+蒸汽缭绕+高级质感，精品咖啡主图', effect: '📈 客单价提升40%', task: '产品白底主图', level: 'expert', uses: 2156, tags: ['绘画'], preview: '☕ 精品咖啡预览' },
-  { name: '美妆类·口红试色', field: '电商AI绘画', desc: '唇部特写+丝绒质感+色号对比，美妆主图', effect: '📈 点击率翻倍', task: 'AI换脸模特图', level: 'expert', uses: 2678, tags: ['绘画', 'hot'], preview: '💄 口红试色预览' },
-  { name: '护肤类·精华液', field: '电商AI绘画', desc: '滴管精华+水润光泽+高级简约，护肤主图', effect: '📈 转化率+55%', task: '产品白底主图', level: 'expert', uses: 1890, tags: ['绘画'], preview: '✨ 精华液预览' },
-  { name: '香水类·瓶身艺术', field: '电商AI绘画', desc: '瓶身光影+奢华背景+氛围感，香水主图', effect: '📈 品牌溢价+60%', task: '产品场景图', level: 'expert', uses: 1432, tags: ['绘画'], preview: '🌸 香水瓶身预览' },
-  { name: '服装类·连衣裙', field: '电商AI绘画', desc: '法式碎花+裙摆飘逸+自然光，穿搭主图', effect: '📈 点击率+85%', task: '模特穿搭图', level: 'expert', uses: 3456, tags: ['绘画', 'hot'], preview: '👗 连衣裙穿搭预览' },
-  { name: '配饰类·腕表', field: '电商AI绘画', desc: '金属质感+表盘细节+商务场景，腕表主图', effect: '📈 客单价提升50%', task: '产品场景图', level: 'expert', uses: 2103, tags: ['绘画'], preview: '⌚ 腕表场景预览' },
-  { name: '鞋履类·运动鞋', field: '电商AI绘画', desc: '鞋面材质+动态光影+街头场景，潮鞋主图', effect: '📈 转化率+70%', task: '产品场景图', level: 'expert', uses: 1976, tags: ['绘画'], preview: '👟 运动鞋预览' },
-  { name: '数码类·耳机', field: '电商AI绘画', desc: '金属质感+线材细节+极简背景，数码主图', effect: '📈 CTR提升60%', task: '产品白底主图', level: 'expert', uses: 2345, tags: ['绘画'], preview: '🎧 耳机预览' },
-  { name: '数码类·手机壳', field: '电商AI绘画', desc: '高清打印+边缘细节+场景展示，手机壳主图', effect: '📈 详情页停留+120%', task: '产品场景图', level: 'expert', uses: 1678, tags: ['绘画'], preview: '📱 手机壳预览' },
-  { name: '家居类·香薰蜡烛', field: '电商AI绘画', desc: '烛火摇曳+柔和光影+温馨氛围，家居主图', effect: '📈 转化率+50%', task: '产品场景图', level: 'expert', uses: 1456, tags: ['绘画'], preview: '🕯️ 香薰蜡烛预览' },
-  { name: '家居类·床上四件套', field: '电商AI绘画', desc: '柔软质感+褶皱细节+自然光，床品主图', effect: '📈 客单价+45%', task: '产品场景图', level: 'expert', uses: 1234, tags: ['绘画'], preview: '🛏️ 床品预览' },
+  { name: '酒水类·精酿啤酒', field: '电商AI绘画', desc: '琥珀色酒液+细腻泡沫+冰爽质感', effect: '📈 详情页转化率+65%', task: '产品场景图', level: 'expert', uses: 3120, tags: ['绘画', 'hot'], preview: '🍺 精酿啤酒场景预览' },
+  { name: '食品类·烘焙甜品', field: '电商AI绘画', desc: '松软面包+诱人色泽+精致摆盘', effect: '📈 CTR提升75%', task: '产品白底主图', level: 'expert', uses: 2834, tags: ['绘画', 'hot'], preview: '🍰 烘焙甜品预览' },
+  { name: '饮品类·咖啡特写', field: '电商AI绘画', desc: '咖啡油脂+蒸汽缭绕+高级质感', effect: '📈 客单价提升40%', task: '产品白底主图', level: 'expert', uses: 2156, tags: ['绘画'], preview: '☕ 精品咖啡预览' },
+  { name: '美妆类·口红试色', field: '电商AI绘画', desc: '唇部特写+丝绒质感+色号对比', effect: '📈 点击率翻倍', task: 'AI换脸模特图', level: 'expert', uses: 2678, tags: ['绘画', 'hot'], preview: '💄 口红试色预览' },
+  { name: '护肤类·精华液', field: '电商AI绘画', desc: '滴管精华+水润光泽+高级简约', effect: '📈 转化率+55%', task: '产品白底主图', level: 'expert', uses: 1890, tags: ['绘画'], preview: '✨ 精华液预览' },
+  { name: '香水类·瓶身艺术', field: '电商AI绘画', desc: '瓶身光影+奢华背景+氛围感', effect: '📈 品牌溢价+60%', task: '产品场景图', level: 'expert', uses: 1432, tags: ['绘画'], preview: '🌸 香水瓶身预览' },
+  { name: '服装类·连衣裙', field: '电商AI绘画', desc: '法式碎花+裙摆飘逸+自然光', effect: '📈 点击率+85%', task: '模特穿搭图', level: 'expert', uses: 3456, tags: ['绘画', 'hot'], preview: '👗 连衣裙穿搭预览' },
+  { name: '配饰类·腕表', field: '电商AI绘画', desc: '金属质感+表盘细节+商务场景', effect: '📈 客单价提升50%', task: '产品场景图', level: 'expert', uses: 2103, tags: ['绘画'], preview: '⌚ 腕表场景预览' },
+  { name: '鞋履类·运动鞋', field: '电商AI绘画', desc: '鞋面材质+动态光影+街头场景', effect: '📈 转化率+70%', task: '产品场景图', level: 'expert', uses: 1976, tags: ['绘画'], preview: '👟 运动鞋预览' },
+  { name: '数码类·耳机', field: '电商AI绘画', desc: '金属质感+线材细节+极简背景', effect: '📈 CTR提升60%', task: '产品白底主图', level: 'expert', uses: 2345, tags: ['绘画'], preview: '🎧 耳机预览' },
+  { name: '数码类·手机壳', field: '电商AI绘画', desc: '高清打印+边缘细节+场景展示', effect: '📈 详情页停留+120%', task: '产品场景图', level: 'expert', uses: 1678, tags: ['绘画'], preview: '📱 手机壳预览' },
+  { name: '家居类·香薰蜡烛', field: '电商AI绘画', desc: '烛火摇曳+柔和光影+温馨氛围', effect: '📈 转化率+50%', task: '产品场景图', level: 'expert', uses: 1456, tags: ['绘画'], preview: '🕯️ 香薰蜡烛预览' },
+  { name: '家居类·床上四件套', field: '电商AI绘画', desc: '柔软质感+褶皱细节+自然光', effect: '📈 客单价+45%', task: '产品场景图', level: 'expert', uses: 1234, tags: ['绘画'], preview: '🛏️ 床品预览' },
   { name: '抖音爆款脚本', field: '内容创作', desc: '3秒钩子→60秒干货→结尾CTA，完播率飙升', effect: '📈 完播率+50%', task: '帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒钩子，中间干货，结尾CTA。', level: 'expert', uses: 4123, tags: ['写作', 'hot'], preview: '🎬 抖音爆款脚本示例' },
   { name: '小红书种草笔记', field: '内容创作', desc: '爆款标题+真实体验+精准标签，单篇涨粉500+', effect: '📈 单篇涨粉500+', task: '写一篇小红书种草笔记，推荐[填写产品]。要求：标题带emoji，正文分点写真实感受，带3-5个标签，引导互动。', level: 'expert', uses: 3567, tags: ['写作', 'hot'], preview: '📕 小红书种草示例' },
   { name: '公众号深度长文', field: '内容创作', desc: '故事引入→层层递进→案例支撑→升华圈粉', effect: '📈 转发率+300%', task: '写一篇3000字公众号深度文，主题：[填写主题]。要求：故事/数据引入，分3-4小节，案例支撑，结尾升华。', level: 'expert', uses: 2890, tags: ['写作'], preview: '📰 公众号深度文示例' },
@@ -2342,7 +2450,7 @@ function renderFavorites() {
 }
 
 // ============================================================
-// 管理面板
+// 管理面板（含密码次数编辑）
 // ============================================================
 function renderAdmin() {
   if (!adminLoggedIn) {
@@ -2380,10 +2488,11 @@ function renderAdmin() {
     return arr.map((p, idx) => `
       <tr>
         <td><span class="code">${p.code}</span></td>
-        <td>${p.used}/${p.max}</td>
+        <td>${p.used}/${p.max === 0 ? '∞' : p.max}</td>
         <td>${p.sold ? '已售' : '可用'}</td>
         <td>
           <button class="admin-action-btn" onclick="copyPwd('${p.code}')">📋 复制</button>
+          <button class="admin-action-btn" onclick="openEditMax('${type}','${p.code}')">✏️ 改次数</button>
           <button class="admin-action-btn" onclick="toggleSold('${type}','${p.code}')">${p.sold ? '🔄 标记可用' : '✓ 标记已售'}</button>
         </td>
       </tr>
@@ -2412,6 +2521,13 @@ function renderAdmin() {
       <div class="collapse-body" id="advCollapse">
         <div class="add-pwd-row">
           <input type="text" id="newAdvPwd" placeholder="输入新密码">
+          <select id="newAdvMax">
+            <option value="30">30次</option>
+            <option value="50">50次</option>
+            <option value="100" selected>100次</option>
+            <option value="200">200次</option>
+            <option value="0">♾️ 无限</option>
+          </select>
           <button onclick="addPwd('advanced')">➕ 添加</button>
         </div>
       </div>
@@ -2434,6 +2550,13 @@ function renderAdmin() {
       <div class="collapse-body" id="expCollapse">
         <div class="add-pwd-row">
           <input type="text" id="newExpPwd" placeholder="输入新密码">
+          <select id="newExpMax">
+            <option value="30">30次</option>
+            <option value="50">50次</option>
+            <option value="100" selected>100次</option>
+            <option value="200">200次</option>
+            <option value="0">♾️ 无限</option>
+          </select>
           <button onclick="addPwd('expert')">➕ 添加</button>
         </div>
       </div>
@@ -2450,6 +2573,44 @@ function renderAdmin() {
       <button class="admin-action-btn" onclick="if(confirm('确定重置所有数据？')){localStorage.removeItem('promptGenDB');location.reload();}" style="color:var(--accent-red);border-color:var(--accent-red);padding:4px 14px;">🗑️ 重置所有数据</button>
     </div>
   `;
+}
+
+// ===== 密码次数编辑功能 =====
+function openEditMax(type, code) {
+  editMaxTarget = { type, code };
+  const pool = db.passwords[type];
+  const p = pool.find(x => x.code === code);
+  if (!p) return;
+  $('editMaxCode').textContent = code;
+  $('editMaxCurrent').textContent = p.max === 0 ? '无限' : p.max;
+  $('editMaxInput').value = p.max === 0 ? '' : p.max;
+  $('editMaxModal').classList.add('active');
+}
+
+function setEditMax(val) {
+  $('editMaxInput').value = val;
+}
+
+function confirmEditMax() {
+  if (!editMaxTarget) return;
+  const val = parseInt($('editMaxInput').value);
+  if (isNaN(val) || val < 0) {
+    showToast('请输入有效的次数（0表示无限）', '⚠️');
+    return;
+  }
+  const pool = db.passwords[editMaxTarget.type];
+  const p = pool.find(x => x.code === editMaxTarget.code);
+  if (!p) { showToast('密码不存在', '❌'); return; }
+  p.max = val;
+  saveDB(db);
+  closeEditMax();
+  renderAdmin();
+  showToast('次数上限已更新为 ' + (val === 0 ? '无限' : val + '次'), '✅');
+}
+
+function closeEditMax() {
+  $('editMaxModal').classList.remove('active');
+  editMaxTarget = null;
 }
 
 window.toggleCollapse = function(id) {
@@ -2472,9 +2633,11 @@ window.toggleSold = function(type, code) {
 
 window.addPwd = function(type) {
   const inputId = type === 'advanced' ? 'newAdvPwd' : 'newExpPwd';
+  const maxId = type === 'advanced' ? 'newAdvMax' : 'newExpMax';
   const code = $(inputId).value.trim();
   if (!code) { showToast('请输入密码', '⚠️'); return; }
-  db.passwords[type].push({ code, used: 0, max: MAX_PASSWORD_USES, sold: false });
+  const maxVal = parseInt($(maxId).value);
+  db.passwords[type].push({ code, used: 0, max: maxVal, sold: false });
   saveDB(db);
   $(inputId).value = '';
   renderAdmin();
@@ -2643,6 +2806,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.querySelectorAll('.modal-overlay').forEach(ov => {
     ov.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
+  });
+
+  // 编辑次数弹窗的键盘事件
+  $('editMaxInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') confirmEditMax();
   });
 
   let lastTouchEnd = 0;
