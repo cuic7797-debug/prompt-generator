@@ -1905,7 +1905,7 @@ body {
   </main>
 </div>
 
-<!-- ===== 解锁弹窗（优化版 - 展示权益，引导咨询） ===== -->
+<!-- ===== 解锁弹窗 ===== -->
 <div class="modal-overlay" id="unlockModal">
   <div class="modal">
     <div style="text-align:center;margin-bottom:12px;">
@@ -1915,8 +1915,6 @@ body {
     <div class="modal-desc" style="text-align:center;font-size:13px;">
       获取专家版邀请码，解锁全部高级功能
     </div>
-
-    <!-- 专家版权益展示 -->
     <div style="background:rgba(124,92,252,0.06);border-radius:8px;padding:14px 16px;margin-bottom:14px;border:1px solid rgba(124,92,252,0.1);">
       <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;font-weight:600;">🎁 专家版专属权益</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;">
@@ -1928,8 +1926,6 @@ body {
         <div style="color:var(--text-secondary);">✅ 持续更新</div>
       </div>
     </div>
-
-    <!-- 获取方式 -->
     <div style="background:rgba(245,179,66,0.06);border-radius:8px;padding:12px 14px;margin-bottom:14px;border:1px solid rgba(245,179,66,0.1);">
       <div style="font-size:12px;color:var(--text-secondary);">👇 获取邀请码</div>
       <div style="font-size:14px;font-weight:500;margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
@@ -1939,7 +1935,6 @@ body {
       </div>
       <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">💡 工作日9:00-22:00在线，立即回复</div>
     </div>
-
     <input type="text" class="modal-input" id="unlockInput" placeholder="已有邀请码？直接输入">
     <div class="modal-actions">
       <button class="modal-btn modal-btn-secondary" id="unlockCancel">稍后再说</button>
@@ -2064,16 +2059,27 @@ PLATFORM_DATA.text.forEach(p => PLATFORM_URL_MAP[p.value] = p.url);
 PLATFORM_DATA.image.forEach(p => PLATFORM_URL_MAP[p.value] = p.url);
 
 // ============================================================
-// 数据库
+// 安全 DOM 获取
 // ============================================================
-const ADVANCED_PASSWORDS = ['ADV0G5U7SWP','ADV146XU8OL','ADV31PYMER7','ADV48FHNTCI','ADV4NKI9HX8','ADV4NWT90YJ','ADV4XIO6WKP','ADV607LQMY3','ADV6LH4W5KB','ADV7F4LXN8R','ADV7N0CUHZ6','ADV9IXJFTWB','ADV9NGUHQ5L','ADVBKZRGLN5','ADVE1LC49SQ','ADVF3CUB0TR','ADVGHY0W3X5','ADVHFGXEZ5W','ADVI46K2JRB','ADVIBGRZK0O','ADVIQ3LY48H','ADVJSBGWZ7Q','ADVJSLC38ZK','ADVJWG4R1YK','ADVL0YE4QT1','ADVLBPT4FRM','ADVLGTHK6IO','ADVLTN4YXJH','ADVLW28B630','ADVMJFHR4X0','ADVMQYO2BGZ','ADVMUBZT5GL','ADVN85TPMWK','ADVNXO6K4W2','ADVPHS1WCKU','ADVPUYXJB3N','ADVQCIWLM4X','ADVQS2BTYFX','ADVR5OGPUH0','ADVR6C14L9K','ADVR8F1HNYQ','ADVR8HC7EWM','ADVRXGL0O42','ADVT5JFWZ0P','ADVT9JBO50U','ADVU9IKTWGJ','ADVWNU0OQH3','ADVYP0OIFR7','ADVZ6JYMI3W','ADVZG5PK4NT'];
-const EXPERT_PASSWORDS = ['EXP097KTRHY','EXP0AKHTBJN','EXP0DCFQKTZ','EXP0QOYIHWK','EXP39JQ70WA','EXP3OKUCN7G','EXP41KD2WF6','EXP4CWVONJ8','EXP5UKOTR4Y','EXP6HV79F1K','EXP7BQYG0VW','EXP7G6OI5DZ','EXP7SCFKVT2','EXP8BM4LR7I','EXP8M2ALVN1','EXP97KT0UL1','EXP9L0B184F','EXP9LMDR6Y8','EXPASLQUGMC','EXPBLYJTW30','EXPBYDM47W0','EXPBZLGTJ8C','EXPC0TGZS3M','EXPGHKTZI57','EXPGYM8C2UH','EXPI2KQZ3YV','EXPI3Y4MOQU','EXPJIO73SQ5','EXPLVRKNCTI','EXPMACWJIDU','EXPMLO5W2V3','EXPN0MOJY8K','EXPN16RUJQW','EXPN3OHT748','EXPNCIRU2O4','EXPND0ICJ83','EXPNRK4GSQA','EXPNYFJ63KL','EXPRCLYO0JH','EXPRCOVK14L','EXPRCV0Q1F6','EXPRWQM1UTJ','EXPSMFG4WCT','EXPSUOYG5I1','EXPSWKGAMJL','EXPT1KAN79B','EXPT85YDQWI','EXPYFB7WCKR','EXPZCMOHIKA','EXPZN61WJLB'];
+function $(id) {
+  var el = document.getElementById(id);
+  if (!el) {
+    console.warn('Element not found:', id);
+  }
+  return el;
+}
+
+// ============================================================
+// 数据库（带错误兜底）
+// ============================================================
+var ADVANCED_PASSWORDS = ['ADV0G5U7SWP','ADV146XU8OL','ADV31PYMER7','ADV48FHNTCI','ADV4NKI9HX8','ADV4NWT90YJ','ADV4XIO6WKP','ADV607LQMY3','ADV6LH4W5KB','ADV7F4LXN8R','ADV7N0CUHZ6','ADV9IXJFTWB','ADV9NGUHQ5L','ADVBKZRGLN5','ADVE1LC49SQ','ADVF3CUB0TR','ADVGHY0W3X5','ADVHFGXEZ5W','ADVI46K2JRB','ADVIBGRZK0O','ADVIQ3LY48H','ADVJSBGWZ7Q','ADVJSLC38ZK','ADVJWG4R1YK','ADVL0YE4QT1','ADVLBPT4FRM','ADVLGTHK6IO','ADVLTN4YXJH','ADVLW28B630','ADVMJFHR4X0','ADVMQYO2BGZ','ADVMUBZT5GL','ADVN85TPMWK','ADVNXO6K4W2','ADVPHS1WCKU','ADVPUYXJB3N','ADVQCIWLM4X','ADVQS2BTYFX','ADVR5OGPUH0','ADVR6C14L9K','ADVR8F1HNYQ','ADVR8HC7EWM','ADVRXGL0O42','ADVT5JFWZ0P','ADVT9JBO50U','ADVU9IKTWGJ','ADVWNU0OQH3','ADVYP0OIFR7','ADVZ6JYMI3W','ADVZG5PK4NT'];
+var EXPERT_PASSWORDS = ['EXP097KTRHY','EXP0AKHTBJN','EXP0DCFQKTZ','EXP0QOYIHWK','EXP39JQ70WA','EXP3OKUCN7G','EXP41KD2WF6','EXP4CWVONJ8','EXP5UKOTR4Y','EXP6HV79F1K','EXP7BQYG0VW','EXP7G6OI5DZ','EXP7SCFKVT2','EXP8BM4LR7I','EXP8M2ALVN1','EXP97KT0UL1','EXP9L0B184F','EXP9LMDR6Y8','EXPASLQUGMC','EXPBLYJTW30','EXPBYDM47W0','EXPBZLGTJ8C','EXPC0TGZS3M','EXPGHKTZI57','EXPGYM8C2UH','EXPI2KQZ3YV','EXPI3Y4MOQU','EXPJIO73SQ5','EXPLVRKNCTI','EXPMACWJIDU','EXPMLO5W2V3','EXPN0MOJY8K','EXPN16RUJQW','EXPN3OHT748','EXPNCIRU2O4','EXPND0ICJ83','EXPNRK4GSQA','EXPNYFJ63KL','EXPRCLYO0JH','EXPRCOVK14L','EXPRCV0Q1F6','EXPRWQM1UTJ','EXPSMFG4WCT','EXPSUOYG5I1','EXPSWKGAMJL','EXPT1KAN79B','EXPT85YDQWI','EXPYFB7WCKR','EXPZCMOHIKA','EXPZN61WJLB'];
 
 function getDB() {
-  const defaultDB = {
+  var defaultDB = {
     passwords: {
-      advanced: ADVANCED_PASSWORDS.map(p => ({ code: p, used: 0, max: MAX_PASSWORD_USES, sold: false })),
-      expert: EXPERT_PASSWORDS.map(p => ({ code: p, used: 0, max: MAX_PASSWORD_USES, sold: false }))
+      advanced: ADVANCED_PASSWORDS.map(function(p) { return { code: p, used: 0, max: MAX_PASSWORD_USES, sold: false }; }),
+      expert: EXPERT_PASSWORDS.map(function(p) { return { code: p, used: 0, max: MAX_PASSWORD_USES, sold: false }; })
     },
     unlocked: { advanced: false, expert: false },
     usedPasswords: {},
@@ -2087,9 +2093,9 @@ function getDB() {
     inviteDate: new Date().toDateString()
   };
   try {
-    const saved = localStorage.getItem('promptGenDB');
+    var saved = localStorage.getItem('promptGenDB');
     if (saved) {
-      const parsed = JSON.parse(saved);
+      var parsed = JSON.parse(saved);
       if (parsed.todayDate !== new Date().toDateString()) {
         parsed.todayBasicCount = 0;
         parsed.todayDate = new Date().toDateString();
@@ -2098,31 +2104,43 @@ function getDB() {
         parsed.inviteUsedToday = 0;
         parsed.inviteDate = new Date().toDateString();
       }
-      return { ...defaultDB, ...parsed };
+      for (var key in defaultDB) {
+        if (parsed[key] === undefined) parsed[key] = defaultDB[key];
+      }
+      return parsed;
     }
-  } catch (e) { console.error('DB load error:', e); }
+  } catch (e) {
+    console.warn('DB load error, using defaults:', e);
+  }
   return defaultDB;
 }
 
 function saveDB(db) {
-  try { localStorage.setItem('promptGenDB', JSON.stringify(db)); } catch (e) { console.error('DB save error:', e); }
+  try {
+    localStorage.setItem('promptGenDB', JSON.stringify(db));
+  } catch (e) {
+    console.warn('DB save error:', e);
+  }
 }
 
-let db = getDB();
-let currentLevel = 'basic';
-let pendingUnlockLevel = null;
-let adminLoggedIn = false;
-let isGenerating = false;
-let editMaxTarget = null;
-let activeModal = null;
-
-const $ = id => document.getElementById(id);
+// ============================================================
+// 全局状态
+// ============================================================
+var db = getDB();
+var currentLevel = 'basic';
+var pendingUnlockLevel = null;
+var adminLoggedIn = false;
+var isGenerating = false;
+var editMaxTarget = null;
+var activeModal = null;
+var passwordSearchQuery = '';
+var currentTemplateFilter = 'all';
 
 // ============================================================
 // 弹窗管理（统一）
 // ============================================================
 function openModal(modalId) {
-  const modal = $(modalId);
+  var modal = $(modalId);
   if (!modal) return;
   modal.classList.add('active');
   activeModal = modalId;
@@ -2130,21 +2148,21 @@ function openModal(modalId) {
 }
 
 function closeModal(modalId) {
-  const modal = $(modalId);
+  var modal = $(modalId);
   if (!modal) return;
   modal.classList.remove('active');
   if (activeModal === modalId) activeModal = null;
-  const anyOpen = document.querySelector('.modal-overlay.active');
+  var anyOpen = document.querySelector('.modal-overlay.active');
   if (!anyOpen) {
     document.body.style.overflow = '';
   }
 }
 
-// 关闭当前所有弹窗
 function closeAllModals() {
-  document.querySelectorAll('.modal-overlay.active').forEach(m => {
-    m.classList.remove('active');
-  });
+  var modals = document.querySelectorAll('.modal-overlay.active');
+  for (var i = 0; i < modals.length; i++) {
+    modals[i].classList.remove('active');
+  }
   activeModal = null;
   document.body.style.overflow = '';
   pendingUnlockLevel = null;
@@ -2152,29 +2170,38 @@ function closeAllModals() {
 }
 
 // ============================================================
-// 工具函数
+// Toast
 // ============================================================
-function showToast(msg, icon = '✅') {
-  const t = $('toast');
-  $('toastText').textContent = msg;
-  $('toastIcon').textContent = icon;
+function showToast(msg, icon) {
+  icon = icon || '✅';
+  var t = $('toast');
+  if (!t) return;
+  var textEl = $('toastText');
+  var iconEl = $('toastIcon');
+  if (textEl) textEl.textContent = msg;
+  if (iconEl) iconEl.textContent = icon;
   t.classList.add('show');
   clearTimeout(t._hide);
-  t._hide = setTimeout(() => t.classList.remove('show'), 2400);
+  t._hide = setTimeout(function() {
+    t.classList.remove('show');
+  }, 2400);
 }
 
+// ============================================================
+// 工具函数
+// ============================================================
 function formatPromptHTML(text, wordCount) {
-  let html = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  var html = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   html = html.replace(/【(.+?)】/g, '<h3>📌 $1</h3>');
   html = html.replace(/^\d+\.\s(.+)$/gm, '<li>$1</li>');
   html = html.replace(/^-\s(.+)$/gm, '<li>$1</li>');
   html = html.replace(/(<li>.+<\/li>\n?)+/g, '<ul>$&</ul>');
   html = html.replace(/<\/ul>\n*<ul>/g, '');
-  const paragraphs = html.split('\n\n');
-  html = paragraphs.map(p => {
-    const t = p.trim();
+  var paragraphs = html.split('\n\n');
+  html = paragraphs.map(function(p) {
+    var t = p.trim();
     if (!t) return '';
-    if (t.startsWith('<h3>') || t.startsWith('<ul>')) return t;
+    if (t.indexOf('<h3>') === 0 || t.indexOf('<ul>') === 0) return t;
     return '<p>' + t + '</p>';
   }).join('');
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
@@ -2184,59 +2211,95 @@ function formatPromptHTML(text, wordCount) {
   return html;
 }
 
+function getCurrentField() {
+  var active = document.querySelector('.field-card.active');
+  return active ? active.getAttribute('data-field') : '内容创作';
+}
+
+function countWords(text) {
+  var zh = text.match(/[\u4e00-\u9fa5]/g) || [];
+  var en = text.match(/[a-zA-Z]+/g) || [];
+  return zh.length + en.length;
+}
+
 // ============================================================
 // 复制
 // ============================================================
-async function copyToClipboard(text) {
+function copyToClipboard(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    try { await navigator.clipboard.writeText(text); showToast('已复制！', '📋'); showGuideModal(); return true; } catch(e) {}
+    navigator.clipboard.writeText(text).then(function() {
+      showToast('已复制！', '📋');
+      showGuideModal();
+    }).catch(function() {
+      fallbackCopy(text);
+    });
+    return;
   }
-  const ta = document.createElement('textarea');
+  fallbackCopy(text);
+}
+
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
   ta.value = text;
   ta.style.cssText = 'position:fixed;opacity:0;';
   document.body.appendChild(ta);
   ta.select();
   try {
-    const ok = document.execCommand('copy');
+    var ok = document.execCommand('copy');
     document.body.removeChild(ta);
-    if (ok) { showToast('已复制！', '📋'); showGuideModal(); return true; }
-  } catch(e) { document.body.removeChild(ta); }
-  $('copyTextarea').value = text;
-  openModal('copyModal');
-  return false;
+    if (ok) {
+      showToast('已复制！', '📋');
+      showGuideModal();
+    }
+  } catch(e) {
+    document.body.removeChild(ta);
+    var copyTextarea = $('copyTextarea');
+    if (copyTextarea) {
+      copyTextarea.value = text;
+      openModal('copyModal');
+    }
+  }
 }
 
 function showGuideModal() {
-  const field = getCurrentField();
-  const isEcommerce = field === '电商AI绘画';
-  const currentPlatform = $('platformSelect').value;
-  const grid = $('guidePlatformGrid');
+  var field = getCurrentField();
+  var isEcommerce = field === '电商AI绘画';
+  var currentPlatform = $('platformSelect');
+  var currentVal = currentPlatform ? currentPlatform.value : '';
+  var grid = $('guidePlatformGrid');
+  if (!grid) return;
 
-  let platforms;
+  var platforms;
   if (isEcommerce) {
     platforms = PLATFORM_DATA.image;
   } else {
-    const cn = ['文心一言','通义千问','Kimi','豆包','讯飞星火','智谱清言','DeepSeek','百小应'];
-    const cnList = PLATFORM_DATA.text.filter(p => cn.includes(p.value));
-    const intlList = PLATFORM_DATA.text.filter(p => !cn.includes(p.value));
-    platforms = [...cnList, ...intlList];
+    var cn = ['文心一言','通义千问','Kimi','豆包','讯飞星火','智谱清言','DeepSeek','百小应'];
+    var cnList = PLATFORM_DATA.text.filter(function(p) { return cn.indexOf(p.value) !== -1; });
+    var intlList = PLATFORM_DATA.text.filter(function(p) { return cn.indexOf(p.value) === -1; });
+    platforms = cnList.concat(intlList);
   }
 
-  grid.innerHTML = platforms.map(p => `
-    <button class="platform-btn" data-url="${p.url}" data-value="${p.value}">
-      <span class="icon">${p.icon}</span>
-      <span class="name">${p.label}</span>
-    </button>
-  `).join('');
+  var htmlStr = '';
+  for (var i = 0; i < platforms.length; i++) {
+    var p = platforms[i];
+    htmlStr += '<button class="platform-btn" data-url="' + p.url + '" data-value="' + p.value + '">';
+    htmlStr += '<span class="icon">' + p.icon + '</span>';
+    htmlStr += '<span class="name">' + p.label + '</span>';
+    htmlStr += '</button>';
+  }
+  grid.innerHTML = htmlStr;
 
-  grid.querySelectorAll('.platform-btn').forEach(btn => {
-    const val = btn.dataset.value;
-    if (val === currentPlatform) btn.classList.add('highlighted');
+  var btns = grid.querySelectorAll('.platform-btn');
+  for (var j = 0; j < btns.length; j++) {
+    var btn = btns[j];
+    var val = btn.getAttribute('data-value');
+    if (val === currentVal) btn.classList.add('highlighted');
     btn.addEventListener('click', function(e) {
       e.stopPropagation();
-      window.open(this.dataset.url, '_blank');
+      var url = this.getAttribute('data-url');
+      if (url) window.open(url, '_blank');
     });
-  });
+  }
 
   if (platforms.length > 6) {
     grid.classList.remove('platform-grid-2col');
@@ -2250,31 +2313,25 @@ function showGuideModal() {
 }
 
 // ============================================================
-// 提示词生成（三级差异化 + 字数控制）
+// 提示词生成
 // ============================================================
 function buildPrompt(field, task, level) {
-  const basic = '【角色定位】\n你是一位专业的' + field + '领域AI助手。\n\n【任务描述】\n' + task + '\n\n【基本要求】\n1. 输出清晰、实用的解决方案\n2. 使用专业但易懂的语言\n3. 确保内容准确、完整';
+  var basic = '【角色定位】\n你是一位专业的' + field + '领域AI助手。\n\n【任务描述】\n' + task + '\n\n【基本要求】\n1. 输出清晰、实用的解决方案\n2. 使用专业但易懂的语言\n3. 确保内容准确、完整';
 
-  const advanced = '【角色定位】\n你是一位资深的' + field + '领域专家，拥有10年以上行业经验。\n\n【核心能力】\n- 深度理解' + field + '领域的专业知识体系\n- 具备解决复杂' + field + '问题的分析能力\n- 熟悉行业最佳实践和标准流程\n\n【任务分析】\n' + task + '\n\n【执行框架】\n1. 需求理解：明确任务目标和约束条件\n2. 方案设计：制定系统化的解决策略\n3. 详细执行：分步骤展开具体实施\n4. 质量检查：验证输出是否符合要求\n\n【输出要求】\n- 结构清晰，逻辑严谨\n- 包含具体可执行的建议\n- 标注关键注意事项';
+  var advanced = '【角色定位】\n你是一位资深的' + field + '领域专家，拥有10年以上行业经验。\n\n【核心能力】\n- 深度理解' + field + '领域的专业知识体系\n- 具备解决复杂' + field + '问题的分析能力\n- 熟悉行业最佳实践和标准流程\n\n【任务分析】\n' + task + '\n\n【执行框架】\n1. 需求理解：明确任务目标和约束条件\n2. 方案设计：制定系统化的解决策略\n3. 详细执行：分步骤展开具体实施\n4. 质量检查：验证输出是否符合要求\n\n【输出要求】\n- 结构清晰，逻辑严谨\n- 包含具体可执行的建议\n- 标注关键注意事项';
 
-  const expert = '【角色定位】\n你是一位' + field + '领域的顶级专家顾问，拥有15年以上跨行业实战经验，曾服务过多家行业头部企业。\n\n【专业能力矩阵】\n- 战略层面：行业趋势洞察、商业模式设计\n- 战术层面：流程优化、方法论应用、工具链搭建\n- 执行层面：细节把控、质量标准制定、风险预判\n\n【思维特征】\n- 系统性思维：善于发现事物间的关联和规律\n- 批判性思维：基于证据做判断，不盲从权威\n- 用户思维：始终站在最终使用者角度思考\n\n【任务深度分析】\n' + task + '\n\n【执行框架】\n第一阶段：诊断与定义\n1. 明确核心问题和边界条件\n2. 识别关键利益相关者\n3. 梳理现有资源和约束\n\n第二阶段：方案设计\n1. 制定多个备选方案\n2. 评估各方案的优劣势\n3. 选择最优路径并细化\n\n第三阶段：交付与迭代\n1. 输出高质量交付物\n2. 收集反馈并优化\n3. 提供后续支持建议\n\n【质量控制标准】\n- 准确性：所有数据和事实经过验证\n- 完整性：覆盖任务的所有维度\n- 可操作性：每个建议都有明确的执行路径\n\n【输出规范】\n- 使用Markdown格式\n- 重要观点使用加粗标注\n- 结尾提供"下一步行动建议"';
+  var expert = '【角色定位】\n你是一位' + field + '领域的顶级专家顾问，拥有15年以上跨行业实战经验，曾服务过多家行业头部企业。\n\n【专业能力矩阵】\n- 战略层面：行业趋势洞察、商业模式设计\n- 战术层面：流程优化、方法论应用、工具链搭建\n- 执行层面：细节把控、质量标准制定、风险预判\n\n【思维特征】\n- 系统性思维：善于发现事物间的关联和规律\n- 批判性思维：基于证据做判断，不盲从权威\n- 用户思维：始终站在最终使用者角度思考\n\n【任务深度分析】\n' + task + '\n\n【执行框架】\n第一阶段：诊断与定义\n1. 明确核心问题和边界条件\n2. 识别关键利益相关者\n3. 梳理现有资源和约束\n\n第二阶段：方案设计\n1. 制定多个备选方案\n2. 评估各方案的优劣势\n3. 选择最优路径并细化\n\n第三阶段：交付与迭代\n1. 输出高质量交付物\n2. 收集反馈并优化\n3. 提供后续支持建议\n\n【质量控制标准】\n- 准确性：所有数据和事实经过验证\n- 完整性：覆盖任务的所有维度\n- 可操作性：每个建议都有明确的执行路径\n\n【输出规范】\n- 使用Markdown格式\n- 重要观点使用加粗标注\n- 结尾提供"下一步行动建议"';
 
   if (level === 'basic') return basic;
   if (level === 'advanced') return advanced;
   return expert;
 }
 
-function countWords(text) {
-  const zh = text.match(/[\u4e00-\u9fa5]/g) || [];
-  const en = text.match(/[a-zA-Z]+/g) || [];
-  return zh.length + en.length;
-}
-
 function buildEcommercePrompt(task, level, platform) {
-  const isEn = ['Midjourney','Stable Diffusion'].includes(platform);
-  const lang = isEn ? 'en' : 'zh';
+  var isEn = (platform === 'Midjourney' || platform === 'Stable Diffusion');
+  var lang = isEn ? 'en' : 'zh';
 
-  const platformStyle = {
+  var platformStyle = {
     '豆包': { style: '写实风格，细节丰富', param: '' },
     '即梦': { style: '高质量人像，细腻皮肤质感', param: '' },
     '可灵': { style: '动态感，电影级光影', param: '' },
@@ -2282,9 +2339,9 @@ function buildEcommercePrompt(task, level, platform) {
     'Midjourney': { style: 'professional product photography', param: ' --ar 1:1 --q 2 --s 250' },
     'Stable Diffusion': { style: 'masterpiece, best quality', param: ', (masterpiece:1.2)' }
   };
-  const p = platformStyle[platform] || platformStyle['豆包'];
+  var p = platformStyle[platform] || platformStyle['豆包'];
 
-  const baseTemplates = {
+  var baseTemplates = {
     '产品白底主图': {
       zh: '【主体】' + task + '，纯白无影背景，居中构图\n【风格】商业产品摄影，极简主义，' + p.style + '\n【光线】左侧45度柔光箱，右侧反光板补光\n【质量】8K超高清，超写实，色彩准确',
       en: 'Product photography of ' + task + ', white seamless background, centered, ' + p.style + ', softbox lighting, 8K ultra HD' + p.param
@@ -2311,7 +2368,8 @@ function buildEcommercePrompt(task, level, platform) {
     }
   };
 
-  let prompt = baseTemplates[task] ? baseTemplates[task][lang] : baseTemplates['产品白底主图'][lang];
+  var base = baseTemplates[task] || baseTemplates['产品白底主图'];
+  var prompt = base[lang] || base.zh;
 
   if (level === 'advanced') {
     prompt += isEn ? ', advanced composition, professional lighting' : '\n【进阶】优化构图与光影层次，增强材质质感';
@@ -2324,17 +2382,12 @@ function buildEcommercePrompt(task, level, platform) {
 }
 
 // ============================================================
-// 核心逻辑
+// 核心功能
 // ============================================================
-function getCurrentField() {
-  const active = document.querySelector('.field-card.active');
-  return active ? active.dataset.field : '内容创作';
-}
-
 function canGenerate(level) {
   if (level === 'basic') {
     if (db.todayBasicCount >= MAX_BASIC_DAILY) {
-      showToast(`基础版每日限${MAX_BASIC_DAILY}次免费，明日再来`, '⚠️');
+      showToast('基础版每日限' + MAX_BASIC_DAILY + '次免费，明日再来', '⚠️');
       return false;
     }
     return true;
@@ -2355,44 +2408,57 @@ function canGenerate(level) {
 }
 
 function showUnlockModal(versionName) {
-  const remaining = Math.max(0, DAILY_INVITE_LIMIT - (db.inviteUsedToday || 0));
-  $('modalInviteRemaining').textContent = remaining;
+  var remaining = Math.max(0, DAILY_INVITE_LIMIT - (db.inviteUsedToday || 0));
+  var inviteRemaining = $('modalInviteRemaining');
+  if (inviteRemaining) inviteRemaining.textContent = remaining;
   openModal('unlockModal');
 }
 
 function doGenerate() {
   if (isGenerating) return;
-  const field = getCurrentField();
-  const task = $('taskInput').value.trim();
-  if (!task) { showToast('请输入任务描述', '⚠️'); $('taskInput').focus(); return; }
+  var field = getCurrentField();
+  var taskInput = $('taskInput');
+  if (!taskInput) return;
+  var task = taskInput.value.trim();
+  if (!task) {
+    showToast('请输入任务描述', '⚠️');
+    taskInput.focus();
+    return;
+  }
   if (!canGenerate(currentLevel)) return;
 
   isGenerating = true;
-  const btn = $('generateBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span>⏳</span> 生成中...';
+  var btn = $('generateBtn');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span> 生成中...';
+  }
 
-  setTimeout(() => {
+  setTimeout(function() {
     if (currentLevel === 'basic') db.todayBasicCount++;
     else if (currentLevel === 'advanced' && db.firstUse.advanced) db.firstUse.advanced = false;
     else if (currentLevel === 'expert' && db.firstUse.expert) db.firstUse.expert = false;
     db.totalGenerated++;
 
-    const platform = $('platformSelect').value;
-    let prompt;
+    var platformSelect = $('platformSelect');
+    var platform = platformSelect ? platformSelect.value : '通用';
+    var prompt;
     if (field === '电商AI绘画') {
       prompt = buildEcommercePrompt(task, currentLevel, platform);
     } else {
       prompt = buildPrompt(field, task, currentLevel);
     }
 
-    const wordCount = countWords(prompt);
-    const now = new Date();
-    const timeStr = now.toLocaleString('zh-CN');
-    const result = {
+    var wordCount = countWords(prompt);
+    var now = new Date();
+    var timeStr = now.toLocaleString('zh-CN');
+    var result = {
       id: Date.now(),
-      field, task, level: currentLevel,
-      prompt, time: timeStr,
+      field: field,
+      task: task,
+      level: currentLevel,
+      prompt: prompt,
+      time: timeStr,
       favorited: false,
       platform: platform !== '通用' ? platform : null,
       wordCount: wordCount
@@ -2402,12 +2468,15 @@ function doGenerate() {
     saveDB(db);
     updateStats();
     renderResult(result);
-    $('emptyState').classList.add('hidden');
+    var emptyState = $('emptyState');
+    if (emptyState) emptyState.classList.add('hidden');
     showToast('提示词生成成功！', '✨');
 
     isGenerating = false;
-    btn.disabled = false;
-    btn.innerHTML = '<span>✨</span> 生成提示词';
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<span>✨</span> 生成提示词';
+    }
   }, 300);
 }
 
@@ -2418,19 +2487,27 @@ function doOptimize() {
     showUnlockModal('专家版');
     return;
   }
-  const task = $('taskInput').value.trim();
-  if (!task) { showToast('请输入需要优化的任务', '⚠️'); return; }
+  var taskInput = $('taskInput');
+  if (!taskInput) return;
+  var task = taskInput.value.trim();
+  if (!task) {
+    showToast('请输入需要优化的任务', '⚠️');
+    return;
+  }
 
   isGenerating = true;
-  const btn = $('optimizeBtn');
-  btn.disabled = true;
-  btn.innerHTML = '⏳ 优化中...';
+  var btn = $('optimizeBtn');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '⏳ 优化中...';
+  }
 
-  setTimeout(() => {
-    const field = getCurrentField();
-    const platform = $('platformSelect').value;
+  setTimeout(function() {
+    var field = getCurrentField();
+    var platformSelect = $('platformSelect');
+    var platform = platformSelect ? platformSelect.value : '通用';
 
-    const optimized = '【一键优化版 · 专家级重构】\n\n' +
+    var optimized = '【一键优化版 · 专家级重构】\n\n' +
       '【原始需求】\n' + task + '\n\n' +
       '【优化方案】\n' +
       '1. 需求拆解：转化为可执行的AI指令\n' +
@@ -2448,8 +2525,8 @@ function doOptimize() {
       '5. 下一步行动\n\n' +
       '格式：Markdown，重要内容加粗，总字数控制在2000字以内';
 
-    const wordCount = countWords(optimized);
-    const result = {
+    var wordCount = countWords(optimized);
+    var result = {
       id: Date.now(),
       field: field + '（优化版）',
       task: task,
@@ -2466,12 +2543,15 @@ function doOptimize() {
     saveDB(db);
     updateStats();
     renderResult(result);
-    $('emptyState').classList.add('hidden');
+    var emptyState = $('emptyState');
+    if (emptyState) emptyState.classList.add('hidden');
     showToast('优化完成！', '🚀');
 
     isGenerating = false;
-    btn.disabled = false;
-    btn.innerHTML = '<span>🚀</span> 一键优化';
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<span>🚀</span> 一键优化';
+    }
   }, 400);
 }
 
@@ -2482,32 +2562,46 @@ function doBatchGenerate() {
     showUnlockModal('专家版');
     return;
   }
-  const task = $('taskInput').value.trim();
-  if (!task) { showToast('请输入任务（每行一个）', '⚠️'); return; }
+  var taskInput = $('taskInput');
+  if (!taskInput) return;
+  var task = taskInput.value.trim();
+  if (!task) {
+    showToast('请输入任务（每行一个）', '⚠️');
+    return;
+  }
 
-  const tasks = task.split('\n').filter(t => t.trim());
-  if (tasks.length < 2) { showToast('至少2个任务，每行一个', '⚠️'); return; }
-  if (tasks.length > 10) { showToast('最多10个任务', '⚠️'); return; }
+  var tasks = task.split('\n').filter(function(t) { return t.trim(); });
+  if (tasks.length < 2) {
+    showToast('至少2个任务，每行一个', '⚠️');
+    return;
+  }
+  if (tasks.length > 10) {
+    showToast('最多10个任务', '⚠️');
+    return;
+  }
 
   isGenerating = true;
-  const btn = $('batchBtn');
-  btn.disabled = true;
-  btn.innerHTML = '⏳ 0/' + tasks.length;
+  var btn = $('batchBtn');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '⏳ 0/' + tasks.length;
+  }
 
-  const field = getCurrentField();
-  const platform = $('platformSelect').value;
-  const now = new Date();
+  var field = getCurrentField();
+  var platformSelect = $('platformSelect');
+  var platform = platformSelect ? platformSelect.value : '通用';
+  var now = new Date();
 
-  tasks.forEach((t, idx) => {
-    setTimeout(() => {
-      let prompt;
+  tasks.forEach(function(t, idx) {
+    setTimeout(function() {
+      var prompt;
       if (field === '电商AI绘画') {
         prompt = buildEcommercePrompt(t.trim(), 'expert', platform);
       } else {
         prompt = buildPrompt(field, t.trim(), 'expert');
       }
-      const wordCount = countWords(prompt);
-      const result = {
+      var wordCount = countWords(prompt);
+      var result = {
         id: Date.now() + idx,
         field: field + '（批量' + (idx+1) + '/' + tasks.length + '）',
         task: t.trim(),
@@ -2524,12 +2618,15 @@ function doBatchGenerate() {
       if (idx === tasks.length - 1) {
         saveDB(db);
         updateStats();
-        $('emptyState').classList.add('hidden');
+        var emptyState = $('emptyState');
+        if (emptyState) emptyState.classList.add('hidden');
         showToast('批量生成完成！共' + tasks.length + '条', '📦');
         isGenerating = false;
-        btn.disabled = false;
-        btn.innerHTML = '<span>📦</span> 批量生成';
-      } else {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>📦</span> 批量生成';
+        }
+      } else if (btn) {
         btn.innerHTML = '⏳ ' + (idx+1) + '/' + tasks.length;
       }
     }, idx * 350);
@@ -2540,111 +2637,128 @@ function doBatchGenerate() {
 // 渲染结果
 // ============================================================
 function renderResult(result) {
-  const container = $('resultsContainer');
-  const levelNames = { basic:'基础版', advanced:'进阶版', expert:'专家版' };
-  const levelBadges = { basic:'badge-basic', advanced:'badge-advanced', expert:'badge-expert' };
+  var container = $('resultsContainer');
+  if (!container) return;
+  var levelNames = { basic:'基础版', advanced:'进阶版', expert:'专家版' };
+  var levelBadges = { basic:'badge-basic', advanced:'badge-advanced', expert:'badge-expert' };
 
-  const levelTags = {
+  var levelTags = {
     basic: '📄 约' + (result.wordCount || 80) + '字 · 基础规格',
     advanced: '📋 含执行框架 · 约' + (result.wordCount || 200) + '字',
     expert: '🧠 含思维链+多版本 · 约' + (result.wordCount || 350) + '字'
   };
 
-  const card = document.createElement('div');
+  var card = document.createElement('div');
   card.className = 'result-card';
-  card.dataset.id = result.id;
-  card.innerHTML = `
-    <div class="result-header">
-      <div class="result-meta">
-        <span class="result-badge ${levelBadges[result.level]}">${levelNames[result.level]}</span>
-        <span class="result-level-tag">${levelTags[result.level] || ''}</span>
-        <span class="result-field">📂 ${result.field}</span>
-        ${result.platform ? '<span class="result-badge" style="background:rgba(124,92,252,0.1);color:var(--accent-purple-light);font-size:11px;">🎯 ' + result.platform + '</span>' : ''}
-        <span class="result-time">🕐 ${result.time}</span>
-      </div>
-      <div class="result-actions">
-        <button class="action-btn" onclick="copyResult(${result.id})">📋 复制</button>
-        <button class="action-btn ${result.favorited?'favorited':''}" onclick="toggleFavorite(${result.id})">${result.favorited?'❤️':'🤍'} ${result.favorited?'已收藏':'收藏'}</button>
-      </div>
-    </div>
-    <div class="result-content">${formatPromptHTML(result.prompt, result.wordCount)}</div>
-  `;
+  card.setAttribute('data-id', result.id);
+
+  var platformHtml = result.platform ? '<span class="result-badge" style="background:rgba(124,92,252,0.1);color:var(--accent-purple-light);font-size:11px;">🎯 ' + result.platform + '</span>' : '';
+
+  card.innerHTML = 
+    '<div class="result-header">' +
+      '<div class="result-meta">' +
+        '<span class="result-badge ' + levelBadges[result.level] + '">' + levelNames[result.level] + '</span>' +
+        '<span class="result-level-tag">' + (levelTags[result.level] || '') + '</span>' +
+        '<span class="result-field">📂 ' + result.field + '</span>' +
+        platformHtml +
+        '<span class="result-time">🕐 ' + result.time + '</span>' +
+      '</div>' +
+      '<div class="result-actions">' +
+        '<button class="action-btn" onclick="copyResult(' + result.id + ')">📋 复制</button>' +
+        '<button class="action-btn ' + (result.favorited ? 'favorited' : '') + '" onclick="toggleFavorite(' + result.id + ')">' + (result.favorited ? '❤️' : '🤍') + ' ' + (result.favorited ? '已收藏' : '收藏') + '</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="result-content">' + formatPromptHTML(result.prompt, result.wordCount) + '</div>';
+
   container.insertBefore(card, container.firstChild);
 }
 
-window.copyResult = function(id) {
-  const r = db.history.find(h => h.id === id);
-  if (r) copyToClipboard(r.prompt);
-};
+function copyResult(id) {
+  var r = db.history.filter(function(h) { return h.id === id; });
+  if (r.length > 0) copyToClipboard(r[0].prompt);
+}
 
-window.toggleFavorite = function(id) {
-  const r = db.history.find(h => h.id === id);
-  if (!r) return;
-  r.favorited = !r.favorited;
-  if (r.favorited) { if (!db.favorites.find(f => f.id === id)) db.favorites.push({...r}); }
-  else { db.favorites = db.favorites.filter(f => f.id !== id); }
-  saveDB(db);
-  const card = document.querySelector(`.result-card[data-id="${id}"]`);
-  if (card) {
-    const btn = card.querySelector('.action-btn:last-child');
-    btn.classList.toggle('favorited', r.favorited);
-    btn.innerHTML = `${r.favorited?'❤️':'🤍'} ${r.favorited?'已收藏':'收藏'}`;
+function toggleFavorite(id) {
+  var r = db.history.filter(function(h) { return h.id === id; });
+  if (r.length === 0) return;
+  var result = r[0];
+  result.favorited = !result.favorited;
+  if (result.favorited) {
+    var exists = db.favorites.filter(function(f) { return f.id === id; });
+    if (exists.length === 0) db.favorites.push(JSON.parse(JSON.stringify(result)));
+  } else {
+    db.favorites = db.favorites.filter(function(f) { return f.id !== id; });
   }
-  showToast(r.favorited ? '已收藏' : '已取消', r.favorited ? '❤️' : '🤍');
-};
+  saveDB(db);
+  var card = document.querySelector('.result-card[data-id="' + id + '"]');
+  if (card) {
+    var btn = card.querySelector('.action-btn:last-child');
+    if (btn) {
+      btn.classList.toggle('favorited', result.favorited);
+      btn.innerHTML = (result.favorited ? '❤️' : '🤍') + ' ' + (result.favorited ? '已收藏' : '收藏');
+    }
+  }
+  showToast(result.favorited ? '已收藏' : '已取消', result.favorited ? '❤️' : '🤍');
+}
 
 // ============================================================
 // 更新UI
 // ============================================================
 function updateFeatureButtons() {
-  const isExpert = db.unlocked.expert || db.firstUse.expert;
-  const opt = $('optimizeBtn');
-  const bat = $('batchBtn');
+  var isExpert = db.unlocked.expert || db.firstUse.expert;
+  var opt = $('optimizeBtn');
+  var bat = $('batchBtn');
 
   if (isExpert) {
-    opt.className = 'generate-btn optimize';
-    opt.innerHTML = '<span>🚀</span> 一键优化';
-    opt.disabled = false;
-    bat.className = 'generate-btn batch';
-    bat.innerHTML = '<span>📦</span> 批量生成';
-    bat.disabled = false;
+    if (opt) { opt.className = 'generate-btn optimize'; opt.innerHTML = '<span>🚀</span> 一键优化'; opt.disabled = false; }
+    if (bat) { bat.className = 'generate-btn batch'; bat.innerHTML = '<span>📦</span> 批量生成'; bat.disabled = false; }
   } else {
-    opt.className = 'generate-btn optimize locked';
-    opt.innerHTML = '<span>🔒</span> 一键优化 · 专家版专属';
-    opt.disabled = true;
-    bat.className = 'generate-btn batch locked';
-    bat.innerHTML = '<span>🔒</span> 批量生成 · 专家版专属';
-    bat.disabled = true;
+    if (opt) { opt.className = 'generate-btn optimize locked'; opt.innerHTML = '<span>🔒</span> 一键优化 · 专家版专属'; opt.disabled = true; }
+    if (bat) { bat.className = 'generate-btn batch locked'; bat.innerHTML = '<span>🔒</span> 批量生成 · 专家版专属'; bat.disabled = true; }
   }
 }
 
 function updateStats() {
-  const todayRemain = Math.max(0, MAX_BASIC_DAILY - db.todayBasicCount);
-  $('todayCount').textContent = todayRemain;
-  $('totalCount').textContent = db.totalGenerated;
-  $('navTodayCount').textContent = todayRemain;
-  $('navTotalCount').textContent = db.totalGenerated;
-  $('mobileTodayCount').textContent = todayRemain;
-  $('mobileTotalCount').textContent = db.totalGenerated;
+  var todayRemain = Math.max(0, MAX_BASIC_DAILY - db.todayBasicCount);
+  var todayEl = $('todayCount');
+  if (todayEl) todayEl.textContent = todayRemain;
+  var totalEl = $('totalCount');
+  if (totalEl) totalEl.textContent = db.totalGenerated;
+  var navToday = $('navTodayCount');
+  if (navToday) navToday.textContent = todayRemain;
+  var navTotal = $('navTotalCount');
+  if (navTotal) navTotal.textContent = db.totalGenerated;
+  var mobileToday = $('mobileTodayCount');
+  if (mobileToday) mobileToday.textContent = todayRemain;
+  var mobileTotal = $('mobileTotalCount');
+  if (mobileTotal) mobileTotal.textContent = db.totalGenerated;
 
-  const remaining = Math.max(0, DAILY_INVITE_LIMIT - (db.inviteUsedToday || 0));
-  $('inviteCount').textContent = remaining;
-  $('mobileInviteCount').textContent = remaining;
+  var remaining = Math.max(0, DAILY_INVITE_LIMIT - (db.inviteUsedToday || 0));
+  var inviteEl = $('inviteCount');
+  if (inviteEl) inviteEl.textContent = remaining;
+  var mobileInvite = $('mobileInviteCount');
+  if (mobileInvite) mobileInvite.textContent = remaining;
 
-  if (!db.firstUse.advanced && !db.unlocked.advanced) {
-    $('advancedBadge').textContent = '🔒 已锁定';
-    $('advancedBadge').className = 'complexity-badge badge-locked';
-  } else if (db.unlocked.advanced) {
-    $('advancedBadge').textContent = '✅ 已解锁';
-    $('advancedBadge').className = 'complexity-badge badge-free';
+  var advBadge = $('advancedBadge');
+  if (advBadge) {
+    if (!db.firstUse.advanced && !db.unlocked.advanced) {
+      advBadge.textContent = '🔒 已锁定';
+      advBadge.className = 'complexity-badge badge-locked';
+    } else if (db.unlocked.advanced) {
+      advBadge.textContent = '✅ 已解锁';
+      advBadge.className = 'complexity-badge badge-free';
+    }
   }
 
-  if (!db.firstUse.expert && !db.unlocked.expert) {
-    $('expertBadge').textContent = '🔥 内测邀请码';
-    $('expertBadge').className = 'complexity-badge badge-invite';
-  } else if (db.unlocked.expert) {
-    $('expertBadge').textContent = '✅ 已解锁';
-    $('expertBadge').className = 'complexity-badge badge-free';
+  var expBadge = $('expertBadge');
+  if (expBadge) {
+    if (!db.firstUse.expert && !db.unlocked.expert) {
+      expBadge.textContent = '🔥 内测邀请码';
+      expBadge.className = 'complexity-badge badge-invite';
+    } else if (db.unlocked.expert) {
+      expBadge.textContent = '✅ 已解锁';
+      expBadge.className = 'complexity-badge badge-free';
+    }
   }
 
   updateFeatureButtons();
@@ -2652,32 +2766,39 @@ function updateStats() {
 }
 
 function updateTemplateLocks() {
-  const isLocked = !db.unlocked.expert && !db.firstUse.expert;
-  document.querySelectorAll('.template-card').forEach(card => {
+  var isLocked = !db.unlocked.expert && !db.firstUse.expert;
+  var cards = document.querySelectorAll('.template-card');
+  for (var i = 0; i < cards.length; i++) {
+    var card = cards[i];
     if (isLocked) {
       card.classList.add('locked');
       if (!card.querySelector('.template-lock-overlay')) {
-        const ov = document.createElement('div');
+        var ov = document.createElement('div');
         ov.className = 'template-lock-overlay';
-        ov.innerHTML = `<div class="lock-icon">🔒</div><div>专家版解锁后可用</div>`;
+        ov.innerHTML = '<div class="lock-icon">🔒</div><div>专家版解锁后可用</div>';
         card.appendChild(ov);
       }
     } else {
       card.classList.remove('locked');
-      const ov = card.querySelector('.template-lock-overlay');
+      var ov = card.querySelector('.template-lock-overlay');
       if (ov) ov.remove();
     }
-  });
+  }
 }
 
 // ============================================================
 // 解锁逻辑
 // ============================================================
 function doUnlock() {
-  const pwd = $('unlockInput').value.trim();
-  if (!pwd) { showToast('请输入邀请码', '⚠️'); return; }
+  var input = $('unlockInput');
+  if (!input) return;
+  var pwd = input.value.trim();
+  if (!pwd) {
+    showToast('请输入邀请码', '⚠️');
+    return;
+  }
 
-  const remaining = Math.max(0, DAILY_INVITE_LIMIT - (db.inviteUsedToday || 0));
+  var remaining = Math.max(0, DAILY_INVITE_LIMIT - (db.inviteUsedToday || 0));
   if (remaining <= 0 && pwd !== SPECIAL_PASSWORD) {
     showToast('今日邀请码已发完，明日再来', '⚠️');
     return;
@@ -2694,10 +2815,23 @@ function doUnlock() {
     return;
   }
 
-  const poolKey = pendingUnlockLevel === 'advanced' ? 'advanced' : 'expert';
-  const found = db.passwords[poolKey].find(p => p.code === pwd);
-  if (!found) { showToast('邀请码错误', '❌'); return; }
-  if (found.used >= found.max) { showToast('该邀请码已失效', '⚠️'); return; }
+  var poolKey = pendingUnlockLevel === 'advanced' ? 'advanced' : 'expert';
+  var found = null;
+  var pool = db.passwords[poolKey];
+  for (var i = 0; i < pool.length; i++) {
+    if (pool[i].code === pwd) {
+      found = pool[i];
+      break;
+    }
+  }
+  if (!found) {
+    showToast('邀请码错误', '❌');
+    return;
+  }
+  if (found.used >= found.max) {
+    showToast('该邀请码已失效', '⚠️');
+    return;
+  }
 
   found.used++;
   db.unlocked[pendingUnlockLevel] = true;
@@ -2713,16 +2847,24 @@ function doUnlock() {
 // 页面导航
 // ============================================================
 function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
+  var pages = document.querySelectorAll('.page');
+  for (var i = 0; i < pages.length; i++) {
+    pages[i].classList.remove('active');
+  }
+  var navBtns = document.querySelectorAll('.nav-btn');
+  for (var j = 0; j < navBtns.length; j++) {
+    navBtns[j].classList.remove('active');
+  }
+  var mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+  for (var k = 0; k < mobileNavItems.length; k++) {
+    mobileNavItems[k].classList.remove('active');
+  }
 
-  const page = $('page-' + name);
-  const btn = document.querySelector(`.nav-btn[data-page="${name}"]`);
-  const mobileBtn = document.querySelector(`.mobile-nav-item[data-page="${name}"]`);
-
+  var page = $('page-' + name);
   if (page) page.classList.add('active');
+  var btn = document.querySelector('.nav-btn[data-page="' + name + '"]');
   if (btn) btn.classList.add('active');
+  var mobileBtn = document.querySelector('.mobile-nav-item[data-page="' + name + '"]');
   if (mobileBtn) mobileBtn.classList.add('active');
 
   if (name === 'history') renderHistory();
@@ -2734,7 +2876,7 @@ function showPage(name) {
 // ============================================================
 // 模板库
 // ============================================================
-const templateData = [
+var templateData = [
   { name: '酒水类·精酿啤酒', field: '电商AI绘画', desc: '琥珀色酒液+细腻泡沫+冰爽质感', effect: '📈 详情页转化率+65%', task: '产品场景图', level: 'expert', uses: 3120, tags: ['绘画', 'hot'], preview: '🍺 精酿啤酒场景预览' },
   { name: '食品类·烘焙甜品', field: '电商AI绘画', desc: '松软面包+诱人色泽+精致摆盘', effect: '📈 CTR提升75%', task: '产品白底主图', level: 'expert', uses: 2834, tags: ['绘画', 'hot'], preview: '🍰 烘焙甜品预览' },
   { name: '饮品类·咖啡特写', field: '电商AI绘画', desc: '咖啡油脂+蒸汽缭绕+高级质感', effect: '📈 客单价提升40%', task: '产品白底主图', level: 'expert', uses: 2156, tags: ['绘画'], preview: '☕ 精品咖啡预览' },
@@ -2758,255 +2900,308 @@ const templateData = [
   { name: '商务邮件模板', field: '职场办公', desc: '正式/半正式/催办三种场景，专业得体', effect: '📈 回复率+120%', task: '写一封正式商务邮件，收件人：[填写]，主题：[填写]，要点：[填写]。', level: 'expert', uses: 1654, tags: ['办公'], preview: '✉️ 商务邮件示例' },
 ];
 
-let currentTemplateFilter = 'all';
-
 function renderTemplates() {
-  const grid = $('templateGrid');
-  let filtered = templateData;
+  var grid = $('templateGrid');
+  if (!grid) return;
+  var filtered = templateData;
   if (currentTemplateFilter !== 'all') {
-    filtered = templateData.filter(t => t.tags.includes(currentTemplateFilter));
-  }
-  const pinned = filtered.filter(t => t.tags.includes('hot'));
-  const rest = filtered.filter(t => !t.tags.includes('hot'));
-  const sorted = [...pinned, ...rest];
-
-  const isLocked = !db.unlocked.expert && !db.firstUse.expert;
-  grid.innerHTML = sorted.map(t => `
-    <div class="template-card ${isLocked ? 'locked' : ''} ${t.tags.includes('hot') ? 'pinned' : ''}" 
-         data-field="${t.field}" data-task="${t.task}" data-level="${t.level}">
-      <div class="template-name">${t.name}</div>
-      <div class="template-field">${t.field}</div>
-      <div class="template-desc">${t.desc}</div>
-      <div class="template-effect">${t.effect}</div>
-      <div class="template-preview"><span class="preview-icon">📷</span> ${t.preview || '效果预览'}</div>
-      <div class="template-stats">🔥 ${t.uses}人用过</div>
-      <div class="template-tags">${t.tags.map(tg => `<span>#${tg}</span>`).join('')}</div>
-      <span class="template-level badge-expert">专家</span>
-      ${isLocked ? `<div class="template-lock-overlay"><div class="lock-icon">🔒</div><div>专家版解锁后可用</div></div>` : ''}
-    </div>
-  `).join('');
-
-  grid.querySelectorAll('.template-card').forEach(card => {
-    card.addEventListener('click', function() {
-      if (this.classList.contains('locked')) {
-        pendingUnlockLevel = 'expert';
-        showUnlockModal('专家版');
-        return;
-      }
-      const field = this.dataset.field;
-      const task = this.dataset.task;
-      document.querySelectorAll('.field-card').forEach(f => f.classList.toggle('active', f.dataset.field === field));
-      $('taskInput').value = task;
-      currentLevel = this.dataset.level;
-      document.querySelectorAll('.complexity-card').forEach(c => c.classList.toggle('selected', c.dataset.level === currentLevel));
-      updatePlatformOptions(field);
-      const isEcommerce = field === '电商AI绘画';
-      $('ecommerceTagSection').style.display = isEcommerce ? 'block' : 'none';
-      showPage('home');
-      showToast('模板已加载', '✅');
+    filtered = templateData.filter(function(t) {
+      return t.tags.indexOf(currentTemplateFilter) !== -1;
     });
-  });
+  }
+  var pinned = filtered.filter(function(t) { return t.tags.indexOf('hot') !== -1; });
+  var rest = filtered.filter(function(t) { return t.tags.indexOf('hot') === -1; });
+  var sorted = pinned.concat(rest);
+
+  var isLocked = !db.unlocked.expert && !db.firstUse.expert;
+  var htmlStr = '';
+  for (var i = 0; i < sorted.length; i++) {
+    var t = sorted[i];
+    var lockedClass = isLocked ? 'locked' : '';
+    var pinnedClass = t.tags.indexOf('hot') !== -1 ? 'pinned' : '';
+    var tagsHtml = t.tags.map(function(tg) { return '<span>#' + tg + '</span>'; }).join('');
+    var lockHtml = isLocked ? '<div class="template-lock-overlay"><div class="lock-icon">🔒</div><div>专家版解锁后可用</div></div>' : '';
+    htmlStr +=
+      '<div class="template-card ' + lockedClass + ' ' + pinnedClass + '" data-field="' + t.field + '" data-task="' + t.task + '" data-level="' + t.level + '">' +
+        '<div class="template-name">' + t.name + '</div>' +
+        '<div class="template-field">' + t.field + '</div>' +
+        '<div class="template-desc">' + t.desc + '</div>' +
+        '<div class="template-effect">' + t.effect + '</div>' +
+        '<div class="template-preview"><span class="preview-icon">📷</span> ' + (t.preview || '效果预览') + '</div>' +
+        '<div class="template-stats">🔥 ' + t.uses + '人用过</div>' +
+        '<div class="template-tags">' + tagsHtml + '</div>' +
+        '<span class="template-level badge-expert">专家</span>' +
+        lockHtml +
+      '</div>';
+  }
+  grid.innerHTML = htmlStr;
+
+  var cards = grid.querySelectorAll('.template-card');
+  for (var j = 0; j < cards.length; j++) {
+    (function(card) {
+      card.addEventListener('click', function() {
+        if (this.classList.contains('locked')) {
+          pendingUnlockLevel = 'expert';
+          showUnlockModal('专家版');
+          return;
+        }
+        var field = this.getAttribute('data-field');
+        var task = this.getAttribute('data-task');
+        var fCards = document.querySelectorAll('.field-card');
+        for (var fc = 0; fc < fCards.length; fc++) {
+          fCards[fc].classList.toggle('active', fCards[fc].getAttribute('data-field') === field);
+        }
+        var taskInput = $('taskInput');
+        if (taskInput) taskInput.value = task;
+        currentLevel = this.getAttribute('data-level');
+        var cCards = document.querySelectorAll('.complexity-card');
+        for (var cc = 0; cc < cCards.length; cc++) {
+          cCards[cc].classList.toggle('selected', cCards[cc].getAttribute('data-level') === currentLevel);
+        }
+        updatePlatformOptions(field);
+        var isEcommerce = field === '电商AI绘画';
+        var ecomSec = $('ecommerceTagSection');
+        if (ecomSec) ecomSec.style.display = isEcommerce ? 'block' : 'none';
+        showPage('home');
+        showToast('模板已加载', '✅');
+      });
+    })(cards[j]);
+  }
 }
 
 // ============================================================
 // 历史 / 收藏
 // ============================================================
 function renderHistory() {
-  const container = $('historyList');
+  var container = $('historyList');
+  if (!container) return;
   if (db.history.length === 0) {
-    container.innerHTML = `<div class="empty-state" style="min-height:160px;"><div class="empty-icon" style="width:44px;height:44px;font-size:22px;">📜</div><div class="empty-title" style="font-size:14px;">暂无历史</div></div>`;
+    container.innerHTML = '<div class="empty-state" style="min-height:160px;"><div class="empty-icon" style="width:44px;height:44px;font-size:22px;">📜</div><div class="empty-title" style="font-size:14px;">暂无历史</div></div>';
     return;
   }
-  const icons = { basic:'🌱', advanced:'🚀', expert:'👑' };
-  container.innerHTML = db.history.slice(0, 50).map(h => `
-    <div class="history-item" onclick="loadHistory(${h.id})">
-      <div class="history-icon" style="background:rgba(124,92,252,0.1);">${icons[h.level]}</div>
-      <div class="history-info">
-        <div class="history-title">${h.field} - ${h.task.substring(0,26)}...</div>
-        <div class="history-meta">${h.level==='basic'?'基础':h.level==='advanced'?'进阶':'专家'} · ${h.time}</div>
-      </div>
-      <div class="history-actions" onclick="event.stopPropagation()">
-        <button class="icon-btn" onclick="copyResult(${h.id})">📋</button>
-        <button class="icon-btn" onclick="toggleFavorite(${h.id})">${h.favorited?'❤️':'🤍'}</button>
-      </div>
-    </div>
-  `).join('');
+  var icons = { basic:'🌱', advanced:'🚀', expert:'👑' };
+  var htmlStr = '';
+  var limit = Math.min(db.history.length, 50);
+  for (var i = 0; i < limit; i++) {
+    var h = db.history[i];
+    htmlStr +=
+      '<div class="history-item" onclick="loadHistory(' + h.id + ')">' +
+        '<div class="history-icon" style="background:rgba(124,92,252,0.1);">' + (icons[h.level] || '') + '</div>' +
+        '<div class="history-info">' +
+          '<div class="history-title">' + h.field + ' - ' + h.task.substring(0,26) + '...</div>' +
+          '<div class="history-meta">' + (h.level === 'basic' ? '基础' : h.level === 'advanced' ? '进阶' : '专家') + ' · ' + h.time + '</div>' +
+        '</div>' +
+        '<div class="history-actions" onclick="event.stopPropagation()">' +
+          '<button class="icon-btn" onclick="copyResult(' + h.id + ')">📋</button>' +
+          '<button class="icon-btn" onclick="toggleFavorite(' + h.id + ')">' + (h.favorited ? '❤️' : '🤍') + '</button>' +
+        '</div>' +
+      '</div>';
+  }
+  container.innerHTML = htmlStr;
 }
 
-window.loadHistory = function(id) {
-  const r = db.history.find(h => h.id === id);
-  if (!r) return;
-  document.querySelectorAll('.field-card').forEach(f => f.classList.toggle('active', f.dataset.field === r.field));
-  $('taskInput').value = r.task;
-  currentLevel = r.level;
-  document.querySelectorAll('.complexity-card').forEach(c => c.classList.toggle('selected', c.dataset.level === currentLevel));
-  updatePlatformOptions(r.field);
+function loadHistory(id) {
+  var r = db.history.filter(function(h) { return h.id === id; });
+  if (r.length === 0) return;
+  var result = r[0];
+  var fCards = document.querySelectorAll('.field-card');
+  for (var i = 0; i < fCards.length; i++) {
+    fCards[i].classList.toggle('active', fCards[i].getAttribute('data-field') === result.field);
+  }
+  var taskInput = $('taskInput');
+  if (taskInput) taskInput.value = result.task;
+  currentLevel = result.level;
+  var cCards = document.querySelectorAll('.complexity-card');
+  for (var j = 0; j < cCards.length; j++) {
+    cCards[j].classList.toggle('selected', cCards[j].getAttribute('data-level') === currentLevel);
+  }
+  updatePlatformOptions(result.field);
   showPage('home');
-  $('emptyState').classList.add('hidden');
-  $('resultsContainer').innerHTML = '';
-  renderResult(r);
-};
+  var emptyState = $('emptyState');
+  if (emptyState) emptyState.classList.add('hidden');
+  var container = $('resultsContainer');
+  if (container) container.innerHTML = '';
+  renderResult(result);
+}
 
 function renderFavorites() {
-  const container = $('favoritesList');
+  var container = $('favoritesList');
+  if (!container) return;
   if (db.favorites.length === 0) {
-    container.innerHTML = `<div class="empty-state" style="min-height:160px;"><div class="empty-icon" style="width:44px;height:44px;font-size:22px;">⭐</div><div class="empty-title" style="font-size:14px;">暂无收藏</div></div>`;
+    container.innerHTML = '<div class="empty-state" style="min-height:160px;"><div class="empty-icon" style="width:44px;height:44px;font-size:22px;">⭐</div><div class="empty-title" style="font-size:14px;">暂无收藏</div></div>';
     return;
   }
-  const icons = { basic:'🌱', advanced:'🚀', expert:'👑' };
-  container.innerHTML = db.favorites.map(f => `
-    <div class="history-item" onclick="loadHistory(${f.id})">
-      <div class="history-icon" style="background:rgba(232,97,168,0.1);">${icons[f.level]}</div>
-      <div class="history-info">
-        <div class="history-title">${f.field} - ${f.task.substring(0,26)}...</div>
-        <div class="history-meta">${f.level==='basic'?'基础':f.level==='advanced'?'进阶':'专家'} · ${f.time}</div>
-      </div>
-      <div class="history-actions" onclick="event.stopPropagation()">
-        <button class="icon-btn" onclick="copyResult(${f.id})">📋</button>
-        <button class="icon-btn" onclick="toggleFavorite(${f.id})">❤️</button>
-      </div>
-    </div>
-  `).join('');
+  var icons = { basic:'🌱', advanced:'🚀', expert:'👑' };
+  var htmlStr = '';
+  for (var i = 0; i < db.favorites.length; i++) {
+    var f = db.favorites[i];
+    htmlStr +=
+      '<div class="history-item" onclick="loadHistory(' + f.id + ')">' +
+        '<div class="history-icon" style="background:rgba(232,97,168,0.1);">' + (icons[f.level] || '') + '</div>' +
+        '<div class="history-info">' +
+          '<div class="history-title">' + f.field + ' - ' + f.task.substring(0,26) + '...</div>' +
+          '<div class="history-meta">' + (f.level === 'basic' ? '基础' : f.level === 'advanced' ? '进阶' : '专家') + ' · ' + f.time + '</div>' +
+        '</div>' +
+        '<div class="history-actions" onclick="event.stopPropagation()">' +
+          '<button class="icon-btn" onclick="copyResult(' + f.id + ')">📋</button>' +
+          '<button class="icon-btn" onclick="toggleFavorite(' + f.id + ')">❤️</button>' +
+        '</div>' +
+      '</div>';
+  }
+  container.innerHTML = htmlStr;
 }
 
 // ============================================================
-// 管理面板（含密码搜索）
+// 管理面板
 // ============================================================
-let passwordSearchQuery = '';
-
 function renderAdmin() {
+  var panel = $('adminPanel');
+  if (!panel) return;
+
   if (!adminLoggedIn) {
-    $('adminPanel').innerHTML = `
-      <div class="empty-state" style="min-height:260px;">
-        <div class="empty-icon" style="width:48px;height:48px;font-size:24px;">🔒</div>
-        <div class="empty-title" style="font-size:15px;">管理面板</div>
-        <div class="empty-desc" style="margin-top:10px;">
-          <input type="password" id="adminPassword" placeholder="管理密码" 
-            style="padding:8px 14px;background:var(--bg-primary);border:1px solid var(--border-glass);border-radius:6px;color:var(--text-primary);width:200px;text-align:center;font-size:14px;">
-          <br><br>
-          <button class="generate-btn" id="adminLoginBtn" style="width:200px;padding:10px;font-size:14px;">进入管理</button>
-        </div>
-      </div>`;
-    const loginBtn = $('adminLoginBtn');
-    const pwdInput = $('adminPassword');
-    loginBtn.onclick = () => {
-      if (pwdInput.value === ADMIN_PASSWORD) { adminLoggedIn = true; renderAdmin(); showToast('已进入管理', '🔓'); }
-      else showToast('密码错误', '❌');
-    };
-    pwdInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') loginBtn.click();
-    });
+    panel.innerHTML =
+      '<div class="empty-state" style="min-height:260px;">' +
+        '<div class="empty-icon" style="width:48px;height:48px;font-size:24px;">🔒</div>' +
+        '<div class="empty-title" style="font-size:15px;">管理面板</div>' +
+        '<div class="empty-desc" style="margin-top:10px;">' +
+          '<input type="password" id="adminPassword" placeholder="管理密码" style="padding:8px 14px;background:var(--bg-primary);border:1px solid var(--border-glass);border-radius:6px;color:var(--text-primary);width:200px;text-align:center;font-size:14px;">' +
+          '<br><br>' +
+          '<button class="generate-btn" id="adminLoginBtn" style="width:200px;padding:10px;font-size:14px;">进入管理</button>' +
+        '</div>' +
+      '</div>';
+    var loginBtn = $('adminLoginBtn');
+    var pwdInput = $('adminPassword');
+    if (loginBtn && pwdInput) {
+      loginBtn.onclick = function() {
+        if (pwdInput.value === ADMIN_PASSWORD) {
+          adminLoggedIn = true;
+          renderAdmin();
+          showToast('已进入管理', '🔓');
+        } else {
+          showToast('密码错误', '❌');
+        }
+      };
+      pwdInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') loginBtn.click();
+      });
+    }
     return;
   }
 
-  const adv = db.passwords.advanced;
-  const exp = db.passwords.expert;
+  var adv = db.passwords.advanced;
+  var exp = db.passwords.expert;
 
-  const search = passwordSearchQuery.toLowerCase().trim();
-  const advFiltered = search ? adv.filter(p => p.code.toLowerCase().includes(search)) : adv;
-  const expFiltered = search ? exp.filter(p => p.code.toLowerCase().includes(search)) : exp;
+  var search = passwordSearchQuery.toLowerCase().trim();
+  var advFiltered = search ? adv.filter(function(p) { return p.code.toLowerCase().indexOf(search) !== -1; }) : adv;
+  var expFiltered = search ? exp.filter(function(p) { return p.code.toLowerCase().indexOf(search) !== -1; }) : exp;
 
-  const advTotal = adv.reduce((s,p) => s + p.used, 0);
-  const expTotal = exp.reduce((s,p) => s + p.used, 0);
-  const advSold = adv.filter(p => p.sold).length;
-  const expSold = exp.filter(p => p.sold).length;
+  var advTotal = 0;
+  for (var i = 0; i < adv.length; i++) advTotal += adv[i].used;
+  var expTotal = 0;
+  for (var j = 0; j < exp.length; j++) expTotal += exp[j].used;
+  var advSold = adv.filter(function(p) { return p.sold; }).length;
+  var expSold = exp.filter(function(p) { return p.sold; }).length;
 
   function pwdRows(arr, type) {
     if (arr.length === 0) {
-      return `<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:20px 0;">没有匹配的密码</td></tr>`;
+      return '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:20px 0;">没有匹配的密码</td></tr>';
     }
-    return arr.map((p, idx) => `
-      <tr>
-        <td><span class="code">${p.code}</span></td>
-        <td>${p.used}/${p.max === 0 ? '∞' : p.max}</td>
-        <td>${p.sold ? '已售' : '可用'}</td>
-        <td>
-          <button class="admin-action-btn" onclick="copyPwd('${p.code}')">📋 复制</button>
-          <button class="admin-action-btn" onclick="openEditMax('${type}','${p.code}')">✏️ 改次数</button>
-          <button class="admin-action-btn" onclick="toggleSold('${type}','${p.code}')">${p.sold ? '🔄 标记可用' : '✓ 标记已售'}</button>
-        </td>
-      </tr>
-    `).join('');
+    var html = '';
+    for (var k = 0; k < arr.length; k++) {
+      var p = arr[k];
+      var maxDisplay = p.max === 0 ? '∞' : p.max;
+      html +=
+        '<tr>' +
+          '<td><span class="code">' + p.code + '</span></td>' +
+          '<td>' + p.used + '/' + maxDisplay + '</td>' +
+          '<td>' + (p.sold ? '已售' : '可用') + '</td>' +
+          '<td>' +
+            '<button class="admin-action-btn" onclick="copyPwd(\'' + p.code + '\')">📋 复制</button>' +
+            '<button class="admin-action-btn" onclick="openEditMax(\'' + type + '\',\'' + p.code + '\')">✏️ 改次数</button>' +
+            '<button class="admin-action-btn" onclick="toggleSold(\'' + type + '\',\'' + p.code + '\')">' + (p.sold ? '🔄 标记可用' : '✓ 标记已售') + '</button>' +
+          '</td>' +
+        '</tr>';
+    }
+    return html;
   }
 
-  $('adminPanel').innerHTML = `
-    <div class="admin-card">
-      <h3>📊 数据总览</h3>
-      <div class="admin-stats">
-        <div class="admin-stat-box"><div class="num">${db.totalGenerated}</div><div class="lbl">总生成数</div></div>
-        <div class="admin-stat-box"><div class="num">${db.todayBasicCount}</div><div class="lbl">今日基础版</div></div>
-        <div class="admin-stat-box"><div class="num">${advTotal}</div><div class="lbl">进阶版使用</div></div>
-        <div class="admin-stat-box"><div class="num">${expTotal}</div><div class="lbl">专家版使用</div></div>
-      </div>
-    </div>
+  panel.innerHTML =
+    '<div class="admin-card">' +
+      '<h3>📊 数据总览</h3>' +
+      '<div class="admin-stats">' +
+        '<div class="admin-stat-box"><div class="num">' + db.totalGenerated + '</div><div class="lbl">总生成数</div></div>' +
+        '<div class="admin-stat-box"><div class="num">' + db.todayBasicCount + '</div><div class="lbl">今日基础版</div></div>' +
+        '<div class="admin-stat-box"><div class="num">' + advTotal + '</div><div class="lbl">进阶版使用</div></div>' +
+        '<div class="admin-stat-box"><div class="num">' + expTotal + '</div><div class="lbl">专家版使用</div></div>' +
+      '</div>' +
+    '</div>' +
 
-    <div class="admin-card">
-      <h3>
-        <span>🔐 进阶版密码池 (${advSold}/50 已售)</span>
-        <span style="flex:1;"></span>
-        <span class="collapse-toggle" onclick="toggleCollapse('advCollapse')">
-          <span class="arrow" id="advCollapseArrow">▶</span> 添加密码
-        </span>
-      </h3>
-      <div class="collapse-body" id="advCollapse">
-        <div class="add-pwd-row">
-          <input type="text" id="newAdvPwd" placeholder="输入新密码">
-          <select id="newAdvMax">
-            <option value="30">30次</option>
-            <option value="50">50次</option>
-            <option value="100" selected>100次</option>
-            <option value="200">200次</option>
-            <option value="0">♾️ 无限</option>
-          </select>
-          <button onclick="addPwd('advanced')">➕ 添加</button>
-        </div>
-      </div>
-      <div class="password-search-row">
-        <input type="text" id="pwdSearchInput" placeholder="🔍 搜索密码..." value="${passwordSearchQuery}" oninput="filterPasswords(this.value)">
-        <button class="admin-action-btn" onclick="document.getElementById('pwdSearchInput').value='';filterPasswords('');" style="padding:6px 14px;">清空</button>
-      </div>
-      <div class="password-table-wrap">
-        <table class="password-table">
-          <thead><tr><th>密码</th><th>使用次数</th><th>状态</th><th>操作</th></tr></thead>
-          <tbody>${pwdRows(advFiltered, 'advanced')}</tbody>
-        </table>
-      </div>
-    </div>
+    '<div class="admin-card">' +
+      '<h3>' +
+        '<span>🔐 进阶版密码池 (' + advSold + '/50 已售)</span>' +
+        '<span style="flex:1;"></span>' +
+        '<span class="collapse-toggle" onclick="toggleCollapse(\'advCollapse\')">' +
+          '<span class="arrow" id="advCollapseArrow">▶</span> 添加密码' +
+        '</span>' +
+      '</h3>' +
+      '<div class="collapse-body" id="advCollapse">' +
+        '<div class="add-pwd-row">' +
+          '<input type="text" id="newAdvPwd" placeholder="输入新密码">' +
+          '<select id="newAdvMax">' +
+            '<option value="30">30次</option>' +
+            '<option value="50">50次</option>' +
+            '<option value="100" selected>100次</option>' +
+            '<option value="200">200次</option>' +
+            '<option value="0">♾️ 无限</option>' +
+          '</select>' +
+          '<button onclick="addPwd(\'advanced\')">➕ 添加</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="password-search-row">' +
+        '<input type="text" id="pwdSearchInput" placeholder="🔍 搜索密码..." value="' + passwordSearchQuery + '" oninput="filterPasswords(this.value)">' +
+        '<button class="admin-action-btn" onclick="document.getElementById(\'pwdSearchInput\').value=\'\';filterPasswords(\'\');" style="padding:6px 14px;">清空</button>' +
+      '</div>' +
+      '<div class="password-table-wrap">' +
+        '<table class="password-table">' +
+          '<thead><tr><th>密码</th><th>使用次数</th><th>状态</th><th>操作</th></tr></thead>' +
+          '<tbody>' + pwdRows(advFiltered, 'advanced') + '</tbody>' +
+        '</table>' +
+      '</div>' +
+    '</div>' +
 
-    <div class="admin-card">
-      <h3>
-        <span>🔐 专家版密码池 (${expSold}/50 已售)</span>
-        <span style="flex:1;"></span>
-        <span class="collapse-toggle" onclick="toggleCollapse('expCollapse')">
-          <span class="arrow" id="expCollapseArrow">▶</span> 添加密码
-        </span>
-      </h3>
-      <div class="collapse-body" id="expCollapse">
-        <div class="add-pwd-row">
-          <input type="text" id="newExpPwd" placeholder="输入新密码">
-          <select id="newExpMax">
-            <option value="30">30次</option>
-            <option value="50">50次</option>
-            <option value="100" selected>100次</option>
-            <option value="200">200次</option>
-            <option value="0">♾️ 无限</option>
-          </select>
-          <button onclick="addPwd('expert')">➕ 添加</button>
-        </div>
-      </div>
-      <div class="password-table-wrap">
-        <table class="password-table">
-          <thead><tr><th>密码</th><th>使用次数</th><th>状态</th><th>操作</th></tr></thead>
-          <tbody>${pwdRows(expFiltered, 'expert')}</tbody>
-        </table>
-      </div>
-    </div>
+    '<div class="admin-card">' +
+      '<h3>' +
+        '<span>🔐 专家版密码池 (' + expSold + '/50 已售)</span>' +
+        '<span style="flex:1;"></span>' +
+        '<span class="collapse-toggle" onclick="toggleCollapse(\'expCollapse\')">' +
+          '<span class="arrow" id="expCollapseArrow">▶</span> 添加密码' +
+        '</span>' +
+      '</h3>' +
+      '<div class="collapse-body" id="expCollapse">' +
+        '<div class="add-pwd-row">' +
+          '<input type="text" id="newExpPwd" placeholder="输入新密码">' +
+          '<select id="newExpMax">' +
+            '<option value="30">30次</option>' +
+            '<option value="50">50次</option>' +
+            '<option value="100" selected>100次</option>' +
+            '<option value="200">200次</option>' +
+            '<option value="0">♾️ 无限</option>' +
+          '</select>' +
+          '<button onclick="addPwd(\'expert\')">➕ 添加</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="password-table-wrap">' +
+        '<table class="password-table">' +
+          '<thead><tr><th>密码</th><th>使用次数</th><th>状态</th><th>操作</th></tr></thead>' +
+          '<tbody>' + pwdRows(expFiltered, 'expert') + '</tbody>' +
+        '</table>' +
+      '</div>' +
+    '</div>' +
 
-    <div class="admin-card">
-      <h3>⚠️ 危险操作</h3>
-      <button class="admin-action-btn" onclick="if(confirm('确定重置所有数据？')){localStorage.removeItem('promptGenDB');location.reload();}" style="color:var(--accent-red);border-color:var(--accent-red);padding:4px 14px;">🗑️ 重置所有数据</button>
-    </div>
-  `;
+    '<div class="admin-card">' +
+      '<h3>⚠️ 危险操作</h3>' +
+      '<button class="admin-action-btn" onclick="if(confirm(\'确定重置所有数据？\')){localStorage.removeItem(\'promptGenDB\');location.reload();}" style="color:var(--accent-red);border-color:var(--accent-red);padding:4px 14px;">🗑️ 重置所有数据</button>' +
+    '</div>';
 }
 
 function filterPasswords(query) {
@@ -3014,32 +3209,92 @@ function filterPasswords(query) {
   renderAdmin();
 }
 
-// ===== 密码次数编辑功能 =====
+function toggleCollapse(id) {
+  var body = $(id);
+  var arrow = $(id + 'Arrow');
+  if (body) {
+    body.classList.toggle('open');
+    if (arrow) arrow.classList.toggle('open');
+  }
+}
+
+function copyPwd(code) {
+  copyToClipboard(code);
+}
+
+function toggleSold(type, code) {
+  var pool = db.passwords[type];
+  var p = null;
+  for (var i = 0; i < pool.length; i++) {
+    if (pool[i].code === code) { p = pool[i]; break; }
+  }
+  if (p) {
+    p.sold = !p.sold;
+    saveDB(db);
+    renderAdmin();
+    showToast(p.sold ? '已标记为已售' : '已标记为可用', '✅');
+  }
+}
+
+function addPwd(type) {
+  var inputId = type === 'advanced' ? 'newAdvPwd' : 'newExpPwd';
+  var maxId = type === 'advanced' ? 'newAdvMax' : 'newExpMax';
+  var input = $(inputId);
+  var maxSel = $(maxId);
+  if (!input) return;
+  var code = input.value.trim();
+  if (!code) {
+    showToast('请输入密码', '⚠️');
+    return;
+  }
+  var maxVal = maxSel ? parseInt(maxSel.value) : 100;
+  db.passwords[type].push({ code: code, used: 0, max: maxVal, sold: false });
+  saveDB(db);
+  input.value = '';
+  renderAdmin();
+  showToast('密码添加成功', '✅');
+}
+
 function openEditMax(type, code) {
-  editMaxTarget = { type, code };
-  const pool = db.passwords[type];
-  const p = pool.find(x => x.code === code);
+  editMaxTarget = { type: type, code: code };
+  var pool = db.passwords[type];
+  var p = null;
+  for (var i = 0; i < pool.length; i++) {
+    if (pool[i].code === code) { p = pool[i]; break; }
+  }
   if (!p) return;
-  $('editMaxCode').textContent = code;
-  $('editMaxCurrent').textContent = p.max === 0 ? '无限' : p.max;
-  $('editMaxInput').value = p.max === 0 ? '' : p.max;
+  var codeEl = $('editMaxCode');
+  var currentEl = $('editMaxCurrent');
+  var inputEl = $('editMaxInput');
+  if (codeEl) codeEl.textContent = code;
+  if (currentEl) currentEl.textContent = p.max === 0 ? '无限' : p.max;
+  if (inputEl) inputEl.value = p.max === 0 ? '' : p.max;
   openModal('editMaxModal');
 }
 
 function setEditMax(val) {
-  $('editMaxInput').value = val;
+  var input = $('editMaxInput');
+  if (input) input.value = val;
 }
 
 function confirmEditMax() {
   if (!editMaxTarget) return;
-  const val = parseInt($('editMaxInput').value);
+  var input = $('editMaxInput');
+  if (!input) return;
+  var val = parseInt(input.value);
   if (isNaN(val) || val < 0) {
     showToast('请输入有效的次数（0表示无限）', '⚠️');
     return;
   }
-  const pool = db.passwords[editMaxTarget.type];
-  const p = pool.find(x => x.code === editMaxTarget.code);
-  if (!p) { showToast('密码不存在', '❌'); return; }
+  var pool = db.passwords[editMaxTarget.type];
+  var p = null;
+  for (var i = 0; i < pool.length; i++) {
+    if (pool[i].code === editMaxTarget.code) { p = pool[i]; break; }
+  }
+  if (!p) {
+    showToast('密码不存在', '❌');
+    return;
+  }
   p.max = val;
   saveDB(db);
   closeEditMax();
@@ -3052,132 +3307,150 @@ function closeEditMax() {
   editMaxTarget = null;
 }
 
-window.toggleCollapse = function(id) {
-  const body = $(id);
-  const arrow = $(id + 'Arrow');
-  if (body) {
-    body.classList.toggle('open');
-    if (arrow) arrow.classList.toggle('open');
-  }
-};
-
-window.copyPwd = function(code) {
-  copyToClipboard(code);
-};
-
-window.toggleSold = function(type, code) {
-  const p = db.passwords[type].find(x => x.code === code);
-  if (p) { p.sold = !p.sold; saveDB(db); renderAdmin(); showToast(p.sold ? '已标记为已售' : '已标记为可用', '✅'); }
-};
-
-window.addPwd = function(type) {
-  const inputId = type === 'advanced' ? 'newAdvPwd' : 'newExpPwd';
-  const maxId = type === 'advanced' ? 'newAdvMax' : 'newExpMax';
-  const code = $(inputId).value.trim();
-  if (!code) { showToast('请输入密码', '⚠️'); return; }
-  const maxVal = parseInt($(maxId).value);
-  db.passwords[type].push({ code, used: 0, max: maxVal, sold: false });
-  saveDB(db);
-  $(inputId).value = '';
-  renderAdmin();
-  showToast('密码添加成功', '✅');
-};
-
 // ============================================================
-// 平台选项更新（含领域记忆）
+// 平台选项更新
 // ============================================================
 function updatePlatformOptions(field) {
-  const sel = $('platformSelect');
-  const isEcommerce = field === '电商AI绘画';
+  var sel = $('platformSelect');
+  if (!sel) return;
+  var isEcommerce = field === '电商AI绘画';
 
-  let html = '';
+  var html = '';
   if (isEcommerce) {
-    html = `<optgroup label="🎨 绘画专用">`;
-    PLATFORM_DATA.image.forEach(p => {
-      html += `<option value="${p.value}">${p.icon} ${p.label}</option>`;
-    });
-    html += `</optgroup>`;
-  } else {
-    const cn = ['文心一言','通义千问','Kimi','豆包','讯飞星火','智谱清言','DeepSeek','百小应'];
-    const cnList = PLATFORM_DATA.text.filter(p => cn.includes(p.value));
-    const intlList = PLATFORM_DATA.text.filter(p => !cn.includes(p.value));
-
-    if (cnList.length) {
-      html += `<optgroup label="🇨🇳 国内主流">`;
-      cnList.forEach(p => { html += `<option value="${p.value}">${p.icon} ${p.label}</option>`; });
-      html += `</optgroup>`;
+    html = '<optgroup label="🎨 绘画专用">';
+    for (var i = 0; i < PLATFORM_DATA.image.length; i++) {
+      var p = PLATFORM_DATA.image[i];
+      html += '<option value="' + p.value + '">' + p.icon + ' ' + p.label + '</option>';
     }
-    if (intlList.length) {
-      html += `<optgroup label="🌐 国际主流">`;
-      intlList.forEach(p => { html += `<option value="${p.value}">${p.icon} ${p.label}</option>`; });
-      html += `</optgroup>`;
+    html += '</optgroup>';
+  } else {
+    var cn = ['文心一言','通义千问','Kimi','豆包','讯飞星火','智谱清言','DeepSeek','百小应'];
+    var cnList = [];
+    var intlList = [];
+    for (var j = 0; j < PLATFORM_DATA.text.length; j++) {
+      var p2 = PLATFORM_DATA.text[j];
+      if (cn.indexOf(p2.value) !== -1) {
+        cnList.push(p2);
+      } else {
+        intlList.push(p2);
+      }
+    }
+    if (cnList.length > 0) {
+      html += '<optgroup label="🇨🇳 国内主流">';
+      for (var k = 0; k < cnList.length; k++) {
+        var p3 = cnList[k];
+        html += '<option value="' + p3.value + '">' + p3.icon + ' ' + p3.label + '</option>';
+      }
+      html += '</optgroup>';
+    }
+    if (intlList.length > 0) {
+      html += '<optgroup label="🌐 国际主流">';
+      for (var l = 0; l < intlList.length; l++) {
+        var p4 = intlList[l];
+        html += '<option value="' + p4.value + '">' + p4.icon + ' ' + p4.label + '</option>';
+      }
+      html += '</optgroup>';
     }
   }
   sel.innerHTML = html;
 
-  const key = 'last_platform_' + field;
-  const lastVal = localStorage.getItem(key);
-  if (lastVal) {
-    const exists = Array.from(sel.options).some(opt => opt.value === lastVal);
-    if (exists) {
-      sel.value = lastVal;
-      return;
+  var key = 'last_platform_' + field;
+  try {
+    var lastVal = localStorage.getItem(key);
+    if (lastVal) {
+      var exists = false;
+      var opts = sel.options;
+      for (var m = 0; m < opts.length; m++) {
+        if (opts[m].value === lastVal) { exists = true; break; }
+      }
+      if (exists) {
+        sel.value = lastVal;
+        return;
+      }
     }
-  }
+  } catch (e) {}
   sel.selectedIndex = 0;
 }
 
 // ============================================================
-// 弹窗事件绑定（统一管理）
+// 弹窗事件绑定
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
 
   // ---- 解锁弹窗 ----
-  $('unlockCancel').addEventListener('click', function() {
-    closeModal('unlockModal');
-    pendingUnlockLevel = null;
-  });
-  $('unlockModal').addEventListener('click', function(e) {
-    if (e.target === this) {
+  var unlockCancel = $('unlockCancel');
+  if (unlockCancel) {
+    unlockCancel.addEventListener('click', function() {
       closeModal('unlockModal');
       pendingUnlockLevel = null;
-    }
-  });
-  $('unlockConfirm').addEventListener('click', doUnlock);
-  $('unlockInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') doUnlock();
-  });
+    });
+  }
+  var unlockModal = $('unlockModal');
+  if (unlockModal) {
+    unlockModal.addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal('unlockModal');
+        pendingUnlockLevel = null;
+      }
+    });
+  }
+  var unlockConfirm = $('unlockConfirm');
+  if (unlockConfirm) unlockConfirm.addEventListener('click', doUnlock);
+  var unlockInput = $('unlockInput');
+  if (unlockInput) {
+    unlockInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') doUnlock();
+    });
+  }
 
   // ---- 密码编辑弹窗 ----
-  $('editMaxModal').addEventListener('click', function(e) {
-    if (e.target === this) closeEditMax();
-  });
-  $('editMaxInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') confirmEditMax();
-  });
+  var editMaxModal = $('editMaxModal');
+  if (editMaxModal) {
+    editMaxModal.addEventListener('click', function(e) {
+      if (e.target === this) closeEditMax();
+    });
+  }
+  var editMaxInput = $('editMaxInput');
+  if (editMaxInput) {
+    editMaxInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') confirmEditMax();
+    });
+  }
 
   // ---- 复制弹窗 ----
-  $('copyClose').addEventListener('click', function() {
-    closeModal('copyModal');
-  });
-  $('copyModal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal('copyModal');
-  });
+  var copyClose = $('copyClose');
+  if (copyClose) {
+    copyClose.addEventListener('click', function() {
+      closeModal('copyModal');
+    });
+  }
+  var copyModal = $('copyModal');
+  if (copyModal) {
+    copyModal.addEventListener('click', function(e) {
+      if (e.target === this) closeModal('copyModal');
+    });
+  }
 
   // ---- 引导弹窗 ----
-  $('guideCloseBtn').addEventListener('click', function() {
-    closeModal('guideModal');
-  });
-  $('guideModal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal('guideModal');
-  });
+  var guideClose = $('guideCloseBtn');
+  if (guideClose) {
+    guideClose.addEventListener('click', function() {
+      closeModal('guideModal');
+    });
+  }
+  var guideModal = $('guideModal');
+  if (guideModal) {
+    guideModal.addEventListener('click', function(e) {
+      if (e.target === this) closeModal('guideModal');
+    });
+  }
 
-  // ---- 全局 ESC 键关闭弹窗 ----
+  // ---- ESC键关闭弹窗 ----
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-      const openModalEl = document.querySelector('.modal-overlay.active');
+      var openModalEl = document.querySelector('.modal-overlay.active');
       if (openModalEl) {
-        const id = openModalEl.id;
+        var id = openModalEl.id;
         if (id === 'unlockModal') {
           closeModal('unlockModal');
           pendingUnlockLevel = null;
@@ -3193,188 +3466,280 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // ---- 领域切换 ----
-  document.querySelectorAll('.field-card').forEach(card => {
-    card.addEventListener('click', function() {
-      document.querySelectorAll('.field-card').forEach(f => f.classList.remove('active'));
-      this.classList.add('active');
-      const field = this.dataset.field;
-      const isEcommerce = field === '电商AI绘画';
-      updatePlatformOptions(field);
-      $('ecommerceTagSection').style.display = isEcommerce ? 'block' : 'none';
-      if (isEcommerce) {
-        currentLevel = 'expert';
-        document.querySelectorAll('.complexity-card').forEach(c => c.classList.toggle('selected', c.dataset.level === 'expert'));
-      }
-    });
-  });
+  var fieldCards = document.querySelectorAll('.field-card');
+  for (var i = 0; i < fieldCards.length; i++) {
+    (function(card) {
+      card.addEventListener('click', function() {
+        var allCards = document.querySelectorAll('.field-card');
+        for (var c = 0; c < allCards.length; c++) {
+          allCards[c].classList.remove('active');
+        }
+        this.classList.add('active');
+        var field = this.getAttribute('data-field');
+        var isEcommerce = field === '电商AI绘画';
+        updatePlatformOptions(field);
+        var ecomSec = $('ecommerceTagSection');
+        if (ecomSec) ecomSec.style.display = isEcommerce ? 'block' : 'none';
+        if (isEcommerce) {
+          currentLevel = 'expert';
+          var cCards = document.querySelectorAll('.complexity-card');
+          for (var cc = 0; cc < cCards.length; cc++) {
+            cCards[cc].classList.toggle('selected', cCards[cc].getAttribute('data-level') === 'expert');
+          }
+        }
+      });
+    })(fieldCards[i]);
+  }
 
   // ---- 平台切换记忆 ----
-  const platSel = $('platformSelect');
+  var platSel = $('platformSelect');
   if (platSel) {
     platSel.addEventListener('change', function() {
-      const field = getCurrentField();
-      const key = 'last_platform_' + field;
-      localStorage.setItem(key, this.value);
+      var field = getCurrentField();
+      var key = 'last_platform_' + field;
+      try {
+        localStorage.setItem(key, this.value);
+      } catch (e) {}
     });
   }
 
   // ---- 模板筛选 ----
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      currentTemplateFilter = this.dataset.filter;
-      renderTemplates();
-    });
-  });
+  var filterBtns = document.querySelectorAll('.filter-btn');
+  for (var f = 0; f < filterBtns.length; f++) {
+    (function(btn) {
+      btn.addEventListener('click', function() {
+        var allBtns = document.querySelectorAll('.filter-btn');
+        for (var b = 0; b < allBtns.length; b++) {
+          allBtns[b].classList.remove('active');
+        }
+        this.classList.add('active');
+        currentTemplateFilter = this.getAttribute('data-filter');
+        renderTemplates();
+      });
+    })(filterBtns[f]);
+  }
 
   // ---- 复杂度 ----
-  document.querySelectorAll('.complexity-card').forEach(card => {
-    card.addEventListener('click', function() {
-      document.querySelectorAll('.complexity-card').forEach(c => c.classList.remove('selected'));
-      this.classList.add('selected');
-      currentLevel = this.dataset.level;
-    });
-  });
+  var complexityCards = document.querySelectorAll('.complexity-card');
+  for (var d = 0; d < complexityCards.length; d++) {
+    (function(card) {
+      card.addEventListener('click', function() {
+        var allCards = document.querySelectorAll('.complexity-card');
+        for (var c = 0; c < allCards.length; c++) {
+          allCards[c].classList.remove('selected');
+        }
+        this.classList.add('selected');
+        currentLevel = this.getAttribute('data-level');
+      });
+    })(complexityCards[d]);
+  }
 
   // ---- 生成按钮 ----
-  $('generateBtn').addEventListener('click', doGenerate);
-  $('optimizeBtn').addEventListener('click', doOptimize);
-  $('batchBtn').addEventListener('click', doBatchGenerate);
+  var genBtn = $('generateBtn');
+  if (genBtn) genBtn.addEventListener('click', doGenerate);
+  var optBtn = $('optimizeBtn');
+  if (optBtn) optBtn.addEventListener('click', doOptimize);
+  var batBtn = $('batchBtn');
+  if (batBtn) batBtn.addEventListener('click', doBatchGenerate);
 
   // ---- 标签点击 ----
-  document.querySelectorAll('.tag:not(#ecommerceTagContainer .tag)').forEach(tag => {
-    tag.addEventListener('click', function() {
-      const field = this.dataset.field || '内容创作';
-      document.querySelectorAll('.field-card').forEach(f => f.classList.toggle('active', f.dataset.field === field));
-      $('taskInput').value = this.dataset.task;
-      updatePlatformOptions(field);
-      const isEcommerce = field === '电商AI绘画';
-      $('ecommerceTagSection').style.display = isEcommerce ? 'block' : 'none';
-      if (isEcommerce) {
-        currentLevel = 'expert';
-        document.querySelectorAll('.complexity-card').forEach(c => c.classList.toggle('selected', c.dataset.level === 'expert'));
-      }
-    });
-  });
+  var tags = document.querySelectorAll('.tag:not(#ecommerceTagContainer .tag)');
+  for (var t = 0; t < tags.length; t++) {
+    (function(tag) {
+      tag.addEventListener('click', function() {
+        var field = this.getAttribute('data-field') || '内容创作';
+        var fCards = document.querySelectorAll('.field-card');
+        for (var fc = 0; fc < fCards.length; fc++) {
+          fCards[fc].classList.toggle('active', fCards[fc].getAttribute('data-field') === field);
+        }
+        var taskInput = $('taskInput');
+        if (taskInput) taskInput.value = this.getAttribute('data-task');
+        updatePlatformOptions(field);
+        var isEcommerce = field === '电商AI绘画';
+        var ecomSec = $('ecommerceTagSection');
+        if (ecomSec) ecomSec.style.display = isEcommerce ? 'block' : 'none';
+        if (isEcommerce) {
+          currentLevel = 'expert';
+          var cCards = document.querySelectorAll('.complexity-card');
+          for (var cc = 0; cc < cCards.length; cc++) {
+            cCards[cc].classList.toggle('selected', cCards[cc].getAttribute('data-level') === 'expert');
+          }
+        }
+      });
+    })(tags[t]);
+  }
 
-  document.querySelectorAll('#ecommerceTagContainer .tag').forEach(tag => {
-    tag.addEventListener('click', function() {
-      $('taskInput').value = this.dataset.task;
-    });
-  });
+  var ecomTags = document.querySelectorAll('#ecommerceTagContainer .tag');
+  for (var e = 0; e < ecomTags.length; e++) {
+    (function(tag) {
+      tag.addEventListener('click', function() {
+        var taskInput = $('taskInput');
+        if (taskInput) taskInput.value = this.getAttribute('data-task');
+      });
+    })(ecomTags[e]);
+  }
 
   // ---- 清空/粘贴 ----
-  $('clearBtn').addEventListener('click', () => { $('taskInput').value = ''; $('taskInput').focus(); });
-  $('pasteBtn').addEventListener('click', async () => {
-    try { const t = await navigator.clipboard.readText(); $('taskInput').value = t; } catch(e) { showToast('无法读取剪贴板', '⚠️'); }
-  });
-
-  // ---- 导航 ----
-  document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      showPage(this.dataset.page);
-      if (window.innerWidth <= 768) {
-        $('configPanel').classList.remove('open');
-        $('overlay').classList.remove('active');
-        $('mobileNavPanel').classList.remove('open');
-        $('mobileNavOverlay').classList.remove('active');
+  var clearBtn = $('clearBtn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function() {
+      var taskInput = $('taskInput');
+      if (taskInput) { taskInput.value = ''; taskInput.focus(); }
+    });
+  }
+  var pasteBtn = $('pasteBtn');
+  if (pasteBtn) {
+    pasteBtn.addEventListener('click', function() {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText().then(function(text) {
+          var taskInput = $('taskInput');
+          if (taskInput) taskInput.value = text;
+        }).catch(function() {
+          showToast('无法读取剪贴板', '⚠️');
+        });
+      } else {
+        showToast('无法读取剪贴板', '⚠️');
       }
     });
-  });
+  }
+
+  // ---- 导航 ----
+  var navBtns = document.querySelectorAll('.nav-btn');
+  for (var n = 0; n < navBtns.length; n++) {
+    (function(btn) {
+      btn.addEventListener('click', function() {
+        showPage(this.getAttribute('data-page'));
+        if (window.innerWidth <= 768) {
+          var panel = $('configPanel');
+          if (panel) panel.classList.remove('open');
+          var ov = $('overlay');
+          if (ov) ov.classList.remove('active');
+          var mPanel = $('mobileNavPanel');
+          if (mPanel) mPanel.classList.remove('open');
+          var mOv = $('mobileNavOverlay');
+          if (mOv) mOv.classList.remove('active');
+        }
+      });
+    })(navBtns[n]);
+  }
 
   // ---- 手机端配置面板 ----
-  const configPanel = $('configPanel');
-  const overlay = $('overlay');
+  var configPanel = $('configPanel');
+  var overlay = $('overlay');
 
-  $('mobileMenuBtn').addEventListener('click', function(e) {
-    e.stopPropagation();
-    configPanel.classList.toggle('open');
-    overlay.classList.toggle('active');
-  });
+  var mobileMenuBtn = $('mobileMenuBtn');
+  if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (configPanel && overlay) {
+        configPanel.classList.toggle('open');
+        overlay.classList.toggle('active');
+      }
+    });
+  }
 
-  overlay.addEventListener('click', function() {
-    configPanel.classList.remove('open');
-    overlay.classList.remove('active');
-  });
+  if (overlay) {
+    overlay.addEventListener('click', function() {
+      if (configPanel) configPanel.classList.remove('open');
+      if (overlay) overlay.classList.remove('active');
+    });
+  }
 
   // 点击右侧结果区关闭配置面板（手机端）
-  const resultPanel = $('resultPanel');
+  var resultPanel = $('resultPanel');
   if (resultPanel) {
     resultPanel.addEventListener('click', function(e) {
-      if (window.innerWidth <= 768 && configPanel.classList.contains('open')) {
+      if (window.innerWidth <= 768 && configPanel && configPanel.classList.contains('open')) {
         if (!e.target.closest('.config-panel')) {
           configPanel.classList.remove('open');
-          overlay.classList.remove('active');
+          if (overlay) overlay.classList.remove('active');
         }
       }
     });
   }
 
   // ---- 手机端导航面板 ----
-  const mobileNavPanel = $('mobileNavPanel');
-  const mobileNavOverlay = $('mobileNavOverlay');
+  var mobileNavPanel = $('mobileNavPanel');
+  var mobileNavOverlay = $('mobileNavOverlay');
 
-  mobileNavOverlay.addEventListener('click', function() {
-    mobileNavPanel.classList.remove('open');
-    mobileNavOverlay.classList.remove('active');
-  });
-
-  document.querySelectorAll('.mobile-nav-item').forEach(item => {
-    item.addEventListener('click', function() {
-      showPage(this.dataset.page);
-      mobileNavPanel.classList.remove('open');
-      mobileNavOverlay.classList.remove('active');
+  if (mobileNavOverlay) {
+    mobileNavOverlay.addEventListener('click', function() {
+      if (mobileNavPanel) mobileNavPanel.classList.remove('open');
+      if (mobileNavOverlay) mobileNavOverlay.classList.remove('active');
     });
-  });
+  }
+
+  var mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+  for (var mi = 0; mi < mobileNavItems.length; mi++) {
+    (function(item) {
+      item.addEventListener('click', function() {
+        showPage(this.getAttribute('data-page'));
+        if (mobileNavPanel) mobileNavPanel.classList.remove('open');
+        if (mobileNavOverlay) mobileNavOverlay.classList.remove('active');
+      });
+    })(mobileNavItems[mi]);
+  }
 
   // ---- 邀请码按钮 ----
   function openInviteModal() {
     pendingUnlockLevel = 'expert';
     showUnlockModal('专家版');
   }
-  $('navInviteBtn').addEventListener('click', openInviteModal);
-  $('mobileNavInviteBtn').addEventListener('click', function() {
-    mobileNavPanel.classList.remove('open');
-    mobileNavOverlay.classList.remove('active');
-    openInviteModal();
-  });
+  var navInvite = $('navInviteBtn');
+  if (navInvite) navInvite.addEventListener('click', openInviteModal);
+  var mobileNavInvite = $('mobileNavInviteBtn');
+  if (mobileNavInvite) {
+    mobileNavInvite.addEventListener('click', function() {
+      if (mobileNavPanel) mobileNavPanel.classList.remove('open');
+      if (mobileNavOverlay) mobileNavOverlay.classList.remove('active');
+      openInviteModal();
+    });
+  }
 
   // ---- iOS触摸优化 ----
-  let lastTouchEnd = 0;
+  var lastTouchEnd = 0;
   document.addEventListener('touchend', function(e) {
-    const now = Date.now();
+    var now = Date.now();
     if (now - lastTouchEnd <= 300) e.preventDefault();
     lastTouchEnd = now;
   }, { passive: false });
 
-  let touchStartX = 0;
-  document.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+  var touchStartX = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+
   document.addEventListener('touchmove', function(e) {
-    if (!configPanel.classList.contains('open')) return;
-    const dx = touchStartX - e.touches[0].clientX;
+    if (!configPanel || !configPanel.classList.contains('open')) return;
+    var touchX = e.touches[0].clientX;
+    var dx = touchStartX - touchX;
     if (dx > 40 && touchStartX < 80) {
       configPanel.classList.remove('open');
-      overlay.classList.remove('active');
+      if (overlay) overlay.classList.remove('active');
     }
   }, { passive: true });
 
   // ---- 底部许可证 ----
-  $('licenseLink').addEventListener('click', function(e) {
-    e.preventDefault();
-    window.open('https://opensource.org/licenses/MIT', '_blank');
-  });
+  var licenseLink = $('licenseLink');
+  if (licenseLink) {
+    licenseLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.open('https://opensource.org/licenses/MIT', '_blank');
+    });
+  }
 
   // ---- 初始化 ----
-  const initialField = getCurrentField();
+  var initialField = getCurrentField();
   updatePlatformOptions(initialField);
   updateStats();
   renderTemplates();
   updateTemplateLocks();
   updateFeatureButtons();
 
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('admin') === ADMIN_PASSWORD) { showPage('admin'); }
+  var urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('admin') === ADMIN_PASSWORD) {
+    showPage('admin');
+  }
 
   console.log('✅ AI提示词生成器 优化版已加载');
 });
