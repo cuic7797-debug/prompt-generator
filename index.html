@@ -630,6 +630,7 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: rgba(124,92,252,0.4); }
 .hidden { display: none !important; }
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -1026,6 +1027,8 @@ function getDB() {
 }
 
 function saveDB(db) {
+  if (db.history && db.history.length > 50) db.history = db.history.slice(0, 50);
+  if (db.favorites && db.favorites.length > 100) db.favorites = db.favorites.slice(0, 100);
   try { localStorage.setItem('promptGenDB', JSON.stringify(db)); } catch (e) {}
 }
 
@@ -1872,7 +1875,9 @@ function renderTemplates() {
           else fCards[fc].classList.remove('active');
         }
         var taskInput = $('taskInput');
+        var drawerTask = $('drawer_taskInput');
         if (taskInput) taskInput.value = task;
+        if (drawerTask) drawerTask.value = task;
         currentLevel = this.getAttribute('data-level');
         var cCards = document.querySelectorAll('.complexity-card');
         for (var cc = 0; cc < cCards.length; cc++) {
@@ -1944,7 +1949,9 @@ function loadHistory(id) {
     else fCards[j].classList.remove('active');
   }
   var taskInput = $('taskInput');
+  var drawerTask = $('drawer_taskInput');
   if (taskInput) taskInput.value = result.task;
+  if (drawerTask) drawerTask.value = result.task;
   currentLevel = result.level;
   var cCards = document.querySelectorAll('.complexity-card');
   for (var k = 0; k < cCards.length; k++) {
@@ -2172,7 +2179,7 @@ function closeEditMax() { closeModal('editMaxModal'); editMaxTarget = null; }
 // ---- 平台选项 ----
 function updatePlatformOptions(field) {
   var sel = $('platformSelect');
-  if (!sel) return;
+  var drawerSel = $('drawer_platformSelect');
   var isEcommerce = (field === '电商AI绘画');
   var html = '';
   if (isEcommerce) {
@@ -2203,16 +2210,24 @@ function updatePlatformOptions(field) {
       html += '</optgroup>';
     }
   }
-  sel.innerHTML = html;
+  if (sel) sel.innerHTML = html;
+  if (drawerSel) drawerSel.innerHTML = html;
   var key = 'last_platform_' + field;
-  try {
-    var lastVal = localStorage.getItem(key);
-    if (lastVal) {
+  var lastVal = '';
+  try { lastVal = localStorage.getItem(key); } catch (e) {}
+  if (lastVal) {
+    if (sel) {
       var opts = sel.options;
-      for (var n = 0; n < opts.length; n++) { if (opts[n].value === lastVal) { sel.value = lastVal; return; } }
+      for (var n = 0; n < opts.length; n++) { if (opts[n].value === lastVal) { sel.value = lastVal; break; } }
     }
-  } catch (e) {}
-  sel.selectedIndex = 0;
+    if (drawerSel) {
+      var dopts = drawerSel.options;
+      for (var n2 = 0; n2 < dopts.length; n2++) { if (dopts[n2].value === lastVal) { drawerSel.value = lastVal; break; } }
+    }
+  } else {
+    if (sel) sel.selectedIndex = 0;
+    if (drawerSel) drawerSel.selectedIndex = 0;
+  }
 }
 
 // ---- 标签数据 ----
@@ -2345,6 +2360,59 @@ function initMobileUI() {
     drawerContent.innerHTML = '';
     drawerContent.appendChild(clone);
   }
+
+  // ===== 修复：抽屉与原始面板数据双向同步 =====
+  function syncDrawerInputs() {
+    var origTask = $('taskInput');
+    var drawerTask = $('drawer_taskInput');
+    if (origTask && drawerTask) {
+      origTask.addEventListener('input', function() { drawerTask.value = origTask.value; });
+      drawerTask.addEventListener('input', function() { origTask.value = drawerTask.value; });
+    }
+    var origPlat = $('platformSelect');
+    var drawerPlat = $('drawer_platformSelect');
+    if (origPlat && drawerPlat) {
+      origPlat.addEventListener('change', function() { drawerPlat.value = origPlat.value; });
+      drawerPlat.addEventListener('change', function() { origPlat.value = drawerPlat.value; });
+    }
+  }
+  syncDrawerInputs();
+
+  // ===== 修复：为抽屉内克隆按钮补充事件绑定 =====
+  var dGen = $('drawer_generateBtn');
+  if (dGen) dGen.addEventListener('click', doGenerate);
+  var dOpt = $('drawer_optimizeBtn');
+  if (dOpt) dOpt.addEventListener('click', doOptimize);
+  var dBat = $('drawer_batchBtn');
+  if (dBat) dBat.addEventListener('click', doBatchGenerate);
+  var dClear = $('drawer_clearBtn');
+  if (dClear) dClear.addEventListener('click', function() {
+    var inp = $('drawer_taskInput');
+    var orig = $('taskInput');
+    if (inp) { inp.value = ''; inp.focus(); }
+    if (orig) { orig.value = ''; }
+  });
+  var dPaste = $('drawer_pasteBtn');
+  if (dPaste) {
+    dPaste.addEventListener('click', function() {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText().then(function(text) {
+          var inp = $('drawer_taskInput');
+          var orig = $('taskInput');
+          if (inp) inp.value = text;
+          if (orig) orig.value = text;
+        }).catch(function() { showToast('无法读取剪贴板', '⚠️'); });
+      } else { showToast('无法读取剪贴板', '⚠️'); }
+    });
+  }
+  var dPlat = $('drawer_platformSelect');
+  if (dPlat) {
+    dPlat.addEventListener('change', function() {
+      var field = getCurrentField();
+      var key = 'last_platform_' + field;
+      try { localStorage.setItem(key, this.value); } catch (e) {}
+    });
+  }
 }
 
 // ---- 主初始化 ----
@@ -2403,7 +2471,9 @@ function initApp() {
   var clearBtn = $('clearBtn');
   if (clearBtn) clearBtn.addEventListener('click', function() {
     var taskInput = $('taskInput');
+    var drawerTask = $('drawer_taskInput');
     if (taskInput) { taskInput.value = ''; taskInput.focus(); }
+    if (drawerTask) { drawerTask.value = ''; }
   });
   var pasteBtn = $('pasteBtn');
   if (pasteBtn) {
@@ -2411,7 +2481,9 @@ function initApp() {
       if (navigator.clipboard && navigator.clipboard.readText) {
         navigator.clipboard.readText().then(function(text) {
           var taskInput = $('taskInput');
+          var drawerTask = $('drawer_taskInput');
           if (taskInput) taskInput.value = text;
+          if (drawerTask) drawerTask.value = text;
         }).catch(function() { showToast('无法读取剪贴板', '⚠️'); });
       } else { showToast('无法读取剪贴板', '⚠️'); }
     });
