@@ -224,6 +224,7 @@ body {
   position: relative;
   left: 0;
   transition: left 0.32s cubic-bezier(0.4,0,0.2,1);
+  z-index: 100;
 }
 
 .config-section { margin-bottom: 22px; }
@@ -515,7 +516,48 @@ body {
   font-size: 32px; margin-bottom: 18px;
 }
 .empty-title { font-size: 19px; font-weight: 600; margin-bottom: 6px; }
-.empty-desc { color: var(--text-muted); font-size: 14px; max-width: 420px; line-height: 1.7; }
+.empty-desc {
+  color: var(--text-muted);
+  font-size: 14px;
+  max-width: 420px;
+  line-height: 1.7;
+}
+
+/* ---- 新手指引（3步走） ---- */
+.onboarding-guide {
+  display: flex;
+  gap: 16px;
+  margin: 16px auto 0;
+  max-width: 480px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.onboarding-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 80px;
+  padding: 10px 12px;
+  background: var(--bg-glass);
+  border-radius: 10px;
+  border: 1px solid var(--border-glass);
+}
+.onboarding-step .step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--accent-purple);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.onboarding-step .step-icon { font-size: 24px; }
+.onboarding-step .step-label { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+.onboarding-step .step-desc { font-size: 10px; color: var(--text-muted); }
 
 /* ---- 结果卡片 ---- */
 .result-card {
@@ -793,29 +835,49 @@ body {
   background: rgba(0,0,0,0.7);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 3000;
-  opacity: 0; visibility: hidden;
+  opacity: 0;
+  visibility: hidden;
   transition: all 0.3s;
 }
-.modal-overlay.active { opacity: 1; visibility: visible; }
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
 
 .modal {
   background: var(--bg-secondary);
   border: 1px solid var(--border-glass);
   border-radius: 16px;
   padding: 28px 32px;
-  max-width: 520px; width: 92%;
+  max-width: 520px;
+  width: 92%;
   box-shadow: 0 16px 64px rgba(0,0,0,0.6);
-  transform: scale(0.92); transition: transform 0.3s;
+  transform: scale(0.92);
+  transition: transform 0.3s;
 }
-.modal-overlay.active .modal { transform: scale(1); }
+.modal-overlay.active .modal {
+  transform: scale(1);
+}
 
-.modal-title { font-size: 19px; font-weight: 600; margin-bottom: 4px; }
-.modal-desc { color: var(--text-muted); font-size: 14px; margin-bottom: 18px; line-height: 1.6; }
+.modal-title {
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.modal-desc {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 18px;
+  line-height: 1.6;
+}
 
 .modal-input {
-  width: 100%; padding: 12px 16px;
+  width: 100%;
+  padding: 12px 16px;
   background: var(--bg-primary);
   border: 1px solid var(--border-glass);
   border-radius: 8px;
@@ -823,23 +885,42 @@ body {
   font-size: 15px;
   margin-bottom: 14px;
 }
-.modal-input:focus { outline: none; border-color: var(--accent-purple); }
+.modal-input:focus {
+  outline: none;
+  border-color: var(--accent-purple);
+}
 
-.modal-actions { display: flex; gap: 10px; }
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
 .modal-btn {
-  flex:1; padding: 12px;
-  border-radius: 8px; border: none;
-  font-size: 14px; font-weight: 600;
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
 }
-.modal-btn-primary { background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink)); color: white; }
-.modal-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(124,92,252,0.3); }
-.modal-btn-secondary { background: var(--bg-glass); color: var(--text-secondary); border: 1px solid var(--border-glass); }
+.modal-btn-primary {
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+  color: white;
+}
+.modal-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(124, 92, 252, 0.3);
+}
+.modal-btn-secondary {
+  background: var(--bg-glass);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-glass);
+}
 
 .modal-invite-box {
-  background: rgba(245,179,66,0.06);
-  border: 1px solid rgba(245,179,66,0.12);
+  background: rgba(245, 179, 66, 0.06);
+  border: 1px solid rgba(245, 179, 66, 0.12);
   border-radius: 8px;
   padding: 12px 16px;
   margin-bottom: 14px;
@@ -847,20 +928,28 @@ body {
   align-items: center;
   justify-content: space-between;
 }
-.modal-invite-box .label { font-size: 12px; color: var(--text-secondary); }
-.modal-invite-box .value { font-size: 16px; font-weight: 700; color: var(--accent-amber); }
+.modal-invite-box .label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.modal-invite-box .value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent-amber);
+}
 
 .copy-modal textarea {
-  width:100%; min-height:160px;
-  padding:12px;
-  background:var(--bg-primary);
-  border:1px solid var(--border-glass);
-  border-radius:8px;
-  color:var(--text-primary);
-  font-size:13px;
-  font-family:monospace;
-  resize:vertical;
-  margin-bottom:12px;
+  width: 100%;
+  min-height: 160px;
+  padding: 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-glass);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: monospace;
+  resize: vertical;
+  margin-bottom: 12px;
 }
 
 #guidePlatformGrid {
@@ -888,52 +977,81 @@ body {
   gap: 4px;
 }
 .platform-btn:hover {
-  background: rgba(124,92,252,0.12);
+  background: rgba(124, 92, 252, 0.12);
   border-color: var(--accent-purple);
   transform: translateY(-2px);
 }
 .platform-btn.highlighted {
-  background: rgba(124,92,252,0.18);
+  background: rgba(124, 92, 252, 0.18);
   border-color: var(--accent-purple);
-  box-shadow: 0 0 20px rgba(124,92,252,0.15);
+  box-shadow: 0 0 20px rgba(124, 92, 252, 0.15);
 }
-.platform-btn .icon { font-size: 22px; }
-.platform-btn .name { font-size: 12px; }
+.platform-btn .icon {
+  font-size: 22px;
+}
+.platform-btn .name {
+  font-size: 12px;
+}
 
 /* ===== Toast ===== */
 .toast {
-  position: fixed; bottom: 30px; left: 50%;
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
   transform: translateX(-50%) translateY(80px);
   background: var(--bg-secondary);
   border: 1px solid var(--border-glass);
-  padding: 10px 22px; border-radius: 8px;
-  display: flex; align-items: center; gap: 8px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  padding: 10px 22px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   z-index: 4000;
   opacity: 0;
   transition: all 0.35s;
 }
-.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-.toast-icon { font-size: 16px; }
-.toast-text { font-size: 14px; }
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+.toast-icon {
+  font-size: 16px;
+}
+.toast-text {
+  font-size: 14px;
+}
 
-/* ===== 遮罩 ===== */
+/* ===== 遮罩（手机端配置面板专用） ===== */
 .overlay {
-  position: fixed; top:0; left:0; right:0; bottom:0;
-  background: rgba(0,0,0,0.4);
-  z-index: 900;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 99;
   display: none;
 }
-.overlay.active { display: block; }
+.overlay.active {
+  display: block;
+}
 
 /* ===== 页面切换 ===== */
-.page { display: none; }
-.page.active { display: block; }
+.page {
+  display: none;
+}
+.page.active {
+  display: block;
+}
 
 /* ===== 底部 ===== */
 #page-footer {
-  position: fixed; bottom:0; left:0; right:0;
-  background: rgba(11,11,20,0.85);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(11, 11, 20, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid var(--border-glass);
@@ -943,19 +1061,34 @@ body {
   text-align: center;
 }
 .footer-content {
-  display: flex; align-items: center; justify-content: center;
-  gap: 12px; flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
-.footer-copyright { color: rgba(255,255,255,0.35); font-size: 11px; }
-.footer-divider { color: rgba(255,255,255,0.1); font-size: 11px; }
+.footer-copyright {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 11px;
+}
+.footer-divider {
+  color: rgba(255, 255, 255, 0.1);
+  font-size: 11px;
+}
 .footer-license {
-  color: rgba(100,200,255,0.5);
+  color: rgba(100, 200, 255, 0.5);
   font-size: 11px;
   text-decoration: none;
   transition: color 0.3s;
 }
-.footer-license:hover { color: rgba(100,200,255,0.9); text-decoration: underline; }
-.footer-qq { color: rgba(255,255,255,0.3); font-size: 11px; }
+.footer-license:hover {
+  color: rgba(100, 200, 255, 0.9);
+  text-decoration: underline;
+}
+.footer-qq {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 11px;
+}
 
 /* ===== 管理面板 ===== */
 .admin-wrap {
@@ -1000,9 +1133,33 @@ body {
   margin-top: 2px;
 }
 
+.password-search-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.password-search-row input {
+  flex: 1;
+  min-width: 180px;
+  padding: 8px 14px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-glass);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+.password-search-row input:focus {
+  outline: none;
+  border-color: var(--accent-purple);
+}
+.password-search-row input::placeholder {
+  color: var(--text-muted);
+}
+
 .password-table-wrap {
   overflow-x: auto;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 .password-table {
   width: 100%;
@@ -1031,9 +1188,15 @@ body {
   padding: 2px 8px;
   border-radius: 4px;
 }
-.password-table .status-avail { color: var(--accent-green); }
-.password-table .status-sold { color: var(--accent-amber); }
-.password-table .status-depleted { color: var(--accent-red); }
+.password-table .status-avail {
+  color: var(--accent-green);
+}
+.password-table .status-sold {
+  color: var(--accent-amber);
+}
+.password-table .status-depleted {
+  color: var(--accent-red);
+}
 
 .admin-action-btn {
   padding: 2px 10px;
@@ -1060,11 +1223,23 @@ body {
   color: var(--text-secondary);
   font-size: 13px;
 }
-.collapse-toggle:hover { color: var(--text-primary); }
-.collapse-toggle .arrow { transition: transform 0.25s; }
-.collapse-toggle .arrow.open { transform: rotate(90deg); }
-.collapse-body { overflow: hidden; transition: max-height 0.3s ease; max-height: 0; }
-.collapse-body.open { max-height: 600px; }
+.collapse-toggle:hover {
+  color: var(--text-primary);
+}
+.collapse-toggle .arrow {
+  transition: transform 0.25s;
+}
+.collapse-toggle .arrow.open {
+  transform: rotate(90deg);
+}
+.collapse-body {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  max-height: 0;
+}
+.collapse-body.open {
+  max-height: 600px;
+}
 
 .add-pwd-row {
   display: flex;
@@ -1083,7 +1258,10 @@ body {
   color: var(--text-primary);
   font-size: 13px;
 }
-.add-pwd-row input:focus { outline: none; border-color: var(--accent-purple); }
+.add-pwd-row input:focus {
+  outline: none;
+  border-color: var(--accent-purple);
+}
 .add-pwd-row select {
   padding: 8px 12px;
   background: var(--bg-primary);
@@ -1104,23 +1282,46 @@ body {
   cursor: pointer;
   transition: all 0.2s;
 }
-.add-pwd-row button:hover { background: var(--accent-purple-light); }
+.add-pwd-row button:hover {
+  background: var(--accent-purple-light);
+}
 
 /* ===== 响应式 ===== */
 @media (min-width: 769px) {
   .mobile-nav-overlay,
-  .mobile-nav-panel { display: none !important; }
-  .mobile-menu-btn { display: none !important; }
-  .nav-links { display: flex !important; }
-  .nav-right { display: flex !important; }
+  .mobile-nav-panel {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: none !important;
+  }
+  .nav-links {
+    display: flex !important;
+  }
+  .nav-right {
+    display: flex !important;
+  }
+  .overlay {
+    display: none !important;
+  }
 }
 
 @media (max-width: 768px) {
-  .nav-links { display: none !important; }
-  .nav-right { display: none !important; }
-  .mobile-menu-btn { display: block !important; }
-  .mobile-nav-overlay { display: block; }
-  .mobile-nav-panel { display: flex; }
+  .nav-links {
+    display: none !important;
+  }
+  .nav-right {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: block !important;
+  }
+  .mobile-nav-overlay {
+    display: block;
+  }
+  .mobile-nav-panel {
+    display: flex;
+  }
 
   .config-panel {
     position: fixed;
@@ -1133,81 +1334,236 @@ body {
     padding: 20px 18px;
     border-right: none;
     border-radius: 0 20px 20px 0;
-    box-shadow: 8px 0 48px rgba(0,0,0,0.6);
+    box-shadow: 8px 0 48px rgba(0, 0, 0, 0.6);
   }
-  .config-panel.open { left: 0 !important; }
+  .config-panel.open {
+    left: 0 !important;
+  }
 
-  .section-label { font-size: 15px; }
-  .field-card { padding: 10px 8px; font-size: 14px; }
-  .field-card .icon { font-size: 20px; }
-  .field-card .label { font-size: 14px; }
-  .platform-select-wrap select { font-size: 16px; padding: 12px 14px; }
-  .textarea-wrap textarea { font-size: 16px; min-height: 120px; padding: 12px 14px; }
-  .tag { padding: 10px 14px; font-size: 14px; }
-  .tag .tag-main { font-size: 14px; }
-  .tag .tag-sub { font-size: 12px; }
-  .tag .tag-effect { font-size: 12px; }
-  .complexity-card { padding: 14px 16px; }
-  .complexity-name { font-size: 15px; }
-  .complexity-desc { font-size: 13px; }
-  .complexity-features { font-size: 12px; }
-  .generate-btn { font-size: 17px; padding: 16px; }
-  .stat-value { font-size: 22px; }
-  .stat-label { font-size: 12px; }
-  .invite-remaining { font-size: 14px; }
-  .invite-remaining strong { font-size: 18px; }
+  .section-label {
+    font-size: 15px;
+  }
+  .field-card {
+    padding: 10px 8px;
+    font-size: 14px;
+  }
+  .field-card .icon {
+    font-size: 20px;
+  }
+  .field-card .label {
+    font-size: 14px;
+  }
+  .platform-select-wrap select {
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+  .textarea-wrap textarea {
+    font-size: 16px;
+    min-height: 120px;
+    padding: 12px 14px;
+  }
+  .tag {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  .tag .tag-main {
+    font-size: 14px;
+  }
+  .tag .tag-sub {
+    font-size: 12px;
+  }
+  .tag .tag-effect {
+    font-size: 12px;
+  }
+  .complexity-card {
+    padding: 14px 16px;
+  }
+  .complexity-name {
+    font-size: 15px;
+  }
+  .complexity-desc {
+    font-size: 13px;
+  }
+  .complexity-features {
+    font-size: 12px;
+  }
+  .generate-btn {
+    font-size: 17px;
+    padding: 16px;
+  }
+  .stat-value {
+    font-size: 22px;
+  }
+  .stat-label {
+    font-size: 12px;
+  }
+  .invite-remaining {
+    font-size: 14px;
+  }
+  .invite-remaining strong {
+    font-size: 18px;
+  }
 
-  .result-panel { padding: 16px; }
-  .field-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
-  .template-grid { grid-template-columns: 1fr; }
-  .btn-row { flex-direction: column; gap: 6px; }
+  .result-panel {
+    padding: 16px;
+  }
+  .field-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .template-grid {
+    grid-template-columns: 1fr;
+  }
+  .btn-row {
+    flex-direction: column;
+    gap: 6px;
+  }
 
-  .modal { padding: 22px; max-width: 94vw; }
-  #guidePlatformGrid { grid-template-columns: repeat(2, 1fr) !important; }
+  .modal {
+    padding: 22px;
+    max-width: 94vw;
+  }
+  #guidePlatformGrid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 
-  .result-header { flex-direction: column; align-items: flex-start; gap: 6px; }
-  .result-meta { flex-wrap: wrap; gap: 6px; }
-  .result-content { font-size: 15px; padding: 14px 16px; }
+  .result-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .result-meta {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .result-content {
+    font-size: 15px;
+    padding: 14px 16px;
+  }
 
-  textarea, .select-field, .modal-input { font-size: 16px; }
+  textarea,
+  .select-field,
+  .modal-input {
+    font-size: 16px;
+  }
 
-  .admin-stats { grid-template-columns: repeat(2,1fr); }
-  .add-pwd-row { flex-direction: column; }
+  .admin-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .add-pwd-row {
+    flex-direction: column;
+  }
 
-  .template-hero { flex-direction: column; align-items: flex-start; }
-  .template-hero .left { flex-wrap: wrap; }
+  .template-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .template-hero .left {
+    flex-wrap: wrap;
+  }
 
-  #page-footer { padding: 6px 14px; }
-  .footer-copyright, .footer-license, .footer-qq, .footer-divider { font-size: 10px; }
-  .mobile-nav-panel { width: 290px; right: -310px; }
+  #page-footer {
+    padding: 6px 14px;
+  }
+  .footer-copyright,
+  .footer-license,
+  .footer-qq,
+  .footer-divider {
+    font-size: 10px;
+  }
+  .mobile-nav-panel {
+    width: 290px;
+    right: -310px;
+  }
+
+  .onboarding-guide {
+    flex-direction: column;
+    align-items: center;
+  }
+  .onboarding-step {
+    width: 100%;
+    max-width: 200px;
+  }
 }
 
 @media (max-width: 480px) {
-  .navbar { padding: 0 14px; height: 52px; }
-  .logo { font-size: 16px; }
-  .logo span { font-size: 11px; }
-  .main-container { margin-top: 52px; }
-  .config-panel { top: 52px; height: calc(100dvh - 52px); padding: 16px 14px; }
-  .field-grid { grid-template-columns: 1fr 1fr; gap: 5px; }
-  .field-card { padding: 8px 6px; font-size: 13px; }
-  .field-card .icon { font-size: 17px; }
-  .result-panel { padding: 12px; }
-  .result-content { font-size: 14px; padding: 12px 14px; }
-  .mobile-nav-panel { width: 270px; right: -290px; }
-  .tag-container { grid-template-columns: 1fr 1fr; gap: 5px; }
-  .tag { padding: 8px 12px; }
-  .tag .tag-main { font-size: 13px; }
-  .tag .tag-sub { font-size: 11px; }
-  .tag .tag-effect { font-size: 11px; }
+  .navbar {
+    padding: 0 14px;
+    height: 52px;
+  }
+  .logo {
+    font-size: 16px;
+  }
+  .logo span {
+    font-size: 11px;
+  }
+  .main-container {
+    margin-top: 52px;
+  }
+  .config-panel {
+    top: 52px;
+    height: calc(100dvh - 52px);
+    padding: 16px 14px;
+  }
+  .field-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+  }
+  .field-card {
+    padding: 8px 6px;
+    font-size: 13px;
+  }
+  .field-card .icon {
+    font-size: 17px;
+  }
+  .result-panel {
+    padding: 12px;
+  }
+  .result-content {
+    font-size: 14px;
+    padding: 12px 14px;
+  }
+  .mobile-nav-panel {
+    width: 270px;
+    right: -290px;
+  }
+  .tag-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+  }
+  .tag {
+    padding: 8px 12px;
+  }
+  .tag .tag-main {
+    font-size: 13px;
+  }
+  .tag .tag-sub {
+    font-size: 11px;
+  }
+  .tag .tag-effect {
+    font-size: 11px;
+  }
 }
 
 /* ===== 滚动条 ===== */
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(124,92,252,0.25); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(124,92,252,0.4); }
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(124, 92, 252, 0.25);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 92, 252, 0.4);
+}
 
-.hidden { display: none !important; }
+.hidden {
+  display: none !important;
+}
 </style>
 </head>
 <body>
@@ -1465,17 +1821,38 @@ body {
           选择场景 → 输入任务 → 选择复杂度 → 点击生成<br>
           基础版每日5次免费 · 进阶版体验1次 · 专家版需内测邀请码
         </div>
+        <!-- 新手指引 3步走 -->
+        <div class="onboarding-guide">
+          <div class="onboarding-step">
+            <div class="step-num">1</div>
+            <div class="step-icon">🎯</div>
+            <div class="step-label">选择场景</div>
+            <div class="step-desc">8个领域任选</div>
+          </div>
+          <div class="onboarding-step">
+            <div class="step-num">2</div>
+            <div class="step-icon">📝</div>
+            <div class="step-label">输入任务</div>
+            <div class="step-desc">或点标签一键填充</div>
+          </div>
+          <div class="onboarding-step">
+            <div class="step-num">3</div>
+            <div class="step-icon">✨</div>
+            <div class="step-label">点击生成</div>
+            <div class="step-desc">5秒得到提示词</div>
+          </div>
+        </div>
       </div>
       <div id="resultsContainer"></div>
     </div>
 
     <div class="page" id="page-templates">
       <h2 style="font-size:18px;margin-bottom:6px;">📚 模板库</h2>
-      <p style="color:var(--text-muted);font-size:12px;margin-bottom:14px;">🔒 专家版解锁后可全部使用 · 持续扩充中</p>
+      <p style="color:var(--text-muted);font-size:12px;margin-bottom:14px;">🔒 专家版专属 · 精品模板持续扩充中</p>
       <div class="template-hero">
         <div class="left">
           <span class="badge">🔥 热卖</span>
-          <span class="count"><span>20+</span> 精品模板</span>
+          <span class="count">精品模板</span>
           <span class="sub">· 持续扩充中 · 每周更新</span>
         </div>
         <span style="font-size:12px;color:var(--text-muted);">📷 每款配效果预览</span>
@@ -1528,33 +1905,44 @@ body {
   </main>
 </div>
 
-<!-- ===== 弹窗 ===== -->
+<!-- ===== 解锁弹窗（优化版 - 展示权益，引导咨询） ===== -->
 <div class="modal-overlay" id="unlockModal">
   <div class="modal">
     <div style="text-align:center;margin-bottom:12px;">
-      <span style="font-size:34px;">🔥</span>
+      <span style="font-size:34px;">👑</span>
     </div>
-    <div class="modal-title" style="text-align:center;">获取内测邀请码</div>
+    <div class="modal-title" style="text-align:center;">解锁专家版</div>
     <div class="modal-desc" style="text-align:center;font-size:13px;">
-      专家版为限量内测阶段<br>
-      每个邀请码可使用 <strong>100次</strong>
+      获取专家版邀请码，解锁全部高级功能
     </div>
-    <div class="modal-invite-box">
-      <span class="label">📌 今日剩余</span>
-      <span class="value" id="modalInviteRemaining">20</span>
+
+    <!-- 专家版权益展示 -->
+    <div style="background:rgba(124,92,252,0.06);border-radius:8px;padding:14px 16px;margin-bottom:14px;border:1px solid rgba(124,92,252,0.1);">
+      <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;font-weight:600;">🎁 专家版专属权益</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;">
+        <div style="color:var(--text-secondary);">✅ 一键优化</div>
+        <div style="color:var(--text-secondary);">✅ 批量生成</div>
+        <div style="color:var(--text-secondary);">✅ 模板库全部解锁</div>
+        <div style="color:var(--text-secondary);">✅ 无限次生成</div>
+        <div style="color:var(--text-secondary);">✅ 专家级提示词</div>
+        <div style="color:var(--text-secondary);">✅ 持续更新</div>
+      </div>
     </div>
-    <div style="background:rgba(124,92,252,0.06);border-radius:6px;padding:12px 14px;margin-bottom:14px;">
-      <div style="font-size:12px;color:var(--text-secondary);">👇 获取方式</div>
+
+    <!-- 获取方式 -->
+    <div style="background:rgba(245,179,66,0.06);border-radius:8px;padding:12px 14px;margin-bottom:14px;border:1px solid rgba(245,179,66,0.1);">
+      <div style="font-size:12px;color:var(--text-secondary);">👇 获取邀请码</div>
       <div style="font-size:14px;font-weight:500;margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
         <span>添加QQ：</span>
         <span style="color:var(--accent-purple-light);font-weight:700;font-size:16px;">704451222</span>
-        <span style="font-size:12px;color:var(--text-muted);">咨询购买</span>
+        <span style="font-size:12px;color:var(--text-muted);">备注「邀请码」</span>
       </div>
-      <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">💡 添加时备注「提示词邀请码」</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">💡 工作日9:00-22:00在线，立即回复</div>
     </div>
-    <input type="text" class="modal-input" id="unlockInput" placeholder="请输入邀请码">
+
+    <input type="text" class="modal-input" id="unlockInput" placeholder="已有邀请码？直接输入">
     <div class="modal-actions">
-      <button class="modal-btn modal-btn-secondary" id="unlockCancel">取消</button>
+      <button class="modal-btn modal-btn-secondary" id="unlockCancel">稍后再说</button>
       <button class="modal-btn modal-btn-primary" id="unlockConfirm">立即解锁</button>
     </div>
   </div>
@@ -1726,8 +2114,42 @@ let pendingUnlockLevel = null;
 let adminLoggedIn = false;
 let isGenerating = false;
 let editMaxTarget = null;
+let activeModal = null;
 
 const $ = id => document.getElementById(id);
+
+// ============================================================
+// 弹窗管理（统一）
+// ============================================================
+function openModal(modalId) {
+  const modal = $(modalId);
+  if (!modal) return;
+  modal.classList.add('active');
+  activeModal = modalId;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(modalId) {
+  const modal = $(modalId);
+  if (!modal) return;
+  modal.classList.remove('active');
+  if (activeModal === modalId) activeModal = null;
+  const anyOpen = document.querySelector('.modal-overlay.active');
+  if (!anyOpen) {
+    document.body.style.overflow = '';
+  }
+}
+
+// 关闭当前所有弹窗
+function closeAllModals() {
+  document.querySelectorAll('.modal-overlay.active').forEach(m => {
+    m.classList.remove('active');
+  });
+  activeModal = null;
+  document.body.style.overflow = '';
+  pendingUnlockLevel = null;
+  editMaxTarget = null;
+}
 
 // ============================================================
 // 工具函数
@@ -1780,7 +2202,7 @@ async function copyToClipboard(text) {
     if (ok) { showToast('已复制！', '📋'); showGuideModal(); return true; }
   } catch(e) { document.body.removeChild(ta); }
   $('copyTextarea').value = text;
-  $('copyModal').classList.add('active');
+  openModal('copyModal');
   return false;
 }
 
@@ -1824,20 +2246,17 @@ function showGuideModal() {
     grid.classList.add('platform-grid-2col');
   }
 
-  $('guideModal').classList.add('active');
+  openModal('guideModal');
 }
 
 // ============================================================
 // 提示词生成（三级差异化 + 字数控制）
 // ============================================================
 function buildPrompt(field, task, level) {
-  // 基础版：80-120字
   const basic = '【角色定位】\n你是一位专业的' + field + '领域AI助手。\n\n【任务描述】\n' + task + '\n\n【基本要求】\n1. 输出清晰、实用的解决方案\n2. 使用专业但易懂的语言\n3. 确保内容准确、完整';
 
-  // 进阶版：180-250字
   const advanced = '【角色定位】\n你是一位资深的' + field + '领域专家，拥有10年以上行业经验。\n\n【核心能力】\n- 深度理解' + field + '领域的专业知识体系\n- 具备解决复杂' + field + '问题的分析能力\n- 熟悉行业最佳实践和标准流程\n\n【任务分析】\n' + task + '\n\n【执行框架】\n1. 需求理解：明确任务目标和约束条件\n2. 方案设计：制定系统化的解决策略\n3. 详细执行：分步骤展开具体实施\n4. 质量检查：验证输出是否符合要求\n\n【输出要求】\n- 结构清晰，逻辑严谨\n- 包含具体可执行的建议\n- 标注关键注意事项';
 
-  // 专家版：320-400字
   const expert = '【角色定位】\n你是一位' + field + '领域的顶级专家顾问，拥有15年以上跨行业实战经验，曾服务过多家行业头部企业。\n\n【专业能力矩阵】\n- 战略层面：行业趋势洞察、商业模式设计\n- 战术层面：流程优化、方法论应用、工具链搭建\n- 执行层面：细节把控、质量标准制定、风险预判\n\n【思维特征】\n- 系统性思维：善于发现事物间的关联和规律\n- 批判性思维：基于证据做判断，不盲从权威\n- 用户思维：始终站在最终使用者角度思考\n\n【任务深度分析】\n' + task + '\n\n【执行框架】\n第一阶段：诊断与定义\n1. 明确核心问题和边界条件\n2. 识别关键利益相关者\n3. 梳理现有资源和约束\n\n第二阶段：方案设计\n1. 制定多个备选方案\n2. 评估各方案的优劣势\n3. 选择最优路径并细化\n\n第三阶段：交付与迭代\n1. 输出高质量交付物\n2. 收集反馈并优化\n3. 提供后续支持建议\n\n【质量控制标准】\n- 准确性：所有数据和事实经过验证\n- 完整性：覆盖任务的所有维度\n- 可操作性：每个建议都有明确的执行路径\n\n【输出规范】\n- 使用Markdown格式\n- 重要观点使用加粗标注\n- 结尾提供"下一步行动建议"';
 
   if (level === 'basic') return basic;
@@ -1846,7 +2265,6 @@ function buildPrompt(field, task, level) {
 }
 
 function countWords(text) {
-  // 中文字数 + 英文单词数
   const zh = text.match(/[\u4e00-\u9fa5]/g) || [];
   const en = text.match(/[a-zA-Z]+/g) || [];
   return zh.length + en.length;
@@ -1939,7 +2357,7 @@ function canGenerate(level) {
 function showUnlockModal(versionName) {
   const remaining = Math.max(0, DAILY_INVITE_LIMIT - (db.inviteUsedToday || 0));
   $('modalInviteRemaining').textContent = remaining;
-  $('unlockModal').classList.add('active');
+  openModal('unlockModal');
 }
 
 function doGenerate() {
@@ -2269,7 +2687,8 @@ function doUnlock() {
     db.unlocked[pendingUnlockLevel] = true;
     db.inviteUsedToday = (db.inviteUsedToday || 0) + 1;
     saveDB(db);
-    $('unlockModal').classList.remove('active');
+    closeModal('unlockModal');
+    pendingUnlockLevel = null;
     showToast('解锁成功！', '🔓');
     updateStats();
     return;
@@ -2284,7 +2703,8 @@ function doUnlock() {
   db.unlocked[pendingUnlockLevel] = true;
   db.inviteUsedToday = (db.inviteUsedToday || 0) + 1;
   saveDB(db);
-  $('unlockModal').classList.remove('active');
+  closeModal('unlockModal');
+  pendingUnlockLevel = null;
   showToast('解锁成功！', '🔓');
   updateStats();
 }
@@ -2450,8 +2870,10 @@ function renderFavorites() {
 }
 
 // ============================================================
-// 管理面板（含密码次数编辑）
+// 管理面板（含密码搜索）
 // ============================================================
+let passwordSearchQuery = '';
+
 function renderAdmin() {
   if (!adminLoggedIn) {
     $('adminPanel').innerHTML = `
@@ -2479,12 +2901,20 @@ function renderAdmin() {
 
   const adv = db.passwords.advanced;
   const exp = db.passwords.expert;
+
+  const search = passwordSearchQuery.toLowerCase().trim();
+  const advFiltered = search ? adv.filter(p => p.code.toLowerCase().includes(search)) : adv;
+  const expFiltered = search ? exp.filter(p => p.code.toLowerCase().includes(search)) : exp;
+
   const advTotal = adv.reduce((s,p) => s + p.used, 0);
   const expTotal = exp.reduce((s,p) => s + p.used, 0);
   const advSold = adv.filter(p => p.sold).length;
   const expSold = exp.filter(p => p.sold).length;
 
   function pwdRows(arr, type) {
+    if (arr.length === 0) {
+      return `<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:20px 0;">没有匹配的密码</td></tr>`;
+    }
     return arr.map((p, idx) => `
       <tr>
         <td><span class="code">${p.code}</span></td>
@@ -2531,10 +2961,14 @@ function renderAdmin() {
           <button onclick="addPwd('advanced')">➕ 添加</button>
         </div>
       </div>
+      <div class="password-search-row">
+        <input type="text" id="pwdSearchInput" placeholder="🔍 搜索密码..." value="${passwordSearchQuery}" oninput="filterPasswords(this.value)">
+        <button class="admin-action-btn" onclick="document.getElementById('pwdSearchInput').value='';filterPasswords('');" style="padding:6px 14px;">清空</button>
+      </div>
       <div class="password-table-wrap">
         <table class="password-table">
           <thead><tr><th>密码</th><th>使用次数</th><th>状态</th><th>操作</th></tr></thead>
-          <tbody>${pwdRows(adv, 'advanced')}</tbody>
+          <tbody>${pwdRows(advFiltered, 'advanced')}</tbody>
         </table>
       </div>
     </div>
@@ -2563,7 +2997,7 @@ function renderAdmin() {
       <div class="password-table-wrap">
         <table class="password-table">
           <thead><tr><th>密码</th><th>使用次数</th><th>状态</th><th>操作</th></tr></thead>
-          <tbody>${pwdRows(exp, 'expert')}</tbody>
+          <tbody>${pwdRows(expFiltered, 'expert')}</tbody>
         </table>
       </div>
     </div>
@@ -2575,6 +3009,11 @@ function renderAdmin() {
   `;
 }
 
+function filterPasswords(query) {
+  passwordSearchQuery = query;
+  renderAdmin();
+}
+
 // ===== 密码次数编辑功能 =====
 function openEditMax(type, code) {
   editMaxTarget = { type, code };
@@ -2584,7 +3023,7 @@ function openEditMax(type, code) {
   $('editMaxCode').textContent = code;
   $('editMaxCurrent').textContent = p.max === 0 ? '无限' : p.max;
   $('editMaxInput').value = p.max === 0 ? '' : p.max;
-  $('editMaxModal').classList.add('active');
+  openModal('editMaxModal');
 }
 
 function setEditMax(val) {
@@ -2609,7 +3048,7 @@ function confirmEditMax() {
 }
 
 function closeEditMax() {
-  $('editMaxModal').classList.remove('active');
+  closeModal('editMaxModal');
   editMaxTarget = null;
 }
 
@@ -2645,7 +3084,7 @@ window.addPwd = function(type) {
 };
 
 // ============================================================
-// 平台选项更新
+// 平台选项更新（含领域记忆）
 // ============================================================
 function updatePlatformOptions(field) {
   const sel = $('platformSelect');
@@ -2675,14 +3114,85 @@ function updatePlatformOptions(field) {
     }
   }
   sel.innerHTML = html;
+
+  const key = 'last_platform_' + field;
+  const lastVal = localStorage.getItem(key);
+  if (lastVal) {
+    const exists = Array.from(sel.options).some(opt => opt.value === lastVal);
+    if (exists) {
+      sel.value = lastVal;
+      return;
+    }
+  }
   sel.selectedIndex = 0;
 }
 
 // ============================================================
-// 初始化
+// 弹窗事件绑定（统一管理）
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
 
+  // ---- 解锁弹窗 ----
+  $('unlockCancel').addEventListener('click', function() {
+    closeModal('unlockModal');
+    pendingUnlockLevel = null;
+  });
+  $('unlockModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeModal('unlockModal');
+      pendingUnlockLevel = null;
+    }
+  });
+  $('unlockConfirm').addEventListener('click', doUnlock);
+  $('unlockInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') doUnlock();
+  });
+
+  // ---- 密码编辑弹窗 ----
+  $('editMaxModal').addEventListener('click', function(e) {
+    if (e.target === this) closeEditMax();
+  });
+  $('editMaxInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') confirmEditMax();
+  });
+
+  // ---- 复制弹窗 ----
+  $('copyClose').addEventListener('click', function() {
+    closeModal('copyModal');
+  });
+  $('copyModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal('copyModal');
+  });
+
+  // ---- 引导弹窗 ----
+  $('guideCloseBtn').addEventListener('click', function() {
+    closeModal('guideModal');
+  });
+  $('guideModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal('guideModal');
+  });
+
+  // ---- 全局 ESC 键关闭弹窗 ----
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const openModalEl = document.querySelector('.modal-overlay.active');
+      if (openModalEl) {
+        const id = openModalEl.id;
+        if (id === 'unlockModal') {
+          closeModal('unlockModal');
+          pendingUnlockLevel = null;
+        } else if (id === 'editMaxModal') {
+          closeEditMax();
+        } else if (id === 'copyModal' || id === 'guideModal') {
+          closeModal(id);
+        } else {
+          closeModal(id);
+        }
+      }
+    }
+  });
+
+  // ---- 领域切换 ----
   document.querySelectorAll('.field-card').forEach(card => {
     card.addEventListener('click', function() {
       document.querySelectorAll('.field-card').forEach(f => f.classList.remove('active'));
@@ -2698,6 +3208,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // ---- 平台切换记忆 ----
+  const platSel = $('platformSelect');
+  if (platSel) {
+    platSel.addEventListener('change', function() {
+      const field = getCurrentField();
+      const key = 'last_platform_' + field;
+      localStorage.setItem(key, this.value);
+    });
+  }
+
+  // ---- 模板筛选 ----
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -2707,6 +3228,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // ---- 复杂度 ----
   document.querySelectorAll('.complexity-card').forEach(card => {
     card.addEventListener('click', function() {
       document.querySelectorAll('.complexity-card').forEach(c => c.classList.remove('selected'));
@@ -2715,10 +3237,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // ---- 生成按钮 ----
   $('generateBtn').addEventListener('click', doGenerate);
   $('optimizeBtn').addEventListener('click', doOptimize);
   $('batchBtn').addEventListener('click', doBatchGenerate);
 
+  // ---- 标签点击 ----
   document.querySelectorAll('.tag:not(#ecommerceTagContainer .tag)').forEach(tag => {
     tag.addEventListener('click', function() {
       const field = this.dataset.field || '内容创作';
@@ -2740,16 +3264,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // ---- 清空/粘贴 ----
   $('clearBtn').addEventListener('click', () => { $('taskInput').value = ''; $('taskInput').focus(); });
   $('pasteBtn').addEventListener('click', async () => {
     try { const t = await navigator.clipboard.readText(); $('taskInput').value = t; } catch(e) { showToast('无法读取剪贴板', '⚠️'); }
   });
 
+  // ---- 导航 ----
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       showPage(this.dataset.page);
-      if (window.innerWidth <= 768) { 
-        $('configPanel').classList.remove('open'); 
+      if (window.innerWidth <= 768) {
+        $('configPanel').classList.remove('open');
         $('overlay').classList.remove('active');
         $('mobileNavPanel').classList.remove('open');
         $('mobileNavOverlay').classList.remove('active');
@@ -2757,14 +3283,37 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  const mobileNavPanel = $('mobileNavPanel');
-  const mobileNavOverlay = $('mobileNavOverlay');
+  // ---- 手机端配置面板 ----
+  const configPanel = $('configPanel');
+  const overlay = $('overlay');
 
   $('mobileMenuBtn').addEventListener('click', function(e) {
     e.stopPropagation();
-    mobileNavPanel.classList.toggle('open');
-    mobileNavOverlay.classList.toggle('active');
+    configPanel.classList.toggle('open');
+    overlay.classList.toggle('active');
   });
+
+  overlay.addEventListener('click', function() {
+    configPanel.classList.remove('open');
+    overlay.classList.remove('active');
+  });
+
+  // 点击右侧结果区关闭配置面板（手机端）
+  const resultPanel = $('resultPanel');
+  if (resultPanel) {
+    resultPanel.addEventListener('click', function(e) {
+      if (window.innerWidth <= 768 && configPanel.classList.contains('open')) {
+        if (!e.target.closest('.config-panel')) {
+          configPanel.classList.remove('open');
+          overlay.classList.remove('active');
+        }
+      }
+    });
+  }
+
+  // ---- 手机端导航面板 ----
+  const mobileNavPanel = $('mobileNavPanel');
+  const mobileNavOverlay = $('mobileNavOverlay');
 
   mobileNavOverlay.addEventListener('click', function() {
     mobileNavPanel.classList.remove('open');
@@ -2779,6 +3328,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // ---- 邀请码按钮 ----
   function openInviteModal() {
     pendingUnlockLevel = 'expert';
     showUnlockModal('专家版');
@@ -2790,29 +3340,7 @@ document.addEventListener('DOMContentLoaded', function() {
     openInviteModal();
   });
 
-  $('overlay').addEventListener('click', function() {
-    $('configPanel').classList.remove('open');
-    $('overlay').classList.remove('active');
-  });
-
-  $('unlockConfirm').addEventListener('click', doUnlock);
-  $('unlockCancel').addEventListener('click', () => $('unlockModal').classList.remove('active'));
-  $('unlockInput').addEventListener('keypress', e => { if (e.key === 'Enter') doUnlock(); });
-
-  $('copyClose').addEventListener('click', () => $('copyModal').classList.remove('active'));
-
-  $('guideCloseBtn').addEventListener('click', () => $('guideModal').classList.remove('active'));
-  $('guideModal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
-
-  document.querySelectorAll('.modal-overlay').forEach(ov => {
-    ov.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
-  });
-
-  // 编辑次数弹窗的键盘事件
-  $('editMaxInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') confirmEditMax();
-  });
-
+  // ---- iOS触摸优化 ----
   let lastTouchEnd = 0;
   document.addEventListener('touchend', function(e) {
     const now = Date.now();
@@ -2821,22 +3349,23 @@ document.addEventListener('DOMContentLoaded', function() {
   }, { passive: false });
 
   let touchStartX = 0;
-  const panel = $('configPanel');
   document.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; }, { passive: true });
   document.addEventListener('touchmove', function(e) {
-    if (!panel.classList.contains('open')) return;
+    if (!configPanel.classList.contains('open')) return;
     const dx = touchStartX - e.touches[0].clientX;
     if (dx > 40 && touchStartX < 80) {
-      panel.classList.remove('open');
-      $('overlay').classList.remove('active');
+      configPanel.classList.remove('open');
+      overlay.classList.remove('active');
     }
   }, { passive: true });
 
+  // ---- 底部许可证 ----
   $('licenseLink').addEventListener('click', function(e) {
     e.preventDefault();
     window.open('https://opensource.org/licenses/MIT', '_blank');
   });
 
+  // ---- 初始化 ----
   const initialField = getCurrentField();
   updatePlatformOptions(initialField);
   updateStats();
