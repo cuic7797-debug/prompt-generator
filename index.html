@@ -3,710 +3,1766 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>提示词生成器：全面代码检查与修复以实现生产级部署</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>AI提示词生成器 Pro</title>
     <style>
-        .font-playfair { font-family: 'Playfair Display', serif; }
-        .font-inter { font-family: 'Inter', sans-serif; }
-        .nav-item.active { background-color: #3b82f6; color: white; }
-        .nav-item:hover { background-color: #e5e7eb; }
-        .nav-item.active:hover { background-color: #2563eb; }
-        html { scroll-behavior: smooth; }
-        .citation { color: #007bff; text-decoration: none; }
-        .citation:hover { text-decoration: underline; }
-        .hero-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .code-block { background-color: #f8fafc; border-left: 4px solid #3b82f6; }
-        .tech-card { 
-            background: rgba(59, 130, 246, 0.05); 
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            transition: all 0.3s ease;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .tech-card:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
         }
-        .feature-icon {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            background-clip: text;
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        
-        /* 响应式隐藏左侧边栏 */
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: #f1f5f9;
+            color: var(--primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* 首页 */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 卡片 */
+        .card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* 网格布局 */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* 表单元素 */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: var(--bg-card);
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* 按钮 */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: var(--primary);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #e2e8f0;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* 标签 */
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #f1f5f9;
+            color: var(--text-secondary);
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            margin: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tag:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tag.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* 结果卡片 */
+        .result-card {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #bae6fd;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .result-level {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .level-basic {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .level-advanced {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .level-expert {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* 弹窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        /* Toast提示 */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1e293b;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 统计卡片 */
+        .stats-card {
+            background: var(--bg-card);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+        }
+
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stats-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* 模板卡片 */
+        .template-card {
+            background: var(--bg-card);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .template-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .template-card.locked {
+            opacity: 0.7;
+            background: #f8fafc;
+        }
+
+        .template-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .template-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .template-scenario {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .template-tags {
+            margin-bottom: 1rem;
+        }
+
+        .template-preview {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        /* 历史记录 */
+        .history-item {
+            background: var(--bg-card);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-content {
+            flex: 1;
+            margin-right: 1rem;
+        }
+
+        .history-task {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .history-meta {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* 移动端导航 */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 0.5rem;
+            z-index: 100;
+            box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .mobile-nav.active {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .mobile-nav-item.active {
+            color: var(--primary);
+        }
+
+        .mobile-nav-item i {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* 徽章 */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-lock {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* 响应式设计 */
         @media (max-width: 768px) {
-            nav.fixed.left-0 {
-                display: none !important;
+            .nav-links {
+                display: none;
             }
-            
-            main {
-                margin-left: 0 !important;
-                width: 100% !important;
+
+            .mobile-menu-btn {
+                display: block;
             }
-            
-            main.ml-64, main.ml-80 {
-                margin-left: 0 !important;
-                width: 100% !important;
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .mobile-nav {
+                display: flex;
+                justify-content: space-around;
             }
         }
     </style>
 </head>
-<body class="bg-gray-50 font-inter">
-    <!-- 左侧导航 -->
-    <nav class="fixed left-0 top-0 w-64 h-full bg-white shadow-lg overflow-y-auto z-10">
-        <div class="p-6">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">目录导航</h2>
-            <ul class="space-y-1 text-sm">
-                <li><a href="#hero" class="nav-item block px-3 py-2 rounded-md text-gray-700 transition-colors">首页概览</a></li>
-                <li><a href="#introduction" class="nav-item block px-3 py-2 rounded-md text-gray-700 transition-colors">引言</a></li>
-                <li>
-                    <a href="#section1" class="nav-item block px-3 py-2 rounded-md text-gray-700 transition-colors font-medium">代码库解构与评估</a>
-                    <ul class="ml-4 mt-1 space-y-1">
-                        <li><a href="#section1-1" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">剖析原始仓库</a></li>
-                        <li><a href="#section1-2" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">原始功能局限性</a></li>
-                        <li><a href="#section1-3" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">部署准备评估</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#section2" class="nav-item block px-3 py-2 rounded-md text-gray-700 transition-colors font-medium">核心增强功能开发</a>
-                    <ul class="ml-4 mt-1 space-y-1">
-                        <li><a href="#section2-1" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">动态提示词生成器</a></li>
-                        <li><a href="#section2-2" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">多LLM后端支持</a></li>
-                        <li><a href="#section2-3" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">响应式前端工程</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#section3" class="nav-item block px-3 py-2 rounded-md text-gray-700 transition-colors font-medium">集成与智能功能</a>
-                    <ul class="ml-4 mt-1 space-y-1">
-                        <li><a href="#section3-1" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">智能提示词优化器</a></li>
-                        <li><a href="#section3-2" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">咒语生成器</a></li>
-                        <li><a href="#section3-3" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">现代化用户体验</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#section4" class="nav-item block px-3 py-2 rounded-md text-gray-700 transition-colors font-medium">单文件重构与测试</a>
-                    <ul class="ml-4 mt-1 space-y-1">
-                        <li><a href="#section4-1" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">架构重组</a></li>
-                        <li><a href="#section4-2" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">测试框架</a></li>
-                        <li><a href="#section4-3" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">验证修复</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#section5" class="nav-item block px-3 py-2 rounded-md text-gray-700 transition-colors font-medium">部署与生产就绪</a>
-                    <ul class="ml-4 mt-1 space-y-1">
-                        <li><a href="#section5-1" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">GitHub Pages部署</a></li>
-                        <li><a href="#section5-2" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">性能优化</a></li>
-                        <li><a href="#section5-3" class="nav-item block px-3 py-1 rounded text-gray-600 transition-colors">最终生产包</a></li>
-                    </ul>
-                </li>
-                <li><a href="#conclusion" class="nav-item block px-3 py-2 rounded-md text-gray-700 transition-colors font-medium">结论</a></li>
-                <li><a href="#references" class="nav-item block px-3 py-2 rounded-md text-gray-700 transition-colors font-medium">参考文献</a></li>
-            </ul>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">AI提示词生成器 Pro</div>
+            <div class="nav-links">
+                <button class="nav-btn active" data-page="home">首页</button>
+                <button class="nav-btn" data-page="templates">模板库</button>
+                <button class="nav-btn" data-page="history">历史记录</button>
+                <button class="nav-btn" data-page="favorites">收藏</button>
+                <button class="nav-btn" data-page="admin">管理面板</button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
         </div>
     </nav>
 
-    <!-- 右侧内容区 -->
-    <main class="ml-64 min-h-screen">
-        <!-- 首页概览 -->
-        <section id="hero" class="min-h-screen bg-gradient-to-br from-blue-600 to-indigo-800 text-white flex items-center justify-center">
-            <div class="text-center max-w-4xl px-12">
-                <h1 class="text-5xl font-playfair font-bold italic mb-8 leading-tight">
-                    提示词生成器：全面代码检查与修复以实现生产级部署
-                </h1>
-                <div class="space-y-6 text-xl font-light">
-                    <p class="text-blue-100">从概念验证原型到功能完备的生产级现代Web应用</p>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-6">
-                            <div class="text-3xl font-bold feature-icon mb-2">⚡</div>
-                            <h3 class="font-semibold mb-2">核心增强</h3>
-                            <p class="text-sm text-blue-100">动态提示词生成、多LLM后端支持</p>
+    <!-- 移动端底部导航 -->
+    <div class="mobile-nav" id="mobileNav">
+        <button class="mobile-nav-item active" data-page="home">
+            <span>🏠</span>
+            <span>首页</span>
+        </button>
+        <button class="mobile-nav-item" data-page="templates">
+            <span>📋</span>
+            <span>模板</span>
+        </button>
+        <button class="mobile-nav-item" data-page="history">
+            <span>🕒</span>
+            <span>历史</span>
+        </button>
+        <button class="mobile-nav-item" data-page="favorites">
+            <span>⭐</span>
+            <span>收藏</span>
+        </button>
+        <button class="mobile-nav-item" data-page="admin">
+            <span>⚙️</span>
+            <span>管理</span>
+        </button>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 首页 -->
+        <div class="page active" id="page-home">
+            <div class="hero">
+                <h1>🚀 一键生成高质量AI提示词</h1>
+                <p>支持多平台、多场景、多难度，让你的AI交互效率提升10倍</p>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">基础设置</h2>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">选择场景</label>
+                        <div id="scenarioTags">
+                            <span class="tag" data-scenario="内容创作">内容创作</span>
+                            <span class="tag" data-scenario="营销增长">营销增长</span>
+                            <span class="tag" data-scenario="学习提升">学习提升</span>
+                            <span class="tag" data-scenario="技术开发">技术开发</span>
+                            <span class="tag" data-scenario="数据分析">数据分析</span>
+                            <span class="tag" data-scenario="职场办公">职场办公</span>
+                            <span class="tag" data-scenario="生活服务">生活服务</span>
                         </div>
-                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-6">
-                            <div class="text-3xl font-bold feature-icon mb-2">🔧</div>
-                            <h3 class="font-semibold mb-2">架构重构</h3>
-                            <p class="text-sm text-blue-100">前后端分离、模块化组件设计</p>
-                        </div>
-                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-6">
-                            <div class="text-3xl font-bold feature-icon mb-2">🚀</div>
-                            <h3 class="font-semibold mb-2">生产就绪</h3>
-                            <p class="text-sm text-blue-100">单文件部署、全面测试覆盖</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">目标平台</label>
+                        <select class="form-select" id="platformSelect">
+                            <option value="文心一言">文心一言</option>
+                            <option value="ChatGPT">ChatGPT</option>
+                            <option value="Claude">Claude</option>
+                            <option value="Gemini">Gemini</option>
+                            <option value="通义千问">通义千问</option>
+                            <option value="豆包">豆包</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">热门标签（点击添加）</label>
+                        <div id="hotTags">
+                            <span class="tag" data-tag="生成">生成</span>
+                            <span class="tag" data-tag="优化">优化</span>
+                            <span class="tag" data-tag="翻译">翻译</span>
+                            <span class="tag" data-tag="总结">总结</span>
+                            <span class="tag" data-tag="润色">润色</span>
+                            <span class="tag" data-tag="扩写">扩写</span>
+                            <span class="tag" data-tag="缩写">缩写</span>
+                            <span class="tag" data-tag="改写">改写</span>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- 引言 -->
-        <section id="introduction" class="px-12 py-12 max-w-6xl mx-auto">
-            <h2 class="text-3xl font-playfair font-bold text-gray-800 mb-8">引言</h2>
-            <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-6">
-                <p>本报告对一个提示词生成器应用的代码库进行了全面重构与开发，旨在将其从一个概念验证原型演变为一个功能完备、可扩展且适合生产级部署的现代Web应用。此过程中的核心任务并非仅仅修复代码，而是在深入理解原有架构的基础上，对其进行系统性的重设计与增强，以满足当代AI应用的开发标准。</p>
-                
-                <p>本次重构遵循现代软件开发的最佳实践，涵盖了从后端API到前端用户体验的全方位优化。关键改进领域包括引入动态提示词生成、集成多个大型语言模型（LLM）后端、实现前后端分离的现代化架构，以及建立全面的测试框架。整个过程不仅修复了原有的代码缺陷，更重要的是，通过引入分层架构、服务模式、组件化设计等先进的设计理念，为应用赋予了极高的可维护性和可扩展性。</p>
-                
-                <p>最终交付的产物是一个利用最新Web技术栈构建的、可部署于GitHub Pages的单文件应用。该应用不仅保留了原有核心功能，还增加了智能提示词优化、模型对比、多场景支持等高级特性。本报告将详细阐述重构的动机、所遇的挑战、实施的解决方案，并通过清晰的架构图和代码示例展示最终实现的生产级应用。所有设计决策均旨在提升代码质量、系统性能以及最终用户的交互体验，确保其符合工业级应用的标准。</p>
-            </div>
-        </section>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">任务描述</h2>
+                    </div>
 
-        <!-- 第一章 -->
-        <section id="section1" class="px-12 py-8 max-w-6xl mx-auto">
-            <h2 class="text-3xl font-playfair font-bold text-gray-800 mb-8">一、代码库解构与初始状态评估</h2>
-            
-            <div id="section1-1" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">1.1 剖析原始仓库</h3>
-                <div class="tech-card rounded-lg p-6 mb-6">
-                    <p class="text-gray-700 mb-4">原始仓库的核心是一个基于Python的Web应用，其旨在帮助用户生成和解析提示词，以用于Midjourney、Stable Diffusion等AI图像生成模型。</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h4 class="font-semibold text-gray-800 mb-3">核心技术栈</h4>
-                            <ul class="space-y-2 text-sm text-gray-600">
-                                <li>• GPT-2微调模型（text2image-prompt-generator）</li>
-                                <li>• CLIP与BLIP模型（图片解析）</li>
-                                <li>• 赫尔辛基大学翻译模型（中英翻译）</li>
-                                <li>• Gradio库（用户界面）</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-gray-800 mb-3">部署与容器化</h4>
-                            <ul class="space-y-2 text-sm text-gray-600">
-                                <li>• Docker环境管理</li>
-                                <li>• 支持CPU和GPU的Dockerfile</li>
-                                <li>• 快速原型开发能力</li>
-                            </ul>
+                    <div class="form-group">
+                        <label class="form-label">你要用AI完成什么任务？</label>
+                        <textarea class="form-textarea" id="taskInput" placeholder="例如：帮我写一篇关于健康饮食的科普文章，面向普通大众，要求通俗易懂，800字左右"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">复杂度等级</label>
+                        <div id="levelTags">
+                            <span class="tag active" data-level="basic">基础版</span>
+                            <span class="tag" data-level="advanced">进阶版</span>
+                            <span class="tag" data-level="expert">专家版</span>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div id="section1-2" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">1.2 原始功能的局限性</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-red-600 mb-3">架构问题</h4>
-                        <ul class="space-y-2 text-sm text-gray-700">
-                            <li>• 单体架构：所有逻辑集中在单个Python脚本中</li>
-                            <li>• 缺乏模块化和关注点分离</li>
-                            <li>• 代码难以测试和维护</li>
-                        </ul>
-                    </div>
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-red-600 mb-3">技术约束</h4>
-                        <ul class="space-y-2 text-sm text-gray-700">
-                            <li>• Gradio灵活性有限</li>
-                            <li>• 硬编码的提示词生成逻辑</li>
-                            <li>• 缺乏现代前端框架支持</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+                    <button class="btn btn-primary" id="generateBtn">
+                        ✨ 生成提示词
+                    </button>
 
-            <div id="section1-3" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">1.3 部署准备状态评估</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse bg-white rounded-lg shadow-sm">
-                        <thead class="bg-gray-100">
-                            <tr>
-                                <th class="border border-gray-300 px-4 py-3 text-left font-semibold">检查项</th>
-                                <th class="border border-gray-300 px-4 py-3 text-left font-semibold">原始状态</th>
-                                <th class="border border-gray-300 px-4 py-3 text-left font-semibold">重构后状态</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-sm">
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-3 font-medium">模块化架构</td>
-                                <td class="border border-gray-300 px-4 py-3 text-red-600">❌ 单体脚本</td>
-                                <td class="border border-gray-300 px-4 py-3 text-green-600">✅ 分层服务架构</td>
-                            </tr>
-                            <tr class="bg-gray-50">
-                                <td class="border border-gray-300 px-4 py-3 font-medium">测试覆盖率</td>
-                                <td class="border border-gray-300 px-4 py-3 text-red-600">❌ 无测试</td>
-                                <td class="border border-gray-300 px-4 py-3 text-green-600">✅ Playwright测试框架</td>
-                            </tr>
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-3 font-medium">多模型支持</td>
-                                <td class="border border-gray-300 px-4 py-3 text-red-600">❌ 单一模型</td>
-                                <td class="border border-gray-300 px-4 py-3 text-green-600">✅ 可插拔LLM后端</td>
-                            </tr>
-                            <tr class="bg-gray-50">
-                                <td class="border border-gray-300 px-4 py-3 font-medium">前端框架</td>
-                                <td class="border border-gray-300 px-4 py-3 text-red-600">❌ Gradio（受限）</td>
-                                <td class="border border-gray-300 px-4 py-3 text-green-600">✅ Streamlit单文件应用</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- 第二章 -->
-        <section id="section2" class="px-12 py-8 max-w-6xl mx-auto">
-            <h2 class="text-3xl font-playfair font-bold text-gray-800 mb-8">二、核心增强功能开发</h2>
-            
-            <div id="section2-1" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">2.1 动态提示词生成器</h3>
-                <div class="tech-card rounded-lg p-6">
-                    <p class="text-gray-700 mb-4">设计了一个动态的提示词生成引擎，核心是一个可复用的<strong>PromptGenerator类</strong>，能够根据用户输入的主题、关键词和特定需求，动态地构建结构化的提示词。</p>
-                    
-                    <div class="code-block p-4 rounded font-mono text-sm text-gray-800">
-                        <div class="flex items-center mb-2">
-                            <span class="text-blue-600 font-semibold">结构化框架</span>
-                        </div>
-                        <div class="ml-4">
-                            <div>• 角色设定（Role）</div>
-                            <div>• 任务目标（Task）</div>
-                            <div>• 约束条件（Constraints）</div>
-                            <div>• 输出格式（Output Format）</div>
-                        </div>
+                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="btn btn-secondary btn-sm" id="optimizeBtn" disabled>
+                            ⚡ 一键优化
+                        </button>
+                        <button class="btn btn-secondary btn-sm" id="batchBtn" disabled>
+                            📚 批量生成
+                        </button>
+                        <button class="btn btn-secondary btn-sm" id="clearInputBtn">
+                            🗑️ 清空输入
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div id="section2-2" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">2.2 多LLM后端支持架构</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-blue-600 mb-3">统一抽象接口</h4>
-                        <p class="text-sm text-gray-700 mb-3">定义了通用的LLMProvider接口，实现主应用逻辑与具体模型实现的解耦。</p>
-                        <div class="text-xs text-gray-600">
-                            支持集成：Ollama、OpenAI API、Google Gemini等
-                        </div>
-                    </div>
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-blue-600 mb-3">Ollama集成</h4>
-                        <p class="text-sm text-gray-700 mb-3">作为默认推荐后端，支持本地运行大型语言模型，降低成本并增强数据隐私性。</p>
-                        <div class="text-xs text-gray-600">
-                            通过Ollama Python SDK for Composio实现
-                        </div>
-                    </div>
+            <!-- 统计信息 -->
+            <div class="grid-3" style="margin-bottom: 2rem;">
+                <div class="stats-card">
+                    <div class="stats-value" id="todayCount">5</div>
+                    <div class="stats-label">今日剩余免费次数</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-value" id="totalCount">0</div>
+                    <div class="stats-label">总生成次数</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-value" id="favoriteCount">0</div>
+                    <div class="stats-label">收藏数量</div>
                 </div>
             </div>
 
-            <div id="section2-3" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">2.3 响应式前端工程</h3>
-                <div class="tech-card rounded-lg p-6">
-                    <p class="text-gray-700 mb-4">采用Streamlit作为前端框架，替代原有的Gradio，提供现代化的交互体验。</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="text-center p-4 bg-blue-50 rounded">
-                            <div class="text-2xl font-bold text-blue-600 mb-2">🎨</div>
-                            <h5 class="font-semibold text-sm">现代化UI/UX</h5>
-                            <p class="text-xs text-gray-600 mt-1">直观美观的界面设计</p>
-                        </div>
-                        <div class="text-center p-4 bg-blue-50 rounded">
-                            <div class="text-2xl font-bold text-blue-600 mb-2">🧩</div>
-                            <h5 class="font-semibold text-sm">模块化组件</h5>
-                            <p class="text-xs text-gray-600 mt-1">可重用的UI组件</p>
-                        </div>
-                        <div class="text-center p-4 bg-blue-50 rounded">
-                            <div class="text-2xl font-bold text-blue-600 mb-2">💾</div>
-                            <h5 class="font-semibold text-sm">状态管理</h5>
-                            <p class="text-xs text-gray-600 mt-1">会话状态跟踪</p>
-                        </div>
+            <!-- 结果区域 -->
+            <div class="card" id="resultCard" style="display: none;">
+                <div class="card-header">
+                    <h2 class="card-title">生成结果</h2>
+                    <div>
+                        <button class="btn btn-secondary btn-sm" id="copyBtn">📋 复制</button>
+                        <button class="btn btn-secondary btn-sm" id="favoriteBtn">⭐ 收藏</button>
+                        <button class="btn btn-danger btn-sm" id="clearResultBtn">🗑️ 清空结果</button>
+                    </div>
+                </div>
+                <div id="resultContainer"></div>
+            </div>
+        </div>
+
+        <!-- 模板库 -->
+        <div class="page" id="page-templates">
+            <div class="hero">
+                <h1>📋 提示词模板库</h1>
+                <p>覆盖全场景优质模板，一键使用提升效率</p>
+            </div>
+
+            <div class="card" style="margin-bottom: 2rem;">
+                <div class="form-group">
+                    <label class="form-label">筛选场景</label>
+                    <select class="form-select" id="templateFilter">
+                        <option value="all">全部场景</option>
+                        <option value="内容创作">内容创作</option>
+                        <option value="营销增长">营销增长</option>
+                        <option value="学习提升">学习提升</option>
+                        <option value="技术开发">技术开发</option>
+                        <option value="数据分析">数据分析</option>
+                        <option value="职场办公">职场办公</option>
+                        <option value="生活服务">生活服务</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid-3" id="templateGrid">
+                <!-- 模板卡片将通过JS动态生成 -->
+            </div>
+        </div>
+
+        <!-- 历史记录 -->
+        <div class="page" id="page-history">
+            <div class="hero">
+                <h1>🕒 历史记录</h1>
+                <p>查看你生成的所有提示词</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">历史记录列表</h2>
+                    <button class="btn btn-danger btn-sm" id="clearHistoryBtn">🗑️ 清空全部</button>
+                </div>
+                <div id="historyContainer">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🕒</div>
+                        <p>暂无历史记录</p>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- 第三章 -->
-        <section id="section3" class="px-12 py-8 max-w-6xl mx-auto">
-            <h2 class="text-3xl font-playfair font-bold text-gray-800 mb-8">三、集成与智能功能</h2>
-            
-            <div id="section3-1" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">3.1 智能提示词优化器</h3>
-                <div class="tech-card rounded-lg p-6">
-                    <p class="text-gray-700 mb-4">用户输入简单查询，系统根据预设优化原则自动生成更复杂、质量更高的提示词。</p>
-                    
-                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg">
-                        <h4 class="font-semibold text-gray-800 mb-3">优化原则</h4>
-                        <div class="grid grid-cols-2 gap-4 text-sm">
-                            <div>
-                                <span class="font-medium text-blue-600">• 增加细节描述</span><br>
-                                <span class="font-medium text-blue-600">• 明确风格要求</span>
+        <!-- 收藏 -->
+        <div class="page" id="page-favorites">
+            <div class="hero">
+                <h1>⭐ 我的收藏</h1>
+                <p>收藏你常用的优质提示词</p>
+            </div>
+
+            <div id="favoritesContainer">
+                <div class="empty-state">
+                    <div class="empty-state-icon">⭐</div>
+                    <p>暂无收藏内容</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 管理面板 -->
+        <div class="page" id="page-admin">
+            <div class="hero">
+                <h1>⚙️ 管理面板</h1>
+                <p>系统设置与数据管理</p>
+            </div>
+
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <div class="form-group">
+                    <label class="form-label">管理密码</label>
+                    <input type="password" class="form-input" id="adminPassword" placeholder="请输入管理密码">
+                </div>
+                <button class="btn btn-primary" id="adminLoginBtn">登录</button>
+            </div>
+
+            <!-- 管理功能（登录后显示） -->
+            <div id="adminFeatures" style="display: none; margin-top: 2rem;">
+                <div class="grid-3">
+                    <div class="stats-card">
+                        <div class="stats-value" id="totalUsers">128</div>
+                        <div class="stats-label">总用户数</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-value" id="totalGenerations">3420</div>
+                        <div class="stats-label">总生成数</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-value" id="expertUsers">23</div>
+                        <div class="stats-label">专家版用户</div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-header">
+                        <h2 class="card-title">邀请码管理</h2>
+                        <button class="btn btn-primary btn-sm" id="addInviteCodeBtn">+ 添加邀请码</button>
+                    </div>
+                    <div id="inviteCodeList">
+                        <div class="history-item">
+                            <div class="history-content">
+                                <div class="history-task">DEMO-2024-EXPERT</div>
+                                <div class="history-meta">未使用 · 创建于 2024-01-01</div>
                             </div>
-                            <div>
-                                <span class="font-medium text-blue-600">• 优化语法结构</span><br>
-                                <span class="font-medium text-blue-600">• 模型特定优化</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="section3-2" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">3.2 "咒语"生成器</h3>
-                <div class="tech-card rounded-lg p-6">
-                    <p class="text-gray-700 mb-4">整合所有核心组件的工作流程，支持多种生成场景。</p>
-                    
-                    <div class="space-y-4">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">1</div>
-                            <div>
-                                <h5 class="font-semibold">用户输入</h5>
-                                <p class="text-sm text-gray-600">主题、关键词、参数选择</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">2</div>
-                            <div>
-                                <h5 class="font-semibold">动态生成</h5>
-                                <p class="text-sm text-gray-600">创建基础提示词版本</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">3</div>
-                            <div>
-                                <h5 class="font-semibold">智能优化</h5>
-                                <p class="text-sm text-gray-600">根据模型特点润色</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">4</div>
-                            <div>
-                                <h5 class="font-semibold">输出结果</h5>
-                                <p class="text-sm text-gray-600">可直接使用的"咒语"</p>
+                            <div class="history-actions">
+                                <button class="btn btn-secondary btn-sm copy-code-btn" data-code="DEMO-2024-EXPERT">复制</button>
+                                <button class="btn btn-danger btn-sm delete-code-btn" data-code="DEMO-2024-EXPERT">删除</button>
                             </div>
                         </div>
+                        <div class="history-item">
+                            <div class="history-content">
+                                <div class="history-task">TRY-PRO-VERSION</div>
+                                <div class="history-meta">未使用 · 创建于 2024-01-02</div>
+                            </div>
+                            <div class="history-actions">
+                                <button class="btn btn-secondary btn-sm copy-code-btn" data-code="TRY-PRO-VERSION">复制</button>
+                                <button class="btn btn-danger btn-sm delete-code-btn" data-code="TRY-PRO-VERSION">删除</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="section3-3" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">3.3 现代化、互动的用户体验</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-purple-600 mb-3">聊天机器人风格</h4>
-                        <p class="text-sm text-gray-700 mb-3">采用类似ChatGPT的对话界面，降低使用门槛。</p>
-                        <div class="text-xs text-gray-600 bg-purple-50 p-2 rounded">
-                            用户熟悉，交互直观
-                        </div>
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-header">
+                        <h2 class="card-title">其他设置</h2>
                     </div>
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-purple-600 mb-3">模型对比视图</h4>
-                        <p class="text-sm text-gray-700 mb-3">A/B测试功能，并排比较不同模型输出。</p>
-                        <div class="text-xs text-gray-600 bg-purple-50 p-2 rounded">
-                            直观比较思维差异
-                        </div>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn btn-secondary btn-sm" id="exportDataBtn">📤 导出所有数据</button>
+                        <button class="btn btn-danger btn-sm" id="resetDataBtn">🗑️ 重置所有数据</button>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
 
-        <!-- 第四章 -->
-        <section id="section4" class="px-12 py-8 max-w-6xl mx-auto">
-            <h2 class="text-3xl font-playfair font-bold text-gray-800 mb-8">四、单文件重构与测试</h2>
-            
-            <div id="section4-1" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">4.1 架构重组为单文件应用</h3>
-                <div class="tech-card rounded-lg p-6">
-                    <p class="text-gray-700 mb-4">将整个应用打包成独立的HTML文件，用户双击即可运行，无需安装任何依赖项。</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <div class="text-center p-4 bg-indigo-50 rounded">
-                            <div class="text-2xl mb-2">🌐</div>
-                            <h5 class="font-semibold text-sm">纯前端推理</h5>
-                            <p class="text-xs text-gray-600">transformers.js + WebGPU</p>
-                        </div>
-                        <div class="text-center p-4 bg-indigo-50 rounded">
-                            <div class="text-2xl mb-2">📦</div>
-                            <h5 class="font-semibold text-sm">内联资源</h5>
-                            <p class="text-xs text-gray-600">HTML/CSS/JS/模型权重</p>
-                        </div>
-                        <div class="text-center p-4 bg-indigo-50 rounded">
-                            <div class="text-2xl mb-2">🔧</div>
-                            <h5 class="font-semibold text-sm">浏览器API</h5>
-                            <p class="text-xs text-gray-600">LocalStorage + File API</p>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
-                        <h4 class="font-semibold text-green-800 mb-2">最终交付物</h4>
-                        <p class="text-sm text-green-700"><code class="bg-green-100 px-2 py-1 rounded">prompt-generator.html</code> - 唯一的、可直接分发的单文件应用</p>
-                    </div>
-                </div>
+    <!-- 邀请码弹窗 -->
+    <div class="modal" id="inviteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">🔑 解锁专家版</h3>
+                <button class="modal-close" id="closeInviteModal">&times;</button>
             </div>
+            <p style="margin-bottom: 1rem; color: var(--text-secondary);">专家版支持一键优化、批量生成、专属模板等高级功能，输入邀请码即可解锁</p>
+            <div class="form-group">
+                <label class="form-label">邀请码</label>
+                <input type="text" class="form-input" id="inviteCodeInput" placeholder="请输入邀请码">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" id="verifyInviteBtn">验证解锁</button>
+            <div style="margin-top: 1rem; text-align: center;">
+                <p style="margin-bottom: 0.5rem; font-size: 0.875rem;">没有邀请码？</p>
+                <button class="btn btn-warning btn-sm" id="getInviteCodeBtn">🎁 免费领取邀请码</button>
+            </div>
+        </div>
+    </div>
 
-            <div id="section4-2" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">4.2 创建测试框架</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-red-600 mb-3">端到端测试</h4>
-                        <p class="text-sm text-gray-700 mb-3">使用Playwright进行浏览器自动化测试。</p>
-                        <div class="text-xs text-gray-600 space-y-1">
-                            <div>• 应用启动验证</div>
-                            <div>• 完整用户流程测试</div>
-                            <div>• 输出结果验证</div>
-                        </div>
-                    </div>
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-red-600 mb-3">模型推理测试</h4>
-                        <p class="text-sm text-gray-700 mb-3">验证transformers.js模型的正确性。</p>
-                        <div class="text-xs text-gray-600 space-y-1">
-                            <div>• 模型加载测试</div>
-                            <div>• 分词流程验证</div>
-                            <div>• 推理结果检查</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="section4-3" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">4.3 验证修复与功能</h3>
-                <div class="tech-card rounded-lg p-6">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div>
-                            <h4 class="font-semibold text-blue-600 mb-3">测试执行</h4>
-                            <ul class="text-sm text-gray-700 space-y-1">
-                                <li>• pytest单元测试</li>
-                                <li>• Playwright E2E测试</li>
-                                <li>• 测试环境验证</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-blue-600 mb-3">性能监控</h4>
-                            <ul class="text-sm text-gray-700 space-y-1">
-                                <li>• CPU占用优化</li>
-                                <li>• 内存使用监控</li>
-                                <li>• 模型量化处理</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold text-blue-600 mb-3">无障碍访问</h4>
-                            <ul class="text-sm text-gray-700 space-y-1">
-                                <li>• WCAG标准兼容</li>
-                                <li>• 屏幕阅读器支持</li>
-                                <li>• 键盘导航优化</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 第五章 -->
-        <section id="section5" class="px-12 py-8 max-w-6xl mx-auto">
-            <h2 class="text-3xl font-playfair font-bold text-gray-800 mb-8">五、部署与生产就绪</h2>
-            
-            <div id="section5-1" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">5.1 GitHub Pages部署策略</h3>
-                <div class="tech-card rounded-lg p-6">
-                    <p class="text-gray-700 mb-4">对于静态单文件HTML应用，GitHub Pages是最简单、最经济的部署方案。</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-blue-50 p-4 rounded-lg">
-                            <h4 class="font-semibold text-blue-800 mb-3">无缝集成</h4>
-                            <p class="text-sm text-blue-700">直接与GitHub代码仓库集成，托管在username.github.io域名下。</p>
-                        </div>
-                        <div class="bg-blue-50 p-4 rounded-lg">
-                            <h4 class="font-semibold text-blue-800 mb-3">自动化部署</h4>
-                            <p class="text-sm text-blue-700">通过GitHub Actions实现从代码推送到网站更新的全自动化。</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="section5-2" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">5.2 性能与可访问性优化</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-green-600 mb-3">安全加固</h4>
-                        <ul class="text-sm text-gray-700 space-y-2">
-                            <li>• 内容安全策略（CSP）配置</li>
-                            <li>• DOMPurify输入净化</li>
-                            <li>• XSS攻击防护</li>
-                        </ul>
-                    </div>
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-green-600 mb-3">性能优化</h4>
-                        <ul class="text-sm text-gray-700 space-y-2">
-                            <li>• 代码压缩与优化</li>
-                            <li>• 资源加载顺序优化</li>
-                            <li>• 浏览器缓存机制</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div id="section5-3" class="mb-12">
-                <h3 class="text-2xl font-inter font-semibold text-gray-800 mb-6">5.3 最终生产包</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse bg-white rounded-lg shadow-sm">
-                        <thead class="bg-gray-100">
-                            <tr>
-                                <th class="border border-gray-300 px-4 py-3 text-left font-semibold">分发方式</th>
-                                <th class="border border-gray-300 px-4 py-3 text-left font-semibold">文件/目录</th>
-                                <th class="border border-gray-300 px-4 py-3 text-left font-semibold">适用场景</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-sm">
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-3 font-medium">单文件应用</td>
-                                <td class="border border-gray-300 px-4 py-3"><code class="bg-gray-100 px-2 py-1 rounded">dist/prompt-generator.html</code></td>
-                                <td class="border border-gray-300 px-4 py-3">个人使用、离线环境、高隐私要求</td>
-                            </tr>
-                            <tr class="bg-gray-50">
-                                <td class="border border-gray-300 px-4 py-3 font-medium">GitHub Pages</td>
-                                <td class="border border-gray-300 px-4 py-3"><code class="bg-gray-100 px-2 py-1 rounded">docs/</code> 或 gh-pages分支</td>
-                                <td class="border border-gray-300 px-4 py-3">在线访问、CDN加速、轻松分享</td>
-                            </tr>
-                            <tr>
-                                <td class="border border-gray-300 px-4 py-3 font-medium">源代码</td>
-                                <td class="border border-gray-300 px-4 py-3"><code class="bg-gray-100 px-2 py-1 rounded">src/</code>, <code class="bg-gray-100 px-2 py-1 rounded">tests/</code></td>
-                                <td class="border border-gray-300 px-4 py-3">二次开发、自定义部署</td>
-                            </tr>
-                            <tr class="bg-gray-50">
-                                <td class="border border-gray-300 px-4 py-3 font-medium">Docker容器</td>
-                                <td class="border border-gray-300 px-4 py-3"><code class="bg-gray-100 px-2 py-1 rounded">Dockerfile</code></td>
-                                <td class="border border-gray-300 px-4 py-3">企业私有化部署、K8s集成</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- 结论 -->
-        <section id="conclusion" class="px-12 py-8 max-w-6xl mx-auto">
-            <h2 class="text-3xl font-playfair font-bold text-gray-800 mb-8">结论</h2>
-            <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-6">
-                <p>本次对提示词生成器代码库的全面重构，成功地将其从一个功能有限的原型转变为一个功能强大、架构现代、用户体验卓越且具备生产级部署能力的现代Web应用。</p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-blue-600 mb-3">架构层面</h4>
-                        <p class="text-sm text-gray-700">通过分层服务架构、组件化设计和可插拔的LLM后端，彻底解决了原始单体架构的瓶颈问题，极大提升了代码的可维护性和可扩展性。</p>
-                    </div>
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-blue-600 mb-3">功能层面</h4>
-                        <p class="text-sm text-gray-700">开发了动态提示词生成、智能优化和多模型对比等核心功能，为用户提供了前所未有的灵活性和创作自由。</p>
-                    </div>
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-blue-600 mb-3">质量保障</h4>
-                        <p class="text-sm text-gray-700">通过Playwright测试框架和模型推理单元测试，为应用稳定性提供了坚实保障，建立了可预期的质量门禁。</p>
-                    </div>
-                    <div class="tech-card rounded-lg p-6">
-                        <h4 class="font-semibold text-blue-600 mb-3">部署创新</h4>
-                        <p class="text-sm text-gray-700">创新的单文件应用交付模式，将复杂技术栈隐藏在简单的HTML文件背后，极大降低了使用门槛。</p>
-                    </div>
-                </div>
-                
-                <p class="text-lg font-medium text-gray-800 bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
-                    总而言之，此次重构不仅是一次代码层面的优化，更是一次全方位、面向未来的技术升级。最终交付的应用已具备了服务于广大AI创作者和开发者的坚实基础，并为后续的迭代发展铺就了一条康庄大道。
-                </p>
-            </div>
-        </section>
-
-        <!-- 参考文献 -->
-        <section id="references" class="px-12 py-8 max-w-6xl mx-auto">
-            <h2 class="text-3xl font-playfair font-bold text-gray-800 mb-8">参考文献</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-4">
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[1]</span>
-                        <cite><a href="https://help.aliyun.com/zh/pai/user-guide/ai-painting-sdwebui-deployment" target="_blank" class="citation">AI绘画-SDWebUI部署</a></cite>
-                    </div>
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[2]</span>
-                        <cite><a href="https://docs.feishu.cn/article/wiki/wikcn4dBAfjMsdJ3IZvI1PkV1Re" target="_blank" class="citation">使用模型来生成作图咒语的偷懒工具</a></cite>
-                    </div>
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[3]</span>
-                        <cite><a href="https://agijuejin.feishu.cn/wiki/E9J6wDoRaio6Qnkn2QLclRJFnHf" target="_blank" class="citation">人人可做提示工程师！Claude上新</a></cite>
-                    </div>
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[4]</span>
-                        <cite><a href="https://www.toutiao.com/article/7221914151512211980" target="_blank" class="citation">Midjourney、Stable Diffusion"咒语"做图工具</a></cite>
-                    </div>
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[5]</span>
-                        <cite><a href="https://m.blog.csdn.net/weixin_40959890/article/details/130021507" target="_blank" class="citation">chatgpt prompt 在线生成器</a></cite>
-                    </div>
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[6]</span>
-                        <cite><a href="https://www.chajianxw.com/product-tool/84290.html" target="_blank" class="citation">Generative Prompts</a></cite>
-                    </div>
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[7]</span>
-                        <cite><a href="https://cloud.tencent.com/developer/article/2258795" target="_blank" class="citation">八十行代码实现开源的咒语作图工具</a></cite>
-                    </div>
-                </div>
-                <div class="space-y-4">
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[8]</span>
-                        <cite><a href="https://prompts.explinks.com/responsive_frontend_generator" target="_blank" class="citation">网页代码一键生成器</a></cite>
-                    </div>
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[9]</span>
-                        <cite><a href="https://m.toutiao.com/a7605171932255289865/" target="_blank" class="citation">前端AI不会写代码？我靠7版提示词把它"调教"成功了</a></cite>
-                    </div>
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[10]</span>
-                        <cite><a href="https://www.sucaijishi.com/toutiao-73-1381-1.html" target="_blank" class="citation">独立站长必备的在线工具AI提示词</a></cite>
-                    </div>
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[11]</span>
-                        <cite><a href="https://www.aihub.cn/prompts/" target="_blank" class="citation">AI提示指令</a></cite>
-                    </div>
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[12]</span>
-                        <cite><a href="https://prompts.explinks.com/enterprise_code_generator" target="_blank" class="citation">企业级高效前端代码生成</a></cite>
-                    </div>
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[13]</span>
-                        <cite><a href="https://prompts.explinks.com/code_generator_function" target="_blank" class="citation">代码生成</a></cite>
-                    </div>
-                    <div class="text-sm">
-                        <span class="font-semibold text-blue-600">[14]</span>
-                        <cite><a href="#" target="_blank" class="citation">Streamlit框架文档</a></cite>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+    <!-- Toast提示 -->
+    <div class="toast" id="toast">
+        <span class="toast-icon">✅</span>
+        <span class="toast-text" id="toastText">操作成功</span>
+    </div>
 
     <script>
-        // 导航激活状态管理
-        function updateActiveNav() {
-            const sections = document.querySelectorAll('section[id]');
-            const navItems = document.querySelectorAll('.nav-item');
-            
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                如果 (窗口.页面偏移Y >= 节顶部 - 200) {
-                    当前 = section.getAttribute('id');
-                }
-            });
+        // ==================== 配置区域（可自行修改） ====================
+        const CONFIG = {
+            // 管理密码，修改这里即可更换管理密码
+            ADMIN_PASSWORD: 'admin888',
+            // 初始免费次数
+            INIT_FREE_COUNT: 5,
+            // 有效邀请码列表
+            INVITE_CODES: ['DEMO-2024-EXPERT', 'TRY-PRO-VERSION', 'VIP-CODE-123', 'FREE-ACCESS-2024'],
+            // 历史记录最大数量
+            MAX_HISTORY_COUNT: 100,
+            // 统计数据
+            STATS: {
+                totalUsers: 128,
+                totalGenerations: 3420,
+                expertUsers: 23
+            }
+        };
 
-            navItems.forEach(item => {
-                项.类名列表.移除('活跃');
-                如果 (item.getAttribute('href') === '#' + current) {
-                    item.classList.add('active');
+        // ==================== 状态管理 ====================
+        const state = {
+            selectedScenario: null,
+            selectedLevel: 'basic',
+            selectedPlatform: '文心一言',
+            selectedTags: [],
+            todayCount: CONFIG.INIT_FREE_COUNT,
+            totalCount: 0,
+            favoriteCount: 0,
+            isExpertUnlocked: false,
+            history: [],
+            favorites: [],
+            inviteCodes: [...CONFIG.INVITE_CODES],
+            currentResult: null,
+            currentPage: 'home',
+            currentRequestId: null
+        };
+
+        // ==================== 模板数据 ====================
+        const templates = [
+            {
+                id: 1,
+                title: '公众号爆款文章生成',
+                scenario: '内容创作',
+                tags: ['文章', '爆款', '文案'],
+                preview: '生成符合公众号调性的爆款文章内容，包含标题优化、排版建议、互动引导等',
+                content: `你是一位专业的公众号运营专家，擅长创作爆款内容，请帮我生成一篇符合以下要求的文章：
+1. 主题：[主题]
+2. 目标人群：[人群描述]
+3. 字数要求：[字数]字
+4. 风格要求：[风格描述，如轻松幽默/专业严谨]
+需要包含：
+- 3-5个爆款标题备选
+- 清晰的正文结构（引言+3-5个核心段落+结尾）
+- 互动引导话术
+- 合适的排版建议`,
+                isLocked: false
+            },
+            {
+                id: 2,
+                title: '小红书笔记优化',
+                scenario: '内容创作',
+                tags: ['小红书', '种草', '笔记'],
+                preview: '优化小红书笔记内容，提升曝光量和互动率，符合平台调性',
+                content: `你是小红书爆款笔记创作专家，请帮我优化以下内容：
+1. 笔记类型：[好物分享/经验教程/测评种草等]
+2. 产品信息：[产品信息]
+3. 目标人群：[人群描述]
+优化要求：
+- 标题需包含高搜索关键词，吸引点击
+- 封面文案建议
+- 正文结构优化，符合小红书阅读习惯
+- 添加合适的话题标签
+- 互动引导设计`,
+                isLocked: false
+            },
+            {
+                id: 3,
+                title: '短视频脚本生成',
+                scenario: '内容创作',
+                tags: ['短视频', '脚本', '抖音'],
+                preview: '生成抖音/小红书短视频脚本，包含镜头、台词、时长等完整信息',
+                content: `你是专业的短视频编剧，请帮我生成一个完整的短视频脚本：
+1. 视频类型：[种草/教程/测评/剧情等]
+2. 产品/主题：[内容]
+3. 视频时长：[时长]
+脚本需包含：
+- 开场黄金3秒设计
+- 完整分镜脚本（镜头、画面、台词、时长）
+- BGM建议
+- 字幕文案
+- 结尾转化引导`,
+                isLocked: false
+            },
+            {
+                id: 9,
+                title: '论文大纲生成',
+                scenario: '学习提升',
+                tags: ['论文', '大纲', '写作'],
+                preview: '生成论文写作大纲，提供清晰的写作思路和结构，专家版专属',
+                content: `你是学术写作专家，请帮我生成论文写作大纲：
+1. 论文主题：[主题]
+2. 学科领域：[专业]
+3. 论文类型：[毕业论文/期刊论文/课程论文]
+4. 字数要求：[字数]
+大纲需包含：
+- 论文标题建议
+- 摘要框架
+- 完整的章节结构
+- 每个章节的写作要点
+- 参考文献建议`,
+                isLocked: true
+            },
+            {
+                id: 12,
+                title: 'API文档生成',
+                scenario: '技术开发',
+                tags: ['API', '文档', '开发'],
+                preview: '生成标准的API接口文档，包含接口说明、参数、返回值等，专家版专属',
+                content: `你是API文档专家，请帮我生成标准的API文档：
+1. 接口功能：[描述接口作用]
+2. 请求方式：[GET/POST/PUT/DELETE]
+3. 请求参数：[参数名、类型、说明]
+4. 返回值：[返回字段说明]
+文档需包含：
+- 接口地址
+- 请求示例
+- 成功/失败返回示例
+- 错误码说明`,
+                isLocked: true
+            }
+        ];
+
+        // ==================== 工具函数 ====================
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toastText');
+            toastText.textContent = message;
+            toast.querySelector('.toast-icon').textContent = type === 'success' ? '✅' : '⚠️';
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function saveState() {
+            const saveData = {
+                todayCount: state.todayCount,
+                totalCount: state.totalCount,
+                favoriteCount: state.favoriteCount,
+                isExpertUnlocked: state.isExpertUnlocked,
+                history: state.history,
+                favorites: state.favorites,
+                inviteCodes: state.inviteCodes,
+                lastSaveTime: new Date().toISOString()
+            };
+            localStorage.setItem('promptGeneratorState', JSON.stringify(saveData));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('promptGeneratorState');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    // 检查是否是今天，如果不是重置今日次数
+                    const lastSaveTime = new Date(data.lastSaveTime);
+                    const now = new Date();
+                    const isSameDay = lastSaveTime.getDate() === now.getDate() && 
+                                      lastSaveTime.getMonth() === now.getMonth() && 
+                                      lastSaveTime.getFullYear() === now.getFullYear();
+                    
+                    state.todayCount = isSameDay ? data.todayCount : CONFIG.INIT_FREE_COUNT;
+                    state.totalCount = data.totalCount || 0;
+                    state.favoriteCount = data.favoriteCount || 0;
+                    state.isExpertUnlocked = data.isExpertUnlocked || false;
+                    state.history = data.history || [];
+                    state.favorites = data.favorites || [];
+                    state.inviteCodes = data.inviteCodes || [...CONFIG.INVITE_CODES];
+
+                    // 更新UI显示
+                    document.getElementById('todayCount').textContent = state.todayCount;
+                    document.getElementById('totalCount').textContent = state.totalCount;
+                    document.getElementById('favoriteCount').textContent = state.favoriteCount;
+                    
+                    if (state.isExpertUnlocked) {
+                        unlockExpertFeatures();
+                    }
+                } catch (e) {
+                    console.error('加载状态失败', e);
                 }
+            }
+        }
+
+        function generatePrompt(task, scenario, platform, level) {
+            state.currentRequestId = Date.now();
+            const currentRequestId = state.currentRequestId;
+            
+            let prompt = `你是一位专业的AI助手，请根据以下需求完成任务：
+
+## 任务描述
+${task}
+
+## 适用场景
+${scenario || '通用场景'}
+
+## 输出要求
+`;
+            switch (level) {
+                case 'basic':
+                    prompt += `- 内容简洁明了，易于理解\n- 满足基本需求即可\n- 结构清晰，可直接使用`;
+                    break;
+                case 'advanced':
+                    prompt += `- 内容详细全面，逻辑清晰\n- 包含具体的案例或说明\n- 结构完整，可直接使用\n- 满足大多数场景需求`;
+                    break;
+                case 'expert':
+                    prompt += `- 内容专业深度，包含进阶技巧和最佳实践\n- 提供多种可选方案及优劣对比\n- 附带优化建议和注意事项\n- 适配${platform}的特性\n- 支持批量处理和复杂场景`;
+                    break;
+            }
+
+            if (state.selectedTags.length > 0) {
+                prompt += `\n\n## 额外要求\n请重点关注：${state.selectedTags.join('、')}`;
+            }
+
+            prompt += `\n\n请用${platform}的风格输出，确保内容符合平台规范。`;
+
+            // 模拟生成延迟
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    if (state.currentRequestId === currentRequestId) {
+                        resolve(prompt);
+                    }
+                }, 800);
             });
         }
 
-        // 滚动监听
-        window.addEventListener('scroll', updateActiveNav);
-        
-        // 页面加载时初始化
-        文档.addEventListener('DOMContentLoaded', 更新活动导航);
+        async function handleGenerate() {
+            const task = document.getElementById('taskInput').value.trim();
+            if (!task) {
+                showToast('请输入任务描述', 'error');
+                return;
+            }
+            
+            // 检查专家版权限
+            if (state.selectedLevel === 'expert' && !state.isExpertUnlocked) {
+                showToast('请先解锁专家版功能', 'error');
+                document.getElementById('inviteModal').classList.add('active');
+                return;
+            }
+            
+            if (!state.isExpertUnlocked && state.todayCount <= 0) {
+                showToast('今日免费次数已用完，请使用专家版或明天再来', 'error');
+                document.getElementById('inviteModal').classList.add('active');
+                return;
+            }
+            
+            const generateBtn = document.getElementById('generateBtn');
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '⏳ 生成中...';
+            
+            try {
+                const result = await generatePrompt(task, state.selectedScenario, state.selectedPlatform, state.selectedLevel);
+                state.currentResult = result;
+                
+                // 更新统计
+                if (!state.isExpertUnlocked && state.todayCount > 0) {
+                    state.todayCount--;
+                }
+                state.totalCount++;
+                document.getElementById('todayCount').textContent = state.todayCount;
+                document.getElementById('totalCount').textContent = state.totalCount;
+                
+                // 添加到历史
+                state.history.unshift({
+                    id: Date.now(),
+                    task,
+                    result,
+                    scenario: state.selectedScenario,
+                    platform: state.selectedPlatform,
+                    level: state.selectedLevel,
+                    time: new Date().toLocaleString()
+                });
+                
+                if (state.history.length > CONFIG.MAX_HISTORY_COUNT) {
+                    state.history = state.history.slice(0, CONFIG.MAX_HISTORY_COUNT);
+                }
+                
+                saveState();
+                
+                // 显示结果
+                const levelText = {
+                    'basic': '基础版',
+                    'advanced': '进阶版',
+                    'expert': '专家版'
+                };
+                const resultContainer = document.getElementById('resultContainer');
+                resultContainer.innerHTML = `
+                    <div class="result-card">
+                        <div class="result-header">
+                            <span class="result-level level-${state.selectedLevel}">${levelText[state.selectedLevel]}</span>
+                            <span style="color: var(--text-secondary);">${state.selectedPlatform}</span>
+                        </div>
+                        <div class="result-content" style="white-space: pre-wrap; line-height: 1.8;">${result}</div>
+                    </div>
+                `;
+                document.getElementById('resultCard').style.display = 'block';
+                showToast('提示词生成成功');
+                
+            } catch (error) {
+                console.error('生成失败:', error);
+                showToast('生成失败，请重试', 'error');
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '✨ 生成提示词';
+            }
+        }
 
-        // 平滑滚动
-        文档.querySelectorAll('.nav-item').forEach(项 => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                    目标元素.滚动到视图({
-                        行为: '平滑',
-                        块: '开始'
+        function unlockExpertFeatures() {
+            state.isExpertUnlocked = true;
+            document.getElementById('optimizeBtn').disabled = false;
+            document.getElementById('batchBtn').disabled = false;
+            document.querySelectorAll('#levelTags .tag').forEach(el => {
+                el.disabled = false;
+            });
+            showToast('专家版功能已解锁，所有次数限制已解除');
+            saveState();
+        }
+
+        function renderTemplates(filter = 'all') {
+            const grid = document.getElementById('templateGrid');
+            grid.innerHTML = '<div style="text-align: center; padding: 2rem; grid-column: 1/-1;">加载中...</div>';
+            
+            setTimeout(() => {
+                const filtered = filter === 'all' ? templates : templates.filter(t => t.scenario === filter);
+                
+                if (filtered.length === 0) {
+                    grid.innerHTML = `
+                        <div style="grid-column: 1/-1;">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📭</div>
+                                <p>暂无该场景的模板</p>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                grid.innerHTML = filtered.map(template => `
+                    <div class="template-card ${template.isLocked && !state.isExpertUnlocked ? 'locked' : ''}" data-id="${template.id}">
+                        <div class="template-header">
+                            <div class="template-title">${template.title}</div>
+                            ${template.isLocked && !state.isExpertUnlocked ? '<span class="badge badge-lock">🔒 专家版</span>' : ''}
+                        </div>
+                        <div class="template-scenario">${template.scenario}</div>
+                        <div class="template-tags">
+                            ${template.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="template-preview">${template.preview}</div>
+                        <div class="template-actions">
+                            <button class="btn btn-primary btn-sm use-template-btn" ${template.isLocked && !state.isExpertUnlocked ? 'disabled' : ''}>
+                                使用模板
+                            </button>
+                            <button class="btn btn-secondary btn-sm preview-template-btn">预览</button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // 绑定事件
+                grid.querySelectorAll('.template-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        if (e.target.tagName === 'BUTTON') return;
+                        const id = parseInt(card.dataset.id);
+                        const template = templates.find(t => t.id === id);
+                        if (template.isLocked && !state.isExpertUnlocked) {
+                            document.getElementById('inviteModal').classList.add('active');
+                            return;
+                        }
+                        document.getElementById('taskInput').value = template.content;
+                        document.querySelector('[data-page="home"]').click();
+                        showToast('模板已填入任务描述');
                     });
+                });
+                
+                grid.querySelectorAll('.use-template-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const id = parseInt(btn.closest('.template-card').dataset.id);
+                        const template = templates.find(t => t.id === id);
+                        if (template.isLocked && !state.isExpertUnlocked) {
+                            document.getElementById('inviteModal').classList.add('active');
+                            return;
+                        }
+                        document.getElementById('taskInput').value = template.content;
+                        document.querySelector('[data-page="home"]').click();
+                        showToast('模板已填入任务描述');
+                    });
+                });
+                
+                grid.querySelectorAll('.preview-template-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const id = parseInt(btn.closest('.template-card').dataset.id);
+                        const template = templates.find(t => t.id === id);
+                        alert(`模板预览：${template.title}\n\n${template.content}`);
+                    });
+                });
+            }, 500);
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('historyContainer');
+            if (state.history.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🕒</div>
+                        <p>暂无历史记录</p>
+                    </div>
+                `;
+                return;
+            }
+            container.innerHTML = state.history.map(item => `
+                <div class="history-item" data-id="${item.id}">
+                    <div class="history-content">
+                        <div class="history-task">${item.task.substring(0, 50)}${item.task.length > 50 ? '...' : ''}</div>
+                        <div class="history-meta">${item.scenario || '通用'} · ${item.platform} · ${item.level === 'basic' ? '基础版' : item.level === 'advanced' ? '进阶版' : '专家版'} · ${item.time}</div>
+                    </div>
+                    <div class="history-actions">
+                        <button class="btn btn-secondary btn-sm copy-history-btn">复制</button>
+                        <button class="btn btn-danger btn-sm delete-history-btn">删除</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // 绑定操作事件
+            container.querySelectorAll('.copy-history-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(btn.closest('.history-item').dataset.id);
+                    const item = state.history.find(h => h.id === id);
+                    if (item) {
+                        navigator.clipboard.writeText(item.result);
+                        showToast('已复制到剪贴板');
+                    }
+                });
+            });
+            
+            container.querySelectorAll('.delete-history-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(btn.closest('.history-item').dataset.id);
+                    state.history = state.history.filter(h => h.id !== id);
+                    saveState();
+                    renderHistory();
+                    showToast('已删除');
+                });
+            });
+        }
+
+        function renderFavorites() {
+            const container = document.getElementById('favoritesContainer');
+            if (state.favorites.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⭐</div>
+                        <p>暂无收藏内容</p>
+                    </div>
+                `;
+                return;
+            }
+            container.innerHTML = state.favorites.map(item => `
+                <div class="history-item" data-id="${item.id}">
+                    <div class="history-content">
+                        <div class="history-task">${item.task.substring(0, 50)}${item.task.length > 50 ? '...' : ''}</div>
+                        <div class="history-meta">${item.scenario || '通用'} · ${item.platform} · ${item.level === 'basic' ? '基础版' : item.level === 'advanced' ? '进阶版' : '专家版'} · ${item.time}</div>
+                    </div>
+                    <div class="history-actions">
+                        <button class="btn btn-secondary btn-sm copy-favorite-btn">复制</button>
+                        <button class="btn btn-danger btn-sm delete-favorite-btn">取消收藏</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // 绑定操作事件
+            container.querySelectorAll('.copy-favorite-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(btn.closest('.history-item').dataset.id);
+                    const item = state.favorites.find(h => h.id === id);
+                    if (item) {
+                        navigator.clipboard.writeText(item.result);
+                        showToast('已复制到剪贴板');
+                    }
+                });
+            });
+            
+            container.querySelectorAll('.delete-favorite-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(btn.closest('.history-item').dataset.id);
+                    state.favorites = state.favorites.filter(h => h.id !== id);
+                    state.favoriteCount = state.favorites.length;
+                    saveState();
+                    document.getElementById('favoriteCount').textContent = state.favoriteCount;
+                    renderFavorites();
+                    showToast('已取消收藏');
+                });
+            });
+        }
+
+        // ==================== 事件监听 ====================
+        // 页面切换
+        document.querySelectorAll('[data-page]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const page = btn.dataset.page;
+                state.currentPage = page;
+                // 更新导航状态
+                document.querySelectorAll('.nav-btn, .mobile-nav-item').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll(`[data-page="${page}"]`).forEach(b => b.classList.add('active'));
+                // 切换页面
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById(`page-${page}`).classList.add('active');
+                // 移动端菜单关闭
+                document.getElementById('mobileNav').classList.remove('active');
+                // 渲染对应内容
+                if (page === 'templates') renderTemplates();
+                if (page === 'history') renderHistory();
+                if (page === 'favorites') renderFavorites();
+                if (page === 'admin') {
+                    document.getElementById('adminFeatures').style.display = 'none';
+                    document.getElementById('adminPassword').value = '';
                 }
             });
         });
-    </脚本>
-</身体>
-      </html>
+
+        // 移动端菜单
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileNav').classList.toggle('active');
+        });
+
+        // 场景选择
+        document.querySelectorAll('#scenarioTags .tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                document.querySelectorAll('#scenarioTags .tag').forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                state.selectedScenario = tag.dataset.scenario;
+            });
+        });
+
+        // 标签选择
+        document.querySelectorAll('#hotTags .tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                const tagName = tag.dataset.tag;
+                if (state.selectedTags.includes(tagName)) {
+                    state.selectedTags = state.selectedTags.filter(t => t !== tagName);
+                    tag.classList.remove('active');
+                } else {
+                    state.selectedTags.push(tagName);
+                    tag.classList.add('active');
+                }
+            });
+        });
+
+        // 等级选择
+        document.querySelectorAll('#levelTags .tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                const level = tag.dataset.level;
+                if (level === 'expert' && !state.isExpertUnlocked) {
+                    document.getElementById('inviteModal').classList.add('active');
+                    return;
+                }
+                document.querySelectorAll('#levelTags .tag').forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                state.selectedLevel = level;
+            });
+        });
+
+        // 平台选择
+        document.getElementById('platformSelect').addEventListener('change', (e) => {
+            state.selectedPlatform = e.target.value;
+        });
+
+        // 生成提示词
+        document.getElementById('generateBtn').addEventListener('click', handleGenerate);
+
+        // 复制结果
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            if (state.currentResult) {
+                navigator.clipboard.writeText(state.currentResult);
+                showToast('已复制到剪贴板');
+            }
+        });
+
+        // 收藏结果
+        document.getElementById('favoriteBtn').addEventListener('click', () => {
+            if (state.currentResult) {
+                const task = document.getElementById('taskInput').value.trim();
+                state.favorites.unshift({
+                    id: Date.now(),
+                    task,
+                    result: state.currentResult,
+                    scenario: state.selectedScenario,
+                    platform: state.selectedPlatform,
+                    level: state.selectedLevel,
+                    time: new Date().toLocaleString()
+                });
+                state.favoriteCount = state.favorites.length;
+                saveState();
+                document.getElementById('favoriteCount').textContent = state.favoriteCount;
+                showToast('已添加到收藏');
+            }
+        });
+        
+        // 清空输入
+        document.getElementById('clearInputBtn').addEventListener('click', () => {
+            document.getElementById('taskInput').value = '';
+            state.selectedTags = [];
+            document.querySelectorAll('#hotTags .tag').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#scenarioTags .tag').forEach(t => t.classList.remove('active'));
+            state.selectedScenario = null;
+            showToast('输入内容已清空');
+        });
+        
+        // 清空结果
+        document.getElementById('clearResultBtn').addEventListener('click', () => {
+            document.getElementById('resultContainer').innerHTML = '';
+            document.getElementById('resultCard').style.display = 'none';
+            state.currentResult = null;
+            showToast('结果已清空');
+        });
+
+        // 清空历史
+        document.getElementById('clearHistoryBtn').addEventListener('click', () => {
+            if (confirm('确定要清空所有历史记录吗？此操作不可恢复。')) {
+                state.history = [];
+                saveState();
+                renderHistory();
+                showToast('历史记录已清空');
+            }
+        });
+
+        // 模板筛选
+        document.getElementById('templateFilter').addEventListener('change', (e) => {
+            renderTemplates(e.target.value);
+        });
+
+        // 邀请码弹窗
+        document.getElementById('closeInviteModal').addEventListener('click', () => {
+            document.getElementById('inviteModal').classList.remove('active');
+        });
+
+        document.getElementById('verifyInviteBtn').addEventListener('click', () => {
+            const code = document.getElementById('inviteCodeInput').value.trim();
+            if (!code) {
+                showToast('请输入邀请码', 'error');
+                return;
+            }
+            if (state.inviteCodes.includes(code)) {
+                unlockExpertFeatures();
+                document.getElementById('inviteModal').classList.remove('active');
+                document.getElementById('inviteCodeInput').value = '';
+            } else {
+                showToast('邀请码无效或已过期', 'error');
+            }
+        });
+
+        document.getElementById('getInviteCodeBtn').addEventListener('click', () => {
+            showToast('你的专属邀请码是：FREE-ACCESS-2024');
+        });
+
+        // 管理面板
+        document.getElementById('adminLoginBtn').addEventListener('click', () => {
+            const password = document.getElementById('adminPassword').value;
+            if (password === CONFIG.ADMIN_PASSWORD) {
+                document.getElementById('adminFeatures').style.display = 'block';
+                showToast('登录成功');
+                document.getElementById('totalUsers').textContent = CONFIG.STATS.totalUsers;
+                document.getElementById('totalGenerations').textContent = state.totalCount + CONFIG.STATS.totalGenerations;
+                document.getElementById('expertUsers').textContent = CONFIG.STATS.expertUsers;
+            } else {
+                showToast('密码错误', 'error');
+            }
+        });
+
+        document.getElementById('addInviteCodeBtn').addEventListener('click', () => {
+            const code = 'CODE-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            state.inviteCodes.push(code);
+            saveState();
+            showToast(`邀请码已生成：${code}`);
+            // 重新渲染邀请码列表
+            const newItem = document.createElement('div');
+            newItem.className = 'history-item';
+            newItem.innerHTML = `
+                <div class="history-content">
+                    <div class="history-task">${code}</div>
+                    <div class="history-meta">未使用 · 创建于 ${new Date().toLocaleString()}</div>
+                </div>
+                <div class="history-actions">
+                    <button class="btn btn-secondary btn-sm copy-btn" data-code="${code}">复制</button>
+                    <button class="btn btn-danger btn-sm delete-btn" data-code="${code}">删除</button>
+                </div>
+            `;
+            document.getElementById('inviteCodeList').appendChild(newItem);
+            
+            // 绑定新按钮的事件
+            newItem.querySelector('.copy-btn').addEventListener('click', () => {
+                navigator.clipboard.writeText(code);
+                showToast('邀请码已复制');
+            });
+            
+            newItem.querySelector('.delete-btn').addEventListener('click', () => {
+                state.inviteCodes = state.inviteCodes.filter(c => c !== code);
+                saveState();
+                newItem.remove();
+                showToast('邀请码已删除');
+            });
+        });
+        
+        // 复制邀请码
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('copy-btn')) {
+                const code = e.target.dataset.code;
+                navigator.clipboard.writeText(code);
+                showToast('邀请码已复制');
+            }
+            if (e.target.classList.contains('delete-btn')) {
+                if (confirm('确定要删除这个邀请码吗？')) {
+                    const code = e.target.dataset.code;
+                    state.inviteCodes = state.inviteCodes.filter(c => c !== code);
+                    saveState();
+                    e.target.closest('.history-item').remove();
+                    showToast('邀请码已删除');
+                }
+            }
+        });
+
+        // 一键优化（专家版）
+        document.getElementById('optimizeBtn').addEventListener('click', () => {
+            if (!state.currentResult) {
+                showToast('请先生成提示词', 'error');
+                return;
+            }
+            const optimized = state.currentResult + '\n\n## 优化要求\n1. 语言更精炼，无冗余\n2. 逻辑更清晰，层次分明\n3. 符合最佳实践\n4. 增加错误处理提示\n5. 增加边界情况处理建议';
+            state.currentResult = optimized;
+            document.getElementById('resultContainer').innerHTML = `
+                <div class="result-card">
+                    <div class="result-header">
+                        <span class="result-level level-expert">优化版</span>
+                        <span style="color: var(--text-secondary);">${state.selectedPlatform}</span>
+                    </div>
+                    <div class="result-content" style="white-space: pre-wrap; line-height: 1.8;">${optimized}</div>
+                </div>
+            `;
+            showToast('提示词已优化');
+        });
+
+        // 批量生成（专家版）
+        document.getElementById('batchBtn').addEventListener('click', async () => {
+            const task = document.getElementById('taskInput').value.trim();
+            if (!task) {
+                showToast('请输入任务描述', 'error');
+                return;
+            }
+            const levels = ['basic', 'advanced', 'expert'];
+            const levelText = {
+                'basic': '基础版',
+                'advanced': '进阶版',
+                'expert': '专家版'
+            };
+            let results = '';
+            const batchBtn = document.getElementById('batchBtn');
+            batchBtn.disabled = true;
+            batchBtn.innerHTML = '⏳ 生成中...';
+            
+            try {
+                for (const level of levels) {
+                    // 检查专家版权限
+                    if (level === 'expert' && !state.isExpertUnlocked) {
+                        showToast('请先解锁专家版功能', 'error');
+                        document.getElementById('inviteModal').classList.add('active');
+                        return;
+                    }
+                    
+                    const result = await generatePrompt(task, state.selectedScenario, state.selectedPlatform, level);
+                    results += `
+                        <div class="result-card" style="margin-bottom: 1rem;">
+                            <div class="result-header">
+                                <span class="result-level level-${level}">${levelText[level]}</span>
+                            </div>
+                            <div class="result-content" style="white-space: pre-wrap; line-height: 1.8;">${result}</div>
+                        </div>
+                    `;
+                }
+                document.getElementById('resultContainer').innerHTML = results;
+                document.getElementById('resultCard').style.display = 'block';
+                showToast('批量生成完成，共生成3个版本');
+                
+                // 更新统计
+                state.totalCount += 3;
+                document.getElementById('totalCount').textContent = state.totalCount;
+                saveState();
+            } catch (error) {
+                showToast('批量生成失败', 'error');
+            } finally {
+                batchBtn.disabled = false;
+                batchBtn.innerHTML = '📚 批量生成';
+            }
+        });
+        
+        // 导出数据
+        const exportDataBtn = document.getElementById('exportDataBtn');
+        if (exportDataBtn) {
+            exportDataBtn.addEventListener('click', () => {
+                const dataStr = JSON.stringify(state, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `提示词生成器数据备份_${new Date().toLocaleDateString()}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('数据导出成功');
+            });
+        }
+        
+        // 重置数据
+        const resetDataBtn = document.getElementById('resetDataBtn');
+        if (resetDataBtn) {
+            resetDataBtn.addEventListener('click', () => {
+                if (confirm('确定要重置所有数据吗？所有历史、收藏、解锁状态都会清除，此操作不可恢复。')) {
+                    localStorage.removeItem('promptGeneratorState');
+                    location.reload();
+                }
+            });
+        }
+        
+        // 关闭弹窗（点击遮罩）
+        document.getElementById('inviteModal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                document.getElementById('inviteModal').classList.remove('active');
+            }
+        });
+
+        // ==================== 初始化 ====================
+        loadState();
+        renderTemplates();
+    </script>
+</body>
+</html>
