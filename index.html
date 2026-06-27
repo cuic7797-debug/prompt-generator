@@ -176,7 +176,7 @@
         .form-label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: 500;
+            font fontWeight: 500;
             color: var(--text-primary);
         }
 
@@ -207,7 +207,7 @@
             border: none;
             border-radius: 0.5rem;
             font-size: 1rem;
-            font-weight: 500;
+            fontWeight: 500;
             cursor: pointer;
             transition: all 0.2s;
             display: inline-flex;
@@ -246,6 +246,11 @@
 
         .btn-warning {
             background: var(--warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
             color: white;
         }
 
@@ -539,6 +544,31 @@
             margin-bottom: 0.25rem;
         }
 
+        /* 徽章 */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-lock {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
         /* 响应式设计 */
         @media (max-width: 768px) {
             .nav-links {
@@ -693,6 +723,9 @@
                         <button class="btn btn-secondary btn-sm" id="batchBtn" disabled>
                             📚 批量生成
                         </button>
+                        <button class="btn btn-secondary btn-sm" id="clearInputBtn">
+                            🗑️ 清空输入
+                        </button>
                     </div>
                 </div>
             </div>
@@ -720,6 +753,7 @@
                     <div>
                         <button class="btn btn-secondary btn-sm" id="copyBtn">📋 复制</button>
                         <button class="btn btn-secondary btn-sm" id="favoriteBtn">⭐ 收藏</button>
+                        <button class="btn btn-secondary btn-sm" id="clearResultBtn">🗑️ 清空结果</button>
                     </div>
                 </div>
                 <div id="resultContainer"></div>
@@ -743,6 +777,8 @@
                         <option value="学习提升">学习提升</option>
                         <option value="技术开发">技术开发</option>
                         <option value="数据分析">数据分析</option>
+                        <option value="职场办公">职场办公</option>
+                        <option value="生活服务">生活服务</option>
                     </select>
                 </div>
             </div>
@@ -801,7 +837,6 @@
                     <input type="password" class="form-input" id="adminPassword" placeholder="请输入管理密码">
                 </div>
                 <button class="btn btn-primary" id="adminLoginBtn">登录</button>
-                <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.875rem;">演示密码：admin123</p>
             </div>
 
             <!-- 管理功能（登录后显示） -->
@@ -830,23 +865,33 @@
                         <div class="history-item">
                             <div class="history-content">
                                 <div class="history-task">DEMO-2024-EXPERT</div>
-                                <div class="history-meta">未使用 创建于 2024-01-01</div>
+                                <div class="history-meta">未使用 · 创建于 2024-01-01</div>
                             </div>
                             <div class="history-actions">
-                                <button class="btn btn-secondary btn-sm">复制</button>
-                                <button class="btn btn-danger btn-sm">删除</button>
+                                <button class="btn btn-secondary btn-sm copy-code-btn" data-code="DEMO-2024-EXPERT">复制</button>
+                                <button class="btn btn-danger btn-sm delete-code-btn" data-code="DEMO-2024-EXPERT">删除</button>
                             </div>
                         </div>
                         <div class="history-item">
                             <div class="history-content">
                                 <div class="history-task">TRY-PRO-VERSION</div>
-                                <div class="history-meta">未使用 创建于 2024-01-02</div>
+                                <div class="history-meta">未使用 · 创建于 2024-01-02</div>
                             </div>
                             <div class="history-actions">
-                                <button class="btn btn-secondary btn-sm">复制</button>
-                                <button class="btn btn-danger btn-sm">删除</button>
+                                <button class="btn btn-secondary btn-sm copy-code-btn" data-code="TRY-PRO-VERSION">复制</button>
+                                <button class="btn btn-danger btn-sm delete-code-btn" data-code="TRY-PRO-VERSION">删除</button>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-header">
+                        <h2 class="card-title">其他设置</h2>
+                    </div>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn btn-secondary btn-sm" id="exportDataBtn">📤 导出所有数据</button>
+                        <button class="btn btn-danger btn-sm" id="resetDataBtn">🗑️ 重置所有数据</button>
                     </div>
                 </div>
             </div>
@@ -880,387 +925,48 @@
     </div>
 
     <script>
+        // ==================== 配置区域（可自行修改） ====================
+        const CONFIG = {
+            // 管理密码，修改这里即可更换管理密码
+            ADMIN_PASSWORD: 'admin888',
+            // 初始免费次数
+            INIT_FREE_COUNT: 5,
+            // 有效邀请码列表
+            INVITE_CODES: ['DEMO-2024-EXPERT', 'TRY-PRO-VERSION', 'VIP-CODE-123', 'FREE-ACCESS-2024'],
+            // 历史记录最大数量
+            MAX_HISTORY_COUNT: 100,
+            // 统计数据
+            STATS: {
+                totalUsers: 128,
+                totalGenerations: 3420,
+                expertUsers: 23
+            }
+        };
+
         // ==================== 状态管理 ====================
         const state = {
             selectedScenario: null,
             selectedLevel: 'basic',
             selectedPlatform: '文心一言',
             selectedTags: [],
-            todayCount: 5,
+            todayCount: CONFIG.INIT_FREE_COUNT,
             totalCount: 0,
             favoriteCount: 0,
             isExpertUnlocked: false,
             history: [],
             favorites: [],
-            inviteCodes: ['DEMO-2024-EXPERT', 'TRY-PRO-VERSION', 'VIP-CODE-123'],
+            inviteCodes: [...CONFIG.INVITE_CODES],
             currentResult: null,
-            currentPage: 'home'
+            currentPage: 'home',
+            currentRequestId: null
         };
-
-        // ==================== 模板数据 ====================
-        const templates = [
-            {
-                id: 1,
-                title: '公众号爆款文章生成',
-                scenario: '内容创作',
-                tags: ['文章', '爆款', '文案'],
-                preview: '生成符合公众号调性的爆款文章内容，包含标题优化、排版建议、互动引导等',
-                content: `你是一位专业的公众号运营专家，擅长创作爆款内容，请帮我生成一篇符合以下要求的文章：
-1. 主题：[主题]
-2. 目标人群：[人群描述]
-3. 字数要求：[字数]字
-4. 风格要求：[风格描述，如轻松幽默/专业严谨]
-需要包含：
-- 3-5个爆款标题备选
-- 清晰的正文结构（引言+3-5个核心段落+结尾）
-- 互动引导话术
-- 合适的排版建议`,
-                isLocked: false
-            },
-            {
-                id: 2,
-                title: '小红书笔记优化',
-                scenario: '内容创作',
-                tags: ['小红书', '种草', '笔记'],
-                preview: '优化小红书笔记内容，提升曝光量和互动率，符合平台调性',
-                content: `你是小红书爆款笔记创作专家，请帮我优化以下内容：
-1. 笔记类型：[好物分享/经验教程/测评种草等]
-2. 产品信息：[产品信息]
-3. 目标人群：[人群描述]
-优化要求：
-- 标题需包含高搜索关键词，吸引点击
-- 封面文案建议
-- 正文结构优化，符合小红书阅读习惯
-- 添加合适的话题标签
-- 互动引导设计`,
-                isLocked: false
-            },
-            {
-                id: 3,
-                title: '短视频脚本生成',
-                scenario: '内容创作',
-                tags: ['短视频', '脚本', '抖音'],
-                preview: '生成抖音/小红书短视频脚本，包含镜头、台词、时长等完整信息',
-                content: `你是专业的短视频编剧，请帮我生成一个完整的短视频脚本：
-1. 视频类型：[种草/教程/测评/剧情等]
-2. 产品/主题：[内容]
-3. 视频时长：[时长]
-脚本需包含：
-- 开场黄金3秒设计
-- 完整分镜脚本（镜头、画面、台词、时长）
-- BGM建议
-- 字幕文案
-- 结尾转化引导`,
-                isLocked: false
-            },
-            {
-                id: 4,
-                title: '营销文案撰写',
-                scenario: '营销增长',
-                tags: ['营销', '文案', '转化'],
-                preview: '撰写高转化率的营销文案，适用于广告投放、落地页、社群营销等场景',
-                content: `你是资深营销文案专家，擅长撰写高转化率的文案，请帮我撰写：
-1. 营销场景：[广告投放/落地页/社群营销/朋友圈等]
-2. 产品/服务：[产品介绍]
-3. 目标人群：[人群画像]
-4. 核心卖点：[卖点1、卖点2、卖点3]
-文案需包含：
-- 吸引眼球的标题
-- 痛点挖掘与解决方案
-- 清晰的行动号召
-- 适配场景的表达风格`,
-                isLocked: false
-            },
-            {
-                id: 5,
-                title: '朋友圈高转化文案',
-                scenario: '营销增长',
-                tags: ['朋友圈', '文案', '私域'],
-                preview: '生成高转化的朋友圈文案，提升私域流量转化率',
-                content: `你是私域运营专家，请帮我生成高转化的朋友圈文案：
-1. 产品/服务：[产品介绍]
-2. 目标用户：[用户特征]
-3. 文案类型：[产品推广/活动预告/用户见证等]
-文案要求：
-- 口语化表达，自然不生硬
-- 痛点与卖点结合
-- 适当的emoji增加可读性
-- 明确的行动指引
-- 符合朋友圈阅读习惯`,
-                isLocked: false
-            },
-            {
-                id: 6,
-                title: '社群运营话术',
-                scenario: '营销增长',
-                tags: ['社群', '话术', '运营'],
-                preview: '生成社群运营所需的话术，包含欢迎语、互动语、转化话术等',
-                content: `你是社群运营专家，请帮我生成以下社群话术：
-1. 社群类型：[用户群/粉丝群/活动群等]
-2. 运营场景：[欢迎语/互动话术/产品推广/活动预告等]
-3. 平台：[微信群/QQ群等]
-话术要求：
-- 符合社群调性
-- 亲切自然，有温度
-- 能有效提升社群活跃度或转化率
-- 包含互动设计`,
-                isLocked: false
-            },
-            {
-                id: 7,
-                title: '学习笔记整理',
-                scenario: '学习提升',
-                tags: ['学习', '笔记', '整理'],
-                preview: '整理学习笔记，生成结构清晰、易于复习的笔记内容',
-                content: `你是学习整理专家，请帮我整理以下学习笔记：
-1. 学习主题：[主题]
-2. 原始笔记内容：[粘贴笔记内容]
-3. 整理要求：[结构清晰/简明扼要/思维导图等]
-整理需包含：
-- 核心知识点梳理
-- 重点难点标注
-- 记忆技巧/口诀
-- 配套练习题建议
-- 复习计划安排`,
-                isLocked: false
-            },
-            {
-                id: 8,
-                title: '知识问答生成',
-                scenario: '学习提升',
-                tags: ['问答', '学习', '测试'],
-                preview: '根据学习内容生成测试题，帮助检验学习效果',
-                content: `你是专业的出题老师，请根据以下学习内容生成测试题：
-1. 学习内容：[粘贴内容/描述主题]
-2. 题目类型：[选择题/填空题/简答题/判断题]
-3. 题目数量：[数量]
-4. 难度等级：[简单/中等/困难]
-生成内容需包含：
-- 完整的题目
-- 标准答案
-- 答案解析
-`,
-                isLocked: false
-            },
-            {
-                id: 9,
-                title: '论文大纲生成',
-                scenario: '学习提升',
-                tags: ['论文', '大纲', '写作'],
-                preview: '生成论文写作大纲，提供清晰的写作思路和结构',
-                content: `你是学术写作专家，请帮我生成论文写作大纲：
-1. 论文主题：[主题]
-2. 学科领域：[专业]
-3. 论文类型：[毕业论文/期刊论文/课程论文]
-4. 字数要求：[字数]
-大纲需包含：
-- 论文标题建议
-- 摘要框架
-- 完整的章节结构
-- 每个章节的写作要点
-- 参考文献建议`,
-                isLocked: true
-            },
-            {
-                id: 10,
-                title: '代码生成与优化',
-                scenario: '技术开发',
-                tags: ['代码', '开发', '优化'],
-                preview: '生成和优化代码，支持Python、Java、JavaScript等多种语言',
-                content: `你是资深全栈开发专家，请帮我完成以下开发任务：
-1. 开发需求：[描述需求]
-2. 技术栈：[编程语言/框架]
-3. 功能要求：[功能1、功能2、功能3]
-输出要求：
-- 完整的代码实现
-- 清晰的代码注释
-- 必要的使用说明
-- 性能优化建议
-- 异常处理方案`,
-                isLocked: false
-            },
-            {
-                id: 11,
-                title: 'SQL查询生成',
-                scenario: '技术开发',
-                tags: ['SQL', '数据库', '查询'],
-                preview: '根据需求生成SQL查询语句，支持MySQL、PostgreSQL等主流数据库',
-                content: `你是数据库专家，请帮我生成SQL查询语句：
-1. 数据库类型：[MySQL/PostgreSQL/SQL Server等]
-2. 表结构：[描述表结构和字段]
-3. 查询需求：[描述查询要求]
-输出要求：
-- 完整的SQL语句
-- 语句解释说明
-- 索引优化建议
-- 性能提升方案`,
-                isLocked: false
-            },
-            {
-                id: 12,
-                title: 'API文档生成',
-                scenario: '技术开发',
-                tags: ['API', '文档', '开发'],
-                preview: '生成标准的API接口文档，包含接口说明、参数、返回值等',
-                content: `你是API文档专家，请帮我生成标准的API文档：
-1. 接口功能：[描述接口作用]
-2. 请求方式：[GET/POST/PUT/DELETE]
-3. 请求参数：[参数名、类型、说明]
-4. 返回值：[返回字段说明]
-文档需包含：
-- 接口地址
-- 请求示例
-- 成功/失败返回示例
-- 错误码说明`,
-                isLocked: true
-            },
-            {
-                id: 13,
-                title: '数据分析报告',
-                scenario: '数据分析',
-                tags: ['数据', '分析', '报告'],
-                preview: '生成数据分析报告，包含数据洞察、可视化建议、行动建议等',
-                content: `你是数据分析专家，请帮我生成数据分析报告：
-1. 数据主题：[主题]
-2. 数据来源：[简述数据来源]
-3. 分析目标：[想要得到的结论]
-报告需包含：
-- 核心数据指标
-- 数据趋势分析
-- 异常数据洞察
-- 可视化图表建议
--  actionable 行动建议`,
-                isLocked: false
-            },
-            {
-                id: 14,
-                title: '用户画像分析',
-                scenario: '数据分析',
-                tags: ['用户', '画像', '分析'],
-                preview: '生成用户画像分析报告，帮助精准定位目标用户',
-                content: `你是用户分析专家，请帮我生成用户画像分析：
-1. 产品类型：[产品类型]
-2. 用户数据：[简述可用数据]
-3. 分析维度：[年龄/性别/地域/消费习惯等]
-分析需包含：
-- 核心用户群体特征
-- 用户行为路径分析
-- 痛点与需求挖掘
-- 精准营销建议`,
-                isLocked: false
-            },
-            {
-                id: 15,
-                title: '竞品分析报告',
-                scenario: '数据分析',
-                tags: ['竞品', '分析', '调研'],
-                preview: '生成竞品分析报告，包含竞品对比、优劣势分析、策略建议等',
-                content: `你是市场分析专家，请帮我生成竞品分析报告：
-1. 分析对象：[列出竞品名称]
-2. 分析维度：[产品/价格/营销/用户等]
-报告需包含：
-- 竞品优劣势对比
-- 市场份额分析
-- 营销策略参考
-- 自身产品优化建议`,
-                isLocked: true
-            },
-            {
-                id: 16,
-                title: '工作总结报告',
-                scenario: '职场办公',
-                tags: ['总结', '工作', '报告'],
-                preview: '生成工作总结报告，适用于周报、月报、年终总结等场景',
-                content: `你是职场写作专家，请帮我生成工作总结报告：
-1. 总结周期：[周/月/季度/年度]
-2. 工作内容：[完成的工作项目]
-3. 成果数据：[业绩数据]
-报告需包含：
-- 核心工作成果
-- 数据化业绩展示
-- 工作亮点梳理
-- 不足与改进方向
-- 下期工作计划`,
-                isLocked: false
-            },
-            {
-                id: 17,
-                title: '会议纪要整理',
-                scenario: '职场办公',
-                tags: ['会议', '纪要', '整理'],
-                preview: '整理会议纪要，提取会议重点、任务分工、时间节点等',
-                content: `你是会议整理专家，请帮我整理会议纪要：
-1. 会议主题：[主题]
-2. 会议内容：[录音/文字记录]
-3. 参会人员：[人员]
-纪要需包含：
-- 会议基本信息
-- 核心议题讨论结果
-- 任务分工及负责人
-- 时间节点要求
-- 下次会议安排`,
-                isLocked: false
-            },
-            {
-                id: 18,
-                title: '邮件写作模板',
-                scenario: '职场办公',
-                tags: ['邮件', '写作', '职场'],
-                preview: '生成职场常用邮件，包含商务合作、请假、汇报等多种场景',
-                content: `你是职场沟通专家，请帮我撰写以下邮件：
-1. 邮件场景：[商务合作/工作汇报/请假/询价等]
-2. 收件人：[职位/关系]
-3. 邮件目的：[要达成的目标]
-邮件要求：
-- 礼貌得体，专业规范
-- 逻辑清晰，目的明确
-- 内容简洁明了
-- 符合职场沟通习惯`,
-                isLocked: false
-            },
-            {
-                id: 19,
-                title: '生活美食菜谱',
-                scenario: '生活服务',
-                tags: ['美食', '菜谱', '做饭'],
-                preview: '生成家常菜谱，包含食材、步骤、烹饪技巧等详细信息',
-                content: `你是美食烹饪专家，请帮我生成家常菜谱：
-1. 想做的菜品：[菜名/食材]
-2. 用餐人数：[人数]
-3. 烹饪条件：[厨具、时间]
-菜谱需包含：
-- 食材清单及用量
-- 详细烹饪步骤
-- 烹饪技巧
-- 口味调整建议`,
-                isLocked: false
-            },
-            {
-                id: 20,
-                title: '旅游攻略生成',
-                scenario: '生活服务',
-                tags: ['旅游', '攻略', '出行'],
-                preview: '生成旅游攻略，包含行程安排、美食推荐、注意事项等',
-                content: `你是旅游达人，请帮我生成旅游攻略：
-1. 目的地：[城市/景点]
-2. 出行时间：[时间]
-3. 出行人数：[人数]
-4. 预算范围：[预算]
-攻略需包含：
-- 每日行程安排
-- 必吃美食推荐
-- 住宿建议
-- 交通指南
-- 注意事项及避坑建议`,
-                isLocked: true
-            }
-        ];
 
         // ==================== 工具函数 ====================
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const toastText = document.getElementById('toastText');
             toastText.textContent = message;
+            toast.querySelector('.toast-icon').textContent = type === 'success' ? '✅' : '⚠️';
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
@@ -1274,7 +980,9 @@
                 favoriteCount: state.favoriteCount,
                 isExpertUnlocked: state.isExpertUnlocked,
                 history: state.history,
-                favorites: state.favorites
+                favorites: state.favorites,
+                inviteCodes: state.inviteCodes,
+                lastSaveTime: new Date().toISOString()
             };
             localStorage.setItem('promptGeneratorState', JSON.stringify(saveData));
         }
@@ -1284,11 +992,26 @@
             if (saved) {
                 try {
                     const data = JSON.parse(saved);
-                    Object.assign(state, data);
+                    // 检查是否是今天，如果不是重置今日次数
+                    const lastSaveTime = new Date(data.lastSaveTime);
+                    const now = new Date();
+                    const isSameDay = lastSaveTime.getDate() === now.getDate() && 
+                                      lastSaveTime.getMonth() === now.getMonth() && 
+                                      lastSaveTime.getFullYear() === now.getFullYear();
+                    
+                    state.todayCount = isSameDay ? data.todayCount : CONFIG.INIT_FREE_COUNT;
+                    state.totalCount = data.totalCount || 0;
+                    state.favoriteCount = data.favoriteCount || 0;
+                    state.isExpertUnlocked = data.isExpertUnlocked || false;
+                    state.history = data.history || [];
+                    state.favorites = data.favorites || [];
+                    state.inviteCodes = data.inviteCodes || [...CONFIG.INVITE_CODES];
+
                     // 更新UI显示
                     document.getElementById('todayCount').textContent = state.todayCount;
                     document.getElementById('totalCount').textContent = state.totalCount;
                     document.getElementById('favoriteCount').textContent = state.favoriteCount;
+                    
                     if (state.isExpertUnlocked) {
                         unlockExpertFeatures();
                     }
@@ -1299,6 +1022,9 @@
         }
 
         function generatePrompt(task, scenario, platform, level) {
+            state.currentRequestId = Date.now();
+            const currentRequestId = state.currentRequestId;
+            
             let prompt = `你是一位专业的AI助手，请根据以下需求完成任务：
 
 ## 任务描述
@@ -1311,13 +1037,13 @@ ${scenario || '通用场景'}
 `;
             switch (level) {
                 case 'basic':
-                    prompt += `- 内容简洁明了，易于理解\n- 满足基本需求即可`;
+                    prompt += `- 内容简洁明了，易于理解\n- 满足基本需求即可\n- 结构清晰，可直接使用`;
                     break;
                 case 'advanced':
-                    prompt += `- 内容详细全面，逻辑清晰\n- 包含具体的案例或说明\n- 结构完整，可直接使用`;
+                    prompt += `- 内容详细全面，逻辑清晰\n- 包含具体的案例或说明\n- 结构完整，可直接使用\n- 满足大多数场景需求`;
                     break;
                 case 'expert':
-                    prompt += `- 内容专业深度，包含进阶技巧和最佳实践\n- 提供多种可选方案及优劣对比\n- 附带优化建议和注意事项\n- 适配${platform}的特性`;
+                    prompt += `- 内容专业深度，包含进阶技巧和最佳实践\n- 提供多种可选方案及优劣对比\n- 附带优化建议和注意事项\n- 适配${platform}的特性\n- 支持批量处理和复杂场景`;
                     break;
             }
 
@@ -1326,46 +1052,272 @@ ${scenario || '通用场景'}
             }
 
             prompt += `\n\n请用${platform}的风格输出，确保内容符合平台规范。`;
-            return prompt;
+
+            // 模拟生成延迟
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    if (state.currentRequestId === currentRequestId) {
+                        resolve(prompt);
+                    }
+                }, 800);
+            });
+        }
+
+        async function handleGenerate() {
+            const task = document.getElementById('taskInput').value.trim();
+            if (!task) {
+                showToast('请输入任务描述', 'error');
+                return;
+            }
+            if (state.todayCount <= 0 && !state.isExpertUnlocked) {
+                showToast('今日免费次数已用完，请使用专家版或明天再来', 'error');
+                document.getElementById('inviteModal').classList.add('active');
+                return;
+            }
+            
+            const generateBtn = document.getElementById('generateBtn');
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '⏳ 生成中...';
+            
+            try {
+                const result = await generatePrompt(task, state.selectedScenario, state.selectedPlatform, state.selectedLevel);
+                state.currentResult = result;
+                
+                // 更新统计
+                if (!state.isExpertUnlocked && state.todayCount > 0) {
+                    state.todayCount--;
+                }
+                state.totalCount++;
+                document.getElementById('todayCount').textContent = state.todayCount;
+                document.getElementById('totalCount').textContent = state.totalCount;
+                
+                // 添加到历史
+                state.history.unshift({
+                    id: Date.now(),
+                    task,
+                    result,
+                    scenario: state.selectedScenario,
+                    platform: state.selectedPlatform,
+                    level: state.selectedLevel,
+                    time: new Date().toLocaleString()
+                });
+                
+                if (state.history.length > CONFIG.MAX_HISTORY_COUNT) {
+                    state.history = state.history.slice(0, CONFIG.MAX_HISTORY_COUNT);
+                }
+                
+                saveState();
+                
+                // 显示结果
+                const levelText = {
+                    'basic': '基础版',
+                    'advanced': '进阶版',
+                    'expert': '专家版'
+                };
+                const resultContainer = document.getElementById('resultContainer');
+                resultContainer.innerHTML = `
+                    <div class="result-card">
+                        <div class="result-header">
+                            <span class="result-level level-${state.selectedLevel}">${levelText[state.selectedLevel]}</span>
+                            <span style="color: var(--text-secondary);">${state.selectedPlatform}</span>
+                        </div>
+                        <div class="result-content" style="white-space: pre-wrap; line-height: 1.8;">${result}</div>
+                    </div>
+                `;
+                document.getElementById('resultCard').style.display = 'block';
+                showToast('提示词生成成功');
+                
+            } catch (error) {
+                console.error('生成失败:', error);
+                showToast('生成失败，请重试', 'error');
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '✨ 生成提示词';
+            }
+        }
+
+        function unlockExpertFeatures() {
+            state.isExpertUnlocked = true;
+            document.getElementById('optimizeBtn').disabled = false;
+            document.getElementById('batchBtn').disabled = false;
+            document.querySelectorAll('#levelTags .tag').forEach(el => {
+                el.disabled = false;
+            });
+            showToast('专家版功能已解锁，所有次数限制已解除');
+            saveState();
         }
 
         function renderTemplates(filter = 'all') {
             const grid = document.getElementById('templateGrid');
-            grid.innerHTML = '';
-            const filtered = filter === 'all' ? templates : templates.filter(t => t.scenario === filter);
+            grid.innerHTML = '<div style="text-align: center; padding: 2rem; grid-column: 1/-1;">加载中...</div>';
             
-            filtered.forEach(template => {
-                const card = document.createElement('div');
-                card.className = `template-card ${template.isLocked && !state.isExpertUnlocked ? 'locked' : ''}`;
-                card.innerHTML = `
-                    <div class="template-header">
-                        <div class="template-title">${template.title}</div>
-                        ${template.isLocked && !state.isExpertUnlocked ? '<span class="badge badge-lock">🔒 专家版</span>' : ''}
-                    </div>
-                    <div class="template-scenario">${template.scenario}</div>
-                    <div class="template-tags">
-                        ${template.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                    </div>
-                    <div class="template-preview">${template.preview}</div>
-                    <div class="template-actions">
-                        <button class="btn btn-primary btn-sm" ${template.isLocked && !state.isExpertUnlocked ? 'disabled' : ''}>
-                            使用模板
-                        </button>
-                        <button class="btn btn-secondary btn-sm">预览</button>
-                    </div>
-                `;
-                card.addEventListener('click', (e) => {
-                    if (e.target.tagName === 'BUTTON') return;
-                    if (template.isLocked && !state.isExpertUnlocked) {
-                        document.getElementById('inviteModal').classList.add('active');
-                        return;
+            setTimeout(() => {
+                const templates = [
+                    {
+                        id: 1,
+                        title: '公众号爆款文章生成',
+                        scenario: '内容创作',
+                        tags: ['文章', '爆款', '文案'],
+                        preview: '生成符合公众号调性的爆款文章内容，包含标题优化、排版建议、互动引导等',
+                        content: `你是一位专业的公众号运营专家，擅长创作爆款内容，请帮我生成一篇符合以下要求的文章：
+1. 主题：[主题]
+2. 目标人群：[人群描述]
+3. 字数要求：[字数]字
+4. 风格要求：[风格描述，如轻松幽默/专业严谨]
+需要包含：
+- 3-5个爆款标题备选
+- 清晰的正文结构（引言+3-5个核心段落+结尾）
+- 互动引导话术
+- 合适的排版建议`,
+                        isLocked: false
+                    },
+                    {
+                        id: 2,
+                        title: '小红书笔记优化',
+                        scenario: '内容创作',
+                        tags: ['小红书', '种草', '笔记'],
+                        preview: '优化小红书笔记内容，提升曝光量和互动率，符合平台调性',
+                        content: `你是小红书爆款笔记创作专家，请帮我优化以下内容：
+1. 笔记类型：[好物分享/经验教程/测评种草等]
+2. 产品信息：[产品信息]
+3. 目标人群：[人群描述]
+优化要求：
+- 标题需包含高搜索关键词，吸引点击
+- 封面文案建议
+- 正文结构优化，符合小红书阅读习惯
+- 添加合适的话题标签
+- 互动引导设计`,
+                        isLocked: false
+                    },
+                    {
+                        id: 9,
+                        title: '论文大纲生成',
+                        scenario: '学习提升',
+                        tags: ['论文', '大纲', '写作'],
+                        preview: '生成论文写作大纲，提供清晰的写作思路和结构，专家版专属',
+                        content: `你是学术写作专家，请帮我生成论文写作大纲：
+1. 论文主题：[主题]
+2. 学科领域：[专业]
+3. 论文类型：[毕业论文/期刊论文/课程论文]
+4. 字数要求：[字数]
+大纲需包含：
+- 论文标题建议
+- 摘要框架
+- 完整的章节结构
+- 每个章节的写作要点
+- 参考文献建议`,
+                        isLocked: true
+                    },
+                    {
+                        id: 12,
+                        title: 'API文档生成',
+                        scenario: '技术开发',
+                        tags: ['API', '文档', '开发'],
+                        preview: '生成标准的API接口文档，包含接口说明、参数、返回值等，专家版专属',
+                        content: `你是API文档专家，请帮我生成标准的API文档：
+1. 接口功能：[描述接口作用]
+2. 请求方式：[GET/POST/PUT/DELETE]
+3. 请求参数：[参数名、类型、说明]
+4. 返回值：[返回字段说明]
+文档需包含：
+- 接口地址
+- 请求示例
+- 成功/失败返回示例
+- 错误码说明`,
+                        isLocked: true
+                    },
+                    {
+                        id: 15,
+                        title: '竞品分析报告',
+                        scenario: '数据分析',
+                        tags: ['竞品', '分析', '调研'],
+                        preview: '生成竞品分析报告，包含竞品对比、优劣势分析、策略建议等，专家版专属',
+                        content: `你是市场分析专家，请帮我生成竞品分析报告：
+1. 分析对象：[列出竞品名称]
+2. 分析维度：[产品/价格/营销/用户等]
+报告需包含：
+- 竞品优劣势对比
+- 市场份额分析
+- 营销策略参考
+- 自身产品优化建议`,
+                        isLocked: true
                     }
-                    document.getElementById('taskInput').value = template.content;
-                    document.querySelector('[data-page="home"]').click();
-                    showToast('模板已填入任务描述');
+                ];
+                
+                const filtered = filter === 'all' ? templates : templates.filter(t => t.scenario === filter);
+                
+                if (filtered.length === 0) {
+                    grid.innerHTML = `
+                        <div style="grid-column: 1/-1;">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📭</div>
+                                <p>暂无该场景的模板</p>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                grid.innerHTML = filtered.map(template => `
+                    <div class="template-card ${template.isLocked && !state.isExpertUnlocked ? 'locked' : ''}" data-id="${template.id}">
+                        <div class="template-header">
+                            <div class="template-title">${template.title}</div>
+                            ${template.isLocked && !state.isExpertUnlocked ? '<span class="badge badge-lock">🔒 专家版</span>' : ''}
+                        </div>
+                        <div class="template-scenario">${template.scenario}</div>
+                        <div class="template-tags">
+                            ${template.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="template-preview">${template.preview}</div>
+                        <div class="template-actions">
+                            <button class="btn btn-primary btn-sm use-template-btn" ${template.isLocked && !state.isExpertUnlocked ? 'disabled' : ''}>
+                                使用模板
+                            </button>
+                            <button class="btn btn-secondary btn-sm preview-template-btn">预览</button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // 绑定事件
+                grid.querySelectorAll('.template-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        if (e.target.tagName === 'BUTTON') return;
+                        const id = parseInt(card.dataset.id);
+                        const template = templates.find(t => t.id === id);
+                        if (template.isLocked && !state.isExpertUnlocked) {
+                            document.getElementById('inviteModal').classList.add('active');
+                            return;
+                        }
+                        document.getElementById('taskInput').value = template.content;
+                        document.querySelector('[data-page="home"]').click();
+                        showToast('模板已填入任务描述');
+                    });
                 });
-                grid.appendChild(card);
-            });
+                
+                grid.querySelectorAll('.use-template-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const id = parseInt(btn.closest('.template-card').dataset.id);
+                        const template = templates.find(t => t.id === id);
+                        if (template.isLocked && !state.isExpertUnlocked) {
+                            document.getElementById('inviteModal').classList.add('active');
+                            return;
+                        }
+                        document.getElementById('taskInput').value = template.content;
+                        document.querySelector('[data-page="home"]').click();
+                        showToast('模板已填入任务描述');
+                    });
+                });
+                
+                grid.querySelectorAll('.preview-template-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const id = parseInt(btn.closest('.template-card').dataset.id);
+                        const template = templates.find(t => t.id === id);
+                        alert(`模板预览：${template.title}\n\n${template.content}`);
+                    });
+                });
+            }, 500);
         }
 
         function renderHistory() {
@@ -1380,35 +1332,37 @@ ${scenario || '通用场景'}
                 return;
             }
             container.innerHTML = state.history.map(item => `
-                <div class="history-item">
+                <div class="history-item" data-id="${item.id}">
                     <div class="history-content">
                         <div class="history-task">${item.task.substring(0, 50)}${item.task.length > 50 ? '...' : ''}</div>
-                        <div class="history-meta">${item.scenario || '通用'} · ${item.platform} · ${item.level} · ${item.time}</div>
+                        <div class="history-meta">${item.scenario || '通用'} · ${item.platform} · ${item.level === 'basic' ? '基础版' : item.level === 'advanced' ? '进阶版' : '专家版'} · ${item.time}</div>
                     </div>
                     <div class="history-actions">
-                        <button class="btn btn-secondary btn-sm" data-action="copy" data-id="${item.id}">复制</button>
-                        <button class="btn btn-danger btn-sm" data-action="delete" data-id="${item.id}">删除</button>
+                        <button class="btn btn-secondary btn-sm copy-history-btn">复制</button>
+                        <button class="btn btn-danger btn-sm delete-history-btn">删除</button>
                     </div>
                 </div>
             `).join('');
 
             // 绑定操作事件
-            container.querySelectorAll('button').forEach(btn => {
+            container.querySelectorAll('.copy-history-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const action = e.target.dataset.action;
-                    const id = parseInt(e.target.dataset.id);
-                    if (action === 'copy') {
-                        const item = state.history.find(h => h.id === id);
-                        if (item) {
-                            navigator.clipboard.writeText(item.result);
-                            showToast('已复制到剪贴板');
-                        }
-                    } else if (action === 'delete') {
-                        state.history = state.history.filter(h => h.id !== id);
-                        saveState();
-                        renderHistory();
-                        showToast('已删除');
+                    const id = parseInt(btn.closest('.history-item').dataset.id);
+                    const item = state.history.find(h => h.id === id);
+                    if (item) {
+                        navigator.clipboard.writeText(item.result);
+                        showToast('已复制到剪贴板');
                     }
+                });
+            });
+            
+            container.querySelectorAll('.delete-history-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(btn.closest('.history-item').dataset.id);
+                    state.history = state.history.filter(h => h.id !== id);
+                    saveState();
+                    renderHistory();
+                    showToast('已删除');
                 });
             });
         }
@@ -1425,49 +1379,41 @@ ${scenario || '通用场景'}
                 return;
             }
             container.innerHTML = state.favorites.map(item => `
-                <div class="history-item">
+                <div class="history-item" data-id="${item.id}">
                     <div class="history-content">
                         <div class="history-task">${item.task.substring(0, 50)}${item.task.length > 50 ? '...' : ''}</div>
-                        <div class="history-meta">${item.scenario || '通用'} · ${item.platform} · ${item.level} · ${item.time}</div>
+                        <div class="history-meta">${item.scenario || '通用'} · ${item.platform} · ${item.level === 'basic' ? '基础版' : item.level === 'advanced' ? '进阶版' : '专家版'} · ${item.time}</div>
                     </div>
                     <div class="history-actions">
-                        <button class="btn btn-secondary btn-sm" data-action="copy" data-id="${item.id}">复制</button>
-                        <button class="btn btn-danger btn-sm" data-action="unfavorite" data-id="${item.id}">取消收藏</button>
+                        <button class="btn btn-secondary btn-sm copy-favorite-btn">复制</button>
+                        <button class="btn btn-danger btn-sm delete-favorite-btn">取消收藏</button>
                     </div>
                 </div>
             `).join('');
 
             // 绑定操作事件
-            container.querySelectorAll('button').forEach(btn => {
+            container.querySelectorAll('.copy-favorite-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const action = e.target.dataset.action;
-                    const id = parseInt(e.target.dataset.id);
-                    if (action === 'copy') {
-                        const item = state.favorites.find(h => h.id === id);
-                        if (item) {
-                            navigator.clipboard.writeText(item.result);
-                            showToast('已复制到剪贴板');
-                        }
-                    } else if (action === 'unfavorite') {
-                        state.favorites = state.favorites.filter(h => h.id !== id);
-                        state.favoriteCount = state.favorites.length;
-                        saveState();
-                        renderFavorites();
-                        showToast('已取消收藏');
+                    const id = parseInt(btn.closest('.history-item').dataset.id);
+                    const item = state.favorites.find(h => h.id === id);
+                    if (item) {
+                        navigator.clipboard.writeText(item.result);
+                        showToast('已复制到剪贴板');
                     }
                 });
             });
-        }
-
-        function unlockExpertFeatures() {
-            state.isExpertUnlocked = true;
-            document.getElementById('optimizeBtn').disabled = false;
-            document.getElementById('batchBtn').disabled = false;
-            document.querySelectorAll('[data-level="expert"]').forEach(el => {
-                el.disabled = false;
+            
+            container.querySelectorAll('.delete-favorite-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(btn.closest('.history-item').dataset.id);
+                    state.favorites = state.favorites.filter(h => h.id !== id);
+                    state.favoriteCount = state.favorites.length;
+                    saveState();
+                    document.getElementById('favoriteCount').textContent = state.favoriteCount;
+                    renderFavorites();
+                    showToast('已取消收藏');
+                });
             });
-            saveState();
-            showToast('专家版功能已解锁');
         }
 
         // ==================== 事件监听 ====================
@@ -1488,6 +1434,10 @@ ${scenario || '通用场景'}
                 if (page === 'templates') renderTemplates();
                 if (page === 'history') renderHistory();
                 if (page === 'favorites') renderFavorites();
+                if (page === 'admin') {
+                    document.getElementById('adminFeatures').style.display = 'none';
+                    document.getElementById('adminPassword').value = '';
+                }
             });
         });
 
@@ -1539,56 +1489,7 @@ ${scenario || '通用场景'}
         });
 
         // 生成提示词
-        document.getElementById('generateBtn').addEventListener('click', () => {
-            const task = document.getElementById('taskInput').value.trim();
-            if (!task) {
-                showToast('请输入任务描述', 'error');
-                return;
-            }
-            if (state.todayCount <= 0) {
-                showToast('今日免费次数已用完，请明天再来或使用专家版', 'error');
-                return;
-            }
-            // 生成结果
-            const result = generatePrompt(task, state.selectedScenario, state.selectedPlatform, state.selectedLevel);
-            state.currentResult = result;
-            // 更新统计
-            state.todayCount--;
-            state.totalCount++;
-            document.getElementById('todayCount').textContent = state.todayCount;
-            document.getElementById('totalCount').textContent = state.totalCount;
-            // 添加到历史
-            state.history.unshift({
-                id: Date.now(),
-                task,
-                result,
-                scenario: state.selectedScenario,
-                platform: state.selectedPlatform,
-                level: state.selectedLevel,
-                time: new Date().toLocaleString()
-            });
-            // 限制历史记录数量
-            if (state.history.length > 50) state.history = state.history.slice(0, 50);
-            saveState();
-            // 显示结果
-            const levelText = {
-                'basic': '基础版',
-                'advanced': '进阶版',
-                'expert': '专家版'
-            };
-            const resultContainer = document.getElementById('resultContainer');
-            resultContainer.innerHTML = `
-                <div class="result-card">
-                    <div class="result-header">
-                        <span class="result-level level-${state.selectedLevel}">${levelText[state.selectedLevel]}</span>
-                        <span style="color: var(--text-secondary);">${state.selectedPlatform}</span>
-                    </div>
-                    <div class="result-content">${result.replace(/\n/g, '<br>')}</div>
-                </div>
-            `;
-            document.getElementById('resultCard').style.display = 'block';
-            showToast('提示词生成成功');
-        });
+        document.getElementById('generateBtn').addEventListener('click', handleGenerate);
 
         // 复制结果
         document.getElementById('copyBtn').addEventListener('click', () => {
@@ -1617,10 +1518,28 @@ ${scenario || '通用场景'}
                 showToast('已添加到收藏');
             }
         });
+        
+        // 清空输入
+        document.getElementById('clearInputBtn').addEventListener('click', () => {
+            document.getElementById('taskInput').value = '';
+            state.selectedTags = [];
+            document.querySelectorAll('#hotTags .tag').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#scenarioTags .tag').forEach(t => t.classList.remove('active'));
+            state.selectedScenario = null;
+            showToast('输入内容已清空');
+        });
+        
+        // 清空结果
+        document.getElementById('clearResultBtn').addEventListener('click', () => {
+            document.getElementById('resultContainer').innerHTML = '';
+            document.getElementById('resultCard').style.display = 'none';
+            state.currentResult = null;
+            showToast('结果已清空');
+        });
 
         // 清空历史
         document.getElementById('clearHistoryBtn').addEventListener('click', () => {
-            if (confirm('确定要清空所有历史记录吗？')) {
+            if (confirm('确定要清空所有历史记录吗？此操作不可恢复。')) {
                 state.history = [];
                 saveState();
                 renderHistory();
@@ -1649,20 +1568,23 @@ ${scenario || '通用场景'}
                 document.getElementById('inviteModal').classList.remove('active');
                 document.getElementById('inviteCodeInput').value = '';
             } else {
-                showToast('邀请码无效', 'error');
+                showToast('邀请码无效或已过期', 'error');
             }
         });
 
         document.getElementById('getInviteCodeBtn').addEventListener('click', () => {
-            showToast('邀请码已发送到你的邮箱：DEMO-2024-EXPERT');
+            showToast('你的专属邀请码是：FREE-ACCESS-2024');
         });
 
         // 管理面板
         document.getElementById('adminLoginBtn').addEventListener('click', () => {
             const password = document.getElementById('adminPassword').value;
-            if (password === 'admin123') {
+            if (password === CONFIG.ADMIN_PASSWORD) {
                 document.getElementById('adminFeatures').style.display = 'block';
                 showToast('登录成功');
+                document.getElementById('totalUsers').textContent = CONFIG.STATS.totalUsers;
+                document.getElementById('totalGenerations').textContent = state.totalCount + CONFIG.STATS.totalGenerations;
+                document.getElementById('expertUsers').textContent = CONFIG.STATS.expertUsers;
             } else {
                 showToast('密码错误', 'error');
             }
@@ -1671,7 +1593,53 @@ ${scenario || '通用场景'}
         document.getElementById('addInviteCodeBtn').addEventListener('click', () => {
             const code = 'CODE-' + Math.random().toString(36).substring(2, 8).toUpperCase();
             state.inviteCodes.push(code);
+            saveState();
             showToast(`邀请码已生成：${code}`);
+            // 重新渲染邀请码列表
+            const newItem = document.createElement('div');
+            newItem.className = 'history-item';
+            newItem.innerHTML = `
+                <div class="history-content">
+                    <div class="history-task">${code}</div>
+                    <div class="history-meta">未使用 · 创建于 ${new Date().toLocaleString()}</div>
+                </div>
+                <div class="history-actions">
+                    <button class="btn btn-secondary btn-sm copy-code-btn" data-code="${code}">复制</button>
+                    <button class="btn btn-danger btn-sm delete-code-btn" data-code="${code}">删除</button>
+                </div>
+            `;
+            document.getElementById('inviteCodeList').appendChild(newItem);
+            
+            // 绑定新按钮的事件
+            newItem.querySelector('.copy-code-btn').addEventListener('click', () => {
+                navigator.clipboard.writeText(code);
+                showToast('邀请码已复制');
+            });
+            
+            newItem.querySelector('.delete-code-btn').addEventListener('click', () => {
+                state.inviteCodes = state.inviteCodes.filter(c => c !== code);
+                saveState();
+                newItem.remove();
+                showToast('邀请码已删除');
+            });
+        });
+        
+        // 复制邀请码
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('copy-code-btn')) {
+                const code = e.target.dataset.code;
+                navigator.clipboard.writeText(code);
+                showToast('邀请码已复制');
+            }
+            if (e.target.classList.contains('delete-code-btn')) {
+                if (confirm('确定要删除这个邀请码吗？')) {
+                    const code = e.target.dataset.code;
+                    state.inviteCodes = state.inviteCodes.filter(c => c !== code);
+                    saveState();
+                    e.target.closest('.history-item').remove();
+                    showToast('邀请码已删除');
+                }
+            }
         });
 
         // 一键优化（专家版）
@@ -1680,7 +1648,7 @@ ${scenario || '通用场景'}
                 showToast('请先生成提示词', 'error');
                 return;
             }
-            const optimized = state.currentResult + '\n\n## 优化要求\n1. 语言更精炼，无冗余\n2. 逻辑更清晰，层次分明\n3. 符合最佳实践\n4. 增加错误处理提示';
+            const optimized = state.currentResult + '\n\n## 优化要求\n1. 语言更精炼，无冗余\n2. 逻辑更清晰，层次分明\n3. 符合最佳实践\n4. 增加错误处理提示\n5. 增加边界情况处理建议';
             state.currentResult = optimized;
             document.getElementById('resultContainer').innerHTML = `
                 <div class="result-card">
@@ -1688,14 +1656,14 @@ ${scenario || '通用场景'}
                         <span class="result-level level-expert">优化版</span>
                         <span style="color: var(--text-secondary);">${state.selectedPlatform}</span>
                     </div>
-                    <div class="result-content">${optimized.replace(/\n/g, '<br>')}</div>
+                    <div class="result-content" style="white-space: pre-wrap; line-height: 1.8;">${optimized}</div>
                 </div>
             `;
             showToast('提示词已优化');
         });
 
         // 批量生成（专家版）
-        document.getElementById('batchBtn').addEventListener('click', () => {
+        document.getElementById('batchBtn').addEventListener('click', async () => {
             const task = document.getElementById('taskInput').value.trim();
             if (!task) {
                 showToast('请输入任务描述', 'error');
@@ -1708,20 +1676,70 @@ ${scenario || '通用场景'}
                 'expert': '专家版'
             };
             let results = '';
-            levels.forEach(level => {
-                const result = generatePrompt(task, state.selectedScenario, state.selectedPlatform, level);
-                results += `
-                    <div class="result-card" style="margin-bottom: 1rem;">
-                        <div class="result-header">
-                            <span class="result-level level-${level}">${levelText[level]}</span>
+            const batchBtn = document.getElementById('batchBtn');
+            batchBtn.disabled = true;
+            batchBtn.innerHTML = '⏳ 生成中...';
+            
+            try {
+                for (const level of levels) {
+                    const result = await generatePrompt(task, state.selectedScenario, state.selectedPlatform, level);
+                    results += `
+                        <div class="result-card" style="margin-bottom: 1rem;">
+                            <div class="result-header">
+                                <span class="result-level level-${level}">${levelText[level]}</span>
+                            </div>
+                            <div class="result-content" style="white-space: pre-wrap; line-height: 1.8;">${result}</div>
                         </div>
-                        <div class="result-content">${result.replace(/\n/g, '<br>')}</div>
-                    </div>
-                `;
+                    `;
+                }
+                document.getElementById('resultContainer').innerHTML = results;
+                document.getElementById('resultCard').style.display = 'block';
+                showToast('批量生成完成，共生成3个版本');
+                
+                // 更新统计
+                state.totalCount += 3;
+                document.getElementById('totalCount').textContent = state.totalCount;
+                saveState();
+            } catch (error) {
+                showToast('批量生成失败', 'error');
+            } finally {
+                batchBtn.disabled = false;
+                batchBtn.innerHTML = '📚 批量生成';
+            }
+        });
+        
+        // 导出数据
+        const exportDataBtn = document.getElementById('exportDataBtn');
+        if (exportDataBtn) {
+            exportDataBtn.addEventListener('click', () => {
+                const dataStr = JSON.stringify(state, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `提示词生成器数据备份_${new Date().toLocaleDateString()}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('数据导出成功');
             });
-            document.getElementById('resultContainer').innerHTML = results;
-            document.getElementById('resultCard').style.display = 'block';
-            showToast('批量生成完成');
+        }
+        
+        // 重置数据
+        const resetDataBtn = document.getElementById('resetDataBtn');
+        if (resetDataBtn) {
+            resetDataBtn.addEventListener('click', () => {
+                if (confirm('确定要重置所有数据吗？所有历史、收藏、解锁状态都会清除，此操作不可恢复。')) {
+                    localStorage.removeItem('promptGeneratorState');
+                    location.reload();
+                }
+            });
+        }
+        
+        // 关闭弹窗（点击遮罩）
+        document.getElementById('inviteModal').addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                document.getElementById('inviteModal').classList.remove('active');
+            }
         });
 
         // ==================== 初始化 ====================
