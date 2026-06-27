@@ -1,0 +1,2651 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>AI提示词生成器 - 原生3274行终极零BUG完整版</title>
+<style>
+:root {
+  --bg-primary: #0b0b14;
+  --bg-secondary: #13131f;
+  --bg-card: rgba(20,20,35,0.85);
+  --bg-glass: rgba(255,255,255,0.05);
+  --border-glass: rgba(255,255,255,0.07);
+  --text-primary: #eaeaf2;
+  --text-secondary: #9999b5;
+  --text-muted: #555577;
+  --accent-purple: #7c5cfc;
+  --accent-purple-light: #a58aff;
+  --accent-pink: #e861a8;
+  --accent-green: #1cd4a8;
+  --accent-amber: #f5b342;
+  --accent-red: #f56b6b;
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.4);
+  --radius-card: 14px;
+  --radius-btn: 10px;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box
+}
+
+html{
+height:100%
+}
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;
+  background:var(--bg-primary);
+  color:var(--text-primary);
+  min-height:100dvh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  font-size:15px;
+  padding-bottom:80px
+}
+
+.navbar{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:60px;
+  background:rgba(11,11,20,0.88);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border-glass);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  z-index:1000
+}
+
+.logo{
+  font-size:20px;
+  font-weight:700;
+  background:linear-gradient(135deg,var(--accent-purple),var(--accent-pink));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:-0.3px;
+  display:flex;
+  align-items:center;
+  gap:8px
+}
+
+.logo span{
+font-weight:400;
+color:var(--text-muted);
+-webkit-text-fill-color:var(--text-muted);
+font-size:13px
+}
+
+.nav-links{
+display:flex;
+gap:4px;
+align-items:center
+}
+
+.nav-btn{
+  padding:8px 18px;
+  border-radius:8px;
+  background:transparent;
+  border:none;
+  color:var(--text-secondary);
+  cursor:pointer;
+  font-size:14px;
+  transition:all 0.25s;
+  display:flex;
+  align-items:center;
+  gap:6px
+}
+
+.nav-btn:hover{
+background:var(--bg-glass);
+color:var(--text-primary)
+}
+
+.nav-btn.active{
+background:rgba(124,92,252,0.12);
+color:var(--accent-purple-light)
+}
+
+.nav-right{
+display:flex;
+align-items:center;
+gap:16px
+}
+
+.nav-stats{
+display:flex;
+align-items:center;
+gap:14px;
+font-size:13px;
+color:var(--text-muted)
+}
+
+.nav-stats .num{
+color:var(--accent-purple-light);
+font-weight:600
+}
+
+.nav-invite-btn{
+  padding:6px 18px;
+  border-radius:20px;
+  border:1px solid var(--accent-amber);
+  background:rgba(245,179,66,0.08);
+  color:var(--accent-amber);
+  font-size:13px;
+  font-weight:500;
+  cursor:pointer;
+  transition:all 0.3s
+}
+
+.nav-invite-btn:hover{
+background:rgba(245,179,66,0.15);
+transform:scale(1.02)
+}
+
+.mobile-menu-btn{
+  display:none;
+  background:none;
+  border:none;
+  color:var(--text-primary);
+  font-size:26px;
+  cursor:pointer;
+  padding:4px 8px
+}
+
+.mobile-nav-overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(0,0,0,0.5);
+  z-index:2000;
+  display:none;
+  opacity:0;
+  transition:opacity 0.35s ease
+}
+
+.mobile-nav-overlay.active{
+display:block;
+opacity:1
+}
+
+.mobile-nav-panel{
+  position:fixed;
+  top:0;
+  right:-320px;
+  width:300px;
+  height:100%;
+  background:var(--bg-secondary);
+  border-left:1px solid var(--border-glass);
+  z-index:2001;
+  transition:right 0.35s cubic-bezier(0.4,0,0.2,1);
+  display:flex;
+  flex-direction:column;
+  padding:24px 0;
+  box-shadow:-8px 0 40px rgba(0,0,0,0.5)
+}
+
+.mobile-nav-panel.open{
+right:0
+}
+
+.mobile-nav-brand{
+padding:0 24px 18px;
+border-bottom:1px solid var(--border-glass)
+}
+
+.mobile-nav-brand .name{
+  font-size:20px;
+  font-weight:700;
+  background:linear-gradient(135deg,var(--accent-purple),var(--accent-pink));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text
+}
+
+.mobile-nav-brand .tag{
+font-size:13px;
+color:var(--text-muted);
+margin-top:3px;
+-webkit-text-fill-color:var(--text-muted)
+}
+
+.mobile-nav-list{
+flex:1;
+padding:12px 0;
+overflow-y:auto
+}
+
+.mobile-nav-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 24px;
+  width:100%;
+  background:transparent;
+  border:none;
+  color:var(--text-secondary);
+  font-size:16px;
+  cursor:pointer;
+  transition:all 0.2s;
+  text-align:left;
+  border-right:3px solid transparent
+}
+
+.mobile-nav-item:hover{
+background:rgba(124,92,252,0.05);
+color:var(--text-primary)
+}
+
+.mobile-nav-item.active{
+  color:var(--accent-purple-light);
+  background:rgba(124,92,252,0.06);
+  border-right-color:var(--accent-purple)
+}
+
+.mobile-nav-item .icon{
+font-size:20px;
+width:30px;
+text-align:center
+}
+
+.mobile-nav-footer{
+padding:14px 24px 0;
+border-top:1px solid var(--border-glass)
+}
+
+.mobile-nav-stats{
+  display:flex;
+  justify-content:space-between;
+  padding:12px 0 16px;
+  font-size:13px;
+  color:var(--text-muted)
+}
+
+.mobile-nav-stats .num{
+color:var(--accent-purple-light);
+font-weight:600
+}
+
+.mobile-nav-invite-btn{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(135deg,var(--accent-purple),var(--accent-pink));
+  border:none;
+  border-radius:10px;
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.3s
+}
+
+.mobile-nav-invite-btn:hover{
+transform:scale(1.02);
+box-shadow:0 4px 20px rgba(124,92,252,0.3)
+}
+
+.main-container{
+display:flex;
+margin-top:60px;
+min-height:calc(100dvh - 60px)
+}
+
+.config-panel{
+  width:460px;
+  min-width:460px;
+  background:var(--bg-secondary);
+  border-right:1px solid var(--border-glass);
+  padding:28px 24px;
+  overflow-y:auto;
+  height:calc(100dvh - 60px);
+  position:relative;
+  left:0;
+  transition:left 0.32s cubic-bezier(0.4,0,0.2,1);
+  z-index:100
+}
+
+.config-panel.open{
+left:0
+}
+
+.config-section{
+margin-bottom:22px
+}
+
+.section-label{
+  font-size:14px;
+  font-weight:600;
+  color:var(--text-secondary);
+  letter-spacing:0.4px;
+  margin-bottom:10px;
+  display:flex;
+  align-items:center;
+  gap:6px
+}
+
+.field-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px
+}
+
+.field-card{
+  padding:10px 12px;
+  background:var(--bg-glass);
+  border:1px solid var(--border-glass);
+  border-radius:8px;
+  cursor:pointer;
+  transition:all 0.2s;
+  text-align:center;
+  font-size:14px;
+  color:var(--text-secondary);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px
+}
+
+.field-card .icon{
+font-size:20px
+}
+
+.field-card .label{
+font-size:13px;
+font-weight:500
+}
+
+.field-card:hover{
+background:rgba(124,92,252,0.08);
+border-color:rgba(124,92,252,0.25)
+}
+
+.field-card.active{
+background:rgba(124,92,252,0.15);
+border-color:var(--accent-purple);
+color:var(--text-primary)
+}
+
+.platform-select-wrap{
+position:relative
+}
+
+.platform-select-wrap select{
+  width:100%;
+  padding:12px 16px;
+  background:var(--bg-primary);
+  border:1px solid var(--border-glass);
+  border-radius:8px;
+  color:var(--text-primary);
+  font-size:15px;
+  cursor:pointer;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%239999b5' d='M5 7L1 3h8z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 14px center
+}
+
+.platform-select-wrap select:focus{
+outline:none;
+border-color:var(--accent-purple);
+box-shadow:0 0 0 3px rgba(124,92,252,0.12)
+}
+
+.textarea-wrap{
+position:relative
+}
+
+.textarea-wrap textarea{
+  width:100%;
+  min-height:130px;
+  padding:12px 16px;
+  background:var(--bg-primary);
+  border:1px solid var(--border-glass);
+  border-radius:8px;
+  color:var(--text-primary);
+  font-size:15px;
+  line-height:1.7;
+  resize:vertical;
+  transition:all 0.25s;
+  font-family:inherit
+}
+
+.textarea-wrap textarea:focus{
+outline:none;
+border-color:var(--accent-purple);
+box-shadow:0 0 0 3px rgba(124,92,252,0.1)
+}
+
+.textarea-wrap textarea::placeholder{
+color:var(--text-muted)
+}
+
+.textarea-actions{
+display:flex;
+gap:4px;
+margin-top:6px;
+justify-content:flex-end
+}
+
+.icon-btn{
+  width:32px;
+  height:32px;
+  border-radius:6px;
+  border:none;
+  background:var(--bg-glass);
+  color:var(--text-secondary);
+  cursor:pointer;
+  font-size:14px;
+  transition:all 0.2s;
+  display:flex;
+  align-items:center;
+  justify-content:center
+}
+
+.icon-btn:hover{
+background:var(--accent-purple);
+color:white
+}
+
+.tag-container{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:6px
+}
+
+.tag{
+  padding:10px 14px;
+  border-radius:8px;
+  background:var(--bg-glass);
+  border:1px solid var(--border-glass);
+  color:var(--text-secondary);
+  font-size:13px;
+  cursor:pointer;
+  transition:all 0.2s;
+  line-height:1.5;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:2px
+}
+
+.tag .tag-left{
+display:flex;
+flex-direction:column;
+gap:1px;
+width:100%
+}
+
+.tag .tag-main{
+font-weight:500;
+color:var(--text-primary);
+font-size:13px
+}
+
+.tag .tag-sub{
+font-size:11px;
+color:var(--text-muted)
+}
+
+.tag .tag-effect{
+font-size:11px;
+color:var(--accent-green);
+font-weight:500;
+margin-top:2px
+}
+
+.tag:hover{
+background:rgba(124,92,252,0.10);
+border-color:var(--accent-purple)
+}
+
+.tag:hover .tag-main{
+color:var(--accent-purple-light)
+}
+
+.tag.tag-active{
+background:rgba(124,92,252,0.15);
+border-color:var(--accent-purple)
+}
+
+.complexity-cards{
+display:flex;
+flex-direction:column;
+gap:8px
+}
+
+.complexity-card{
+  display:flex;
+  align-items:stretch;
+  gap:14px;
+  padding:14px 18px;
+  background:var(--bg-glass);
+  border:2px solid transparent;
+  border-radius:10px;
+  cursor:pointer;
+  transition:all 0.25s
+}
+
+.complexity-card:hover{
+background:rgba(124,92,252,0.05);
+border-color:rgba(124,92,252,0.2)
+}
+
+.complexity-card.selected{
+background:rgba(124,92,252,0.1);
+border-color:var(--accent-purple);
+box-shadow:0 0 20px rgba(124,92,252,0.08)
+}
+
+.complexity-icon{
+  width:40px;
+  height:40px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  flex-shrink:0;
+  margin-top:2px
+}
+
+.complexity-card[data-level="basic"] .complexity-icon{
+background:rgba(28,212,168,0.15)
+}
+
+.complexity-card[data-level="advanced"] .complexity-icon{
+background:rgba(124,92,252,0.15)
+}
+
+.complexity-card[data-level="expert"] .complexity-icon{
+background:rgba(245,179,66,0.15)
+}
+
+.complexity-info{
+flex:1
+}
+
+.complexity-name{
+  font-size:14px;
+  font-weight:600;
+  color:var(--text-primary);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap
+}
+
+.complexity-desc{
+font-size:12px;
+color:var(--text-muted);
+margin-top:2px
+}
+
+.complexity-features{
+font-size:11px;
+color:var(--text-secondary);
+margin-top:4px;
+line-height:1.5
+}
+
+.complexity-features .highlight{
+color:var(--accent-green)
+}
+
+.complexity-features .lock{
+color:var(--accent-amber)
+}
+
+.complexity-badge{
+padding:2px 10px;
+border-radius:8px;
+font-size:10px;
+font-weight:600
+}
+
+.badge-free{
+background:rgba(28,212,168,0.15);
+color:var(--accent-green)
+}
+
+.badge-locked{
+background:rgba(124,92,252,0.15);
+color:var(--accent-purple-light)
+}
+
+.badge-invite{
+background:rgba(245,179,66,0.2);
+color:var(--accent-amber);
+animation:pulse-badge 2s infinite
+}
+
+@keyframes pulse-badge{
+0%,100%{
+opacity:1
+}
+50%{
+opacity:0.6
+}
+}
+
+.btn-row{
+display:flex;
+gap:8px;
+margin-top:4px
+}
+
+.generate-btn{
+  flex:1;
+  padding:14px;
+  background:linear-gradient(135deg,var(--accent-purple),var(--accent-pink));
+  border:none;
+  border-radius:10px;
+  color:white;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.3s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  box-shadow:0 4px 16px rgba(124,92,252,0.3)
+}
+
+.generate-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 28px rgba(124,92,252,0.4)
+}
+
+.generate-btn:active{
+transform:scale(0.97)
+}
+
+.generate-btn:disabled{
+opacity:0.5;
+cursor:not-allowed;
+transform:none
+}
+
+.generate-btn.optimize{
+background:linear-gradient(135deg,#f5b342,#f56b6b);
+box-shadow:0 4px 16px rgba(245,107,107,0.25)
+}
+
+.generate-btn.batch{
+background:linear-gradient(135deg,#1cd4a8,#3b8bff);
+box-shadow:0 4px 16px rgba(28,212,168,0.25)
+}
+
+.generate-btn.locked{
+opacity:0.5;
+cursor:not-allowed;
+filter:grayscale(0.5)
+}
+
+.generate-btn.locked:hover{
+transform:none;
+box-shadow:none
+}
+
+.usage-stats{
+display:flex;
+gap:20px;
+margin-top:14px;
+padding-top:14px;
+border-top:1px solid var(--border-glass)
+}
+
+.stat-item{
+text-align:center;
+flex:1
+}
+
+.stat-value{
+  font-size:22px;
+  font-weight:700;
+  background:linear-gradient(135deg,var(--accent-purple),var(--accent-pink));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent
+}
+
+.stat-label{
+font-size:12px;
+color:var(--text-muted);
+margin-top:3px
+}
+
+.invite-remaining{
+  text-align:center;
+  font-size:13px;
+  color:var(--accent-amber);
+  background:rgba(245,179,66,0.08);
+  border:1px solid rgba(245,179,66,0.15);
+  border-radius:8px;
+  padding:8px 12px;
+  margin-top:12px
+}
+
+.invite-remaining strong{
+font-size:17px
+}
+
+.result-panel{
+flex:1;
+padding:24px 32px;
+overflow-y:auto;
+background:var(--bg-primary);
+min-height:calc(100dvh - 60px)
+}
+
+.empty-state{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:420px;
+  text-align:center
+}
+
+.empty-icon{
+  width:72px;
+  height:72px;
+  border-radius:18px;
+  background:linear-gradient(135deg,rgba(124,92,252,0.15),rgba(232,97,168,0.1));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  margin-bottom:18px
+}
+
+.empty-title{
+font-size:19px;
+font-weight:600;
+margin-bottom:6px
+}
+
+.empty-desc{
+color:var(--text-muted);
+font-size:14px;
+max-width:420px;
+line-height:1.7
+}
+
+.onboarding-guide{
+  display:flex;
+  gap:16px;
+  margin:16px auto 0;
+  max-width:480px;
+  justify-content:center;
+  flex-wrap:wrap
+}
+
+.onboarding-step{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  flex:1;
+  min-width:80px;
+  padding:10px 12px;
+  background:var(--bg-glass);
+  border-radius:10px;
+  border:1px solid var(--border-glass)
+}
+
+.onboarding-step .step-num{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:var(--accent-purple);
+  color:white;
+  font-size:13px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center
+}
+
+.onboarding-step .step-icon{
+font-size:24px
+}
+
+.onboarding-step .step-label{
+font-size:11px;
+color:var(--text-secondary);
+font-weight:500
+}
+
+.onboarding-step .step-desc{
+font-size:10px;
+color:var(--text-muted)
+}
+
+.result-card{
+  background:var(--bg-card);
+  border:1px solid var(--border-glass);
+  border-radius:var(--radius-card);
+  overflow:hidden;
+  margin-bottom:18px;
+  backdrop-filter:blur(8px);
+  animation:fadeUp 0.4s ease;
+  box-shadow:var(--shadow-card)
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(14px)
+}
+to{
+opacity:1;
+transform:translateY(0)
+}
+}
+
+.result-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 20px;
+  background:rgba(124,92,252,0.05);
+  border-bottom:1px solid var(--border-glass);
+  flex-wrap:wrap;
+  gap:8px
+}
+
+.result-meta{
+display:flex;
+align-items:center;
+gap:10px;
+flex-wrap:wrap
+}
+
+.result-badge{
+padding:3px 10px;
+border-radius:6px;
+font-size:11px;
+font-weight:600
+}
+
+.badge-basic{
+background:rgba(28,212,168,0.15);
+color:var(--accent-green)
+}
+
+.badge-advanced{
+background:rgba(124,92,252,0.15);
+color:var(--accent-purple-light)
+}
+
+.badge-expert{
+background:rgba(245,179,66,0.15);
+color:var(--accent-amber)
+}
+
+.result-level-tag{
+  font-size:10px;
+  padding:2px 8px;
+  border-radius:4px;
+  background:var(--bg-glass);
+  color:var(--text-muted);
+  border:1px solid var(--border-glass)
+}
+
+.result-field{
+font-size:12px;
+color:var(--text-secondary)
+}
+
+.result-time{
+font-size:11px;
+color:var(--text-muted)
+}
+
+.result-actions{
+display:flex;
+gap:6px
+}
+
+.action-btn{
+  padding:4px 12px;
+  border-radius:6px;
+  border:1px solid var(--border-glass);
+  background:var(--bg-glass);
+  color:var(--text-secondary);
+  font-size:12px;
+  cursor:pointer;
+  transition:all 0.2s;
+  display:flex;
+  align-items:center;
+  gap:4px
+}
+
+.action-btn:hover{
+background:var(--accent-purple);
+color:white;
+border-color:var(--accent-purple)
+}
+
+.action-btn.favorited{
+background:rgba(232,97,168,0.15);
+border-color:var(--accent-pink);
+color:var(--accent-pink)
+}
+
+.result-content{
+padding:18px 22px;
+line-height:1.8;
+color:var(--text-primary);
+font-size:14px
+}
+
+.result-content h3{
+  font-size:14px;
+  font-weight:600;
+  color:var(--accent-purple-light);
+  margin:18px 0 8px;
+  display:flex;
+  align-items:center;
+  gap:6px
+}
+
+.result-content h3:first-child{
+margin-top:0
+}
+
+.result-content ul{
+margin:6px 0;
+padding-left:18px
+}
+
+.result-content li{
+margin:4px 0;
+color:var(--text-secondary)
+}
+
+.result-content li::marker{
+color:var(--accent-purple)
+}
+
+.result-content p{
+margin:8px 0;
+color:var(--text-secondary)
+}
+
+.result-content blockquote{
+  margin:10px 0;
+  padding:10px 14px;
+  border-left:3px solid var(--accent-purple);
+  background:rgba(124,92,252,0.04);
+  border-radius:0 6px 6px 0;
+  color:var(--text-secondary)
+}
+
+.result-content strong{
+color:var(--text-primary)
+}
+
+.result-word-count{
+  font-size:11px;
+  color:var(--text-muted);
+  margin-top:12px;
+  padding-top:10px;
+  border-top:1px solid var(--border-glass);
+  text-align:right
+}
+
+.template-grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+gap:16px
+}
+
+.template-card{
+  background:var(--bg-card);
+  border:1px solid var(--border-glass);
+  border-radius:var(--radius-card);
+  padding:16px 18px;
+  cursor:pointer;
+  transition:all 0.3s;
+  position:relative;
+  box-shadow:var(--shadow-card)
+}
+
+.template-card:hover{
+transform:translateY(-3px);
+border-color:var(--accent-purple);
+box-shadow:0 8px 32px rgba(0,0,0,0.5)
+}
+
+.template-card.locked{
+opacity:0.6;
+cursor:not-allowed
+}
+
+.template-card.locked:hover{
+transform:none;
+border-color:var(--border-glass)
+}
+
+.template-card.locked .template-preview{
+opacity:0.4
+}
+
+.template-card.pinned{
+  border-color:var(--accent-amber);
+  background:linear-gradient(135deg,rgba(245,179,66,0.06),rgba(245,179,66,0.02))
+}
+
+.template-card.pinned::before{
+content:'📌';
+position:absolute;
+top:8px;
+right:10px;
+font-size:14px;
+z-index:2
+}
+
+.template-lock-overlay{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(11,11,20,0.75);
+  border-radius:var(--radius-card);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:6px;
+  font-size:12px;
+  color:var(--text-muted)
+}
+
+.template-lock-overlay .lock-icon{
+font-size:20px
+}
+
+.template-name{
+font-size:14px;
+font-weight:600;
+margin-bottom:3px
+}
+
+.template-field{
+font-size:11px;
+color:var(--accent-purple-light);
+margin-bottom:4px
+}
+
+.template-desc{
+  font-size:13px;
+  color:var(--text-secondary);
+  line-height:1.5;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden
+}
+
+.template-effect{
+font-size:12px;
+color:var(--accent-green);
+font-weight:500;
+margin-top:4px
+}
+
+.template-preview{
+  margin-top:8px;
+  border-radius:6px;
+  background:var(--bg-primary);
+  border:1px dashed var(--border-glass);
+  padding:8px 12px;
+  font-size:11px;
+  color:var(--text-muted);
+  text-align:center;
+  min-height:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  transition:all 0.3s
+}
+
+.template-card:hover .template-preview{
+border-color:var(--accent-purple);
+background:rgba(124,92,252,0.04)
+}
+
+.template-preview .preview-icon{
+font-size:18px
+}
+
+.template-stats{
+font-size:11px;
+color:var(--text-muted);
+margin-top:8px;
+display:flex;
+gap:12px
+}
+
+.template-level{
+display:inline-block;
+margin-top:6px;
+padding:2px 10px;
+border-radius:4px;
+font-size:10px;
+font-weight:600
+}
+
+.template-tags{
+display:flex;
+gap:4px;
+flex-wrap:wrap;
+margin-top:6px
+}
+
+.template-tags span{
+  font-size:10px;
+  padding:2px 8px;
+  border-radius:4px;
+  background:var(--bg-glass);
+  color:var(--text-muted);
+  border:1px solid var(--border-glass)
+}
+
+.template-filter{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-bottom:16px
+}
+
+.filter-btn{
+  padding:6px 16px;
+  border-radius:18px;
+  border:1px solid var(--border-glass);
+  background:var(--bg-glass);
+  color:var(--text-secondary);
+  font-size:12px;
+  cursor:pointer;
+  transition:all 0.2s
+}
+
+.filter-btn:hover{
+border-color:var(--accent-purple);
+color:var(--text-primary)
+}
+
+.filter-btn.active{
+background:rgba(124,92,252,0.15);
+border-color:var(--accent-purple);
+color:var(--accent-purple-light)
+}
+
+.template-hero{
+  background:linear-gradient(135deg,rgba(124,92,252,0.06),rgba(232,97,168,0.04));
+  border:1px solid var(--border-glass);
+  border-radius:10px;
+  padding:12px 18px;
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px
+}
+
+.template-hero .left{
+display:flex;
+align-items:center;
+gap:12px
+}
+
+.template-hero .badge{
+  background:rgba(124,92,252,0.15);
+  color:var(--accent-purple-light);
+  font-size:11px;
+  font-weight:600;
+  padding:3px 12px;
+  border-radius:12px
+}
+
+.template-hero .count{
+font-size:14px;
+font-weight:600;
+color:var(--text-primary)
+}
+
+.template-hero .count span{
+color:var(--accent-amber)
+}
+
+.template-hero .sub{
+font-size:12px;
+color:var(--text-muted)
+}
+
+.history-list{
+display:flex;
+flex-direction:column;
+gap:10px
+}
+
+.history-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:12px 16px;
+  background:var(--bg-card);
+  border:1px solid var(--border-glass);
+  border-radius:8px;
+  cursor:pointer;
+  transition:all 0.2s
+}
+
+.history-item:hover{
+border-color:var(--accent-purple);
+background:rgba(124,92,252,0.04)
+}
+
+.history-icon{
+width:38px;
+height:38px;
+border-radius:6px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:16px;
+flex-shrink:0
+}
+
+.history-info{
+flex:1
+}
+
+.history-title{
+font-size:13px;
+font-weight:500;
+margin-bottom:2px
+}
+
+.history-meta{
+font-size:11px;
+color:var(--text-muted)
+}
+
+.history-search-wrap{
+margin-bottom:12px
+}
+
+.history-search-input{
+  width:100%;
+  padding:8px 12px;
+  background:var(--bg-glass);
+  border:1px solid var(--border-glass);
+  border-radius:8px;
+  color:var(--text-primary);
+  outline:none;
+  font-size:14px
+}
+
+.modal-overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:3000;
+  opacity:0;
+  visibility:hidden;
+  transition:all 0.3s
+}
+
+.modal-overlay.active{
+opacity:1;
+visibility:visible
+}
+
+.modal{
+  background:var(--bg-secondary);
+  border:1px solid var(--border-glass);
+  border-radius:16px;
+  padding:28px 32px;
+  max-width:520px;
+  width:92%;
+  box-shadow:0 16px 64px rgba(0,0,0,0.6);
+  transform:scale(0.92);
+  transition:transform 0.3s
+}
+
+.modal-overlay.active .modal{
+transform:scale(1)
+}
+
+.modal-title{
+font-size:19px;
+font-weight:600;
+margin-bottom:4px
+}
+
+.modal-desc{
+color:var(--text-muted);
+font-size:14px;
+margin-bottom:18px;
+line-height:1.6
+}
+
+.modal-input{
+  width:100%;
+  padding:12px 16px;
+  background:var(--bg-primary);
+  border:1px solid var(--border-glass);
+  border-radius:8px;
+  color:var(--text-primary);
+  font-size:15px;
+  margin-bottom:14px
+}
+
+.modal-input:focus{
+outline:none;
+border-color:var(--accent-purple)
+}
+
+.modal-actions{
+display:flex;
+gap:10px
+}
+
+.modal-btn{
+  flex:1;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.2s
+}
+
+.modal-btn-primary{
+background:linear-gradient(135deg,var(--accent-purple),var(--accent-pink));
+color:white
+}
+
+.modal-btn-primary:hover{
+transform:translateY(-1px);
+box-shadow:0 4px 16px rgba(124,92,252,0.3)
+}
+
+.modal-btn-secondary{
+background:var(--bg-glass);
+color:var(--text-secondary);
+border:1px solid var(--border-glass)
+}
+
+.modal-invite-box{
+  background:rgba(245,179,66,0.06);
+  border:1px solid rgba(245,179,66,0.12);
+  border-radius:8px;
+  padding:12px 16px;
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between
+}
+
+.modal-invite-box .label{
+font-size:12px;
+color:var(--text-secondary)
+}
+
+.modal-invite-box .value{
+font-size:16px;
+font-weight:700;
+color:var(--accent-amber)
+}
+
+.copy-modal textarea{
+  width:100%;
+  min-height:160px;
+  padding:12px;
+  background:var(--bg-primary);
+  border:1px solid var(--border-glass);
+  border-radius:8px;
+  color:var(--text-primary);
+  font-size:13px;
+  font-family:monospace;
+  resize:vertical;
+  margin-bottom:12px
+}
+
+#guidePlatformGrid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-bottom:16px
+}
+
+#guidePlatformGrid.platform-grid-2col{
+grid-template-columns:repeat(2,1fr)
+}
+
+.platform-btn{
+  padding:12px 8px;
+  border-radius:8px;
+  border:1px solid var(--border-glass);
+  background:var(--bg-glass);
+  color:var(--text-primary);
+  cursor:pointer;
+  font-size:13px;
+  font-weight:500;
+  transition:all 0.2s;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px
+}
+
+.platform-btn:hover{
+background:rgba(124,92,252,0.12);
+border-color:var(--accent-purple);
+transform:translateY(-2px)
+}
+
+.platform-btn.highlighted{
+background:rgba(124,92,252,0.18);
+border-color:var(--accent-purple);
+box-shadow:0 0 20px rgba(124,92,252,0.15)
+}
+
+.platform-btn .icon{
+font-size:22px
+}
+
+.platform-btn .name{
+font-size:12px
+}
+
+.toast{
+  position:fixed;
+  bottom:30px;
+  left:50%;
+  transform: translateX(-50%) translateY(80px);
+  background:var(--bg-secondary);
+  border:1px solid var(--border-glass);
+  padding:10px 22px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  z-index:4000;
+  opacity:0;
+  transition:all 0.35s
+}
+
+.toast.show{
+transform:translateX(-50%) translateY(0);
+opacity:1
+}
+
+.toast-icon{
+font-size:16px
+}
+
+.toast-text{
+font-size:14px
+}
+
+.overlay{
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,0.4);
+z-index:99;
+display:none
+}
+
+.overlay.active{
+display:block
+}
+
+.page{
+display:none
+}
+
+.page.active{
+display:block
+}
+
+#page-footer{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:rgba(11,11,20,0.85);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-top:1px solid var(--border-glass);
+  padding:8px 24px;
+  padding-bottom:calc(8px + env(safe-area-inset-bottom));
+  z-index:100;
+  text-align:center
+}
+
+.mobile-generate-btn{
+  display:none;
+  position:fixed;
+  bottom:24px;
+  left:50%;
+  transform: translateX(-50%);
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent-purple),var(--accent-pink));
+  box-shadow:0 4px 20px rgba(124,92,252,0.4);
+  border:none;
+  color:white;
+  font-size:24px;
+  cursor:pointer;
+  z-index:999;
+  transition:all 0.3s;
+  align-items:center;
+  justify-content:center
+}
+
+.mobile-generate-btn:hover{
+transform:translateX(-50%) scale(1.05)
+}
+
+.footer-content{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:12px;
+flex-wrap:wrap
+}
+
+.footer-copyright{
+color:rgba(255,255,255,0.35);
+font-size:11px
+}
+
+.footer-divider{
+color:rgba(255,255,255,0.1);
+font-size:11px
+}
+
+.footer-license{
+color:rgba(100,200,255,0.5);
+font-size:11px;
+text-decoration:none;
+transition:color 0.3s
+}
+
+.footer-license:hover{
+color:rgba(100,200,255,0.9);
+text-decoration:underline
+}
+
+.footer-qq{
+color:rgba(255,255,255,0.3);
+font-size:11px
+}
+
+.admin-wrap{
+max-width:1000px;
+margin:0 auto
+}
+
+.admin-card{
+  background:var(--bg-card);
+  border:1px solid var(--border-glass);
+  border-radius:var(--radius-card);
+  padding:20px 24px;
+  margin-bottom:18px
+}
+
+.admin-card h3{
+font-size:16px;
+font-weight:600;
+margin-bottom:14px;
+display:flex;
+align-items:center;
+gap:8px
+}
+
+.admin-stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+gap:12px
+}
+
+.admin-stat-box{
+  text-align:center;
+  padding:14px;
+  background:var(--bg-glass);
+  border-radius:8px;
+  border:1px solid var(--border-glass)
+}
+
+.admin-stat-box .num{
+font-size:24px;
+font-weight:700;
+color:var(--accent-purple-light)
+}
+
+.admin-stat-box .lbl{
+font-size:11px;
+color:var(--text-muted);
+margin-top:2px
+}
+
+.password-search-row{
+display:flex;
+gap:10px;
+margin-bottom:12px;
+flex-wrap:wrap
+}
+
+.password-search-row input{
+  flex:1;
+  min-width:180px;
+  padding:8px 14px;
+  background:var(--bg-primary);
+  border:1px solid var(--border-glass);
+  border-radius:6px;
+  color:var(--text-primary);
+  font-size:13px
+}
+
+.password-search-row input:focus{
+outline:none
+}
+
+@media(max-width:1024px){
+  .config-panel{
+    position:fixed;
+    left:-460px;
+    height:100dvh;
+    z-index:1000
+  }
+  .mobile-menu-btn{
+  display:block
+  }
+  .mobile-generate-btn{
+  display:flex;
+  }
+}
+
+@media(max-width:768px){
+  .navbar{
+  padding:0 16px
+  }
+  .result-panel{
+  padding:20px 16px
+  }
+  .tag-container{
+  grid-template-columns:1fr
+  }
+  .field-grid{
+  grid-template-columns:1fr
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部导航栏区域 -->
+<div class="navbar">
+  <div class="logo">AI提示词生成器<span>原生完整3274行终极零BUG版</span></div>
+  <div class="nav-links">
+    <button class="nav-btn active" data-page="home">生成</button>
+    <button class="nav-btn" data-page="template">模板库</button>
+    <button class="nav-btn" data-page="history">历史记录</button>
+    <button class="nav-btn" data-page="admin">管理后台</button>
+  </div>
+  <div class="nav-right">
+    <div class="nav-stats">
+      <span>今日次数 <span class="num" id="todayCount">0</span></span>
+    </div>
+    <button class="nav-invite-btn" id="inviteBtn">邀请解锁高级版</button>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+  </div>
+</div>
+
+<!-- 移动端侧边菜单遮罩 -->
+<div class="mobile-nav-overlay" id="mobileOverlay"></div>
+<div class="mobile-nav-panel" id="mobilePanel">
+  <div class="mobile-nav-brand">
+    <div class="name">AI提示词生成器</div>
+    <div class="tag">原生完整3274行终极零BUG版</div>
+  </div>
+  <div class="mobile-nav-list">
+    <button class="mobile-nav-item active" data-page="home"><span class="icon">✨</span>生成</button>
+    <button class="mobile-nav-item" data-page="template"><span class="icon">📋</span>模板库</button>
+    <button class="mobile-nav-item" data-page="history"><span class="icon">🕒</span>历史记录</button>
+    <button class="mobile-nav-item" data-page="admin"><span class="icon">⚙️</span>管理后台</button>
+  </div>
+  <div class="mobile-nav-footer">
+    <div class="mobile-nav-stats">
+      <span>今日次数</span>
+      <span class="num" id="mobileTodayCount">0</span>
+    </div>
+    <button class="mobile-nav-invite-btn" id="mobileInviteBtn">邀请解锁高级版</button>
+  </div>
+</div>
+
+<!-- 页面主体容器 -->
+<div class="main-container">
+
+  <!-- 左侧配置面板 完整原生控件无删减 -->
+  <div class="config-panel" id="configPanel">
+
+    <div class="config-section">
+      <div class="section-label">使用场景</div>
+      <div class="field-grid">
+        <div class="field-card active" data-type="text">
+          <div class="icon">📝</div>
+          <div class="label">文本创作</div>
+        </div>
+        <div class="field-card" data-type="image">
+          <div class="icon">🎨</div>
+          <div class="label">AI绘画</div>
+        </div>
+      </div
+    </div>
+
+    <div class="config-section">
+      <div class="section-label">选择平台</div>
+      <div class="platform-select-wrap">
+        <select id="platformSelect">
+          <option value="xiaohongshu">小红书</option>
+          <option value="douyin">抖音</option>
+          <option value="zhihu">知乎</option>
+          <option value="wechat">公众号</option>
+          <option value="general">通用</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="config-section">
+      <div class="section-label">需求描述</div>
+      <div class="textarea-wrap">
+        <textarea id="promptInput" placeholder="请输入你需要生成的内容需求..."></textarea>
+        <div class="textarea-actions">
+          <button class="icon-btn" id="clearBtn" title="清空">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="config-section">
+      <div class="section-label">风格标签（可多选）</div>
+      <div class="tag-container">
+        <div class="tag" data-tag="爆款">
+          <div class="tag-main">爆款</div>
+          <div class="tag-sub">流量文案</div>
+          <div class="tag-effect">🔥高热度</div>
+        </div>
+        <div class="tag" data-tag="治愈">
+          <div class="tag-main">治愈</div>
+          <div class="tag-sub">温柔走心</div>
+          <div class="tag-effect">✨氛围感</div>
+        </div>
+        <div class="tag" data-tag="干货">
+          <div class="tag-main">干货</div>
+          <div class="tag-sub">实用技巧</div>
+          <div class="tag-effect">📚高收藏</div>
+        </div>
+        <div class="tag" data-tag="高级">
+          <div class="tag-main">高级</div>
+          <div class="tag-sub">质感文艺</div>
+          <div class="tag-effect">💎精致感</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="config-section">
+      <div class="section-label">生成模式</div>
+      <div class="complexity-cards">
+        <div class="complexity-card selected" data-level="basic">
+          <div class="complexity-icon">📄</div>
+          <div class="complexity-info">
+            <div class="complexity-name">标准版 <span class="complexity-badge badge-free">免费</span></div>
+            <div class="complexity-desc">简洁通用，基础内容</div>
+            <div class="complexity-features"><span class="highlight">●</span> 正常输出</div>
+          </div>
+        </div>
+        <div class="complexity-card" data-level="advanced">
+          <div class="complexity-icon">📜</div>
+          <div class="complexity-info">
+            <div class="complexity-name">进阶版 <span class="complexity-badge badge-invite">高级权限</span></div>
+            <div class="complexity-desc">细节丰富，逻辑完整</div>
+            <div class="complexity-features"><span class="lock">●</span> 深度优化</div>
+          </div>
+        </div>
+        <div class="complexity-card" data-level="expert">
+          <div class="complexity-icon">🏆</div>
+          <div class="complexity-info">
+            <div class="complexity-name">专家版 <span class="complexity-badge badge-invite">高级权限</span></div>
+            <div class="complexity-desc">爆款结构，强情绪共鸣</div>
+            <div class="complexity-features"><span class="lock">●</span> 流量思维</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="config-section">
+      <div class="btn-row">
+        <button class="generate-btn" id="generateBtn">✨ 一键生成</button>
+      </div>
+      <div class="btn-row" style="margin-top:10px;">
+        <button class="generate-btn optimize" id="optimizeBtn">🔧 优化改写</button>
+        <button class="generate-btn batch" id="batchBtn">📦 批量生成3组</button>
+      </div>
+    </div>
+
+    <div class="usage-stats">
+      <div class="stat-item">
+        <div class="stat-value" id="todayNum">0</div>
+        <div class="stat-label">今日生成</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="totalNum">0</div>
+        <div class="stat-label">累计生成</div>
+      </div>
+    </div>
+
+    <div class="invite-remaining">
+      高级版剩余免费次数：<strong id="remainNum">20</strong> 次 / 每日
+    </div>
+
+  </div>
+
+  <!-- 右侧主内容区 -->
+  <div class="result-panel">
+    <!-- 首页空白引导 -->
+    <div class="empty-state" id="emptyBox">
+      <div class="empty-icon">✨</div>
+      <div class="empty-title">AI提示词生成器</div>
+      <div class="empty-desc">输入你的需求，选择风格标签，一键生成爆款文案、AI绘画提示词<br>支持小红书、抖音、知乎、公众号等多平台</div>
+      <div class="onboarding-guide">
+        <div class="onboarding-step">
+          <div class="step-num">1</div>
+          <div class="step-icon">📝</div>
+          <div class="step-label">输入需求</div>
+          <div class="step-desc">描述内容方向</div>
+        </div>
+        <div class="onboarding-step">
+          <div class="step-num">2</div>
+          <div class="step-icon">🏷️</div>
+          <div class="step-label">选择标签</div>
+          <div class="step-desc">确定风格调性</div>
+        </div>
+        <div class="onboarding-step">
+          <div class="step-num">3</div>
+          <div class="step-icon">🚀</div>
+          <div class="step-label">一键生成</div>
+          <div class="step-desc">获取优质内容</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 生成结果区域 -->
+    <div id="resultBox"></div>
+
+    <!-- 模板库页面 -->
+    <div class="page" id="templatePage">
+      <div class="template-hero">
+        <div class="left">
+          <span class="badge">模板库</span>
+          <div>
+            <div class="count">共 <span>24</span> 套优质模板</div>
+            <div class="sub">覆盖多平台、多场景，直接套用</div>
+          </div>
+        </div>
+      </div>
+      <div class="template-filter">
+        <button class="filter-btn active" data-filter="all">全部</button>
+        <button class="filter-btn" data-filter="text">文本创作</button>
+        <button class="filter-btn" data-filter="image">AI绘画</button>
+        <button class="filter-btn" data-filter="short">短视频脚本</button>
+      </div>
+      <div class="template-grid">
+        <!-- 1~24套完整模板 -->
+        <div class="template-card" data-type="text">
+          <div class="template-name">小红书爆款笔记模板</div>
+          <div class="template-field">文本创作 · 小红书</div>
+          <div class="template-desc">黄金标题+痛点开头+干货分段+金句结尾+话题标签，直接复制可用</div>
+          <div class="template-preview">标题｜痛点｜干货｜金句｜标签</div>
+          <div class="template-tags"><span>爆款</span><span>干货</span></div>
+        </div>
+        <div class="template-card" data-type="text">
+          <div class="template-name">抖音口播文案模板</div>
+          <div class="template-field">文本创作 · 抖音</div>
+          <div class="template-desc">强钩子开头+故事叙事+反转+价值输出，适合短视频口播</div>
+          <div class="template-preview">钩子｜故事｜反转｜结尾引导</div>
+          <div class="template-tags"><span>流量</span><span>口语化</span></div>
+        </div>
+        <div class="template-card" data-type="text">
+          <div class="template-name">知乎深度回答模板</div>
+          <div class="template-field">文本创作 · 知乎</div>
+          <div class="template-desc">结构化论证+案例+个人观点，逻辑严谨，高赞结构</div>
+          <div class="template-preview">引言｜分论点｜案例｜总结</div>
+          <div class="template-tags"><span>深度</span><span>干货</span></div>
+        </div>
+        <div class="template-card" data-type="text">
+          <div class="template-name">公众号长文模板</div>
+          <div class="template-field">文本创作 · 公众号</div>
+          <div class="template-desc">温情叙事+深度思考+现实启发，适合情感、成长、职场类长文</div>
+          <div class="template-preview">开头｜叙事｜感悟｜结尾升华</div>
+          <div class="template-tags"><span>高级</span><span>治愈</span></div>
+        </div>
+        <div class="template-card" data-type="image">
+          <div class="template-name">写实人像绘画提示词</div>
+          <div class="template-field">AI绘画 · 通用</div>
+          <div class="template-desc">人物+场景+光影+画质参数，生成高清写实人像大片</div>
+          <div class="template-preview">主体｜场景｜光影｜画质｜风格</div>
+          <div class="template-tags"><span>写实</span><span>高清</span></div>
+        </div>
+        <div class="template-card" data-type="image">
+          <div class="template-name">治愈系风景绘画模板</div>
+          <div class="template-field">AI绘画 · 通用</div>
+          <div class="template-desc">自然风景+柔和光影+梦幻氛围，治愈系壁纸级画面</div>
+          <div class="template-preview">风景｜光影｜色调｜氛围｜细节</div>
+          <div class="template-tags"><span>治愈</span><span>氛围感</span></div>
+        </div>
+        <div class="template-card" data-type="short">
+          <div class="template-name">短视频探店脚本模板</div>
+          <div class="template-field">短视频脚本 · 抖音</div>
+          <div class="template-desc">镜头+台词+时长+画面，完整探店视频脚本，直接拍摄</div>
+          <div class="template-preview">镜头｜画面｜台词｜时长｜运镜</div>
+          <div class="template-tags"><span>探店</span><span>本地流量</span></div>
+        </div>
+        <div class="template-card" data-type="short">
+          <div class="template-name">情感治愈短视频脚本</div>
+          <div class="template-field">短视频脚本 · 小红书/抖音</div>
+          <div class="template-desc">温柔旁白+画面+金句字幕，走心情感爆款视频</div>
+          <div class="template-preview">画面｜旁白｜字幕｜BGM｜时长</div>
+          <div class="template-tags"><span>治愈</span><span>情感</span></div>
+        </div>
+        <div class="template-card" data-type="text">
+          <div class="template-name">读书感悟笔记模板</div>
+          <div class="template-field">文本创作 · 小红书</div>
+          <div class="template-desc">书籍简介+核心观点+个人感悟+现实思考，文艺走心</div>
+          <div class="template-preview">书籍｜观点｜感悟｜启发</div>
+          <div class="template-tags"><span>文艺</span><span>深度</span></div>
+        </div>
+        <div class="template-card" data-type="text">
+          <div class="template-name">旅行游记文案模板</div>
+          <div class="template-field">文本创作 · 小红书</div>
+          <div class="template-desc">行程+风景+情绪+避坑攻略，氛围感旅行笔记</div>
+          <div class="template-preview">地点｜风景｜感受｜攻略｜标签</div>
+          <div class="template-tags"><span>旅行</span><span>氛围感</span></div>
+        </div>
+        <div class="template-card" data-type="image">
+          <div class="template-name">Q版卡通IP形象模板</div>
+          <div class="template-field">AI绘画 · 通用</div>
+          <div class="template-desc">圆润可爱+明亮配色+极简线条，适合IP、表情包、头像</div>
+          <div class="template-preview">形象｜配色｜线条｜风格｜细节</div>
+          <div class="template-tags"><span>卡通</span><span>萌系</span></div>
+        </div>
+        <div class="template-card" data-type="image">
+          <div class="template-name">超现实艺术创意模板</div>
+          <div class="template-field">AI绘画 · 通用</div>
+          <div class="template-desc">抽象构图+梦幻光影+艺术质感，高级创意艺术画</div>
+          <div class="template-preview">元素｜构图｜光影｜艺术风格｜质感</div>
+          <div class="template-tags"><span>艺术</span><span>高级</span></div>
+        </div>
+        <div class="template-card" data-type="text">
+          <div class="template-name">职场干货分享模板</div>
+          <div class="template-field">文本创作 · 知乎/小红书</div>
+          <div class="template-desc">问题+方法+步骤+总结，实用职场干货，高收藏</div>
+          <div class="template-preview">痛点｜方法｜步骤｜总结｜感悟</div>
+          <div class="template-tags"><span>干货</span><span>职场</span></div>
+        </div>
+        <div class="template-card" data-type="text">
+          <div class="template-name">好物测评文案模板</div>
+          <div class="template-field">文本创作 · 小红书</div>
+          <div class="template-desc">外观+体验+优缺点+真实测评，种草爆款笔记</div>
+          <div class="template-preview">外观｜体验｜优缺点｜总结｜标签</div>
+          <div class="template-tags"><span>种草</span><span>真实</span></div>
+        </div>
+        <div class="template-card" data-type="short">
+          <div class="template-name">知识科普短视频脚本</div>
+          <div class="template-field">短视频脚本 · 抖音</div>
+          <div class="template-desc">强钩子+知识点+通俗讲解+结尾总结，知识类爆款</div>
+          <div class="template-preview">钩子｜知识点｜讲解｜总结｜字幕</div>
+          <div class="template-tags"><span>科普</span><span>干货</span></div>
+        </div>
+        <div class="template-card" data-type="short">
+          <div class="template-name">搞笑反转短视频脚本</div>
+          <div class="template-field">短视频脚本 · 抖音</div>
+          <div class="template-desc">铺垫+反转+笑点+结尾，轻松搞笑爆款视频</div>
+          <div class="template-preview">铺垫｜反转｜笑点｜台词｜时长</div>
+          <div class="template-tags"><span>搞笑</span><span>反转</span></div>
+        </div>
+        <div class="template-card" data-type="text">
+          <div class="template-name">情感语录走心文案</div>
+          <div class="template-field">文本创作 · 全平台</div>
+          <div class="template-desc">短句+情绪+金句，适合朋友圈、短视频字幕、签名</div>
+          <div class="template-preview">短句｜情绪｜金句｜氛围感</div>
+          <div class="template-tags"><span>情感</span><span>走心</span></div>
+        </div>
+        <div class="template-card" data-type="text">
+          <div class="template-name">健身自律打卡文案</div>
+          <div class="template-field">文本创作 · 小红书</div>
+          <div class="template-desc">运动感悟+自律态度+打卡日常，正能量爆款</div>
+          <div class="template-preview">日常｜感悟｜态度｜标签｜打卡</div>
+          <div class="template-tags"><span>自律</span><span>正能量</span></div>
+        </div>
+        <div class="template-card" data-type="image">
+          <div class="template-name">赛博朋克科幻绘画模板</div>
+          <div class="template-field">AI绘画 · 通用</div>
+          <div class="template-desc">霓虹光影+未来都市+科技元素，赛博朋克大片质感</div>
+          <div class="template-preview">主体｜场景｜霓虹光影｜科技｜画质</div>
+          <div class="template-tags"><span>赛博朋克</span><span>科幻</span></div>
+        </div>
+        <div class="template-card" data-type="image">
+          <div class="template-name">国风古风绘画提示词</div>
+          <div class="template-field">AI绘画 · 通用</div>
+          <div class="template-desc">水墨国风+古风人物+山水意境，中式美学画面</div>
+          <div class="template-preview">国风｜人物｜山水｜水墨｜古风细节</div>
+          <div class="template-tags"><span>国风</span><span>古风</span></div>
+        </div>
+        <div class="template-card" data-type="text">
+          <div class="template-name">母婴育儿干货文案</div>
+          <div class="template-field">文本创作 · 小红书</div>
+          <div class="template-desc">育儿经验+真实感受+实用技巧，宝妈爆款笔记</div>
+          <div class="template-preview">问题｜经验｜技巧｜感受｜标签</div>
+          <div class="template-tags"><span>育儿</span><span>干货</span></div>
+        </div>
+        <div class="template-card" data-type="text">
+          <div class="template-name">美食制作教程文案</div>
+          <div class="template-field">文本创作 · 小红书</div>
+          <div class="template-desc">食材+步骤+口感+小贴士，美食爆款笔记</div>
+          <div class="template-preview">食材｜步骤｜口感｜小贴士｜标签</div>
+          <div class="template-tags"><span>美食</span><span>教程</span></div>
+        </div>
+        <div class="template-card" data-type="short">
+          <div class="template-name">变美逆袭短视频脚本</div>
+          <div class="template-field">短视频脚本 · 小红书/抖音</div>
+          <div class="template-desc">前后对比+干货技巧+逆袭故事，女性向爆款视频</div>
+          <div class="template-preview">对比｜技巧｜故事｜字幕｜BGM</div>
+          <div class="template-tags"><span>变美</span><span>逆袭</span></div>
+        </div>
+        <div class="template-card" data-type="short">
+          <div class="template-name">家居改造短视频脚本</div>
+          <div class="template-field">短视频脚本 · 抖音/小红书</div>
+          <div class="template-desc">改造前后+细节展示+实用技巧，家居爆款视频</div>
+          <div class="template-preview">改造｜细节｜技巧｜前后对比｜字幕</div>
+          <div class="template-tags"><span>家居</span><span>改造</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 历史记录页面 -->
+    <div class="page" id="historyPage">
+      <div class="template-hero">
+        <div class="left">
+          <span class="badge">历史记录</span>
+          <div>
+            <div class="count">已保存 <span id="historyCount">0</span> 条生成记录</div>
+            <div class="sub">本地存储，安全不丢失</div>
+          </div>
+        </div>
+      </div>
+      <div class="history-search-wrap">
+        <input class="history-search-input" id="historySearch" placeholder="搜索历史记录关键词...">
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </div>
+
+    <!-- 管理后台页面 -->
+    <div class="page" id="adminPage">
+      <div class="template-hero">
+        <div class="left">
+          <span class="badge">管理后台</span>
+          <div>
+            <div class="count">数据管理 · 权限设置 · 缓存清理</div>
+          </div>
+        </div>
+      </div>
+      <div class="admin-wrap">
+        <div class="admin-card">
+          <h3>📊 生成数据统计</h3>
+          <div class="admin-stats">
+            <div class="admin-stat-box">
+              <div class="num" id="adminToday">0</div>
+              <div class="lbl">今日生成次数</div>
+            </div>
+            <div class="admin-stat-box">
+              <div class="num" id="adminTotal">0</div>
+              <div class="lbl">累计生成次数</div>
+            </div>
+            <div class="admin-stat-box">
+              <div class="num" id="adminHistory">0</div>
+              <div class="lbl">历史记录条数</div>
+            </div>
+            <div class="admin-stat-box">
+              <div class="num" id="adminRemain">20</div>
+              <div class="lbl">高级版剩余次数</div>
+            </div>
+          </div>
+        </div>
+        <div class="admin-card">
+          <h3>🔐 高级权限管理</h3>
+          <div style="margin:10px 0 20px;">
+            <p>解锁永久高级版：输入解锁码激活，即可无限次使用进阶版、专家版</p>
+            <div class="password-search-row">
+              <input type="text" id="unlockCode" placeholder="请输入解锁码">
+              <button class="generate-btn" style="width:120px;" id="unlockBtn">立即激活</button>
+            </div>
+          </div>
+          <h3>🔑 自定义密码池</h3>
+          <div style="margin:10px 0;">
+            <p>批量添加解锁密码，一行一个</p>
+            <textarea id="pwdPool" style="width:100%;height:120px;background:#0b0b14;border:1px solid #333;color:#fff;padding:10px;border-radius:8px;"></textarea>
+            <div class="btn-row" style="margin-top:10px;">
+              <button class="generate-btn" id="savePwdBtn">保存密码池</button>
+              <button class="generate-btn optimize" id="clearPwdBtn">清空密码池</button>
+            </div>
+          </div>
+        </div>
+        <div class="admin-card">
+          <h3>🗑️ 缓存清理</h3>
+          <div class="btn-row">
+            <button class="generate-btn optimize" id="clearHistoryBtn">清空所有历史记录</button>
+            <button class="generate-btn batch" id="resetAllBtn">重置所有数据</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 移动端悬浮生成按钮 -->
+<button class="mobile-generate-btn" id="mobileGenerateBtn">✨</button>
+
+<!-- Toast提示弹窗 -->
+<div class="toast" id="toastBox">
+  <span class="toast-icon">✅</span>
+  <span class="toast-text">操作成功</span>
+</div>
+
+<!-- 解锁弹窗 -->
+<div class="modal-overlay" id="unlockModal">
+  <div class="modal">
+    <div class="modal-title">🔓 解锁永久高级版</div>
+    <div class="modal-desc">解锁后可无限使用进阶版、专家版，无每日次数限制</div>
+    <input class="modal-input" id="modalCode" placeholder="请输入解锁码">
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-secondary" id="modalCancel">取消</button>
+      <button class="modal-btn modal-btn-primary" id="modalConfirm">立即解锁</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+// ==============================================
+// 全局存储系统（完整原生，零删减，修复跨天重置）
+// ==============================================
+const Storage = {
+  get(key) {
+    const val = localStorage.getItem(key);
+    try { return JSON.parse(val); } catch { return val; }
+  },
+  set(key, val) {
+    localStorage.setItem(key, JSON.stringify(val));
+  },
+  remove(key) {
+    localStorage.removeItem(key);
+  }
+};
+
+// 初始化全局数据
+let appData = Storage.get("appData") || {
+  todayDate: new Date().toLocaleDateString(),
+  todayNum: 0,
+  totalNum: 0,
+  remainNum: 20,
+  isVip: false,
+  pwdPool: ["vip888", "pro666", "admin000"],
+  history: []
+};
+
+// 跨天自动重置
+const nowDate = new Date().toLocaleDateString();
+if (appData.todayDate !== nowDate) {
+  appData.todayDate = nowDate;
+  appData.todayNum = 0;
+  appData.remainNum = 20;
+  Storage.set("appData", appData);
+}
+
+// ==============================================
+// DOM 元素
+// ==============================================
+const dom = {
+  // 左侧面板
+  promptInput: document.getElementById("promptInput"),
+  clearBtn: document.getElementById("clearBtn"),
+  generateBtn: document.getElementById("generateBtn"),
+  optimizeBtn: document.getElementById("optimizeBtn"),
+  batchBtn: document.getElementById("batchBtn"),
+  platformSelect: document.getElementById("platformSelect"),
+  // 统计
+  todayNum: document.getElementById("todayNum"),
+  totalNum: document.getElementById("totalNum"),
+  remainNum: document.getElementById("remainNum"),
+  mobileTodayCount: document.getElementById("mobileTodayCount"),
+  // 页面容器
+  emptyBox: document.getElementById("emptyBox"),
+  resultBox: document.getElementById("resultBox"),
+  // 页面切换
+  navBtns: document.querySelectorAll(".nav-btn"),
+  pages: document.querySelectorAll(".page"),
+  // 移动端侧边栏
+  mobileMenuBtn: document.getElementById("mobileMenuBtn"),
+  mobilePanel: document.getElementById("mobilePanel"),
+  mobileOverlay: document.getElementById("mobileOverlay"),
+  mobileGenerateBtn: document.getElementById("mobileGenerateBtn"),
+  // 标签与卡片
+  fieldCards: document.querySelectorAll(".field-card"),
+  tags: document.querySelectorAll(".tag"),
+  complexityCards: document.querySelectorAll(".complexity-card"),
+  // 模板
+  filterBtns: document.querySelectorAll(".filter-btn"),
+  templateCards: document.querySelectorAll(".template-card"),
+  // Toast
+  toastBox: document.getElementById("toastBox"),
+  // 弹窗
+  unlockModal: document.getElementById("unlockModal"),
+  modalCode: document.getElementById("modalCode"),
+  modalCancel: document.getElementById("modalCancel"),
+  modalConfirm: document.getElementById("modalConfirm"),
+  // 历史
+  historyList: document.getElementById("historyList"),
+  historySearch: document.getElementById("historySearch"),
+  historyCount: document.getElementById("historyCount"),
+  // 管理后台
+  unlockCode: document.getElementById("unlockCode"),
+  unlockBtn: document.getElementById("unlockBtn"),
+  pwdPool: document.getElementById("pwdPool"),
+  savePwdBtn: document.getElementById("savePwdBtn"),
+  clearPwdBtn: document.getElementById("clearPwdBtn"),
+  clearHistoryBtn: document.getElementById("clearHistoryBtn"),
+  resetAllBtn: document.getElementById("resetAllBtn"),
+  adminToday: document.getElementById("adminToday"),
+  adminTotal: document.getElementById("adminTotal"),
+  adminHistory: document.getElementById("adminHistory"),
+  adminRemain: document.getElementById("adminRemain")
+};
+
+// ==============================================
+// 初始化渲染数据
+// ==============================================
+function renderData() {
+  dom.todayNum.textContent = appData.todayNum;
+  dom.totalNum.textContent = appData.totalNum;
+  dom.remainNum.textContent = appData.remainNum;
+  dom.mobileTodayCount.textContent = appData.todayNum;
+  dom.adminToday.textContent = appData.todayNum;
+  dom.adminTotal.textContent = appData.totalNum;
+  dom.adminHistory.textContent = appData.history.length;
+  dom.adminRemain.textContent = appData.remainNum;
+  dom.historyCount.textContent = appData.history.length;
+  dom.pwdPool.value = appData.pwdPool.join("\n");
+}
+renderData();
+
+// ==============================================
+// Toast 提示（修复浏览器兼容）
+// ==============================================
+function showToast(msg, icon = "✅") {
+  dom.toastBox.querySelector(".toast-icon").textContent = icon;
+  dom.toastBox.querySelector(".toast-text").textContent = msg;
+  dom.toastBox.classList.add("show");
+  setTimeout(() => dom.toastBox.classList.remove("show"), 2000);
+}
+
+// ==============================================
+// 页面切换逻辑
+// ==============================================
+dom.navBtns.forEach(btn => {
+  btn.onclick = () => {
+    const pageId = btn.dataset.page + "Page";
+    dom.navBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    dom.pages.forEach(p => p.classList.remove("active"));
+    if (pageId === "homePage") {
+      dom.emptyBox.style.display = "flex";
+      dom.resultBox.innerHTML = "";
+    } else {
+      document.getElementById(pageId).classList.add("active");
+      if (pageId === "historyPage") renderHistory();
+    }
+    // 移动端关闭侧边栏
+    dom.mobilePanel.classList.remove("open");
+    dom.mobileOverlay.classList.remove("active");
+  };
+});
+
+// ==============================================
+// 左侧单选交互：场景、模式
+// ==============================================
+function singleSelect(list) {
+  list.forEach(item => {
+    item.onclick = () => {
+      list.forEach(i => i.classList.remove("active"));
+      item.classList.add("active");
+    };
+  });
+}
+singleSelect(dom.fieldCards);
+singleSelect(dom.complexityCards);
+
+// ==============================================
+// 标签多选交互
+// ==============================================
+dom.tags.forEach(tag => {
+  tag.onclick = () => tag.classList.toggle("tag-active");
+});
+
+// ==============================================
+// 移动端侧边栏：打开/关闭（修复空白点击关闭）
+// ==============================================
+dom.mobileMenuBtn.onclick = () => {
+  dom.mobilePanel.classList.add("open");
+  dom.mobileOverlay.classList.add("active");
+};
+// 点击遮罩关闭
+dom.mobileOverlay.onclick = () => {
+  dom.mobilePanel.classList.remove("open");
+  dom.mobileOverlay.classList.remove("active");
+};
+// 悬浮按钮打开面板
+dom.mobileGenerateBtn.onclick = () => {
+  dom.mobilePanel.classList.add("open");
+  dom.mobileOverlay.classList.add("active");
+};
+
+// ==============================================
+// 清空输入框
+// ==============================================
+dom.clearBtn.onclick = () => {
+  dom.promptInput.value = "";
+  showToast("已清空输入");
+};
+
+// ==============================================
+// 模板筛选
+// ==============================================
+dom.filterBtns.forEach(btn => {
+  btn.onclick = () => {
+    const filter = btn.dataset.filter;
+    dom.filterBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    dom.templateCards.forEach(card => {
+      if (filter === "all" || card.dataset.type === filter) card.style.display = "block";
+      else card.style.display = "none";
+    });
+  };
+});
+
+// ==============================================
+// 生成核心逻辑
+// ==============================================
+function getSelectedTags() {
+  return Array.from(dom.tags).filter(t => t.classList.contains("tag-active")).map(t => t.dataset.tag);
+}
+function getLevel() {
+  return Array.from(dom.complexityCards).find(c => c.classList.contains("selected")).dataset.level;
+}
+
+// 一键生成
+dom.generateBtn.onclick = async () => {
+  const prompt = dom.promptInput.value.trim();
+  if (!prompt) return showToast("请输入需求内容", "⚠️");
+
+  const level = getLevel();
+  // 高级权限校验
+  if (!appData.isVip && level !== "basic") {
+    dom.unlockModal.classList.add("active");
+    return;
+  }
+  if (!appData.isVip && appData.remainNum <= 0) {
+    return showToast("今日高级次数已用完，请明日再来", "⚠️");
+  }
+
+  // 计数
+  appData.todayNum++;
+  appData.totalNum++;
+  if (!appData.isVip && level !== "basic") appData.remainNum--;
+  Storage.set("appData", appData);
+  renderData();
+
+  // 模拟生成（可替换真实AI接口）
+  const platform = dom.platformSelect.value;
+  const tags = getSelectedTags().join("、");
+  let res = "";
+  if (level === "basic") res = `【${platform}｜标准版】\n${prompt}\n风格：${tags || "通用"}`;
+  if (level === "advanced") res = `【${platform}｜进阶版】\n深度内容：${prompt}\n风格：${tags || "通用"}`;
+  if (level === "expert") res = `【${platform}｜专家爆款版】\n强情绪爆款文案：${prompt}\n风格：${tags || "爆款、干货"}`;
+
+  dom.emptyBox.style.display = "none";
+  dom.resultBox.innerHTML = `
+    <div class="result-card">
+      <div class="result-header">
+        <div class="result-meta">
+          <span class="result-badge ${level==='basic'?'badge-basic':level==='advanced'?'badge-advanced':'badge-expert'}">${level==='basic'?'标准版':level==='advanced'?'进阶版':'专家版'}</span>
+          <span class="result-time">${new Date().toLocaleString()}</span>
+        </div>
+        <div class="result-actions">
+          <button class="action-btn copy-btn">📋 复制</button>
+          <button class="action-btn save-btn">💾 保存历史</button>
+        </div>
+      </div>
+      <div class="result-content">${res.replace(/\n/g,"<br>")}</div>
+      <div class="result-word-count">字数：${res.length}</div>
+    </div>
+  `;
+
+  // 复制（兼容所有浏览器，修复async报错）
+  dom.resultBox.querySelector(".copy-btn").onclick = function() {
+    const text = res;
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    showToast("已复制到剪贴板");
+  };
+
+  // 保存历史
+  dom.resultBox.querySelector(".save-btn").onclick = function() {
+    appData.history.unshift({
+      id: Date.now(),
+      time: new Date().toLocaleString(),
+      prompt,
+      platform,
+      level,
+      tags,
+      content: res
+    });
+    Storage.set("appData", appData);
+    renderData();
+    showToast("已保存到历史记录");
+  };
+};
+
+// 优化改写
+dom.optimizeBtn.onclick = () => {
+  if (!dom.resultBox.innerHTML) return showToast("请先生成内容", "⚠️");
+  dom.promptInput.value = "优化改写：" + dom.promptInput.value;
+  dom.generateBtn.click();
+};
+
+// 批量生成3组
+dom.batchBtn.onclick = () => {
+  const prompt = dom.promptInput.value.trim();
+  if (!prompt) return showToast("请输入需求内容", "⚠️");
+  const level = getLevel();
+  if (!appData.isVip && level !== "basic") {
+    dom.unlockModal.classList.add("active");
+    return;
+  }
+  dom.emptyBox.style.display = "none";
+  dom.resultBox.innerHTML = "";
+  for (let i = 1; i <= 3; i++) {
+    setTimeout(() => dom.generateBtn.click(), i * 200);
+  }
+};
+
+// ==============================================
+// 解锁弹窗逻辑
+// ==============================================
+dom.modalCancel.onclick = () => dom.unlockModal.classList.remove("active");
+dom.modalConfirm.onclick = () => {
+  const code = dom.modalCode.value.trim();
+  if (appData.pwdPool.includes(code)) {
+    appData.isVip = true;
+    Storage.set("appData", appData);
+    renderData();
+    dom.unlockModal.classList.remove("active");
+    showToast("解锁成功！永久高级权限已激活 🎉");
+  } else {
+    showToast("解锁码错误，请重试", "❌");
+  }
+};
+
+// ==============================================
+// 历史记录渲染与搜索
+// ==============================================
+function renderHistory(keyword = "") {
+  const list = dom.historyList;
+  list.innerHTML = "";
+  let arr = appData.history;
+  if (keyword) arr = arr.filter(h => h.prompt.includes(keyword) || h.content.includes(keyword));
+  if (arr.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:#999;">暂无历史记录</div>';
+    return;
+  }
+  arr.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "history-item";
+    div.innerHTML = `
+      <div class="history-icon">📄</div>
+      <div class="history-info">
+        <div class="history-title">${item.prompt.substring(0,30)}${item.prompt.length>30?"...":""}</div>
+        <div class="history-meta">${item.time} · ${item.level} · ${item.platform}</div>
+      </div>
+    `;
+    div.onclick = () => {
+      dom.emptyBox.style.display = "none";
+      dom.resultBox.innerHTML = `
+        <div class="result-card">
+          <div class="result-header">
+            <div class="result-meta">
+              <span class="result-badge ${item.level==='basic'?'badge-basic':item.level==='advanced'?'badge-advanced':'badge-expert'}">${item.level==='basic'?'标准版':item.level==='advanced'?'进阶版':'专家版'}</span>
+              <span class="result-time">${item.time}</span>
+            </div>
+            <div class="result-actions">
+              <button class="action-btn copy-btn">📋 复制</button>
+            </div>
+          </div>
+          <div class="result-content">${item.content.replace(/\n/g,"<br>")}</div>
+          <div class="result-word-count">字数：${item.content.length}</div>
+        </div>
+      `;
+      dom.resultBox.querySelector(".copy-btn").onclick = function() {
+        const ta = document.createElement("textarea");
+        ta.value = item.content;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        showToast("已复制");
+      };
+    };
+    list.appendChild(div);
+  });
+}
+dom.historySearch.oninput = () => renderHistory(dom.historySearch.value.trim());
+
+// ==============================================
+// 管理后台功能
+// ==============================================
+// 解锁
+dom.unlockBtn.onclick = () => {
+  const code = dom.unlockCode.value.trim();
+  if (appData.pwdPool.includes(code)) {
+    appData.isVip = true;
+    Storage.set("appData", appData);
+    renderData();
+    showToast("永久解锁成功！");
+  } else showToast("解锁码错误", "❌");
+};
+// 保存密码池
+dom.savePwdBtn.onclick = () => {
+  const arr = dom.pwdPool.value.split("\n").map(s => s.trim()).filter(s => s);
+  appData.pwdPool = arr;
+  Storage.set("appData", appData);
+  showToast("密码池已保存");
+};
+// 清空密码池
+dom.clearPwdBtn.onclick = () => {
+  dom.pwdPool.value = "";
+  appData.pwdPool = [];
+  Storage.set("appData", appData);
+  showToast("密码池已清空");
+};
+// 清空历史
+dom.clearHistoryBtn.onclick = () => {
+  appData.history = [];
+  Storage.set("appData", appData);
+  renderData();
+  showToast("历史记录已清空");
+};
+// 重置所有数据
+dom.resetAllBtn.onclick = () => {
+  localStorage.removeItem("appData");
+  location.reload();
+};
+
+// ==============================================
+// 模板点击快速填充
+// ==============================================
+dom.templateCards.forEach(card => {
+  card.onclick = () => {
+    const name = card.querySelector(".template-name").textContent;
+    dom.promptInput.value = `使用【${name}】生成内容`;
+    showToast("模板已填充到输入框");
+  };
+});
+</script>
+</body>
+</html>
