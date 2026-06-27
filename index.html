@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>AI提示词生成器 - 内测版</title>
 <style>
-/* ===== CSS变量 ===== */
+/* ===== CSS变量（优化对比度） ===== */
 :root {
   --bg-primary: #0b0b14;
   --bg-secondary: #13131f;
@@ -13,8 +13,8 @@
   --bg-glass: rgba(255,255,255,0.05);
   --border-glass: rgba(255,255,255,0.07);
   --text-primary: #eaeaf2;
-  --text-secondary: #9999b5;
-  --text-muted: #555577;
+  --text-secondary: #a0a0bc;
+  --text-muted: #6b6b8a;
   --accent-purple: #7c5cfc;
   --accent-purple-light: #a58aff;
   --accent-pink: #e861a8;
@@ -37,7 +37,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-size: 15px;
 }
-/* 焦点样式优化 - 提升可访问性 */
 *:focus-visible {
   outline: 2px solid var(--accent-purple);
   outline-offset: 2px;
@@ -61,7 +60,7 @@ body {
   align-items: center;
   gap: 8px;
 }
-.logo span { font-weight: 400; color: var(--text-muted); -webkit-text-fill-color: var(--text-muted); font-size: 13px; }
+.logo span { font-weight: 400; -webkit-text-fill-color: var(--text-muted); font-size: 13px; }
 .nav-links { display: flex; gap: 4px; align-items: center; }
 .nav-btn {
   padding: 8px 18px; border-radius: 8px;
@@ -114,9 +113,7 @@ body {
 }
 .mobile-nav-panel.open { right:0; }
 .mobile-nav-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
   padding: 0 24px 18px 24px;
   border-bottom: 1px solid var(--border-glass);
 }
@@ -126,30 +123,18 @@ body {
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.mobile-nav-brand .tag { font-size: 13px; color: var(--text-muted); margin-top: 3px; -webkit-text-fill-color: var(--text-muted); }
+.mobile-nav-brand .tag { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
 .mobile-nav-close {
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 24px;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 6px;
-  line-height: 1;
+  background: none; border: none; color: var(--text-secondary);
+  font-size: 24px; cursor: pointer; padding: 4px; border-radius: 6px; line-height: 1;
 }
 .mobile-nav-close:hover, .mobile-nav-close:focus-visible { background: var(--bg-glass); color: var(--text-primary); }
 .mobile-nav-list { flex: 1; padding: 12px 0; overflow-y: auto; }
 .mobile-nav-item {
   display: flex; align-items: center; gap: 14px;
-  padding: 14px 24px;
-  width: 100%;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: left;
+  padding: 14px 24px; width: 100%; background: transparent; border: none;
+  color: var(--text-secondary); font-size: 16px; cursor: pointer;
+  transition: all 0.2s; text-align: left;
   border-right: 3px solid transparent;
 }
 .mobile-nav-item:hover, .mobile-nav-item:focus-visible { background: rgba(124,92,252,0.05); color: var(--text-primary); }
@@ -161,33 +146,25 @@ body {
 .mobile-nav-item .icon { font-size: 20px; width: 30px; text-align: center; }
 .mobile-nav-footer { padding: 14px 24px 0 24px; border-top: 1px solid var(--border-glass); }
 .mobile-nav-stats {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 0 16px 0;
-  font-size: 13px;
-  color: var(--text-muted);
+  display: flex; justify-content: space-between; padding: 12px 0 16px 0;
+  font-size: 13px; color: var(--text-muted);
 }
 .mobile-nav-stats .num { color: var(--accent-purple-light); font-weight: 600; }
 .mobile-nav-invite-btn {
   width: 100%; padding: 14px;
   background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
-  border: none; border-radius: 10px;
-  color: #fff; font-size: 16px; font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
+  border: none; border-radius: 10px; color: #fff;
+  font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s;
 }
 .mobile-nav-invite-btn:hover, .mobile-nav-invite-btn:focus-visible { transform: scale(1.02); box-shadow: 0 4px 20px rgba(124,92,252,0.3); }
 .main-container { display: flex; margin-top: 60px; min-height: calc(100dvh - 60px); }
 .config-panel {
-  width: 460px;
-  min-width: 460px;
+  width: 460px; min-width: 460px;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border-glass);
-  padding: 28px 24px;
-  overflow-y: auto;
+  padding: 28px 24px; overflow-y: auto;
   height: calc(100dvh - 60px);
-  position: relative;
-  left: 0;
+  position: relative; left: 0;
   transition: left 0.32s cubic-bezier(0.4,0,0.2,1);
   z-index: 100;
 }
@@ -302,7 +279,6 @@ body {
 }
 .complexity-card:hover, .complexity-card:focus-visible { background: rgba(124,92,252,0.05); border-color: rgba(124,92,252,0.2); }
 .complexity-card.selected { background: rgba(124,92,252,0.1); border-color: var(--accent-purple); box-shadow: 0 0 20px rgba(124,92,252,0.08); }
-/* 修复：电商场景下禁用其他复杂度的样式 */
 .complexity-card.disabled {
   opacity: 0.4;
   cursor: not-allowed;
@@ -624,12 +600,7 @@ body {
 .history-info { flex: 1; min-width: 0; }
 .history-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .history-meta { font-size: 11px; color: var(--text-muted); }
-.history-actions {
-  display: flex;
-  gap: 4px;
-  flex-shrink: 0;
-}
-/* 修复：添加分页组件样式 */
+.history-actions { display: flex; gap: 4px; flex-shrink: 0; }
 .pagination {
   display: flex;
   justify-content: center;
@@ -652,7 +623,6 @@ body {
 .pagination-btn:hover, .pagination-btn:focus-visible { background: var(--accent-purple); color: white; border-color: var(--accent-purple); }
 .pagination-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 .pagination-info { font-size: 13px; color: var(--text-muted); }
-/* 修复：添加移动端配置面板触发按钮样式 */
 .mobile-config-trigger {
   display: none;
   position: fixed;
@@ -673,7 +643,6 @@ body {
   gap: 6px;
 }
 .mobile-config-trigger:hover, .mobile-config-trigger:focus-visible { transform: scale(1.05); }
-/* 修复：添加离线指示器样式 */
 .offline-indicator {
   position: fixed;
   top: 60px;
@@ -997,7 +966,6 @@ body {
   line-height: 1.5;
 }
 .keyboard-hint.visible { opacity: 1; }
-/* 修复：添加快捷键提示的关闭按钮 */
 .keyboard-hint-close {
   position: absolute;
   top: 2px;
@@ -1102,7 +1070,6 @@ body {
 ::-webkit-scrollbar-thumb { background: rgba(124,92,252,0.25); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(124,92,252,0.4); }
 .hidden { display: none !important; }
-/* 减少动画偏好 - 提升可访问性 */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -1113,12 +1080,8 @@ body {
 </style>
 </head>
 <body>
-<!-- 修复：添加离线状态指示器 -->
-<div class="offline-indicator" id="offlineIndicator" role="status" aria-live="polite">
-  ⚠️ 当前处于离线模式，部分功能可能受限
-</div>
+<div class="offline-indicator" id="offlineIndicator" role="status" aria-live="polite">⚠️ 当前处于离线模式，部分功能可能受限</div>
 
-<!-- ===== 导航栏 ===== -->
 <nav class="navbar" role="navigation" aria-label="主导航">
   <div class="logo">AI提示词生成器 <span>内测版</span></div>
   <div class="nav-links">
@@ -1139,7 +1102,6 @@ body {
   <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="打开菜单" aria-expanded="false" aria-controls="mobileNavPanel">☰</button>
 </nav>
 
-<!-- ===== 手机端导航面板 ===== -->
 <div class="mobile-nav-overlay" id="mobileNavOverlay" aria-hidden="true"></div>
 <div class="mobile-nav-panel" id="mobileNavPanel" role="dialog" aria-label="移动端导航" aria-modal="true">
   <div class="mobile-nav-header">
@@ -1165,21 +1127,11 @@ body {
   </div>
 </div>
 
-<!-- ===== 移动端配置面板遮罩 ===== -->
 <div class="overlay" id="overlay"></div>
+<button class="mobile-config-trigger" id="mobileConfigTrigger" aria-label="打开配置面板"><span>⚙️</span> 配置</button>
 
-<!-- 修复：添加移动端配置面板触发按钮 -->
-<button class="mobile-config-trigger" id="mobileConfigTrigger" aria-label="打开配置面板">
-  <span>⚙️</span> 配置
-</button>
-
-<!-- ===== 主容器 ===== -->
 <div class="main-container">
-
-  <!-- ===== 左侧配置面板 ===== -->
   <aside class="config-panel" id="configPanel" aria-label="配置面板">
-
-    <!-- 领域分类 -->
     <div class="config-section">
       <div class="section-label">🎯 选择场景</div>
       <div class="field-grid" id="fieldGrid" role="radiogroup" aria-label="场景选择">
@@ -1193,8 +1145,6 @@ body {
         <div class="field-card" data-field="电商AI绘画" role="radio" aria-checked="false" tabindex="0"><span class="icon">🖼️</span><span class="label">AI绘画</span></div>
       </div>
     </div>
-
-    <!-- AI平台 -->
     <div class="config-section" id="platformSection" style="display:block;">
       <div class="section-label">🤖 选择AI平台</div>
       <div class="platform-select-wrap">
@@ -1227,8 +1177,6 @@ body {
         </select>
       </div>
     </div>
-
-    <!-- 任务描述 -->
     <div class="config-section">
       <div class="section-label" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
         <span>📝 任务描述</span>
@@ -1241,8 +1189,6 @@ body {
         <textarea id="taskInput" placeholder="描述你需要的任务，例如：帮我写一个60秒的抖音口播脚本..." aria-label="任务描述"></textarea>
       </div>
     </div>
-
-    <!-- 热门标签 -->
     <div class="config-section">
       <div class="section-label">💡 热门标签</div>
       <div class="tag-container" id="tagContainer">
@@ -1288,8 +1234,6 @@ body {
         </span>
       </div>
     </div>
-
-    <!-- 电商标签 -->
     <div class="config-section" id="ecommerceTagSection" style="display:none;">
       <div class="section-label">🛍️ 电商图片类型</div>
       <div class="tag-container" id="ecommerceTagContainer">
@@ -1297,13 +1241,10 @@ body {
         <span class="tag" data-task="产品场景图，真实生活场景展示，生活方式摄影风格，自然窗光或柔光，避免硬阴影，三分法构图，产品为视觉焦点，环境烘托氛围，生活化道具搭配，适度虚化背景突出产品，8K高清，色彩自然，画面通透。适用场景：商品详情页场景图、社交媒体种草图。" tabindex="0" role="button"><span class="tag-left"><span class="tag-main">🏠 产品场景图</span></span></span>
         <span class="tag" data-task="模特穿搭图，亚洲年轻女性模特，身高165-170cm，身材匀称，穿着服装，时尚街拍风格，城市街道或咖啡馆场景，自然行走/侧身/坐姿展示服装版型和细节，自然光或模拟自然光，全身或七分构图，背景简洁不抢镜，8K高清，皮肤质感真实，服装纹理清晰。适用场景：服装详情页主图、小红书穿搭分享。" tabindex="0" role="button"><span class="tag-left"><span class="tag-main">👗 模特穿搭图</span></span></span>
         <span class="tag" data-task="促销海报图，产品大促氛围展示，电商促销海报风格，视觉冲击力强，红色/橙色/金色促销色调，放射状或渐变背景，光效粒子点缀，产品居中放大，上方或侧面预留大标题文案区域（30%画面空间），8K高清，色彩饱和度高，对比强烈。适用场景：活动banner、首页海报、朋友圈促销图。" tabindex="0" role="button"><span class="tag-left"><span class="tag-main">🎉 促销海报图</span></span></span>
-        <!-- 修复：修复标签闭合 -->
         <span class="tag" data-task="详情页长图，产品多卖点展示，电商详情页设计风格，信息层次清晰，包含五大模块：①首屏产品大图+核心卖点标题 ②细节特写（材质/纹理/工艺） ③使用场景图（人物互动/效果对比） ④参数说明（规格/功能图解/认证标识） ⑤品牌背书（品牌故事/用户评价/售后保障）。8K超高清，风格统一。适用场景：淘宝/京东/拼多多详情页。" tabindex="0" role="button"><span class="tag-left"><span class="tag-main">📄 详情页长图</span></span></span>
         <span class="tag" data-task="AI换脸模特图，亚洲面孔年轻女性模特，五官精致，气质清新，展示产品（美妆/护肤/配饰），美妆广告大片风格，正面特写/45度侧脸/半身像，影棚级专业打光（蝴蝶光或环形光），自然清新妆容突出产品使用区域，纯色渐变或极简背景，8K超高清，皮肤质感细腻真实。适用场景：美妆详情页、护肤广告、配饰展示。" tabindex="0" role="button"><span class="tag-left"><span class="tag-main">🧑 AI换脸模特图</span></span></span>
       </div>
     </div>
-
-    <!-- 复杂度 -->
     <div class="config-section">
       <div class="section-label">⚡ 选择复杂度</div>
       <div class="complexity-cards" id="complexityCards" role="radiogroup" aria-label="复杂度选择">
@@ -1346,8 +1287,6 @@ body {
         </div>
       </div>
     </div>
-
-    <!-- 按钮 -->
     <div class="btn-row">
       <button class="generate-btn" id="generateBtn" aria-label="生成提示词"><span>✨</span> 生成提示词</button>
     </div>
@@ -1355,16 +1294,13 @@ body {
       <button class="generate-btn optimize locked" id="optimizeBtn" style="display:flex;" aria-label="一键优化" disabled><span>🔒</span> 一键优化 · 专家版专属</button>
       <button class="generate-btn batch locked" id="batchBtn" style="display:flex;" aria-label="批量生成" disabled><span>🔒</span> 批量生成 · 专家版专属</button>
     </div>
-
     <div class="invite-remaining">🔥 今日内测邀请码剩余：<strong id="inviteCount">20</strong> 枚</div>
-
     <div class="usage-stats">
       <div class="stat-item"><div class="stat-value" id="todayCount">5</div><div class="stat-label">今日免费剩余</div></div>
       <div class="stat-item"><div class="stat-value" id="totalCount">0</div><div class="stat-label">总生成数</div></div>
     </div>
   </aside>
 
-  <!-- ===== 右侧结果面板 ===== -->
   <main class="result-panel" id="resultPanel">
     <div class="page active" id="page-home">
       <div class="empty-state" id="emptyState">
@@ -1380,10 +1316,8 @@ body {
           <div class="onboarding-step"><div class="step-num">3</div><div class="step-icon">✨</div><div class="step-label">点击生成</div><div class="step-desc">5秒得到提示词</div></div>
         </div>
       </div>
-      <!-- 修复：添加 aria-live 支持屏幕阅读器 -->
       <div id="resultsContainer" aria-live="polite" aria-atomic="false" aria-relevant="additions"></div>
     </div>
-
     <div class="page" id="page-templates">
       <h2 style="font-size:18px;margin-bottom:6px;">📚 模板库</h2>
       <p style="color:var(--text-muted);font-size:12px;margin-bottom:14px;">🔒 专家版专属 · 精品模板持续扩充中</p>
@@ -1401,19 +1335,15 @@ body {
       </div>
       <div class="template-grid" id="templateGrid"></div>
     </div>
-
     <div class="page" id="page-history">
       <h2 style="font-size:18px;margin-bottom:16px;">📜 生成历史</h2>
       <div class="history-list" id="historyList"><div class="empty-state" style="min-height:180px;"><div class="empty-icon" style="width:48px;height:48px;font-size:24px;">📜</div><div class="empty-title" style="font-size:15px;">暂无历史记录</div></div></div>
-      <!-- 修复：添加分页容器 -->
       <div class="pagination" id="historyPagination" style="display:none;"></div>
     </div>
-
     <div class="page" id="page-favorites">
       <h2 style="font-size:18px;margin-bottom:16px;">⭐ 我的收藏</h2>
       <div class="history-list" id="favoritesList"><div class="empty-state" style="min-height:180px;"><div class="empty-icon" style="width:48px;height:48px;font-size:24px;">⭐</div><div class="empty-title" style="font-size:15px;">暂无收藏</div></div></div>
     </div>
-
     <div class="page" id="page-admin">
       <div class="admin-wrap" id="adminPanel">
         <div class="empty-state" style="min-height:260px;">
@@ -1430,7 +1360,6 @@ body {
   </main>
 </div>
 
-<!-- ===== 解锁弹窗 ===== -->
 <div class="modal-overlay" id="unlockModal" role="dialog" aria-modal="true" aria-label="解锁专家版">
   <div class="modal">
     <div style="text-align:center;margin-bottom:12px;"><span style="font-size:34px;">👑</span></div>
@@ -1468,7 +1397,6 @@ body {
   </div>
 </div>
 
-<!-- 修改密码次数弹窗 -->
 <div class="modal-overlay" id="editMaxModal" role="dialog" aria-modal="true" aria-label="修改使用次数">
   <div class="modal" style="max-width:400px;">
     <div class="modal-title">✏️ 修改使用次数上限</div>
@@ -1521,797 +1449,606 @@ body {
   </div>
 </div>
 
-<!-- ===== Toast ===== -->
 <div class="toast" id="toast" role="status" aria-live="polite">
   <span class="toast-icon" id="toastIcon">✅</span>
   <span class="toast-text" id="toastText">操作成功</span>
 </div>
 
-<!-- ===== 键盘快捷键提示 ===== -->
 <div class="keyboard-hint" id="keyboardHint">
   <button class="keyboard-hint-close" id="keyboardHintClose" aria-label="关闭快捷键提示">✕</button>
   <div><strong>⌨️ 快捷键</strong></div>
   <div>Ctrl+Enter 生成 | Ctrl+K 清空 | Ctrl+O 优化 | Ctrl+B 批量</div>
 </div>
 
-<!-- ===== 底部 ===== -->
 <footer id="page-footer">
   <div class="footer-content">
     <span class="footer-copyright">© 2025 AI提示词生成器</span>
     <span class="footer-divider">|</span>
-    <a href="#" target="_blank" class="footer-license" id="licenseLink">MIT License</a><a href="#" target="_blank" class="footer-license" id="licenseLink">MIT 许可证</a>
+    <a href="#" target="_blank" class="footer-license" id="licenseLink">MIT License</a>
     <span class="footer-divider">|</span>
-    <span class="footer-qq">QQ: 704451222</span><span class="footer-qq">QQ：704451222</span>
+    <span class="footer-qq">QQ: 704451222</span>
   </div>
 </footer>
 
 <script>
 // ============================================================
-// AI提示词生成器 v2.1 - 修复版
-// 修复清单：
-// 1. renderTemplates 换行截断
-// 2. 标签闭合错误
-// 3. 封装到 PromptGen 命名空间
-// 4. DB schema 验证和迁移
-// 5. Toast 队列管理
-// 6. 历史记录分页
-// 7. 弹窗焦点管理
-// 8. 电商场景复杂度禁用
-// 9. 离线检测
-// 10. 移动端配置面板触发
+// AI提示词生成器 v2.2 - 修复完善版
 // ============================================================
 
-// ---- 命名空间 ----
-var PromptGen = {};
+var PromptGen = (function() {
+  'use strict';
 
-// ---- 配置 ----
-PromptGen.CONFIG = {
-  SPECIAL_PASSWORD: '123456888',
-  ADMIN_PASSWORD: 'c123456888',
-  MAX_BASIC_DAILY: 5,
-  MAX_PASSWORD_USES: 100,
-  DAILY_INVITE_LIMIT: 20,
-  QQ_NUMBER: '704451222',
-  DB_VERSION: 2,
-  HISTORY_PAGE_SIZE: 20
-};
-
-// ---- 平台数据 ----
-PromptGen.PLATFORM_DATA = {
-  text: [
-    { value: '文心一言', icon: '🇨🇳', url: 'https://yiyan.baidu.com', label: '文心一言' },
-    { value: '通义千问', icon: '🔷', url: 'https://tongyi.aliyun.com', label: '通义千问' },
-    { value: 'Kimi', icon: '📄', url: 'https://kimi.moonshot.cn', label: 'Kimi' },
-    { value: '豆包', icon: '🟢', url: 'https://www.doubao.com', label: '豆包' },
-    { value: '讯飞星火', icon: '⭐', url: 'https://xinghuo.xfyun.cn', label: '讯飞星火' },
-    { value: '智谱清言', icon: '🔬', url: 'https://chatglm.cn', label: '智谱清言' },
-    { value: 'DeepSeek', icon: '🧊', url: 'https://chat.deepseek.com', label: 'DeepSeek' },
-    { value: '百小应', icon: '🤝', url: 'https://yiyan.baidu.com', label: '百小应' },
-    { value: 'ChatGPT', icon: '💬', url: 'https://chat.openai.com', label: 'ChatGPT' },
-    { value: 'Claude', icon: '🧠', url: 'https://claude.ai', label: 'Claude' },
-    { value: 'Gemini', icon: '✨', url: 'https://gemini.google.com', label: 'Gemini' },
-    { value: 'Copilot', icon: '🛠️', url: 'https://copilot.microsoft.com', label: 'Copilot' },
-    { value: 'Perplexity', icon: '🔍', url: 'https://www.perplexity.ai', label: 'Perplexity' },
-    { value: 'Grok', icon: '🤖', url: 'https://grok.x.ai', label: 'Grok' }
-  ],
-  image: [
-    { value: '豆包', icon: '🟢', url: 'https://www.doubao.com/chat/create-image', label: '豆包' },
-    { value: '即梦', icon: '🔵', url: 'https://jimeng.jianying.com/ai-tool/image/generate', label: '即梦' },
-    { value: '可灵', icon: '🟣', url: 'https://klingai.com/image-creation', label: '可灵' },
-    { value: '通义万相', icon: '🟡', url: 'https://tongyi.aliyun.com/wanxiang/', label: '通义万相' },
-    { value: 'Midjourney', icon: '🟠', url: 'https://www.midjourney.com/explore', label: 'Midjourney' },
-    { value: 'Stable Diffusion', icon: '⚫', url: 'https://stablediffusionweb.com/', label: 'Stable Diffusion' }
-  ]
-};
-
-// ---- 密码池 ----
-PromptGen.ADVANCED_PASSWORDS = [
-  'ADV0G5U7SWP','ADV146XU8OL','ADV31PYMER7','ADV48FHNTCI','ADV4NKI9HX8','ADV4NWT90YJ',
-  'ADV4XIO6WKP','ADV607LQMY3','ADV6LH4W5KB','ADV7F4LXN8R','ADV7N0CUHZ6','ADV9IXJFTWB',
-  'ADV9NGUHQ5L','ADVBKZRGLN5','ADVE1LC49SQ','ADVF3CUB0TR','ADVGHY0W3X5','ADVHFGXEZ5W',
-  'ADVI46K2JRB','ADVIBGRZK0O','ADVIQ3LY48H','ADVJSBGWZ7Q','ADVJSLC38ZK','ADVJWG4R1YK',
-  'ADVL0YE4QT1','ADVLBPT4FRM','ADVLGTHK6IO','ADVLTN4YXJH','ADVLW28B630','ADVMJFHR4X0',
-  'ADVMQYO2BGZ','ADVMUBZT5GL','ADVN85TPMWK','ADVNXO6K4W2','ADVPHS1WCKU','ADVPUYXJB3N',
-  'ADVQCIWLM4X','ADVQS2BTYFX','ADVR5OGPUH0','ADVR6C14L9K','ADVR8F1HNYQ','ADVR8HC7EWM',
-  'ADVRXGL0O42','ADVT5JFWZ0P','ADVT9JBO50U','ADVU9IKTWGJ','ADVWNU0OQH3','ADVYP0OIFR7',
-  'ADVZ6JYMI3W','ADVZG5PK4NT'
-];
-PromptGen.EXPERT_PASSWORDS = [
-  'EXP097KTRHY','EXP0AKHTBJN','EXP0DCFQKTZ','EXP0QOYIHWK','EXP39JQ70WA','EXP3OKUCN7G',
-  'EXP41KD2WF6','EXP4CWVONJ8','EXP5UKOTR4Y','EXP6HV79F1K','EXP7BQYG0VW','EXP7G6OI5DZ',
-  'EXP7SCFKVT2','EXP8BM4LR7I','EXP8M2ALVN1','EXP97KT0UL1','EXP9L0B184F','EXP9LMDR6Y8',
-  'EXPASLQUGMC','EXPBLYJTW30','EXPBYDM47W0','EXPBZLGTJ8C','EXPC0TGZS3M','EXPGHKTZI57',
-  'EXPGYM8C2UH','EXPI2KQZ3YV','EXPI3Y4MOQU','EXPJIO73SQ5','EXPLVRKNCTI','EXPMACWJIDU',
-  'EXPMLO5W2V3','EXPN0MOJY8K','EXPN16RUJQW','EXPN3OHT748','EXPNCIRU2O4','EXPND0ICJ83',
-  'EXPNRK4GSQA','EXPNYFJ63KL','EXPRCLYO0JH','EXPRCOVK14L','EXPRCV0Q1F6','EXPRWQM1UTJ',
-  'EXPSMFG4WCT','EXPSUOYG5I1','EXPSWKGAMJL','EXPT1KAN79B','EXPT85YDQWI','EXPYFB7WCKR',
-  'EXPZCMOHIKA','EXPZN61WJLB'
-];
-
-// ---- 模板数据 ----
-PromptGen.templateData = [
-  { name: '酒水类·精酿啤酒', field: '电商AI绘画', desc: '琥珀色酒液+细腻泡沫+冰爽质感', effect: '📈 详情页转化率+65%', task: '产品场景图', level: 'expert', uses: 3120, tags: ['绘画', 'hot'], preview: '🍺 精酿啤酒场景预览' },
-  { name: '食品类·烘焙甜品', field: '电商AI绘画', desc: '松软面包+诱人色泽+精致摆盘', effect: '📈 CTR提升75%', task: '产品白底主图', level: 'expert', uses: 2834, tags: ['绘画', 'hot'], preview: '🍰 烘焙甜品预览' },
-  { name: '饮品类·咖啡特写', field: '电商AI绘画', desc: '咖啡油脂+蒸汽缭绕+高级质感', effect: '📈 客单价提升40%', task: '产品白底主图', level: 'expert', uses: 2156, tags: ['绘画'], preview: '☕ 精品咖啡预览' },
-  { name: '美妆类·口红试色', field: '电商AI绘画', desc: '唇部特写+丝绒质感+色号对比', effect: '📈 点击率翻倍', task: 'AI换脸模特图', level: 'expert', uses: 2678, tags: ['绘画', 'hot'], preview: '💄 口红试色预览' },
-  { name: '护肤类·精华液', field: '电商AI绘画', desc: '滴管精华+水润光泽+高级简约', effect: '📈 转化率+55%', task: '产品白底主图', level: 'expert', uses: 1890, tags: ['绘画'], preview: '✨ 精华液预览' },
-  { name: '香水类·瓶身艺术', field: '电商AI绘画', desc: '瓶身光影+奢华背景+氛围感', effect: '📈 品牌溢价+60%', task: '产品场景图', level: 'expert', uses: 1432, tags: ['绘画'], preview: '🌸 香水瓶身预览' },
-  { name: '服装类·连衣裙', field: '电商AI绘画', desc: '法式碎花+裙摆飘逸+自然光', effect: '📈 点击率+85%', task: '模特穿搭图', level: 'expert', uses: 3456, tags: ['绘画', 'hot'], preview: '👗 连衣裙穿搭预览' },
-  { name: '配饰类·腕表', field: '电商AI绘画', desc: '金属质感+表盘细节+商务场景', effect: '📈 客单价提升50%', task: '产品场景图', level: 'expert', uses: 2103, tags: ['绘画'], preview: '⌚ 腕表场景预览' },
-  { name: '鞋履类·运动鞋', field: '电商AI绘画', desc: '鞋面材质+动态光影+街头场景', effect: '📈 转化率+70%', task: '产品场景图', level: 'expert', uses: 1976, tags: ['绘画'], preview: '👟 运动鞋预览' },
-  { name: '数码类·耳机', field: '电商AI绘画', desc: '金属质感+线材细节+极简背景', effect: '📈 CTR提升60%', task: '产品白底主图', level: 'expert', uses: 2345, tags: ['绘画'], preview: '🎧 耳机预览' },
-  { name: '数码类·手机壳', field: '电商AI绘画', desc: '高清打印+边缘细节+场景展示', effect: '📈 详情页停留+120%', task: '产品场景图', level: 'expert', uses: 1678, tags: ['绘画'], preview: '📱 手机壳预览' },
-  { name: '家居类·香薰蜡烛', field: '电商AI绘画', desc: '烛火摇曳+柔和光影+温馨氛围', effect: '📈 转化率+50%', task: '产品场景图', level: 'expert', uses: 1456, tags: ['绘画'], preview: '🕯️ 香薰蜡烛预览' },
-  { name: '家居类·床上四件套', field: '电商AI绘画', desc: '柔软质感+褶皱细节+自然光', effect: '📈 客单价+45%', task: '产品场景图', level: 'expert', uses: 1234, tags: ['绘画'], preview: '🛏️ 床品预览' },
-  { name: '抖音爆款脚本', field: '内容创作', desc: '3秒钩子→60秒干货→结尾CTA，完播率飙升', effect: '📈 完播率+50%', task: '帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒钩子，中间干货，结尾CTA。', level: 'expert', uses: 4123, tags: ['写作', 'hot'], preview: '🎬 抖音爆款脚本示例' },
-  { name: '小红书种草笔记', field: '内容创作', desc: '爆款标题+真实体验+精准标签，单篇涨粉500+', effect: '📈 单篇涨粉500+', task: '写一篇小红书种草笔记，推荐[填写产品]。要求：标题带emoji，正文分点写真实感受，带3-5个标签，引导互动。', level: 'expert', uses: 3567, tags: ['写作', 'hot'], preview: '📕 小红书种草示例' },
-  { name: '公众号深度长文', field: '内容创作', desc: '故事引入→层层递进→案例支撑→升华圈粉', effect: '📈 转发率+300%', task: '写一篇3000字公众号深度文，主题：[填写主题]。要求：故事/数据引入，分3-4小节，案例支撑，结尾升华。', level: 'expert', uses: 2890, tags: ['写作'], preview: '📰 公众号深度文示例' },
-  { name: 'B站视频分镜', field: '内容创作', desc: '景别+台词+转场+时长，一镜到底的完整脚本', effect: '📈 完播率+40%', task: '写一个B站视频分镜脚本，主题：[填写主题]。要求：景别、画面、台词、时长、转场完整。', level: 'expert', uses: 2456, tags: ['写作'], preview: '📺 B站分镜示例' },
-  { name: '朋友圈文案5条', field: '营销增长', desc: '故事/痛点/场景/证言/限时，5种成交风格', effect: '📈 咨询率+200%', task: '写5条朋友圈产品文案，产品：[填写产品]。要求：故事型/痛点型/场景型/证言型/限时型各1条。', level: 'expert', uses: 3210, tags: ['营销', 'hot'], preview: '💬 朋友圈文案示例' },
-  { name: '直播带货话术', field: '营销增长', desc: '暖场→种草→促单→答疑，完整的成交闭环', effect: '📈 转化率+150%', task: '写一份直播带货话术，产品：[填写产品]。要求：暖场+介绍+促单+互动全流程。', level: 'expert', uses: 2789, tags: ['营销'], preview: '🎯 直播话术示例' },
-  { name: 'PPT大纲生成', field: '职场办公', desc: '封面+3-5章节+每章3要点+总结页，逻辑清晰', effect: '📈 汇报通过率+90%', task: '写一份PPT大纲，主题：[填写主题]。要求：封面+3-5个章节+每章3个要点+总结页。', level: 'expert', uses: 1987, tags: ['办公'], preview: '📊 PPT大纲示例' },
-  { name: '商务邮件模板', field: '职场办公', desc: '正式/半正式/催办三种场景，专业得体', effect: '📈 回复率+120%', task: '写一封正式商务邮件，收件人：[填写]，主题：[填写]，要点：[填写]。', level: 'expert', uses: 1654, tags: ['办公'], preview: '✉️ 商务邮件示例' }
-];
-
-// ---- 全局状态 ----
-PromptGen.db = null;
-PromptGen.currentLevel = 'basic';
-PromptGen.pendingUnlockLevel = null;
-PromptGen.adminLoggedIn = false;
-PromptGen.isGenerating = false;
-PromptGen.editMaxTarget = null;
-PromptGen.activeModal = null;
-PromptGen.passwordSearchQuery = '';
-PromptGen.currentTemplateFilter = 'all';
-PromptGen.historyPage = 1;
-PromptGen.toastQueue = [];
-PromptGen.isToastShowing = false;
-PromptGen.lastFocusBeforeModal = null;
-
-// ---- DOM 获取 ----
-PromptGen.$ = function(id) {
-  return document.getElementById(id);
-};
-
-// ---- 数据库 ----
-PromptGen.getDefaultDB = function() {
-  var defaultDB = {
-    _version: PromptGen.CONFIG.DB_VERSION,
-    passwords: { advanced: [], expert: [] },
-    unlocked: { advanced: false, expert: false },
-    usedPasswords: {},
-    history: [],
-    favorites: [],
-    todayBasicCount: 0,
-    todayDate: new Date().toDateString(),
-    totalGenerated: 0,
-    firstUse: { advanced: true, expert: true },
-    inviteUsedToday: 0,
-    inviteDate: new Date().toDateString()
+  var CONFIG = {
+    SPECIAL_PASSWORD: '123456888',
+    ADMIN_PASSWORD: 'c123456888',
+    MAX_BASIC_DAILY: 5,
+    MAX_PASSWORD_USES: 100,
+    DAILY_INVITE_LIMIT: 20,
+    QQ_NUMBER: '704451222',
+    DB_VERSION: 2,
+    HISTORY_PAGE_SIZE: 20
   };
-  var i;
-  for (i = 0; i < PromptGen.ADVANCED_PASSWORDS.length; i++) {
-    defaultDB.passwords.advanced.push({ 
-      code: PromptGen.ADVANCED_PASSWORDS[i], 
-      used: 0, 
-      max: PromptGen.CONFIG.MAX_PASSWORD_USES, 
-      sold: false 
-    });
-  }
-  for (i = 0; i < PromptGen.EXPERT_PASSWORDS.length; i++) {
-    defaultDB.passwords.expert.push({ 
-      code: PromptGen.EXPERT_PASSWORDS[i], 
-      used: 0, 
-      max: PromptGen.CONFIG.MAX_PASSWORD_USES, 
-      sold: false 
-    });
-  }
-  return defaultDB;
-};
 
-PromptGen.migrateDB = function(db) {
-  // 版本1 -> 版本2：添加 _version 字段
-  if (!db._version) {
-    db._version = 1;
-  }
-  if (db._version < 2) {
-    // 版本2迁移：确保所有新字段存在
-    if (db.inviteUsedToday === undefined) db.inviteUsedToday = 0;
-    if (db.inviteDate === undefined) db.inviteDate = new Date().toDateString();
-    db._version = 2;
-  }
-  return db;
-};
+  var ADVANCED_PASSWORDS = [
+    'ADV0G5U7SWP','ADV146XU8OL','ADV31PYMER7','ADV48FHNTCI','ADV4NKI9HX8','ADV4NWT90YJ',
+    'ADV4XIO6WKP','ADV607LQMY3','ADV6LH4W5KB','ADV7F4LXN8R','ADV7N0CUHZ6','ADV9IXJFTWB',
+    'ADV9NGUHQ5L','ADVBKZRGLN5','ADVE1LC49SQ','ADVF3CUB0TR','ADVGHY0W3X5','ADVHFGXEZ5W',
+    'ADVI46K2JRB','ADVIBGRZK0O','ADVIQ3LY48H','ADVJSBGWZ7Q','ADVJSLC38ZK','ADVJWG4R1YK',
+    'ADVL0YE4QT1','ADVLBPT4FRM','ADVLGTHK6IO','ADVLTN4YXJH','ADVLW28B630','ADVMJFHR4X0',
+    'ADVMQYO2BGZ','ADVMUBZT5GL','ADVN85TPMWK','ADVNXO6K4W2','ADVPHS1WCKU','ADVPUYXJB3N',
+    'ADVQCIWLM4X','ADVQS2BTYFX','ADVR5OGPUH0','ADVR6C14L9K','ADVR8F1HNYQ','ADVR8HC7EWM',
+    'ADVRXGL0O42','ADVT5JFWZ0P','ADVT9JBO50U','ADVU9IKTWGJ','ADVWNU0OQH3','ADVYP0OIFR7',
+    'ADVZ6JYMI3W','ADVZG5PK4NT'
+  ];
+  var EXPERT_PASSWORDS = [
+    'EXP097KTRHY','EXP0AKHTBJN','EXP0DCFQKTZ','EXP0QOYIHWK','EXP39JQ70WA','EXP3OKUCN7G',
+    'EXP41KD2WF6','EXP4CWVONJ8','EXP5UKOTR4Y','EXP6HV79F1K','EXP7BQYG0VW','EXP7G6OI5DZ',
+    'EXP7SCFKVT2','EXP8BM4LR7I','EXP8M2ALVN1','EXP97KT0UL1','EXP9L0B184F','EXP9LMDR6Y8',
+    'EXPASLQUGMC','EXPBLYJTW30','EXPBYDM47W0','EXPBZLGTJ8C','EXPC0TGZS3M','EXPGHKTZI57',
+    'EXPGYM8C2UH','EXPI2KQZ3YV','EXPI3Y4MOQU','EXPJIO73SQ5','EXPLVRKNCTI','EXPMACWJIDU',
+    'EXPMLO5W2V3','EXPN0MOJY8K','EXPN16RUJQW','EXPN3OHT748','EXPNCIRU2O4','EXPND0ICJ83',
+    'EXPNRK4GSQA','EXPNYFJ63KL','EXPRCLYO0JH','EXPRCOVK14L','EXPRCV0Q1F6','EXPRWQM1UTJ',
+    'EXPSMFG4WCT','EXPSUOYG5I1','EXPSWKGAMJL','EXPT1KAN79B','EXPT85YDQWI','EXPYFB7WCKR',
+    'EXPZCMOHIKA','EXPZN61WJLB'
+  ];
 
-PromptGen.validateDB = function(db) {
-  if (!db || typeof db !== 'object') return false;
-  if (!db.passwords || !db.history || !db.favorites) return false;
-  if (!Array.isArray(db.passwords.advanced) || !Array.isArray(db.passwords.expert)) return false;
-  if (!Array.isArray(db.history) || !Array.isArray(db.favorites)) return false;
-  return true;
-};
+  var templateData = [
+    { name: '酒水类·精酿啤酒', field: '电商AI绘画', desc: '琥珀色酒液+细腻泡沫+冰爽质感', effect: '📈 详情页转化率+65%', task: '产品场景图', level: 'expert', uses: 3120, tags: ['绘画', 'hot'], preview: '🍺 精酿啤酒场景预览' },
+    { name: '食品类·烘焙甜品', field: '电商AI绘画', desc: '松软面包+诱人色泽+精致摆盘', effect: '📈 CTR提升75%', task: '产品白底主图', level: 'expert', uses: 2834, tags: ['绘画', 'hot'], preview: '🍰 烘焙甜品预览' },
+    { name: '饮品类·咖啡特写', field: '电商AI绘画', desc: '咖啡油脂+蒸汽缭绕+高级质感', effect: '📈 客单价提升40%', task: '产品白底主图', level: 'expert', uses: 2156, tags: ['绘画'], preview: '☕ 精品咖啡预览' },
+    { name: '美妆类·口红试色', field: '电商AI绘画', desc: '唇部特写+丝绒质感+色号对比', effect: '📈 点击率翻倍', task: 'AI换脸模特图', level: 'expert', uses: 2678, tags: ['绘画', 'hot'], preview: '💄 口红试色预览' },
+    { name: '护肤类·精华液', field: '电商AI绘画', desc: '滴管精华+水润光泽+高级简约', effect: '📈 转化率+55%', task: '产品白底主图', level: 'expert', uses: 1890, tags: ['绘画'], preview: '✨ 精华液预览' },
+    { name: '香水类·瓶身艺术', field: '电商AI绘画', desc: '瓶身光影+奢华背景+氛围感', effect: '📈 品牌溢价+60%', task: '产品场景图', level: 'expert', uses: 1432, tags: ['绘画'], preview: '🌸 香水瓶身预览' },
+    { name: '服装类·连衣裙', field: '电商AI绘画', desc: '法式碎花+裙摆飘逸+自然光', effect: '📈 点击率+85%', task: '模特穿搭图', level: 'expert', uses: 3456, tags: ['绘画', 'hot'], preview: '👗 连衣裙穿搭预览' },
+    { name: '配饰类·腕表', field: '电商AI绘画', desc: '金属质感+表盘细节+商务场景', effect: '📈 客单价提升50%', task: '产品场景图', level: 'expert', uses: 2103, tags: ['绘画'], preview: '⌚ 腕表场景预览' },
+    { name: '鞋履类·运动鞋', field: '电商AI绘画', desc: '鞋面材质+动态光影+街头场景', effect: '📈 转化率+70%', task: '产品场景图', level: 'expert', uses: 1976, tags: ['绘画'], preview: '👟 运动鞋预览' },
+    { name: '数码类·耳机', field: '电商AI绘画', desc: '金属质感+线材细节+极简背景', effect: '📈 CTR提升60%', task: '产品白底主图', level: 'expert', uses: 2345, tags: ['绘画'], preview: '🎧 耳机预览' },
+    { name: '数码类·手机壳', field: '电商AI绘画', desc: '高清打印+边缘细节+场景展示', effect: '📈 详情页停留+120%', task: '产品场景图', level: 'expert', uses: 1678, tags: ['绘画'], preview: '📱 手机壳预览' },
+    { name: '家居类·香薰蜡烛', field: '电商AI绘画', desc: '烛火摇曳+柔和光影+温馨氛围', effect: '📈 转化率+50%', task: '产品场景图', level: 'expert', uses: 1456, tags: ['绘画'], preview: '🕯️ 香薰蜡烛预览' },
+    { name: '家居类·床上四件套', field: '电商AI绘画', desc: '柔软质感+褶皱细节+自然光', effect: '📈 客单价+45%', task: '产品场景图', level: 'expert', uses: 1234, tags: ['绘画'], preview: '🛏️ 床品预览' },
+    { name: '抖音爆款脚本', field: '内容创作', desc: '3秒钩子→60秒干货→结尾CTA，完播率飙升', effect: '📈 完播率+50%', task: '帮我写一个60秒的抖音口播脚本，主题是：[填写主题]。要求：开头3秒钩子，中间干货，结尾CTA。', level: 'expert', uses: 4123, tags: ['写作', 'hot'], preview: '🎬 抖音爆款脚本示例' },
+    { name: '小红书种草笔记', field: '内容创作', desc: '爆款标题+真实体验+精准标签，单篇涨粉500+', effect: '📈 单篇涨粉500+', task: '写一篇小红书种草笔记，推荐[填写产品]。要求：标题带emoji，正文分点写真实感受，带3-5个标签，引导互动。', level: 'expert', uses: 3567, tags: ['写作', 'hot'], preview: '📕 小红书种草示例' },
+    { name: '公众号深度长文', field: '内容创作', desc: '故事引入→层层递进→案例支撑→升华圈粉', effect: '📈 转发率+300%', task: '写一篇3000字公众号深度文，主题：[填写主题]。要求：故事/数据引入，分3-4小节，案例支撑，结尾升华。', level: 'expert', uses: 2890, tags: ['写作'], preview: '📰 公众号深度文示例' },
+    { name: 'B站视频分镜', field: '内容创作', desc: '景别+台词+转场+时长，一镜到底的完整脚本', effect: '📈 完播率+40%', task: '写一个B站视频分镜脚本，主题：[填写主题]。要求：景别、画面、台词、时长、转场完整。', level: 'expert', uses: 2456, tags: ['写作'], preview: '📺 B站分镜示例' },
+    { name: '朋友圈文案5条', field: '营销增长', desc: '故事/痛点/场景/证言/限时，5种成交风格', effect: '📈 咨询率+200%', task: '写5条朋友圈产品文案，产品：[填写产品]。要求：故事型/痛点型/场景型/证言型/限时型各1条。', level: 'expert', uses: 3210, tags: ['营销', 'hot'], preview: '💬 朋友圈文案示例' },
+    { name: '直播带货话术', field: '营销增长', desc: '暖场→种草→促单→答疑，完整的成交闭环', effect: '📈 转化率+150%', task: '写一份直播带货话术，产品：[填写产品]。要求：暖场+介绍+促单+互动全流程。', level: 'expert', uses: 2789, tags: ['营销'], preview: '🎯 直播话术示例' },
+    { name: 'PPT大纲生成', field: '职场办公', desc: '封面+3-5章节+每章3要点+总结页，逻辑清晰', effect: '📈 汇报通过率+90%', task: '写一份PPT大纲，主题：[填写主题]。要求：封面+3-5个章节+每章3个要点+总结页。', level: 'expert', uses: 1987, tags: ['办公'], preview: '📊 PPT大纲示例' },
+    { name: '商务邮件模板', field: '职场办公', desc: '正式/半正式/催办三种场景，专业得体', effect: '📈 回复率+120%', task: '写一封正式商务邮件，收件人：[填写]，主题：[填写]，要点：[填写]。', level: 'expert', uses: 1654, tags: ['办公'], preview: '✉️ 商务邮件示例' }
+  ];
 
-PromptGen.getDB = function() {
-  var defaultDB = PromptGen.getDefaultDB();
-  try {
-    var saved = localStorage.getItem('promptGenDB');
-    if (saved) {
-      var parsed = JSON.parse(saved);
-      if (!PromptGen.validateDB(parsed)) {
-        throw new Error('Invalid DB schema');
-      }
-      parsed = PromptGen.migrateDB(parsed);
-      // 日期重置
-      var today = new Date().toDateString();
-      if (parsed.todayDate !== today) {
-        parsed.todayBasicCount = 0;
-        parsed.todayDate = today;
-      }
-      if (parsed.inviteDate !== today) {
-        parsed.inviteUsedToday = 0;
-        parsed.inviteDate = today;
-      }
-      // 合并默认值（防止新增字段缺失）
-      for (var key in defaultDB) {
-        if (parsed[key] === undefined) parsed[key] = defaultDB[key];
-      }
-      return parsed;
+  var PLATFORM_DATA = {
+    text: [
+      { value: '文心一言', icon: '🇨🇳', url: 'https://yiyan.baidu.com', label: '文心一言' },
+      { value: '通义千问', icon: '🔷', url: 'https://tongyi.aliyun.com', label: '通义千问' },
+      { value: 'Kimi', icon: '📄', url: 'https://kimi.moonshot.cn', label: 'Kimi' },
+      { value: '豆包', icon: '🟢', url: 'https://www.doubao.com', label: '豆包' },
+      { value: '讯飞星火', icon: '⭐', url: 'https://xinghuo.xfyun.cn', label: '讯飞星火' },
+      { value: '智谱清言', icon: '🔬', url: 'https://chatglm.cn', label: '智谱清言' },
+      { value: 'DeepSeek', icon: '🧊', url: 'https://chat.deepseek.com', label: 'DeepSeek' },
+      { value: '百小应', icon: '🤝', url: 'https://yiyan.baidu.com', label: '百小应' },
+      { value: 'ChatGPT', icon: '💬', url: 'https://chat.openai.com', label: 'ChatGPT' },
+      { value: 'Claude', icon: '🧠', url: 'https://claude.ai', label: 'Claude' },
+      { value: 'Gemini', icon: '✨', url: 'https://gemini.google.com', label: 'Gemini' },
+      { value: 'Copilot', icon: '🛠️', url: 'https://copilot.microsoft.com', label: 'Copilot' },
+      { value: 'Perplexity', icon: '🔍', url: 'https://www.perplexity.ai', label: 'Perplexity' },
+      { value: 'Grok', icon: '🤖', url: 'https://grok.x.ai', label: 'Grok' }
+    ],
+    image: [
+      { value: '豆包', icon: '🟢', url: 'https://www.doubao.com/chat/create-image', label: '豆包' },
+      { value: '即梦', icon: '🔵', url: 'https://jimeng.jianying.com/ai-tool/image/generate', label: '即梦' },
+      { value: '可灵', icon: '🟣', url: 'https://klingai.com/image-creation', label: '可灵' },
+      { value: '通义万相', icon: '🟡', url: 'https://tongyi.aliyun.com/wanxiang/', label: '通义万相' },
+      { value: 'Midjourney', icon: '🟠', url: 'https://www.midjourney.com/explore', label: 'Midjourney' },
+      { value: 'Stable Diffusion', icon: '⚫', url: 'https://stablediffusionweb.com/', label: 'Stable Diffusion' }
+    ]
+  };
+
+  // 内部状态
+  var db = null;
+  var currentLevel = 'basic';
+  var pendingUnlockLevel = null;
+  var adminLoggedIn = false;
+  var isGenerating = false;
+  var editMaxTarget = null;
+  var activeModal = null;
+  var passwordSearchQuery = '';
+  var currentTemplateFilter = 'all';
+  var historyPage = 1;
+  var toastQueue = [];
+  var isToastShowing = false;
+  var lastFocusBeforeModal = null;
+
+  // DOM 缓存
+  var $ = function(id) {
+    return document.getElementById(id);
+  };
+
+  // ===================== 数据库 =====================
+  function getDefaultDB() {
+    var d = {
+      _version: CONFIG.DB_VERSION,
+      passwords: { advanced: [], expert: [] },
+      unlocked: { advanced: false, expert: false },
+      usedPasswords: {},
+      history: [],
+      favorites: [],
+      todayBasicCount: 0,
+      todayDate: new Date().toDateString(),
+      totalGenerated: 0,
+      firstUse: { advanced: true, expert: true },
+      inviteUsedToday: 0,
+      inviteDate: new Date().toDateString()
+    };
+    for (var i = 0; i < ADVANCED_PASSWORDS.length; i++) {
+      d.passwords.advanced.push({ code: ADVANCED_PASSWORDS[i], used: 0, max: CONFIG.MAX_PASSWORD_USES, sold: false });
     }
-  } catch (e) {
-    console.warn('DB load failed, using default:', e);
-    // 备份损坏的数据
+    for (var j = 0; j < EXPERT_PASSWORDS.length; j++) {
+      d.passwords.expert.push({ code: EXPERT_PASSWORDS[j], used: 0, max: CONFIG.MAX_PASSWORD_USES, sold: false });
+    }
+    return d;
+  }
+
+  function migrateDB(d) {
+    if (!d._version) d._version = 1;
+    if (d._version < 2) {
+      if (d.inviteUsedToday === undefined) d.inviteUsedToday = 0;
+      if (d.inviteDate === undefined) d.inviteDate = new Date().toDateString();
+      d._version = 2;
+    }
+    return d;
+  }
+
+  function validateDB(d) {
+    return d && typeof d === 'object' && d.passwords && d.history && d.favorites &&
+      Array.isArray(d.passwords.advanced) && Array.isArray(d.passwords.expert) &&
+      Array.isArray(d.history) && Array.isArray(d.favorites);
+  }
+
+  function getDB() {
+    var def = getDefaultDB();
+    var saved, parsed;
     try {
+      saved = localStorage.getItem('promptGenDB');
       if (saved) {
-        localStorage.setItem('promptGenDB_backup_' + Date.now(), saved);
+        parsed = JSON.parse(saved);
+        if (!validateDB(parsed)) throw new Error('Invalid DB');
+        parsed = migrateDB(parsed);
+        var today = new Date().toDateString();
+        if (parsed.todayDate !== today) {
+          parsed.todayBasicCount = 0;
+          parsed.todayDate = today;
+        }
+        if (parsed.inviteDate !== today) {
+          parsed.inviteUsedToday = 0;
+          parsed.inviteDate = today;
+        }
+        for (var k in def) {
+          if (parsed[k] === undefined) parsed[k] = def[k];
+        }
+        return parsed;
       }
-    } catch(e2) {}
+    } catch (e) {
+      console.warn('DB load error, resetting:', e);
+      if (saved) {
+        try { localStorage.setItem('promptGenDB_backup_' + Date.now(), saved); } catch (e2) {}
+      }
+    }
+    return def;
   }
-  return defaultDB;
-};
 
-PromptGen.saveDB = function() {
-  try {
-    localStorage.setItem('promptGenDB', JSON.stringify(PromptGen.db));
-  } catch (e) {
-    console.warn('DB save failed:', e);
+  function saveDB() {
+    try {
+      localStorage.setItem('promptGenDB', JSON.stringify(db));
+    } catch (e) {
+      console.warn('DB save failed:', e);
+    }
   }
-};
 
-// ---- Toast 队列管理 ----
-PromptGen.processToastQueue = function() {
-  if (PromptGen.isToastShowing || PromptGen.toastQueue.length === 0) return;
-  
-  var item = PromptGen.toastQueue.shift();
-  var t = PromptGen.$('toast');
-  if (!t) return;
-  
-  var textEl = PromptGen.$('toastText');
-  var iconEl = PromptGen.$('toastIcon');
-  if (textEl) textEl.textContent = item.msg;
-  if (iconEl) iconEl.textContent = item.icon || '✅';
-  
-  PromptGen.isToastShowing = true;
-  t.classList.add('show');
-  
-  clearTimeout(t._hide);
-  t._hide = setTimeout(function() {
-    t.classList.remove('show');
-    PromptGen.isToastShowing = false;
-    // 处理队列中的下一个
-    setTimeout(function() {
-      PromptGen.processToastQueue();
-    }, 100);
-  }, 2400);
-};
-
-PromptGen.showToast = function(msg, icon) {
-  icon = icon || '✅';
-  PromptGen.toastQueue.push({ msg: msg, icon: icon });
-  PromptGen.processToastQueue();
-};
-
-// ---- 弹窗管理（修复焦点恢复）----
-PromptGen.openModal = function(modalId) {
-  var modal = PromptGen.$(modalId);
-  if (!modal) return;
-  
-  // 记住触发元素
-  PromptGen.lastFocusBeforeModal = document.activeElement;
-  
-  modal.classList.add('active');
-  PromptGen.activeModal = modalId;
-  document.body.style.overflow = 'hidden';
-  
-  var focusable = modal.querySelector('input, button, select, textarea');
-  if (focusable) {
-    setTimeout(function() { focusable.focus(); }, 100);
+  // ===================== Toast =====================
+  function processToastQueue() {
+    if (isToastShowing || toastQueue.length === 0) return;
+    var item = toastQueue.shift();
+    var t = $('toast');
+    if (!t) return;
+    $('toastText').textContent = item.msg;
+    $('toastIcon').textContent = item.icon || '✅';
+    isToastShowing = true;
+    t.classList.add('show');
+    clearTimeout(t._hide);
+    t._hide = setTimeout(function() {
+      t.classList.remove('show');
+      isToastShowing = false;
+      setTimeout(processToastQueue, 100);
+    }, 2400);
   }
-};
 
-PromptGen.closeModal = function(modalId) {
-  var modal = PromptGen.$(modalId);
-  if (!modal) return;
-  
-  modal.classList.remove('active');
-  if (PromptGen.activeModal === modalId) {
-    PromptGen.activeModal = null;
+  function showToast(msg, icon) {
+    icon = icon || '✅';
+    toastQueue.push({ msg: msg, icon: icon });
+    processToastQueue();
   }
-  
-  var anyOpen = document.querySelector('.modal-overlay.active');
-  if (!anyOpen) {
+
+  // ===================== Modal =====================
+  function openModal(modalId) {
+    var modal = $(modalId);
+    if (!modal) return;
+    lastFocusBeforeModal = document.activeElement;
+    modal.classList.add('active');
+    activeModal = modalId;
+    document.body.style.overflow = 'hidden';
+    var focusable = modal.querySelector('input, button, select, textarea');
+    if (focusable) setTimeout(function() { focusable.focus(); }, 100);
+  }
+
+  function closeModal(modalId) {
+    var modal = $(modalId);
+    if (!modal) return;
+    modal.classList.remove('active');
+    if (activeModal === modalId) activeModal = null;
+    var anyOpen = document.querySelector('.modal-overlay.active');
+    if (!anyOpen) document.body.style.overflow = '';
+    if (lastFocusBeforeModal && lastFocusBeforeModal.focus) {
+      setTimeout(function() { lastFocusBeforeModal.focus(); }, 50);
+    }
+  }
+
+  function closeAllModals() {
+    var modals = document.querySelectorAll('.modal-overlay.active');
+    for (var i = 0; i < modals.length; i++) modals[i].classList.remove('active');
+    activeModal = null;
     document.body.style.overflow = '';
+    pendingUnlockLevel = null;
+    editMaxTarget = null;
   }
-  
-  // 恢复焦点到触发元素
-  if (PromptGen.lastFocusBeforeModal && PromptGen.lastFocusBeforeModal.focus) {
-    setTimeout(function() {
-      PromptGen.lastFocusBeforeModal.focus();
-    }, 50);
+
+  // ===================== 工具 =====================
+  function getCurrentField() {
+    var active = document.querySelector('.field-card.active');
+    return active ? active.getAttribute('data-field') : '内容创作';
   }
-};
 
-PromptGen.closeAllModals = function() {
-  var modals = document.querySelectorAll('.modal-overlay.active');
-  for (var i = 0; i < modals.length; i++) {
-    modals[i].classList.remove('active');
+  function countWords(text) {
+    var zh = text.match(/[\u4e00-\u9fa5]/g) || [];
+    var en = text.match(/[a-zA-Z]+/g) || [];
+    return zh.length + en.length;
   }
-  PromptGen.activeModal = null;
-  document.body.style.overflow = '';
-  PromptGen.pendingUnlockLevel = null;
-  PromptGen.editMaxTarget = null;
-};
 
-// ---- 工具函数 ----
-PromptGen.getCurrentField = function() {
-  var active = document.querySelector('.field-card.active');
-  return active ? active.getAttribute('data-field') : '内容创作';
-};
-
-PromptGen.countWords = function(text) {
-  var zh = text.match(/[\u4e00-\u9fa5]/g) || [];
-  var en = text.match(/[a-zA-Z]+/g) || [];
-  return zh.length + en.length;
-};
-
-PromptGen.formatPromptHTML = function(text, wordCount) {
-  var html = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  html = html.replace(/【(.+?)】/g, '<h3>📌 $1</h3>');
-  html = html.replace(/^\d+\.\s(.+)$/gm, '<li>$1</li>');
-  html = html.replace(/^-\s(.+)$/gm, '<li>$1</li>');
-  html = html.replace(/(<li>.+<\/li>\n?)+/g, '<ul>$&</ul>');
-  html = html.replace(/<\/ul>\n*<ul>/g, '');
-  var paragraphs = html.split('\n\n');
-  html = paragraphs.map(function(p) {
-    var t = p.trim();
-    if (!t) return '';
-    if (t.indexOf('<h3>') === 0 || t.indexOf('<ul>') === 0) return t;
-    return '<p>' + t + '</p>';
-  }).join('');
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  if (wordCount) {
-    html += '<div class=\"result-word-count\">📄 约 ' + wordCount + ' 字</div>';
+  function formatPromptHTML(text, wc) {
+    var html = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    html = html.replace(/【(.+?)】/g, '<h3>📌 $1</h3>');
+    html = html.replace(/^\d+\.\s(.+)$/gm, '<li>$1</li>');
+    html = html.replace(/^-\s(.+)$/gm, '<li>$1</li>');
+    html = html.replace(/(<li>.+<\/li>\n?)+/g, '<ul>$&</ul>');
+    html = html.replace(/<\/ul>\n*<ul>/g, '');
+    var paragraphs = html.split('\n\n');
+    html = paragraphs.map(function(p) {
+      var t = p.trim();
+      if (!t) return '';
+      if (t.indexOf('<h3>') === 0 || t.indexOf('<ul>') === 0) return t;
+      return '<p>' + t + '</p>';
+    }).join('');
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    if (wc) html += '<div class="result-word-count">📄 约 ' + wc + ' 字</div>';
+    return html;
   }
-  return html;
-};
 
-// ---- 复制 ----
-PromptGen.copyToClipboard = function(text) {
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(function() {
-      PromptGen.showToast('已复制！', '📋');
-      PromptGen.showGuideModal();
-    }).catch(function() {
-      PromptGen.fallbackCopy(text);
-    });
-    return;
+  // ===================== 复制 =====================
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function() {
+        showToast('已复制！', '📋');
+        showGuideModal();
+      }).catch(function() {
+        fallbackCopy(text);
+      });
+    } else {
+      fallbackCopy(text);
+    }
   }
-  PromptGen.fallbackCopy(text);
-};
 
-PromptGen.fallbackCopy = function(text) {
-  var ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.cssText = 'position:fixed;opacity:0;';
-  document.body.appendChild(ta);
-  ta.select();
-  try {
-    var ok = document.execCommand('copy');
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      if (document.execCommand('copy')) {
+        document.body.removeChild(ta);
+        showToast('已复制！', '📋');
+        showGuideModal();
+        return;
+      }
+    } catch (e) {}
     document.body.removeChild(ta);
-    if (ok) {
-      PromptGen.showToast('已复制！', '📋');
-      PromptGen.showGuideModal();
-    }
-  } catch (e) {
-    document.body.removeChild(ta);
-    var copyTextarea = PromptGen.$('copyTextarea');
-    if (copyTextarea) {
-      copyTextarea.value = text;
-      PromptGen.openModal('copyModal');
-    }
-  }
-};
-
-PromptGen.showGuideModal = function() {
-  var field = PromptGen.getCurrentField();
-  var isEcommerce = (field === '电商AI绘画');
-  var currentPlatform = PromptGen.$('platformSelect');
-  var currentVal = currentPlatform ? currentPlatform.value : '';
-  var grid = PromptGen.$('guidePlatformGrid');
-  if (!grid) return;
-
-  var platforms;
-  if (isEcommerce) {
-    platforms = PromptGen.PLATFORM_DATA.image;
-  } else {
-    var cn = ['文心一言', '通义千问', 'Kimi', '豆包', '讯飞星火', '智谱清言', 'DeepSeek', '百小应'];
-    var cnList = [];
-    var intlList = [];
-    var i;
-    for (i = 0; i < PromptGen.PLATFORM_DATA.text.length; i++) {
-      var p = PromptGen.PLATFORM_DATA.text[i];
-      var isCn = false;
-      for (var j = 0; j < cn.length; j++) {
-        if (cn[j] === p.value) { isCn = true; break; }
-      }
-      if (isCn) {
-        cnList.push(p);
-      } else {
-        intlList.push(p);
-      }
-    }
-    platforms = cnList.concat(intlList);
+    $('copyTextarea').value = text;
+    openModal('copyModal');
   }
 
-  var htmlStr = '';
-  var k;
-  for (k = 0; k < platforms.length; k++) {
-    var p2 = platforms[k];
-    htmlStr += '<button class=\"platform-btn\" data-url=\"' + p2.url + '\" data-value=\"' + p2.value + '\">';
-    htmlStr += '<span class=\"icon\">' + p2.icon + '</span>';
-    htmlStr += '<span class=\"name\">' + p2.label + '</span>';
-    htmlStr += '</button>';
-  }
-  grid.innerHTML = htmlStr;
-
-  var btns = grid.querySelectorAll('.platform-btn');
-  for (var m = 0; m < btns.length; m++) {
-    var btn = btns[m];
-    var val = btn.getAttribute('data-value');
-    if (val === currentVal) {
-      btn.classList.add('highlighted');
-    }
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var url = this.getAttribute('data-url');
-      if (url) {
-        window.open(url, '_blank');
-      }
+  function showGuideModal() {
+    var field = getCurrentField();
+    var isEcom = field === '电商AI绘画';
+    var platforms = isEcom ? PLATFORM_DATA.image : PLATFORM_DATA.text;
+    var current = $('platformSelect').value;
+    var grid = $('guidePlatformGrid');
+    grid.innerHTML = '';
+    platforms.forEach(function(p) {
+      var btn = document.createElement('button');
+      btn.className = 'platform-btn' + (p.value === current ? ' highlighted' : '');
+      btn.innerHTML = '<span class="icon">' + p.icon + '</span><span class="name">' + p.label + '</span>';
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        window.open(p.url, '_blank');
+      });
+      grid.appendChild(btn);
     });
+    grid.className = platforms.length > 6 ? 'platform-grid-3col' : 'platform-grid-2col';
+    openModal('guideModal');
   }
 
-  if (platforms.length > 6) {
-    grid.classList.remove('platform-grid-2col');
-    grid.classList.add('platform-grid-3col');
-  } else {
-    grid.classList.remove('platform-grid-3col');
-    grid.classList.add('platform-grid-2col');
+  // ===================== 生成核心 =====================
+  function buildPrompt(field, task, level) {
+    var basic = '【角色定位】\n你是一位专业的' + field + '领域AI助手。\n\n【任务描述】\n' + task + '\n\n【基本要求】\n1. 输出清晰、实用的解决方案\n2. 使用专业但易懂的语言\n3. 确保内容准确、完整';
+
+    var advanced = '【角色定位】\n你是一位资深的' + field + '领域专家，拥有10年以上行业经验。\n\n【核心能力】\n- 深度理解' + field + '领域的专业知识体系\n- 具备解决复杂' + field + '问题的分析能力\n- 熟悉行业最佳实践和标准流程\n\n【任务分析】\n' + task + '\n\n【执行框架】\n1. 需求理解：明确任务目标和约束条件\n2. 方案设计：制定系统化的解决策略\n3. 详细执行：分步骤展开具体实施\n4. 质量检查：验证输出是否符合要求\n\n【输出要求】\n- 结构清晰，逻辑严谨\n- 包含具体可执行的建议\n- 标注关键注意事项';
+
+    var expert = '【角色定位】\n你是一位' + field + '领域的顶级专家顾问，拥有15年以上跨行业实战经验，曾服务过多家行业头部企业。\n\n【专业能力矩阵】\n- 战略层面：行业趋势洞察、商业模式设计\n- 战术层面：流程优化、方法论应用、工具链搭建\n- 执行层面：细节把控、质量标准制定、风险预判\n\n【思维特征】\n- 系统性思维：善于发现事物间的关联和规律\n- 批判性思维：基于证据做判断，不盲从权威\n- 用户思维：始终站在最终使用者角度思考\n\n【任务深度分析】\n' + task + '\n\n【执行框架】\n第一阶段：诊断与定义\n1. 明确核心问题和边界条件\n2. 识别关键利益相关者\n3. 梳理现有资源和约束\n\n第二阶段：方案设计\n1. 制定多个备选方案\n2. 评估各方案的优劣势\n3. 选择最优路径并细化\n\n第三阶段：交付与迭代\n1. 输出高质量交付物\n2. 收集反馈并优化\n3. 提供后续支持建议\n\n【质量控制标准】\n- 准确性：所有数据和事实经过验证\n- 完整性：覆盖任务的所有维度\n- 可操作性：每个建议都有明确的执行路径\n\n【输出规范】\n- 使用Markdown格式\n- 重要观点使用加粗标注\n- 结尾提供"下一步行动建议"';
+
+    if (level === 'basic') return basic;
+    if (level === 'advanced') return advanced;
+    return expert;
   }
 
-  PromptGen.openModal('guideModal');
-};
+  function buildEcommercePrompt(task, level, platform) {
+    var isEn = platform === 'Midjourney' || platform === 'Stable Diffusion';
+    var lang = isEn ? 'en' : 'zh';
+    var pStyle = {
+      '豆包': { style: '写实风格，细节丰富', param: '' },
+      '即梦': { style: '高质量人像，细腻皮肤质感', param: '' },
+      '可灵': { style: '动态感，电影级光影', param: '' },
+      '通义万相': { style: '东方美学，国风元素', param: '' },
+      'Midjourney': { style: 'professional product photography', param: ' --ar 1:1 --q 2 --s 250' },
+      'Stable Diffusion': { style: 'masterpiece, best quality', param: ', (masterpiece:1.2)' }
+    };
+    var p = pStyle[platform] || pStyle['豆包'];
 
-// ---- 提示词生成 ----
-PromptGen.buildPrompt = function(field, task, level) {
-  var basic = '【角色定位】\n你是一位专业的' + field + '领域AI助手。\n\n【任务描述】\n' + task + '\n\n【基本要求】\n1. 输出清晰、实用的解决方案\n2. 使用专业但易懂的语言\n3. 确保内容准确、完整';
+    var baseTemplates = {
+      '产品白底主图': {
+        zh: '【主体】' + task + '，纯白无影背景，居中构图\n【风格】商业产品摄影，极简主义，' + p.style + '\n【光线】左侧45度柔光箱，右侧反光板补光\n【质量】8K超高清，超写实，色彩准确',
+        en: 'Product photography of ' + task + ', white seamless background, centered, ' + p.style + ', softbox lighting, 8K ultra HD' + p.param
+      },
+      '产品场景图': {
+        zh: '【主体】' + task + '，真实生活场景\n【风格】生活方式摄影，自然光感，温馨氛围，' + p.style + '\n【构图】三分法，产品为焦点\n【质量】8K高清，色彩自然',
+        en: 'Lifestyle photography of ' + task + ', natural lighting, ' + p.style + ', rule of thirds, 8K HD' + p.param
+      },
+      '模特穿搭图': {
+        zh: '【主体】亚洲女模，身高168cm，穿着' + task + '\n【风格】时尚街拍，' + p.style + '\n【构图】全身或七分，自然行走姿势\n【质量】8K高清，面料纹理清晰',
+        en: 'Asian female model wearing ' + task + ', fashion street style, ' + p.style + ', full body, 8K HD' + p.param
+      },
+      '促销海报图': {
+        zh: '【主体】' + task + '，大促氛围\n【风格】电商促销海报，' + p.style + '\n【元素】红/金促销色调，放射背景\n【构图】产品居中放大，预留文案区',
+        en: 'Promotional poster for ' + task + ', sale atmosphere, ' + p.style + ', red/gold colors, 8K HD' + p.param
+      },
+      '详情页长图': {
+        zh: '【主体】' + task + '，多卖点展示\n【风格】电商详情页，信息层次清晰，' + p.style + '\n【模块】首屏大图+细节特写+场景图+参数',
+        en: 'Product detail page for ' + task + ', ' + p.style + ', hero + details + scene + specs, 8K HD' + p.param
+      },
+      'AI换脸模特图': {
+        zh: '【主体】亚洲女模，精致五官，展示' + task + '\n【风格】美妆广告大片，' + p.style + '\n【光线】影棚蝴蝶光，突出面部立体感\n【质量】8K超高清，皮肤质感细腻',
+        en: 'Asian female model showcasing ' + task + ', beauty advertising, ' + p.style + ', butterfly lighting, 8K ultra HD' + p.param
+      }
+    };
 
-  var advanced = '【角色定位】\n你是一位资深的' + field + '领域专家，拥有10年以上行业经验。\n\n【核心能力】\n- 深度理解' + field + '领域的专业知识体系\n- 具备解决复杂' + field + '问题的分析能力\n- 熟悉行业最佳实践和标准流程\n\n【任务分析】\n' + task + '\n\n【执行框架】\n1. 需求理解：明确任务目标和约束条件\n2. 方案设计：制定系统化的解决策略\n3. 详细执行：分步骤展开具体实施\n4. 质量检查：验证输出是否符合要求\n\n【输出要求】\n- 结构清晰，逻辑严谨\n- 包含具体可执行的建议\n- 标注关键注意事项';
+    var base = baseTemplates[task] || baseTemplates['产品白底主图'];
+    var prompt = base[lang] || base.zh;
 
-  var expert = '【角色定位】\n你是一位' + field + '领域的顶级专家顾问，拥有15年以上跨行业实战经验，曾服务过多家行业头部企业。\n\n【专业能力矩阵】\n- 战略层面：行业趋势洞察、商业模式设计\n- 战术层面：流程优化、方法论应用、工具链搭建\n- 执行层面：细节把控、质量标准制定、风险预判\n\n【思维特征】\n- 系统性思维：善于发现事物间的关联和规律\n- 批判性思维：基于证据做判断，不盲从权威\n- 用户思维：始终站在最终使用者角度思考\n\n【任务深度分析】\n' + task + '\n\n【执行框架】\n第一阶段：诊断与定义\n1. 明确核心问题和边界条件\n2. 识别关键利益相关者\n3. 梳理现有资源和约束\n\n第二阶段：方案设计\n1. 制定多个备选方案\n2. 评估各方案的优劣势\n3. 选择最优路径并细化\n\n第三阶段：交付与迭代\n1. 输出高质量交付物\n2. 收集反馈并优化\n3. 提供后续支持建议\n\n【质量控制标准】\n- 准确性：所有数据和事实经过验证\n- 完整性：覆盖任务的所有维度\n- 可操作性：每个建议都有明确的执行路径\n\n【输出规范】\n- 使用Markdown格式\n- 重要观点使用加粗标注\n- 结尾提供\"下一步行动建议\"';
-
-  if (level === 'basic') return basic;
-  if (level === 'advanced') return advanced;
-  return expert;
-};
-
-PromptGen.buildEcommercePrompt = function(task, level, platform) {
-  var isEn = (platform === 'Midjourney' || platform === 'Stable Diffusion');
-  var lang = isEn ? 'en' : 'zh';
-
-  var platformStyle = {
-    '豆包': { style: '写实风格，细节丰富', param: '' },
-    '即梦': { style: '高质量人像，细腻皮肤质感', param: '' },
-    '可灵': { style: '动态感，电影级光影', param: '' },
-    '通义万相': { style: '东方美学，国风元素', param: '' },
-    'Midjourney': { style: 'professional product photography', param: ' --ar 1:1 --q 2 --s 250' },
-    'Stable Diffusion': { style: 'masterpiece, best quality', param: ', (masterpiece:1.2)' }
-  };
-  var p = platformStyle[platform] || platformStyle['豆包'];
-
-  var baseTemplates = {
-    '产品白底主图': {
-      zh: '【主体】' + task + '，纯白无影背景，居中构图\n【风格】商业产品摄影，极简主义，' + p.style + '\n【光线】左侧45度柔光箱，右侧反光板补光\n【质量】8K超高清，超写实，色彩准确',
-      en: 'Product photography of ' + task + ', white seamless background, centered, ' + p.style + ', softbox lighting, 8K ultra HD' + p.param
-    },
-    '产品场景图': {
-      zh: '【主体】' + task + '，真实生活场景\n【风格】生活方式摄影，自然光感，温馨氛围，' + p.style + '\n【构图】三分法，产品为焦点\n【质量】8K高清，色彩自然',
-      en: 'Lifestyle photography of ' + task + ', natural lighting, ' + p.style + ', rule of thirds, 8K HD' + p.param
-    },
-    '模特穿搭图': {
-      zh: '【主体】亚洲女模，身高168cm，穿着' + task + '\n【风格】时尚街拍，' + p.style + '\n【构图】全身或七分，自然行走姿势\n【质量】8K高清，面料纹理清晰',
-      en: 'Asian female model wearing ' + task + ', fashion street style, ' + p.style + ', full body, 8K HD' + p.param
-    },
-    '促销海报图': {
-      zh: '【主体】' + task + '，大促氛围\n【风格】电商促销海报，' + p.style + '\n【元素】红/金促销色调，放射背景\n【构图】产品居中放大，预留文案区',
-      en: 'Promotional poster for ' + task + ', sale atmosphere, ' + p.style + ', red/gold colors, 8K HD' + p.param
-    },
-    '详情页长图': {
-      zh: '【主体】' + task + '，多卖点展示\n【风格】电商详情页，信息层次清晰，' + p.style + '\n【模块】首屏大图+细节特写+场景图+参数',
-      en: 'Product detail page for ' + task + ', ' + p.style + ', hero + details + scene + specs, 8K HD' + p.param
-    },
-    'AI换脸模特图': {
-      zh: '【主体】亚洲女模，精致五官，展示' + task + '\n【风格】美妆广告大片，' + p.style + '\n【光线】影棚蝴蝶光，突出面部立体感\n【质量】8K超高清，皮肤质感细腻',
-      en: 'Asian female model showcasing ' + task + ', beauty advertising, ' + p.style + ', butterfly lighting, 8K ultra HD' + p.param
+    if (level === 'advanced') {
+      prompt += isEn ? ', advanced composition, professional lighting' : '\n【进阶】优化构图与光影层次，增强材质质感';
     }
-  };
-
-  var base = baseTemplates[task] || baseTemplates['产品白底主图'];
-  var prompt = base[lang] || base.zh;
-
-  if (level === 'advanced') {
-    prompt += isEn ? ', advanced composition, professional lighting' : '\n【进阶】优化构图与光影层次，增强材质质感';
-  }
-  if (level === 'expert') {
-    prompt += isEn ? ', expert-level composition, 3 lighting setup, color grading, commercial-grade quality' : '\n【专家级】三层布光+色彩分级+超写实材质+商业质检标准';
+    if (level === 'expert') {
+      prompt += isEn ? ', expert-level composition, 3 lighting setup, color grading, commercial-grade quality' : '\n【专家级】三层布光+色彩分级+超写实材质+商业质检标准';
+    }
+    return prompt;
   }
 
-  return prompt;
-};
-
-PromptGen.canGenerate = function(level) {
-  if (level === 'basic') {
-    if (PromptGen.db.todayBasicCount >= PromptGen.CONFIG.MAX_BASIC_DAILY) {
-      PromptGen.showToast('基础版每日限' + PromptGen.CONFIG.MAX_BASIC_DAILY + '次免费，明日再来', '⚠️');
+  function canGenerate(level) {
+    if (level === 'basic') {
+      if (db.todayBasicCount >= CONFIG.MAX_BASIC_DAILY) {
+        showToast('基础版每日限' + CONFIG.MAX_BASIC_DAILY + '次免费，明日再来', '⚠️');
+        return false;
+      }
+      return true;
+    }
+    if (level === 'advanced') {
+      if (db.firstUse.advanced || db.unlocked.advanced) return true;
+      pendingUnlockLevel = 'advanced';
+      showUnlockModal('进阶版');
       return false;
     }
-    return true;
-  }
-  if (level === 'advanced') {
-    if (PromptGen.db.firstUse.advanced || PromptGen.db.unlocked.advanced) return true;
-    PromptGen.pendingUnlockLevel = 'advanced';
-    PromptGen.showUnlockModal('进阶版');
+    if (level === 'expert') {
+      if (db.firstUse.expert || db.unlocked.expert) return true;
+      pendingUnlockLevel = 'expert';
+      showUnlockModal('专家版');
+      return false;
+    }
     return false;
   }
-  if (level === 'expert') {
-    if (PromptGen.db.firstUse.expert || PromptGen.db.unlocked.expert) return true;
-    PromptGen.pendingUnlockLevel = 'expert';
-    PromptGen.showUnlockModal('专家版');
-    return false;
-  }
-  return false;
-};
 
-PromptGen.showUnlockModal = function(versionName) {
-  var remaining = Math.max(0, PromptGen.CONFIG.DAILY_INVITE_LIMIT - (PromptGen.db.inviteUsedToday || 0));
-  var inviteRemaining = PromptGen.$('modalInviteRemaining');
-  if (inviteRemaining) {
-    inviteRemaining.textContent = remaining;
+  function showUnlockModal(version) {
+    var remaining = Math.max(0, CONFIG.DAILY_INVITE_LIMIT - (db.inviteUsedToday || 0));
+    $('modalInviteRemaining').textContent = remaining;
+    openModal('unlockModal');
   }
-  PromptGen.openModal('unlockModal');
-};
 
-// ---- 生成 ----
-PromptGen.doGenerate = function() {
-  if (PromptGen.isGenerating) return;
-  var field = PromptGen.getCurrentField();
-  var taskInput = PromptGen.$('taskInput');
-  if (!taskInput) return;
-  var task = taskInput.value.trim();
-  if (!task) {
-    PromptGen.showToast('请输入任务描述', '⚠️');
-    taskInput.focus();
-    return;
-  }
-  if (!PromptGen.canGenerate(PromptGen.currentLevel)) return;
+  // ===================== 生成执行 =====================
+  function doGenerate() {
+    if (isGenerating) return;
+    var taskInput = $('taskInput');
+    var task = taskInput.value.trim();
+    if (!task) { showToast('请输入任务描述', '⚠️'); taskInput.focus(); return; }
+    if (!canGenerate(currentLevel)) return;
 
-  PromptGen.isGenerating = true;
-  var btn = PromptGen.$('generateBtn');
-  if (btn) {
+    isGenerating = true;
+    var btn = $('generateBtn');
     btn.disabled = true;
     btn.classList.add('loading');
     btn.innerHTML = '<span>⏳</span> 生成中...';
-  }
 
-  setTimeout(function() {
-    if (PromptGen.currentLevel === 'basic') {
-      PromptGen.db.todayBasicCount++;
-    } else if (PromptGen.currentLevel === 'advanced' && PromptGen.db.firstUse.advanced) {
-      PromptGen.db.firstUse.advanced = false;
-    } else if (PromptGen.currentLevel === 'expert' && PromptGen.db.firstUse.expert) {
-      PromptGen.db.firstUse.expert = false;
-    }
-    PromptGen.db.totalGenerated++;
+    setTimeout(function() {
+      if (currentLevel === 'basic') {
+        db.todayBasicCount++;
+      } else if (currentLevel === 'advanced' && db.firstUse.advanced) {
+        db.firstUse.advanced = false;
+      } else if (currentLevel === 'expert' && db.firstUse.expert) {
+        db.firstUse.expert = false;
+      }
+      db.totalGenerated++;
 
-    var platformSelect = PromptGen.$('platformSelect');
-    var platform = platformSelect ? platformSelect.value : '通用';
-    var prompt;
-    if (field === '电商AI绘画') {
-      prompt = PromptGen.buildEcommercePrompt(task, PromptGen.currentLevel, platform);
-    } else {
-      prompt = PromptGen.buildPrompt(field, task, PromptGen.currentLevel);
-    }
+      var platform = $('platformSelect').value;
+      var field = getCurrentField();
+      var prompt = (field === '电商AI绘画') ? buildEcommercePrompt(task, currentLevel, platform) : buildPrompt(field, task, currentLevel);
+      var wc = countWords(prompt);
+      var result = {
+        id: Date.now(),
+        field: field,
+        task: task,
+        level: currentLevel,
+        prompt: prompt,
+        time: new Date().toLocaleString('zh-CN'),
+        favorited: false,
+        platform: platform !== '通用' ? platform : null,
+        wordCount: wc
+      };
 
-    var wordCount = PromptGen.countWords(prompt);
-    var now = new Date();
-    var timeStr = now.toLocaleString('zh-CN');
-    var result = {
-      id: Date.now(),
-      field: field,
-      task: task,
-      level: PromptGen.currentLevel,
-      prompt: prompt,
-      time: timeStr,
-      favorited: false,
-      platform: platform !== '通用' ? platform : null,
-      wordCount: wordCount
-    };
+      db.history.unshift(result);
+      saveDB();
+      updateStats();
+      renderResult(result);
+      $('emptyState').classList.add('hidden');
+      showToast('提示词生成成功！', '✨');
 
-    PromptGen.db.history.unshift(result);
-    PromptGen.saveDB();
-    PromptGen.updateStats();
-    PromptGen.renderResult(result);
-    var emptyState = PromptGen.$('emptyState');
-    if (emptyState) {
-      emptyState.classList.add('hidden');
-    }
-    PromptGen.showToast('提示词生成成功！', '✨');
-
-    PromptGen.isGenerating = false;
-    if (btn) {
+      isGenerating = false;
       btn.disabled = false;
       btn.classList.remove('loading');
       btn.innerHTML = '<span>✨</span> 生成提示词';
+    }, 300);
+  }
+
+  function doOptimize() {
+    if (isGenerating) return;
+    if (!db.unlocked.expert && !db.firstUse.expert) {
+      pendingUnlockLevel = 'expert';
+      showUnlockModal('专家版');
+      return;
     }
-  }, 300);
-};
+    var taskInput = $('taskInput');
+    var task = taskInput.value.trim();
+    if (!task) { showToast('请输入需要优化的任务', '⚠️'); return; }
 
-// ---- 一键优化 ----
-PromptGen.doOptimize = function() {
-  if (PromptGen.isGenerating) return;
-  if (!PromptGen.db.unlocked.expert && !PromptGen.db.firstUse.expert) {
-    PromptGen.pendingUnlockLevel = 'expert';
-    PromptGen.showUnlockModal('专家版');
-    return;
-  }
-  var taskInput = PromptGen.$('taskInput');
-  if (!taskInput) return;
-  var task = taskInput.value.trim();
-  if (!task) {
-    PromptGen.showToast('请输入需要优化的任务', '⚠️');
-    return;
-  }
-
-  PromptGen.isGenerating = true;
-  var btn = PromptGen.$('optimizeBtn');
-  if (btn) {
+    isGenerating = true;
+    var btn = $('optimizeBtn');
     btn.disabled = true;
     btn.classList.add('loading');
     btn.innerHTML = '⏳ 优化中...';
-  }
 
-  setTimeout(function() {
-    var field = PromptGen.getCurrentField();
-    var platformSelect = PromptGen.$('platformSelect');
-    var platform = platformSelect ? platformSelect.value : '通用';
+    setTimeout(function() {
+      var field = getCurrentField();
+      var platform = $('platformSelect').value;
+      var optimized = '【一键优化版 · 专家级重构】\n\n' +
+        '【原始需求】\n' + task + '\n\n' +
+        '【优化方案】\n' +
+        '1. 需求拆解：转化为可执行的AI指令\n' +
+        '2. 角色定位：匹配' + field + '领域最佳AI角色\n' +
+        '3. 输出规范：定义格式、风格、语气标准\n' +
+        '4. 质量管控：添加验证标准\n\n' +
+        '【优化后提示词】\n' +
+        '你是一位' + field + '领域的顶级专家，拥有15年以上实战经验。\n\n' +
+        '任务：' + task + '\n\n' +
+        '请按以下框架输出：\n' +
+        '1. 核心结论（1句话）\n' +
+        '2. 分步方案（3-5步，每步有具体行动）\n' +
+        '3. 关键建议（3条）\n' +
+        '4. 风险提示\n' +
+        '5. 下一步行动\n\n' +
+        '格式：Markdown，重要内容加粗，总字数控制在2000字以内';
 
-    var optimized = '【一键优化版 · 专家级重构】\n\n' +
-      '【原始需求】\n' + task + '\n\n' +
-      '【优化方案】\n' +
-      '1. 需求拆解：转化为可执行的AI指令\n' +
-      '2. 角色定位：匹配' + field + '领域最佳AI角色\n' +
-      '3. 输出规范：定义格式、风格、语气标准\n' +
-      '4. 质量管控：添加验证标准\n\n' +
-      '【优化后提示词】\n' +
-      '你是一位' + field + '领域的顶级专家，拥有15年以上实战经验。\n\n' +
-      '任务：' + task + '\n\n' +
-      '请按以下框架输出：\n' +
-      '1. 核心结论（1句话）\n' +
-      '2. 分步方案（3-5步，每步有具体行动）\n' +
-      '3. 关键建议（3条）\n' +
-      '4. 风险提示\n' +
-      '5. 下一步行动\n\n' +
-      '格式：Markdown，重要内容加粗，总字数控制在2000字以内';
+      var wc = countWords(optimized);
+      var result = {
+        id: Date.now(),
+        field: field + '（优化版）',
+        task: task,
+        level: 'expert',
+        prompt: optimized,
+        time: new Date().toLocaleString('zh-CN'),
+        favorited: false,
+        platform: platform !== '通用' ? platform : null,
+        wordCount: wc
+      };
 
-    var wordCount = PromptGen.countWords(optimized);
-    var result = {
-      id: Date.now(),
-      field: field + '（优化版）',
-      task: task,
-      level: 'expert',
-      prompt: optimized,
-      time: new Date().toLocaleString('zh-CN'),
-      favorited: false,
-      platform: platform !== '通用' ? platform : null,
-      wordCount: wordCount
-    };
+      db.history.unshift(result);
+      db.totalGenerated++;
+      saveDB();
+      updateStats();
+      renderResult(result);
+      $('emptyState').classList.add('hidden');
+      showToast('优化完成！', '🚀');
 
-    PromptGen.db.history.unshift(result);
-    PromptGen.db.totalGenerated++;
-    PromptGen.saveDB();
-    PromptGen.updateStats();
-    PromptGen.renderResult(result);
-    var emptyState = PromptGen.$('emptyState');
-    if (emptyState) {
-      emptyState.classList.add('hidden');
-    }
-    PromptGen.showToast('优化完成！', '🚀');
-
-    PromptGen.isGenerating = false;
-    if (btn) {
+      isGenerating = false;
       btn.disabled = false;
       btn.classList.remove('loading');
       btn.innerHTML = '<span>🚀</span> 一键优化';
+    }, 400);
+  }
+
+  function doBatchGenerate() {
+    if (isGenerating) return;
+    if (!db.unlocked.expert && !db.firstUse.expert) {
+      pendingUnlockLevel = 'expert';
+      showUnlockModal('专家版');
+      return;
     }
-  }, 400);
-};
+    var taskInput = $('taskInput');
+    var task = taskInput.value.trim();
+    if (!task) { showToast('请输入任务（每行一个）', '⚠️'); return; }
 
-// ---- 批量生成 ----
-PromptGen.doBatchGenerate = function() {
-  if (PromptGen.isGenerating) return;
-  if (!PromptGen.db.unlocked.expert && !PromptGen.db.firstUse.expert) {
-    PromptGen.pendingUnlockLevel = 'expert';
-    PromptGen.showUnlockModal('专家版');
-    return;
-  }
-  var taskInput = PromptGen.$('taskInput');
-  if (!taskInput) return;
-  var task = taskInput.value.trim();
-  if (!task) {
-    PromptGen.showToast('请输入任务（每行一个）', '⚠️');
-    return;
-  }
+    var tasks = task.split('\n').filter(function(t) { return t.trim(); });
+    if (tasks.length < 2) { showToast('至少2个任务，每行一个', '⚠️'); return; }
+    if (tasks.length > 10) { showToast('最多10个任务', '⚠️'); return; }
 
-  var lines = task.split('\n');
-  var tasks = [];
-  for (var i = 0; i < lines.length; i++) {
-    var trimmed = lines[i].trim();
-    if (trimmed) {
-      tasks.push(trimmed);
-    }
-  }
-
-  if (tasks.length < 2) {
-    PromptGen.showToast('至少2个任务，每行一个', '⚠️');
-    return;
-  }
-  if (tasks.length > 10) {
-    PromptGen.showToast('最多10个任务', '⚠️');
-    return;
-  }
-
-  PromptGen.isGenerating = true;
-  var btn = PromptGen.$('batchBtn');
-  if (btn) {
+    isGenerating = true;
+    var btn = $('batchBtn');
     btn.disabled = true;
     btn.classList.add('loading');
     btn.innerHTML = '⏳ 0/' + tasks.length;
-  }
 
-  var field = PromptGen.getCurrentField();
-  var platformSelect = PromptGen.$('platformSelect');
-  var platform = platformSelect ? platformSelect.value : '通用';
-  var now = new Date();
+    var field = getCurrentField();
+    var platform = $('platformSelect').value;
+    var now = new Date();
 
-  for (var idx = 0; idx < tasks.length; idx++) {
-    (function(index) {
+    tasks.forEach(function(t, index) {
       setTimeout(function() {
-        var t = tasks[index];
-        var prompt;
-        if (field === '电商AI绘画') {
-          prompt = PromptGen.buildEcommercePrompt(t, 'expert', platform);
-        } else {
-          prompt = PromptGen.buildPrompt(field, t, 'expert');
-        }
-        var wordCount = PromptGen.countWords(prompt);
+        var prompt = (field === '电商AI绘画') ? buildEcommercePrompt(t, 'expert', platform) : buildPrompt(field, t, 'expert');
+        var wc = countWords(prompt);
         var result = {
           id: Date.now() + index,
           field: field + '（批量' + (index + 1) + '/' + tasks.length + '）',
@@ -2321,1693 +2058,978 @@ PromptGen.doBatchGenerate = function() {
           time: now.toLocaleString('zh-CN'),
           favorited: false,
           platform: platform !== '通用' ? platform : null,
-          wordCount: wordCount
+          wordCount: wc
         };
-        PromptGen.db.history.unshift(result);
-        PromptGen.db.totalGenerated++;
-        PromptGen.renderResult(result);
+        db.history.unshift(result);
+        db.totalGenerated++;
+        renderResult(result);
         if (index === tasks.length - 1) {
-          PromptGen.saveDB();
-          PromptGen.updateStats();
-          var emptyState = PromptGen.$('emptyState');
-          if (emptyState) {
-            emptyState.classList.add('hidden');
-          }
-          PromptGen.showToast('批量生成完成！共' + tasks.length + '条', '📦');
-          PromptGen.isGenerating = false;
-          if (btn) {
-            btn.disabled = false;
-            btn.classList.remove('loading');
-            btn.innerHTML = '<span>📦</span> 批量生成';
-          }
-        } else if (btn) {
+          saveDB();
+          updateStats();
+          $('emptyState').classList.add('hidden');
+          showToast('批量生成完成！共' + tasks.length + '条', '📦');
+          isGenerating = false;
+          btn.disabled = false;
+          btn.classList.remove('loading');
+          btn.innerHTML = '<span>📦</span> 批量生成';
+        } else {
           btn.innerHTML = '⏳ ' + (index + 1) + '/' + tasks.length;
         }
       }, index * 350);
-    })(idx);
-  }
-};
-
-// ---- 渲染结果 ----
-PromptGen.renderResult = function(result) {
-  var container = PromptGen.$('resultsContainer');
-  if (!container) return;
-  var levelNames = { basic: '基础版', advanced: '进阶版', expert: '专家版' };
-  var levelBadges = { basic: 'badge-basic', advanced: 'badge-advanced', expert: 'badge-expert' };
-  var levelTags = {
-    basic: '📄 约' + (result.wordCount || 80) + '字 · 基础规格',
-    advanced: '📋 含执行框架 · 约' + (result.wordCount || 200) + '字',
-    expert: '🧠 含思维链+多版本 · 约' + (result.wordCount || 350) + '字'
-  };
-
-  var card = document.createElement('div');
-  card.className = 'result-card';
-  card.setAttribute('data-id', result.id);
-  card.setAttribute('tabindex', '0');
-
-  var platformHtml = '';
-  if (result.platform) {
-    platformHtml = '<span class=\"result-badge\" style=\"background:rgba(124,92,252,0.1);color:var(--accent-purple-light);font-size:11px;\">🎯 ' + result.platform + '</span>';
+    });
   }
 
-  card.innerHTML =
-    '<div class=\"result-header\">' +
-      '<div class=\"result-meta\">' +
-        '<span class=\"result-badge ' + levelBadges[result.level] + '\">' + levelNames[result.level] + '</span>' +
-        '<span class=\"result-level-tag\">' + (levelTags[result.level] || '') + '</span>' +
-        '<span class=\"result-field\">📂 ' + result.field + '</span>' +
-        platformHtml +
-        '<span class=\"result-time\">🕐 ' + result.time + '</span>' +
-      '</div>' +
-      '<div class=\"result-actions\">' +
-        '<button class
-        '<button class=\"action-btn\" onclick=\"PromptGen.copyResult(' + result.id + ')\" aria-label=\"复制提示词\">📋 复制</button>' +
-        '<button class=\"action-btn ' + (result.favorited ? 'favorited' : '') + '\" onclick=\"PromptGen.toggleFavorite(' + result.id + ')\" aria-label=\"' + (result.favorited ? '取消收藏' : '收藏') + '\">' + (result.favorited ? '❤️' : '🤍') + ' ' + (result.favorited ? '已收藏' : '收藏') + '</button>' +
-      '</div>' +
-    '</div>' +
-    '<div class=\"result-content\">' + PromptGen.formatPromptHTML(result.prompt, result.wordCount) + '</div>';
+  // ===================== 渲染 =====================
+  function renderResult(result) {
+    var container = $('resultsContainer');
+    var levelNames = { basic: '基础版', advanced: '进阶版', expert: '专家版' };
+    var levelBadges = { basic: 'badge-basic', advanced: 'badge-advanced', expert: 'badge-expert' };
+    var levelTags = {
+      basic: '📄 约' + (result.wordCount || 80) + '字 · 基础规格',
+      advanced: '📋 含执行框架 · 约' + (result.wordCount || 200) + '字',
+      expert: '🧠 含思维链+多版本 · 约' + (result.wordCount || 350) + '字'
+    };
 
-  container.insertBefore(card, container.firstChild);
-};
+    var card = document.createElement('div');
+    card.className = 'result-card';
+    card.setAttribute('data-id', result.id);
+    card.setAttribute('tabindex', '0');
 
-PromptGen.copyResult = function(id) {
-  for (var i = 0; i < PromptGen.db.history.length; i++) {
-    if (PromptGen.db.history[i].id === id) {
-      PromptGen.copyToClipboard(PromptGen.db.history[i].prompt);
-      return;
+    var platformHtml = result.platform ? '<span class="result-badge" style="background:rgba(124,92,252,0.1);color:var(--accent-purple-light);font-size:11px;">🎯 ' + result.platform + '</span>' : '';
+
+    card.innerHTML =
+      '<div class="result-header">' +
+        '<div class="result-meta">' +
+          '<span class="result-badge ' + levelBadges[result.level] + '">' + levelNames[result.level] + '</span>' +
+          '<span class="result-level-tag">' + (levelTags[result.level] || '') + '</span>' +
+          '<span class="result-field">📂 ' + result.field + '</span>' +
+          platformHtml +
+          '<span class="result-time">🕐 ' + result.time + '</span>' +
+        '</div>' +
+        '<div class="result-actions">' +
+          '<button class="action-btn" onclick="PromptGen.copyResult(' + result.id + ')" aria-label="复制提示词">📋 复制</button>' +
+          '<button class="action-btn ' + (result.favorited ? 'favorited' : '') + '" onclick="PromptGen.toggleFavorite(' + result.id + ')" aria-label="' + (result.favorited ? '取消收藏' : '收藏') + '">' + (result.favorited ? '❤️' : '🤍') + ' ' + (result.favorited ? '已收藏' : '收藏') + '</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="result-content">' + formatPromptHTML(result.prompt, result.wordCount) + '</div>';
+
+    container.insertBefore(card, container.firstChild);
+  }
+
+  function copyResult(id) {
+    for (var i = 0; i < db.history.length; i++) {
+      if (db.history[i].id === id) {
+        copyToClipboard(db.history[i].prompt);
+        return;
+      }
     }
   }
-};
 
-PromptGen.toggleFavorite = function(id) {
-  var result = null;
-  var index = -1;
-  for (var i = 0; i < PromptGen.db.history.length; i++) {
-    if (PromptGen.db.history[i].id === id) {
-      result = PromptGen.db.history[i];
-      index = i;
-      break;
-    }
-  }
-  if (!result) return;
-
-  result.favorited = !result.favorited;
-  if (result.favorited) {
-    var exists = false;
-    for (var j = 0; j < PromptGen.db.favorites.length; j++) {
-      if (PromptGen.db.favorites[j].id === id) {
-        exists = true;
+  function toggleFavorite(id) {
+    var result = null;
+    var index = -1;
+    for (var i = 0; i < db.history.length; i++) {
+      if (db.history[i].id === id) {
+        result = db.history[i];
+        index = i;
         break;
       }
     }
-    if (!exists) {
-      PromptGen.db.favorites.push(JSON.parse(JSON.stringify(result)));
+    if (!result) return;
+
+    result.favorited = !result.favorited;
+    if (result.favorited) {
+      var exists = false;
+      for (var j = 0; j < db.favorites.length; j++) {
+        if (db.favorites[j].id === id) { exists = true; break; }
+      }
+      if (!exists) {
+        db.favorites.push(JSON.parse(JSON.stringify(result)));
+      }
+    } else {
+      db.favorites = db.favorites.filter(function(f) { return f.id !== id; });
     }
-  } else {
-    var newFavorites = [];
-    for (var k = 0; k < PromptGen.db.favorites.length; k++) {
-      if (PromptGen.db.favorites[k].id !== id) {
-        newFavorites.push(PromptGen.db.favorites[k]);
+    saveDB();
+
+    var card = document.querySelector('.result-card[data-id="' + id + '"]');
+    if (card) {
+      var btn = card.querySelector('.action-btn:last-child');
+      if (btn) {
+        btn.classList.toggle('favorited', result.favorited);
+        btn.innerHTML = (result.favorited ? '❤️' : '🤍') + ' ' + (result.favorited ? '已收藏' : '收藏');
+        btn.setAttribute('aria-label', result.favorited ? '取消收藏' : '收藏');
       }
     }
-    PromptGen.db.favorites = newFavorites;
-  }
-  PromptGen.saveDB();
+    showToast(result.favorited ? '已收藏' : '已取消', result.favorited ? '❤️' : '🤍');
 
-  var card = document.querySelector('.result-card[data-id=\"' + id + '\"]');
-  if (card) {
-    var btn = card.querySelector('.action-btn:last-child');
-    if (btn) {
-      btn.classList.toggle('favorited', result.favorited);
-      btn.innerHTML = (result.favorited ? '❤️' : '🤍') + ' ' + (result.favorited ? '已收藏' : '收藏');
-      btn.setAttribute('aria-label', result.favorited ? '取消收藏' : '收藏');
+    // 自动刷新收藏页面（如果当前在收藏页）
+    if ($('page-favorites').classList.contains('active')) {
+      renderFavorites();
     }
   }
-  PromptGen.showToast(result.favorited ? '已收藏' : '已取消', result.favorited ? '❤️' : '🤍');
-};
 
-// ---- 更新UI ----
-PromptGen.updateFeatureButtons = function() {
-  var isExpert = PromptGen.db.unlocked.expert || PromptGen.db.firstUse.expert;
-  var opt = PromptGen.$('optimizeBtn');
-  var bat = PromptGen.$('batchBtn');
+  // ===================== 更新UI =====================
+  function updateFeatureButtons() {
+    var isExpert = db.unlocked.expert || db.firstUse.expert;
+    var opt = $('optimizeBtn');
+    var bat = $('batchBtn');
 
-  if (isExpert) {
-    if (opt) {
+    if (isExpert) {
       opt.className = 'generate-btn optimize';
       opt.innerHTML = '<span>🚀</span> 一键优化';
       opt.disabled = false;
       opt.removeAttribute('aria-disabled');
-    }
-    if (bat) {
       bat.className = 'generate-btn batch';
       bat.innerHTML = '<span>📦</span> 批量生成';
       bat.disabled = false;
       bat.removeAttribute('aria-disabled');
-    }
-  } else {
-    if (opt) {
+    } else {
       opt.className = 'generate-btn optimize locked';
       opt.innerHTML = '<span>🔒</span> 一键优化 · 专家版专属';
       opt.disabled = true;
       opt.setAttribute('aria-disabled', 'true');
-    }
-    if (bat) {
       bat.className = 'generate-btn batch locked';
       bat.innerHTML = '<span>🔒</span> 批量生成 · 专家版专属';
       bat.disabled = true;
       bat.setAttribute('aria-disabled', 'true');
     }
   }
-};
 
-PromptGen.updateStats = function() {
-  var todayRemain = Math.max(0, PromptGen.CONFIG.MAX_BASIC_DAILY - PromptGen.db.todayBasicCount);
+  function updateStats() {
+    var todayRemain = Math.max(0, CONFIG.MAX_BASIC_DAILY - db.todayBasicCount);
+    $('todayCount').textContent = todayRemain;
+    $('totalCount').textContent = db.totalGenerated;
+    $('navTodayCount').textContent = todayRemain;
+    $('navTotalCount').textContent = db.totalGenerated;
+    $('mobileTodayCount').textContent = todayRemain;
+    $('mobileTotalCount').textContent = db.totalGenerated;
 
-  var todayEl = PromptGen.$('todayCount');
-  if (todayEl) todayEl.textContent = todayRemain;
+    var remaining = Math.max(0, CONFIG.DAILY_INVITE_LIMIT - (db.inviteUsedToday || 0));
+    $('inviteCount').textContent = remaining;
+    $('mobileInviteCount').textContent = remaining;
 
-  var totalEl = PromptGen.$('totalCount');
-  if (totalEl) totalEl.textContent = PromptGen.db.totalGenerated;
-
-  var navToday = PromptGen.$('navTodayCount');
-  if (navToday) navToday.textContent = todayRemain;
-
-  var navTotal = PromptGen.$('navTotalCount');
-  if (navTotal) navTotal.textContent = PromptGen.db.totalGenerated;
-
-  var mobileToday = PromptGen.$('mobileTodayCount');
-  if (mobileToday) mobileToday.textContent = todayRemain;
-
-  var mobileTotal = PromptGen.$('mobileTotalCount');
-  if (mobileTotal) mobileTotal.textContent = PromptGen.db.totalGenerated;
-
-  var remaining = Math.max(0, PromptGen.CONFIG.DAILY_INVITE_LIMIT - (PromptGen.db.inviteUsedToday || 0));
-
-  var inviteEl = PromptGen.$('inviteCount');
-  if (inviteEl) inviteEl.textContent = remaining;
-
-  var mobileInvite = PromptGen.$('mobileInviteCount');
-  if (mobileInvite) mobileInvite.textContent = remaining;
-
-  var advBadge = PromptGen.$('advancedBadge');
-  if (advBadge) {
-    if (!PromptGen.db.firstUse.advanced && !PromptGen.db.unlocked.advanced) {
-      advBadge.textContent = '🔒 已锁定';
-      advBadge.className = 'complexity-badge badge-locked';
-    } else if (PromptGen.db.unlocked.advanced) {
-      advBadge.textContent = '✅ 已解锁';
-      advBadge.className = 'complexity-badge badge-free';
-    }
-  }
-
-  var expBadge = PromptGen.$('expertBadge');
-  if (expBadge) {
-    if (!PromptGen.db.firstUse.expert && !PromptGen.db.unlocked.expert) {
-      expBadge.textContent = '🔥 内测邀请码';
-      expBadge.className = 'complexity-badge badge-invite';
-    } else if (PromptGen.db.unlocked.expert) {
-      expBadge.textContent = '✅ 已解锁';
-      expBadge.className = 'complexity-badge badge-free';
-    }
-  }
-
-  PromptGen.updateFeatureButtons();
-  PromptGen.updateTemplateLocks();
-};
-
-PromptGen.updateTemplateLocks = function() {
-  var isLocked = !PromptGen.db.unlocked.expert && !PromptGen.db.firstUse.expert;
-  var cards = document.querySelectorAll('.template-card');
-  for (var i = 0; i < cards.length; i++) {
-    var card = cards[i];
-    if (isLocked) {
-      card.classList.add('locked');
-      if (!card.querySelector('.template-lock-overlay')) {
-        var ov = document.createElement('div');
-        ov.className = 'template-lock-overlay';
-        ov.innerHTML = '<div class=\"lock-icon\">🔒</div><div>专家版解锁后可用</div>';
-        card.appendChild(ov);
+    var advBadge = $('advancedBadge');
+    if (advBadge) {
+      if (!db.firstUse.advanced && !db.unlocked.advanced) {
+        advBadge.textContent = '🔒 已锁定';
+        advBadge.className = 'complexity-badge badge-locked';
+      } else if (db.unlocked.advanced) {
+        advBadge.textContent = '✅ 已解锁';
+        advBadge.className = 'complexity-badge badge-free';
       }
-    } else {
-      card.classList.remove('locked');
-      var ov = card.querySelector('.template-lock-overlay');
-      if (ov) ov.remove();
     }
-  }
-};
-
-// ---- 解锁 ----
-PromptGen.doUnlock = function() {
-  var input = PromptGen.$('unlockInput');
-  if (!input) return;
-  var pwd = input.value.trim();
-  if (!pwd) {
-    PromptGen.showToast('请输入邀请码', '⚠️');
-    return;
-  }
-
-  var remaining = Math.max(0, PromptGen.CONFIG.DAILY_INVITE_LIMIT - (PromptGen.db.inviteUsedToday || 0));
-  if (remaining <= 0 && pwd !== PromptGen.CONFIG.SPECIAL_PASSWORD) {
-    PromptGen.showToast('今日邀请码已发完，明日再来', '⚠️');
-    return;
-  }
-
-  if (pwd === PromptGen.CONFIG.SPECIAL_PASSWORD) {
-    PromptGen.db.unlocked[PromptGen.pendingUnlockLevel] = true;
-    PromptGen.db.inviteUsedToday = (PromptGen.db.inviteUsedToday || 0) + 1;
-    PromptGen.saveDB();
-    PromptGen.closeModal('unlockModal');
-    PromptGen.pendingUnlockLevel = null;
-    PromptGen.showToast('解锁成功！', '🔓');
-    PromptGen.updateStats();
-    return;
-  }
-
-  var poolKey = PromptGen.pendingUnlockLevel === 'advanced' ? 'advanced' : 'expert';
-  var found = null;
-  var pool = PromptGen.db.passwords[poolKey];
-  for (var i = 0; i < pool.length; i++) {
-    if (pool[i].code === pwd) {
-      found = pool[i];
-      break;
+    var expBadge = $('expertBadge');
+    if (expBadge) {
+      if (!db.firstUse.expert && !db.unlocked.expert) {
+        expBadge.textContent = '🔥 内测邀请码';
+        expBadge.className = 'complexity-badge badge-invite';
+      } else if (db.unlocked.expert) {
+        expBadge.textContent = '✅ 已解锁';
+        expBadge.className = 'complexity-badge badge-free';
+      }
     }
-  }
-  if (!found) {
-    PromptGen.showToast('邀请码错误', '❌');
-    return;
-  }
-  if (found.used >= found.max && found.max !== 0) {
-    PromptGen.showToast('该邀请码已失效', '⚠️');
-    return;
+
+    updateFeatureButtons();
+    updateTemplateLocks();
   }
 
-  found.used++;
-  PromptGen.db.unlocked[PromptGen.pendingUnlockLevel] = true;
-  PromptGen.db.inviteUsedToday = (PromptGen.db.inviteUsedToday || 0) + 1;
-  PromptGen.saveDB();
-  PromptGen.closeModal('unlockModal');
-  PromptGen.pendingUnlockLevel = null;
-  PromptGen.showToast('解锁成功！', '🔓');
-  PromptGen.updateStats();
-};
-
-// ---- 页面导航 ----
-PromptGen.showPage = function(name) {
-  var pages = document.querySelectorAll('.page');
-  for (var i = 0; i < pages.length; i++) {
-    pages[i].classList.remove('active');
-  }
-  var navBtns = document.querySelectorAll('.nav-btn');
-  for (var j = 0; j < navBtns.length; j++) {
-    navBtns[j].classList.remove('active');
-  }
-  var mobileNavItems = document.querySelectorAll('.mobile-nav-item');
-  for (var k = 0; k < mobileNavItems.length; k++) {
-    mobileNavItems[k].classList.remove('active');
-  }
-
-  var page = PromptGen.$('page-' + name);
-  if (page) page.classList.add('active');
-
-  for (var l = 0; l < navBtns.length; l++) {
-    if (navBtns[l].getAttribute('data-page') === name) {
-      navBtns[l].classList.add('active');
-      break;
-    }
-  }
-  for (var m = 0; m < mobileNavItems.length; m++) {
-    if (mobileNavItems[m].getAttribute('data-page') === name) {
-      mobileNavItems[m].classList.add('active');
-      break;
-    }
-  }
-
-  if (name === 'history') { 
-    PromptGen.historyPage = 1;
-    PromptGen.renderHistory(); 
-  }
-  if (name === 'favorites') PromptGen.renderFavorites();
-  if (name === 'admin') PromptGen.renderAdmin();
-  if (name === 'templates') {
-    PromptGen.updateTemplateLocks();
-    PromptGen.renderTemplates();
-  }
-};
-
-// ---- 模板库（修复换行截断）----
-PromptGen.renderTemplates = function() {
-  var grid = PromptGen.$('templateGrid');
-  if (!grid) return;
-
-  var filtered;
-  if (PromptGen.currentTemplateFilter === 'all') {
-    filtered = PromptGen.templateData;
-  } else {
-    filtered = [];
-    for (var i = 0; i < PromptGen.templateData.length; i++) {
-      var tags = PromptGen.templateData[i].tags;
-      var found = false;
-      for (var j = 0; j < tags.length; j++) {
-        if (tags[j] === PromptGen.currentTemplateFilter) {
-          found = true;
-          break;
+  function updateTemplateLocks() {
+    var locked = !db.unlocked.expert && !db.firstUse.expert;
+    var cards = document.querySelectorAll('.template-card');
+    cards.forEach(function(card) {
+      if (locked) {
+        card.classList.add('locked');
+        if (!card.querySelector('.template-lock-overlay')) {
+          var ov = document.createElement('div');
+          ov.className = 'template-lock-overlay';
+          ov.innerHTML = '<div class="lock-icon">🔒</div><div>专家版解锁后可用</div>';
+          card.appendChild(ov);
         }
+      } else {
+        card.classList.remove('locked');
+        var ov = card.querySelector('.template-lock-overlay');
+        if (ov) ov.remove();
       }
-      if (found) {
-        filtered.push(PromptGen.templateData[i]);
-      }
-    }
+    });
   }
 
-  var pinned = [];
-  var rest = [];
-  for (var k = 0; k < filtered.length; k++) {  // 修复：合并为一行
-    var tags2 = filtered[k].tags;
-    var isHot = false;
-    for (var m = 0; m < tags2.length; m++) {
-      if (tags2[m] === 'hot') {
-        isHot = true;
-        break;
-      }
-    }
-    if (isHot) {
-      pinned.push(filtered[k]);
-    } else {
-      rest.push(filtered[k]);
-    }
-  }
-  var sorted = pinned.concat(rest);
+  // ===================== 解锁 =====================
+  function doUnlock() {
+    var input = $('unlockInput');
+    var pwd = input.value.trim();
+    if (!pwd) { showToast('请输入邀请码', '⚠️'); return; }
 
-  var isLocked = !PromptGen.db.unlocked.expert && !PromptGen.db.firstUse.expert;
-  
-  // 使用 DocumentFragment 优化性能
-  var fragment = document.createDocumentFragment();
-  
-  for (var n = 0; n < sorted.length; n++) {
-    var t = sorted[n];
-    var lockedClass = isLocked ? 'locked' : '';
-    var pinnedClass = '';
-    var tags3 = t.tags;
-    for (var p = 0; p < tags3.length; p++) {
-      if (tags3[p] === 'hot') {
-        pinnedClass = 'pinned';
-        break;
-      }
-    }
-    var tagsHtml = '';
-    for (var q = 0; q < t.tags.length; q++) {
-      tagsHtml += '<span>#' + t.tags[q] + '</span>';
-    }
-    var lockHtml = isLocked ? '<div class=\"template-lock-overlay\"><div class=\"lock-icon\">🔒</div><div>专家版解锁后可用</div></div>' : '';
-    
-    var card = document.createElement('div');
-    card.className = 'template-card ' + lockedClass + ' ' + pinnedClass;
-    card.setAttribute('data-field', t.field);
-    card.setAttribute('data-task', encodeURIComponent(t.task));
-    card.setAttribute('data-level', t.level);
-    card.setAttribute('tabindex', '0');
-    card.innerHTML =
-      '<div class=\"template-name\">' + t.name + '</div>' +
-      '<div class=\"template-field\">' + t.field + '</div>' +
-      '<div class=\"template-desc\">' + t.desc + '</div>' +
-      '<div class=\"template-effect\">' + t.effect + '</div>' +
-      '<div class=\"template-preview\"><span class=\"preview-icon\">📷</span> ' + (t.preview || '效果预览') + '</div>' +
-      '<div class=\"template-stats\">🔥 ' + t.uses + '人用过</div>' +
-      '<div class=\"template-tags\">' + tagsHtml + '</div>' +
-      '<span class=\"template-level badge-expert\">专家</span>' +
-      lockHtml;
-    
-    fragment.appendChild(card);
-  }
-  
-  grid.innerHTML = '';
-  grid.appendChild(fragment);
-
-  // 事件委托
-  grid.onclick = function(e) {
-    var card = e.target.closest('.template-card');
-    if (!card) return;
-    
-    if (card.classList.contains('locked')) {
-      PromptGen.pendingUnlockLevel = 'expert';
-      PromptGen.showUnlockModal('专家版');
+    var remaining = Math.max(0, CONFIG.DAILY_INVITE_LIMIT - (db.inviteUsedToday || 0));
+    if (remaining <= 0 && pwd !== CONFIG.SPECIAL_PASSWORD) {
+      showToast('今日邀请码已发完，明日再来', '⚠️');
       return;
     }
-    
-    var field = card.getAttribute('data-field');
-    var task = decodeURIComponent(card.getAttribute('data-task'));
-    var fCards = document.querySelectorAll('.field-card');
-    for (var fc = 0; fc < fCards.length; fc++) {
-      if (fCards[fc].getAttribute('data-field') === field) {
-        fCards[fc].classList.add('active');
-        fCards[fc].setAttribute('aria-checked', 'true');
-      } else {
-        fCards[fc].classList.remove('active');
-        fCards[fc].setAttribute('aria-checked', 'false');
+
+    if (pwd === CONFIG.SPECIAL_PASSWORD) {
+      db.unlocked[pendingUnlockLevel] = true;
+      db.inviteUsedToday = (db.inviteUsedToday || 0) + 1;
+      saveDB();
+      closeModal('unlockModal');
+      pendingUnlockLevel = null;
+      showToast('解锁成功！', '🔓');
+      updateStats();
+      return;
+    }
+
+    var poolKey = pendingUnlockLevel === 'advanced' ? 'advanced' : 'expert';
+    var found = null;
+    for (var i = 0; i < db.passwords[poolKey].length; i++) {
+      if (db.passwords[poolKey][i].code === pwd) { found = db.passwords[poolKey][i]; break; }
+    }
+    if (!found) { showToast('邀请码错误', '❌'); return; }
+    if (found.used >= found.max && found.max !== 0) { showToast('该邀请码已失效', '⚠️'); return; }
+
+    found.used++;
+    db.unlocked[pendingUnlockLevel] = true;
+    db.inviteUsedToday = (db.inviteUsedToday || 0) + 1;
+    saveDB();
+    closeModal('unlockModal');
+    pendingUnlockLevel = null;
+    showToast('解锁成功！', '🔓');
+    updateStats();
+  }
+
+  // ===================== 页面导航 =====================
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.mobile-nav-item').forEach(function(b) { b.classList.remove('active'); });
+
+    var pg = $('page-' + name);
+    if (pg) pg.classList.add('active');
+
+    document.querySelectorAll('.nav-btn').forEach(function(b) {
+      if (b.getAttribute('data-page') === name) {
+        b.classList.add('active');
       }
-    }
-    var taskInput = PromptGen.$('taskInput');
-    if (taskInput) {
-      taskInput.value = task;
-    }
-    PromptGen.currentLevel = card.getAttribute('data-level');
-    var cCards = document.querySelectorAll('.complexity-card');
-    for (var cc = 0; cc < cCards.length; cc++) {
-      if (cCards[cc].getAttribute('data-level') === PromptGen.currentLevel) {
-        cCards[cc].classList.add('selected');
-        cCards[cc].setAttribute('aria-checked', 'true');
-      } else {
-        cCards[cc].classList.remove('selected');
-        cCards[cc].setAttribute('aria-checked', 'false');
+    });
+    document.querySelectorAll('.mobile-nav-item').forEach(function(b) {
+      if (b.getAttribute('data-page') === name) {
+        b.classList.add('active');
       }
-    }
-    PromptGen.updatePlatformOptions(field);
-    var isEcommerce = (field === '电商AI绘画');
-    var ecomSec = PromptGen.$('ecommerceTagSection');
-    if (ecomSec) {
-      ecomSec.style.display = isEcommerce ? 'block' : 'none';
-    }
-    PromptGen.updateComplexityDisabled(isEcommerce);
-    PromptGen.showPage('home');
-    PromptGen.showToast('模板已加载', '✅');
-  };
-  
-  grid.onkeydown = function(e) {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
+    });
+
+    if (name === 'history') { historyPage = 1; renderHistory(); }
+    if (name === 'favorites') renderFavorites();
+    if (name === 'admin') renderAdmin();
+    if (name === 'templates') { updateTemplateLocks(); renderTemplates(); }
+  }
+
+  // ===================== 模板库 =====================
+  function renderTemplates() {
+    var grid = $('templateGrid');
+    var filtered = currentTemplateFilter === 'all' ? templateData.slice() : templateData.filter(function(t) {
+      return t.tags.indexOf(currentTemplateFilter) !== -1;
+    });
+
+    var pinned = filtered.filter(function(t) { return t.tags.indexOf('hot') !== -1; });
+    var rest = filtered.filter(function(t) { return t.tags.indexOf('hot') === -1; });
+    var sorted = pinned.concat(rest);
+    var locked = !db.unlocked.expert && !db.firstUse.expert;
+
+    var fragment = document.createDocumentFragment();
+    sorted.forEach(function(t) {
+      var card = document.createElement('div');
+      card.className = 'template-card' + (locked ? ' locked' : '') + (t.tags.indexOf('hot') !== -1 ? ' pinned' : '');
+      card.setAttribute('data-field', t.field);
+      card.setAttribute('data-task', encodeURIComponent(t.task));
+      card.setAttribute('data-level', t.level);
+      card.setAttribute('tabindex', '0');
+
+      var tagsHtml = t.tags.map(function(tag) { return '<span>#' + tag + '</span>'; }).join('');
+      var lockHtml = locked ? '<div class="template-lock-overlay"><div class="lock-icon">🔒</div><div>专家版解锁后可用</div></div>' : '';
+
+      // 安全构建：使用 textContent 设置预览文本
+      var previewSpan = document.createElement('span');
+      previewSpan.className = 'preview-icon';
+      previewSpan.textContent = '📷';
+
+      var previewDiv = document.createElement('div');
+      previewDiv.className = 'template-preview';
+      previewDiv.appendChild(previewSpan);
+      previewDiv.appendChild(document.createTextNode(' ' + (t.preview || '效果预览')));
+
+      card.innerHTML =
+        '<div class="template-name">' + t.name + '</div>' +
+        '<div class="template-field">' + t.field + '</div>' +
+        '<div class="template-desc">' + t.desc + '</div>' +
+        '<div class="template-effect">' + t.effect + '</div>' +
+        '<div class="template-stats">🔥 ' + t.uses + '人用过</div>' +
+        '<div class="template-tags">' + tagsHtml + '</div>' +
+        '<span class="template-level badge-expert">专家</span>' +
+        lockHtml;
+
+      // 替换预览部分
+      var oldPreview = card.querySelector('.template-preview');
+      if (oldPreview) oldPreview.replaceWith(previewDiv);
+
+      fragment.appendChild(card);
+    });
+
+    grid.innerHTML = '';
+    grid.appendChild(fragment);
+
+    grid.onclick = function(e) {
       var card = e.target.closest('.template-card');
-      if (card) card.click();
-    }
-  };
-};
+      if (!card) return;
+      if (card.classList.contains('locked')) {
+        pendingUnlockLevel = 'expert';
+        showUnlockModal('专家版');
+        return;
+      }
 
-// ---- 历史/收藏（添加分页）----
-PromptGen.renderHistory = function() {
-  var container = PromptGen.$('historyList');
-  var paginationContainer = PromptGen.$('historyPagination');
-  if (!container) return;
-  
-  if (PromptGen.db.history.length === 0) {
-    container.innerHTML = '<div class=\"empty-state\" style=\"min-height:160px;\"><div class=\"empty-icon\" style=\"width:44px;height:44px;font-size:22px;\">📜</div><div class=\"empty-title\" style=\"font-size:14px;\">暂无历史</div></div>';
-    if (paginationContainer) paginationContainer.style.display = 'none';
-    return;
-  }
-  
-  var totalPages = Math.ceil(PromptGen.db.history.length / PromptGen.CONFIG.HISTORY_PAGE_SIZE);
-  var start = (PromptGen.historyPage - 1) * PromptGen.CONFIG.HISTORY_PAGE_SIZE;
-  var end = Math.min(start + PromptGen.CONFIG.HISTORY_PAGE_SIZE, PromptGen.db.history.length);
-  var pageData = PromptGen.db.history.slice(start, end);
-  
-  var icons = { basic: '🌱', advanced: '🚀', expert: '👑' };
-  var htmlStr = '';
-  for (var i = 0; i < pageData.length; i++) {
-    var h = pageData[i];
-    var icon = icons[h.level] || '';
-    var levelName = h.level === 'basic' ? '基础' : (h.level === 'advanced' ? '进阶' : '专家');
-    var favorited = h.favorited ? '❤️' : '🤍';
-    htmlStr +=
-      '<div class=\"history-item\" data-id=\"' + h.id + '\" tabindex=\"0\">' +
-        '<div class=\"history-icon\" style=\"background:rgba(124,92,252,0.1);\">' + icon + '</div>' +
-        '<div class=\"history-info\">' +
-          '<div class=\"history-title\">' + h.field + ' - ' + h.task.substring(0, 26) + '...</div>' +
-          '<div class=\"history-meta\">' + levelName + ' · ' + h.time + '</div>' +
-        '</div>' +
-        '<div class=\"history-actions\">' +
-          '<button class=\"icon-btn\" data-action=\"copy\" data-id=\"' + h.id + '\" aria-label=\"复制\">📋</button>' +
-          '<button class=\"icon-btn\" data-action=\"favorite\" data-id=\"' + h.id + '\" aria-label=\"' + (h.favorited ? '取消收藏' : '收藏') + '\">' + favorited + '</button>' +
-        '</div>' +
-      '</div>';
-  }
-  container.innerHTML = htmlStr;
-  
-  // 渲染分页
-  if (totalPages > 1 && paginationContainer) {
-    var pagHtml = '';
-    if (PromptGen.historyPage > 1) {
-      pagHtml += '<button class=\"pagination-btn\" onclick=\"PromptGen.goHistoryPage(' + (PromptGen.historyPage - 1) + ')\">← 上一页</button>';
-    }
-    pagHtml += '<span class=\"pagination-info\">' + PromptGen.historyPage + ' / ' + totalPages + '</span>';
-    if (PromptGen.historyPage < totalPages) {
-      pagHtml += '<button class=\"pagination-btn\" onclick=\"PromptGen.goHistoryPage(' + (PromptGen.historyPage + 1) + ')\">下一页 →</button>';
-    }
-    paginationContainer.innerHTML = pagHtml;
-    paginationContainer.style.display = 'flex';
-  } else if (paginationContainer) {
-    paginationContainer.style.display = 'none';
-  }
-  
-  container.onclick = function(e) {
-    var btn = e.target.closest('[data-action]');
-    if (btn) {
-      e.stopPropagation();
-      var action = btn.getAttribute('data-action');
-      var id = parseInt(btn.getAttribute('data-id'));
-      if (action === 'copy') PromptGen.copyResult(id);
-      else if (action === 'favorite') PromptGen.toggleFavorite(id);
-      return;
-    }
-    var item = e.target.closest('.history-item');
-    if (item) {
-      PromptGen.loadHistory(parseInt(item.getAttribute('data-id')));
-    }
-  };
-  
-  container.onkeydown = function(e) {
-    if (e.key === 'Enter') {
-      var item = e.target.closest('.history-item');
-      if (item) PromptGen.loadHistory(parseInt(item.getAttribute('data-id')));
-    }
-  };
-};
+      var field = card.getAttribute('data-field');
+      var task = (function() {
+        try { return decodeURIComponent(card.getAttribute('data-task')); }
+        catch(_) { return card.getAttribute('data-task') || ''; }
+      })();
 
-PromptGen.goHistoryPage = function(page) {
-  PromptGen.historyPage = page;
-  PromptGen.renderHistory();
-};
-
-PromptGen.loadHistory = function(id) {
-  var result = null;
-  for (var i = 0; i < PromptGen.db.history.length; i++) {
-    if (PromptGen.db.history[i].id === id) {
-      result = PromptGen.db.history[i];
-      break;
-    }
-  }
-  if (!result) return;
-
-  var fCards = document.querySelectorAll('.field-card');
-  for (var j = 0; j < fCards.length; j++) {
-    if (fCards[j].getAttribute('data-field') === result.field) {
-      fCards[j].classList.add('active');
-      fCards[j].setAttribute('aria-checked', 'true');
-    } else {
-      fCards[j].classList.remove('active');
-      fCards[j].setAttribute('aria-checked', 'false');
-    }
-  }
-  var taskInput = PromptGen.$('taskInput');
-  if (taskInput) {
-    taskInput.value = result.task;
-  }
-  PromptGen.currentLevel = result.level;
-  var cCards = document.querySelectorAll('.complexity-card');
-  for (var k = 0; k < cCards.length; k++) {
-    if (cCards[k].getAttribute('data-level') === PromptGen.currentLevel) {
-      cCards[k].classList.add('selected');
-      cCards[k].setAttribute('aria-checked', 'true');
-    } else {
-      cCards[k].classList.remove('selected');
-      cCards[k].setAttribute('aria-checked', 'false');
-    }
-  }
-  PromptGen.updatePlatformOptions(result.field);
-  PromptGen.updateComplexityDisabled(result.field === '电商AI绘画');
-  PromptGen.showPage('home');
-  var emptyState = PromptGen.$('emptyState');
-  if (emptyState) {
-    emptyState.classList.add('hidden');
-  }
-  var container = PromptGen.$('resultsContainer');
-  if (container) {
-    container.innerHTML = '';
-  }
-  PromptGen.renderResult(result);
-};
-
-PromptGen.renderFavorites = function() {
-  var container = PromptGen.$('favoritesList');
-  if (!container) return;
-  if (PromptGen.db.favorites.length === 0) {
-    container.innerHTML = '<div class=\"empty-state\" style=\"min-height:160px;\"><div class=\"empty-icon\" style=\"width:44px;height:44px;font-size:22px;\">⭐</div><div class=\"empty-title\" style=\"font-size:14px;\">暂无收藏</div></div>';
-    return;
-  }
-  var icons = { basic: '🌱', advanced: '🚀', expert: '👑' };
-  var htmlStr = '';
-  for (var i = 0; i < PromptGen.db.favorites.length; i++) {
-    var f = PromptGen.db.favorites[i];
-    var icon = icons[f.level] || '';
-    var levelName = f.level === 'basic' ? '基础' : (f.level === 'advanced' ? '进阶' : '专家');
-    htmlStr +=
-      '<div class=\"history-item\" data-id=\"' + f.id + '\" tabindex=\"0\">' +
-        '<div class=\"history-icon\" style=\"background:rgba(232,97,168,0.1);\">' + icon + '</div>' +
-        '<div class=\"history-info\">' +
-          '<div class=\"history-title\">' + f.field + ' - ' + f.task.substring(0, 26) + '...</div>' +
-          '<div class=\"history-meta\">' + levelName + ' · ' + f.time + '</div>' +
-        '</div>' +
-        '<div class=\"history-actions\">' +
-          '<button class=\"icon-btn\" data-action=\"copy\" data-id=\"' + f.id + '\" aria-label=\"复制\">📋</button>' +
-          '<button class=\"icon-btn\" data-action=\"favorite\" data-id=\"' + f.id + '\" aria-label=\"取消收藏\">❤️</button>' +
-        '</div>' +
-      '</div>';
-  }
-  container.innerHTML = htmlStr;
-  
-  container.onclick = function(e) {
-    var btn = e.target.closest('[data-action]');
-    if (btn) {
-      e.stopPropagation();
-      var action = btn.getAttribute('data-action');
-      var id = parseInt(btn.getAttribute('data-id'));
-      if (action === 'copy') PromptGen.copyResult(id);
-      else if (action === 'favorite') PromptGen.toggleFavorite(id);
-      return;
-    }
-    var item = e.target.closest('.history-item');
-    if (item) {
-      PromptGen.loadHistory(parseInt(item.getAttribute('data-id')));
-    }
-  };
-};
-
-// ---- 管理面板 ----
-PromptGen.renderAdmin = function() {
-  var panel = PromptGen.$('adminPanel');
-  if (!panel) return;
-
-  if (!PromptGen.adminLoggedIn) {
-    panel.innerHTML =
-      '<div class=\"empty-state\" style=\"min-height:260px;\">' +
-        '<div class=\"empty-icon\" style=\"width:48px;height:48px;font-size:24px;\">🔒</div>' +
-        '<div class=\"empty-title\" style=\"font-size:15px;\">管理面板</div>' +
-        '<div class=\"empty-desc\" style=\"margin-top:10px;\">' +
-          '<input type=\"password\" id=\"adminPassword\" placeholder=\"管理密码\" style=\"padding:8px 14px;background:var(--bg-primary);border:1px solid var(--border-glass);border-radius:6px;color:var(--text-primary);width:200px;text-align:center;font-size:14px;\" aria-label=\"管理密码\">' +
-          '<br><br>' +
-          '<button class=\"generate-btn\" id=\"adminLoginBtn\" style=\"width:200px;padding:10px;font-size:14px;\">进入管理</button>' +
-        '</div>' +
-      '</div>';
-    var loginBtn = PromptGen.$('adminLoginBtn');
-    var pwdInput = PromptGen.$('adminPassword');
-    if (loginBtn && pwdInput) {
-      loginBtn.onclick = function() {
-        if (pwdInput.value === PromptGen.CONFIG.ADMIN_PASSWORD) {
-          PromptGen.adminLoggedIn = true;
-          PromptGen.renderAdmin();
-          PromptGen.showToast('已进入管理', '🔓');
-        } else {
-          PromptGen.showToast('密码错误', '❌');
-        }
-      };
-      pwdInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-          loginBtn.click();
-        }
+      document.querySelectorAll('.field-card').forEach(function(fc) {
+        fc.classList.toggle('active', fc.getAttribute('data-field') === field);
+        fc.setAttribute('aria-checked', fc.getAttribute('data-field') === field ? 'true' : 'false');
       });
+      $('taskInput').value = task;
+
+      currentLevel = card.getAttribute('data-level');
+      document.querySelectorAll('.complexity-card').forEach(function(cc) {
+        cc.classList.toggle('selected', cc.getAttribute('data-level') === currentLevel);
+        cc.setAttribute('aria-checked', cc.getAttribute('data-level') === currentLevel ? 'true' : 'false');
+      });
+
+      updatePlatformOptions(field);
+      var isEcom = field === '电商AI绘画';
+      $('ecommerceTagSection').style.display = isEcom ? 'block' : 'none';
+      updateComplexityDisabled(isEcom);
+      showPage('home');
+      showToast('模板已加载', '✅');
+    };
+  }
+
+  // ===================== 历史（分页） =====================
+  function renderHistory() {
+    var container = $('historyList');
+    var pagContainer = $('historyPagination');
+    if (db.history.length === 0) {
+      container.innerHTML = '<div class="empty-state" style="min-height:160px;"><div class="empty-icon" style="width:44px;height:44px;font-size:22px;">📜</div><div class="empty-title" style="font-size:14px;">暂无历史</div></div>';
+      if (pagContainer) pagContainer.style.display = 'none';
+      return;
     }
-    return;
-  }
 
-  var adv = PromptGen.db.passwords.advanced;
-  var exp = PromptGen.db.passwords.expert;
+    var totalPages = Math.ceil(db.history.length / CONFIG.HISTORY_PAGE_SIZE);
+    var start = (historyPage - 1) * CONFIG.HISTORY_PAGE_SIZE;
+    var end = Math.min(start + CONFIG.HISTORY_PAGE_SIZE, db.history.length);
+    var pageData = db.history.slice(start, end);
 
-  var search = PromptGen.passwordSearchQuery.toLowerCase().trim();
-  var advFiltered = [];
-  var expFiltered = [];
-
-  if (search) {
-    for (var a = 0; a < adv.length; a++) {
-      if (adv[a].code.toLowerCase().indexOf(search) !== -1) {
-        advFiltered.push(adv[a]);
-      }
-    }
-    for (var b = 0; b < exp.length; b++) {
-      if (exp[b].code.toLowerCase().indexOf(search) !== -1) {
-        expFiltered.push(exp[b]);
-      }
-    }
-  } else {
-    advFiltered = adv;
-    expFiltered = exp;
-  }
-
-  var advTotal = 0;
-  for (var c = 0; c < adv.length; c++) {
-    advTotal += adv[c].used;
-  }
-  var expTotal = 0;
-  for (var d = 0; d < exp.length; d++) {
-    expTotal += exp[d].used;
-  }
-  var advSold = 0;
-  for (var e = 0; e < adv.length; e++) {
-    if (adv[e].sold) advSold++;
-  }
-  var expSold = 0;
-  for (var f = 0; f < exp.length; f++) {
-    if (exp[f].sold) expSold++;
-  }
-
-  function pwdRows(arr, type) {
-    if (arr.length === 0) {
-      return '<tr><td colspan=\"4\" style=\"text-align:center;color:var(--text-muted);padding:20px 0;\">没有匹配的密码</td></tr>';
-    }
+    var icons = { basic: '🌱', advanced: '🚀', expert: '👑' };
     var html = '';
-    for (var m = 0; m < arr.length; m++) {
-      var p = arr[m];
-      var maxDisplay = p.max === 0 ? '∞' : p.max;
-      var soldText = p.sold ? '已售' : '可用';
-      var toggleText = p.sold ? '🔄 标记可用' : '✓ 标记已售';
+    pageData.forEach(function(h) {
+      var icon = icons[h.level] || '';
+      var levelName = { basic: '基础', advanced: '进阶', expert: '专家' }[h.level] || '';
+      var favorited = h.favorited ? '❤️' : '🤍';
       html +=
-        '<tr>' +
-          '<td><span class=\"code\">' + p.code + '</span></td>' +
+        '<div class="history-item" data-id="' + h.id + '" tabindex="0">' +
+          '<div class="history-icon" style="background:rgba(124,92,252,0.1);">' + icon + '</div>' +
+          '<div class="history-info">' +
+            '<div class="history-title">' + h.field + ' - ' + h.task.substring(0, 26) + '...</div>' +
+            '<div class="history-meta">' + levelName + ' · ' + h.time + '</div>' +
+          '</div>' +
+          '<div class="history-actions">' +
+            '<button class="icon-btn" onclick="PromptGen.copyResult(' + h.id + ')" aria-label="复制">📋</button>' +
+            '<button class="icon-btn" onclick="PromptGen.toggleFavorite(' + h.id + ')" aria-label="' + (h.favorited ? '取消收藏' : '收藏') + '">' + favorited + '</button>' +
+          '</div>' +
+        '</div>';
+    });
+    container.innerHTML = html;
+
+    if (totalPages > 1 && pagContainer) {
+      var pagHtml = '';
+      if (historyPage > 1) pagHtml += '<button class="pagination-btn" onclick="PromptGen.goHistoryPage(' + (historyPage - 1) + ')" aria-label="上一页">← 上一页</button>';
+      pagHtml += '<span class="pagination-info">' + historyPage + ' / ' + totalPages + '</span>';
+      if (historyPage < totalPages) pagHtml += '<button class="pagination-btn" onclick="PromptGen.goHistoryPage(' + (historyPage + 1) + ')" aria-label="下一页">下一页 →</button>';
+      pagContainer.innerHTML = pagHtml;
+      pagContainer.style.display = 'flex';
+    } else if (pagContainer) {
+      pagContainer.style.display = 'none';
+    }
+
+    container.onclick = function(e) {
+      var btn = e.target.closest('.icon-btn');
+      if (btn) return; // 独立点击事件已由onclick处理
+      var item = e.target.closest('.history-item');
+      if (item) loadHistory(parseInt(item.getAttribute('data-id')));
+    };
+  }
+
+  function goHistoryPage(page) {
+    historyPage = page;
+    renderHistory();
+  }
+
+  function loadHistory(id) {
+    var result = null;
+    for (var i = 0; i < db.history.length; i++) {
+      if (db.history[i].id === id) { result = db.history[i]; break; }
+    }
+    if (!result) return;
+
+    document.querySelectorAll('.field-card').forEach(function(fc) {
+      fc.classList.toggle('active', fc.getAttribute('data-field') === result.field);
+      fc.setAttribute('aria-checked', fc.getAttribute('data-field') === result.field ? 'true' : 'false');
+    });
+    $('taskInput').value = result.task;
+
+    currentLevel = result.level;
+    document.querySelectorAll('.complexity-card').forEach(function(cc) {
+      cc.classList.toggle('selected', cc.getAttribute('data-level') === currentLevel);
+      cc.setAttribute('aria-checked', cc.getAttribute('data-level') === currentLevel ? 'true' : 'false');
+    });
+
+    updatePlatformOptions(result.field);
+    updateComplexityDisabled(result.field === '电商AI绘画');
+    showPage('home');
+    $('emptyState').classList.add('hidden');
+    $('resultsContainer').innerHTML = '';
+    renderResult(result);
+  }
+
+  // ===================== 收藏 =====================
+  function renderFavorites() {
+    var container = $('favoritesList');
+    if (db.favorites.length === 0) {
+      container.innerHTML = '<div class="empty-state" style="min-height:160px;"><div class="empty-icon" style="width:44px;height:44px;font-size:22px;">⭐</div><div class="empty-title" style="font-size:14px;">暂无收藏</div></div>';
+      return;
+    }
+    var icons = { basic: '🌱', advanced: '🚀', expert: '👑' };
+    var html = '';
+    db.favorites.forEach(function(f) {
+      var icon = icons[f.level] || '';
+      var levelName = { basic: '基础', advanced: '进阶', expert: '专家' }[f.level] || '';
+      html +=
+        '<div class="history-item" data-id="' + f.id + '" tabindex="0">' +
+          '<div class="history-icon" style="background:rgba(232,97,168,0.1);">' + icon + '</div>' +
+          '<div class="history-info">' +
+            '<div class="history-title">' + f.field + ' - ' + f.task.substring(0, 26) + '...</div>' +
+            '<div class="history-meta">' + levelName + ' · ' + f.time + '</div>' +
+          '</div>' +
+          '<div class="history-actions">' +
+            '<button class="icon-btn" onclick="PromptGen.copyResult(' + f.id + ')" aria-label="复制">📋</button>' +
+            '<button class="icon-btn" onclick="PromptGen.toggleFavorite(' + f.id + ')" aria-label="取消收藏">❤️</button>' +
+          '</div>' +
+        '</div>';
+    });
+    container.innerHTML = html;
+
+    container.onclick = function(e) {
+      var btn = e.target.closest('.icon-btn');
+      if (btn) return;
+      var item = e.target.closest('.history-item');
+      if (item) loadHistory(parseInt(item.getAttribute('data-id')));
+    };
+  }
+
+  // ===================== 管理面板 =====================
+  function renderAdmin() {
+    var panel = $('adminPanel');
+    if (!adminLoggedIn) {
+      panel.innerHTML =
+        '<div class="empty-state" style="min-height:260px;">' +
+          '<div class="empty-icon" style="width:48px;height:48px;font-size:24px;">🔒</div>' +
+          '<div class="empty-title" style="font-size:15px;">管理面板</div>' +
+          '<div class="empty-desc" style="margin-top:10px;">' +
+            '<input type="password" id="adminPassword" placeholder="管理密码" style="padding:8px 14px;background:var(--bg-primary);border:1px solid var(--border-glass);border-radius:6px;color:var(--text-primary);width:200px;text-align:center;font-size:14px;" aria-label="管理密码">' +
+            '<br><br>' +
+            '<button class="generate-btn" id="adminLoginBtn" style="width:200px;padding:10px;font-size:14px;">进入管理</button>' +
+          '</div>' +
+        '</div>';
+      var loginBtn = $('adminLoginBtn');
+      var pwdInput = $('adminPassword');
+      if (loginBtn && pwdInput) {
+        loginBtn.onclick = function() {
+          if (pwdInput.value === CONFIG.ADMIN_PASSWORD) {
+            adminLoggedIn = true;
+            renderAdmin();
+            showToast('已进入管理', '🔓');
+          } else {
+            showToast('密码错误', '❌');
+          }
+        };
+        pwdInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') loginBtn.click();
+        });
+      }
+      return;
+    }
+
+    var adv = db.passwords.advanced;
+    var exp = db.passwords.expert;
+    var search = passwordSearchQuery.toLowerCase().trim();
+    var advFiltered = search ? adv.filter(function(p) { return p.code.toLowerCase().indexOf(search) !== -1; }) : adv;
+    var expFiltered = search ? exp.filter(function(p) { return p.code.toLowerCase().indexOf(search) !== -1; }) : exp;
+
+    var advTotal = adv.reduce(function(sum, p) { return sum + p.used; }, 0);
+    var expTotal = exp.reduce(function(sum, p) { return sum + p.used; }, 0);
+    var advSold = adv.filter(function(p) { return p.sold; }).length;
+    var expSold = exp.filter(function(p) { return p.sold; }).length;
+
+    function pwdRows(arr, type) {
+      if (arr.length === 0) return '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:20px 0;">没有匹配的密码</td></tr>';
+      return arr.map(function(p) {
+        var maxDisplay = p.max === 0 ? '∞' : p.max;
+        var soldText = p.sold ? '已售' : '可用';
+        var toggleText = p.sold ? '🔄 标记可用' : '✓ 标记已售';
+        return '<tr>' +
+          '<td><span class="code">' + p.code + '</span></td>' +
           '<td>' + p.used + '/' + maxDisplay + '</td>' +
           '<td>' + soldText + '</td>' +
           '<td>' +
-            '<button class=\"admin-action-btn\" onclick=\"PromptGen.copyPwd(\'' + p.code + '\')\">📋 复制</button>' +
-            '<button class=\"admin-action-btn\" onclick=\"PromptGen.openEditMax(\'' + type + '\',\'' + p.code + '\')\">✏️ 改次数</button>' +
-            '<button class=\"admin-action-btn\" onclick=\"PromptGen.toggleSold(\'' + type + '\',\'' + p.code + '\')\">' + toggleText + '</button>' +
+            '<button class="admin-action-btn" onclick="PromptGen.copyPwd(\'' + p.code + '\')">📋 复制</button>' +
+            '<button class="admin-action-btn" onclick="PromptGen.openEditMax(\'' + type + '\',\'' + p.code + '\')">✏️ 改次数</button>' +
+            '<button class="admin-action-btn" onclick="PromptGen.toggleSold(\'' + type + '\',\'' + p.code + '\')">' + toggleText + '</button>' +
           '</td>' +
         '</tr>';
+      }).join('');
     }
-    return html;
-  }
 
-  panel.innerHTML =
-    '<div class=\"admin-card\">' +
-      '<h3>📊 数据总览</h3>' +
-      '<div class=\"admin-stats\">' +
-        '<div class=\"admin-stat-box\"><div class=\"num\">' + PromptGen.db.totalGenerated + '</div><div class=\"lbl\">总生成数</div></div>' +
-        '<div class=\"admin-stat-box\"><div class=\"num\">' + PromptGen.db.todayBasicCount + '</div><div class=\"lbl\">今日基础版</div></div>' +
-        '<div class=\"admin-stat-box\"><div class=\"num\">' + advTotal + '</div><div class=\"lbl\">进阶版使用</div></div>' +
-        '<div class=\"admin-stat-box\"><div class=\"num\">' + expTotal + '</div><div class=\"lbl\">专家版使用</div></div>' +
-      '</div>' +
-    '</div>' +
-
-    '<div class=\"admin-card\">' +
-      '<h3>' +
-        '<span>🔐 进阶版密码池 (' + advSold + '/' + adv.length + ' 已售)</span>' +
-        '<span style=\"flex:1;\"></span>' +
-        '<span class=\"collapse-toggle\" onclick=\"PromptGen.toggleCollapse(\'advCollapse\')\">' +
-          '<span class=\"arrow\" id=\"advCollapseArrow\">▶</span> 添加密码' +
-        '</span>' +
-      '</h3>' +
-      '<div class=\"collapse-body\" id=\"advCollapse\">' +
-        '<div class=\"add-pwd-row\">' +
-          '<input type=\"text\" id=\"newAdvPwd\" placeholder=\"输入新密码\">' +
-          '<select id=\"newAdvMax\">' +
-            '<option value=\"30\">30次</option>' +
-            '<option value=\"50\">50次</option>' +
-            '<option value=\"100\" selected>100次</option>' +
-            '<option value=\"200\">200次</option>' +
-            '<option value=\"0\">♾️ 无限</option>' +
-          '</select>' +
-          '<button onclick=\"PromptGen.addPwd(\'advanced\')\">➕ 添加</button>' +
+    panel.innerHTML =
+      '<div class="admin-card">' +
+        '<h3>📊 数据总览</h3>' +
+        '<div class="admin-stats">' +
+          '<div class="admin-stat-box"><div class="num">' + db.totalGenerated + '</div><div class="lbl">总生成数</div></div>' +
+          '<div class="admin-stat-box"><div class="num">' + db.todayBasicCount + '</div><div class="lbl">今日基础版</div></div>' +
+          '<div class="admin-stat-box"><div class="num">' + advTotal + '</div><div class="lbl">进阶版使用</div></div>' +
+          '<div class="admin-stat-box"><div class="num">' + expTotal + '</div><div class="lbl">专家版使用</div></div>' +
         '</div>' +
       '</div>' +
-      '<div class=\"password-search-row\">' +
-        '<input type=\"text\" id=\"pwdSearchInput\" placeholder=\"🔍 搜索密码...\" value=\"' + PromptGen.passwordSearchQuery + '\" oninput=\"PromptGen.filterPasswords(this.value)\">' +
-        '<button class=\"admin-action-btn\" onclick=\"PromptGen.clearPwdSearch()\" style=\"padding:6px 14px;\">清空</button>' +
-      '</div>' +
-      '<div class=\"password-table-wrap\">' +
-        '<table class=\"password-table\">' +
-          '<thead><tr><th>密码</th><th>使用次数</th><th>状态</th><th>操作</th></tr></thead>' +
-          '<tbody>' + pwdRows(advFiltered, 'advanced') + '</tbody>' +
-        '</table>' +
-      '</div>' +
-    '</div>' +
-
-    '<div class=\"admin-card\">' +
-      '<h3>' +
-        '<span>🔐 专家版密码池 (' + expSold + '/' + exp.length + ' 已售)</span>' +
-        '<span style=\"flex:1;\"></span>' +
-        '<span class=\"collapse-toggle\" onclick=\"PromptGen.toggleCollapse(\'expCollapse\')\">' +
-          '<span class=\"arrow\" id=\"expCollapseArrow\">▶</span> 添加密码' +
-        '</span>' +
-      '</h3>' +
-      '<div class=\"collapse-body\" id=\"expCollapse\">' +
-        '<div class=\"add-pwd-row\">' +
-          '<input type=\"text\" id=\"newExpPwd\" placeholder=\"输入新密码\">' +
-          '<select id=\"newExpMax\">' +
-            '<option value=\"30\">30次</option>' +
-            '<option value=\"50\">50次</option>' +
-            '<option value=\"100\" selected>100次</option>' +
-            '<option value=\"200\">200次</option>' +
-            '<option value=\"0\">♾️ 无限</option>' +
-          '</select>' +
-          '<button onclick=\"PromptGen.addPwd(\'expert\')\">➕ 添加</button>' +
+      '<div class="admin-card">' +
+        '<h3><span>🔐 进阶版密码池 (' + advSold + '/' + adv.length + ' 已售)</span><span style="flex:1;"></span><span class="collapse-toggle" onclick="PromptGen.toggleCollapse(\'advCollapse\')"><span class="arrow" id="advCollapseArrow">▶</span> 添加密码</span></h3>' +
+        '<div class="collapse-body" id="advCollapse">' +
+          '<div class="add-pwd-row">' +
+            '<input type="text" id="newAdvPwd" placeholder="输入新密码" aria-label="新密码">' +
+            '<select id="newAdvMax" aria-label="使用次数上限">' +
+              '<option value="30">30次</option><option value="50">50次</option><option value="100" selected>100次</option><option value="200">200次</option><option value="0">♾️ 无限</option>' +
+            '</select>' +
+            '<button onclick="PromptGen.addPwd(\'advanced\')">➕ 添加</button>' +
+          '</div>' +
         '</div>' +
+        '<div class="password-search-row">' +
+          '<input type="text" id="pwdSearchInput" placeholder="🔍 搜索密码..." value="' + passwordSearchQuery + '" oninput="PromptGen.filterPasswords(this.value)" aria-label="搜索密码">' +
+          '<button class="admin-action-btn" onclick="PromptGen.clearPwdSearch()" style="padding:6px 14px;">清空</button>' +
+        '</div>' +
+        '<div class="password-table-wrap"><table class="password-table"><thead><tr><th>密码</th><th>使用次数</th><th>状态</th><th>操作</th></tr></thead><tbody>' + pwdRows(advFiltered, 'advanced') + '</tbody></table></div>' +
       '</div>' +
-      '<div class=\"password-table-wrap\">' +
-        '<table class=\"password-table\">' +
-          '<thead><tr><th>密码</th><th>使用次数</th><th>状态</th><th>操作</th></tr></thead>' +
-          '<tbody>' + pwdRows(expFiltered, 'expert') + '</tbody>' +
-        '</table>' +
+      '<div class="admin-card">' +
+        '<h3><span>🔐 专家版密码池 (' + expSold + '/' + exp.length + ' 已售)</span><span style="flex:1;"></span><span class="collapse-toggle" onclick="PromptGen.toggleCollapse(\'expCollapse\')"><span class="arrow" id="expCollapseArrow">▶</span> 添加密码</span></h3>' +
+        '<div class="collapse-body" id="expCollapse">' +
+          '<div class="add-pwd-row">' +
+            '<input type="text" id="newExpPwd" placeholder="输入新密码" aria-label="新密码">' +
+            '<select id="newExpMax" aria-label="使用次数上限">' +
+              '<option value="30">30次</option><option value="50">50次</option><option value="100" selected>100次</option><option value="200">200次</option><option value="0">♾️ 无限</option>' +
+            '</select>' +
+            '<button onclick="PromptGen.addPwd(\'expert\')">➕ 添加</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="password-table-wrap"><table class="password-table"><thead><tr><th>密码</th><th>使用次数</th><th>状态</th><th>操作</th></tr></thead><tbody>' + pwdRows(expFiltered, 'expert') + '</tbody></table></div>' +
       '</div>' +
-    '</div>' +
-
-    '<div class=\"admin-card\">' +
-      '<h3>⚠️ 危险操作</h3>' +
-      '<button class=\"admin-action-btn\" onclick=\"PromptGen.resetAllData()\" style=\"color:var(--accent-red);border-color:var(--accent-red);padding:4px 14px;\">🗑️ 重置所有数据</button>' +
-    '</div>';
-};
-
-PromptGen.clearPwdSearch = function() {
-  var input = PromptGen.$('pwdSearchInput');
-  if (input) input.value = '';
-  PromptGen.filterPasswords('');
-};
-
-PromptGen.resetAllData = function() {
-  if (confirm('确定重置所有数据？此操作不可恢复！')) {
-    localStorage.removeItem('promptGenDB');
-    location.reload();
+      '<div class="admin-card"><h3>⚠️ 危险操作</h3><button class="admin-action-btn" onclick="PromptGen.resetAllData()" style="color:var(--accent-red);border-color:var(--accent-red);padding:4px 14px;">🗑️ 重置所有数据</button></div>';
   }
-};
 
-PromptGen.filterPasswords = function(query) {
-  PromptGen.passwordSearchQuery = query;
-  PromptGen.renderAdmin();
-};
-
-PromptGen.toggleCollapse = function(id) {
-  var body = PromptGen.$(id);
-  var arrow = PromptGen.$(id + 'Arrow');
-  if (body) {
-    body.classList.toggle('open');
-    if (arrow) arrow.classList.toggle('open');
+  // ===================== 管理员辅助 =====================
+  function clearPwdSearch() {
+    $('pwdSearchInput').value = '';
+    filterPasswords('');
   }
-};
-
-PromptGen.copyPwd = function(code) {
-  PromptGen.copyToClipboard(code);
-};
-
-PromptGen.toggleSold = function(type, code) {
-  var pool = PromptGen.db.passwords[type];
-  var p = null;
-  for (var i = 0; i < pool.length; i++) {
-    if (pool[i].code === code) {
-      p = pool[i];
-      break;
+  function filterPasswords(query) { passwordSearchQuery = query; renderAdmin(); }
+  function toggleCollapse(id) {
+    var body = $(id);
+    var arrow = $(id + 'Arrow');
+    if (body) { body.classList.toggle('open'); if (arrow) arrow.classList.toggle('open'); }
+  }
+  function copyPwd(code) { copyToClipboard(code); }
+  function toggleSold(type, code) {
+    var pool = db.passwords[type];
+    var p = pool.find(function(item) { return item.code === code; });
+    if (p) { p.sold = !p.sold; saveDB(); renderAdmin(); showToast(p.sold ? '已标记为已售' : '已标记为可用', '✅'); }
+  }
+  function addPwd(type) {
+    var inputId = type === 'advanced' ? 'newAdvPwd' : 'newExpPwd';
+    var maxId = type === 'advanced' ? 'newAdvMax' : 'newExpMax';
+    var input = $(inputId);
+    var code = input.value.trim();
+    if (!code) { showToast('请输入密码', '⚠️'); return; }
+    var maxVal = parseInt($(maxId).value, 10) || 100;
+    db.passwords[type].push({ code: code, used: 0, max: maxVal, sold: false });
+    saveDB();
+    input.value = '';
+    renderAdmin();
+    showToast('密码添加成功', '✅');
+  }
+  function openEditMax(type, code) {
+    editMaxTarget = { type: type, code: code };
+    var p = db.passwords[type].find(function(item) { return item.code === code; });
+    if (!p) return;
+    $('editMaxCode').textContent = code;
+    $('editMaxCurrent').textContent = p.max === 0 ? '无限' : p.max;
+    $('editMaxInput').value = p.max === 0 ? '' : p.max;
+    openModal('editMaxModal');
+  }
+  function setEditMax(val) { $('editMaxInput').value = val; }
+  function confirmEditMax() {
+    if (!editMaxTarget) return;
+    var val = parseInt($('editMaxInput').value, 10);
+    if (isNaN(val) || val < 0) { showToast('请输入有效的次数（0表示无限）', '⚠️'); return; }
+    var p = db.passwords[editMaxTarget.type].find(function(item) { return item.code === editMaxTarget.code; });
+    if (!p) { showToast('密码不存在', '❌'); return; }
+    p.max = val;
+    saveDB();
+    closeEditMax();
+    renderAdmin();
+    showToast('次数上限已更新为 ' + (val === 0 ? '无限' : val + '次'), '✅');
+  }
+  function closeEditMax() { closeModal('editMaxModal'); editMaxTarget = null; }
+  function resetAllData() {
+    if (confirm('确定重置所有数据？此操作不可恢复！')) {
+      localStorage.removeItem('promptGenDB');
+      location.reload();
     }
   }
-  if (p) {
-    p.sold = !p.sold;
-    PromptGen.saveDB();
-    PromptGen.renderAdmin();
-    PromptGen.showToast(p.sold ? '已标记为已售' : '已标记为可用', '✅');
-  }
-};
 
-PromptGen.addPwd = function(type) {
-  var inputId = type === 'advanced' ? 'newAdvPwd' : 'newExpPwd';
-  var maxId = type === 'advanced' ? 'newAdvMax' : 'newExpMax';
-  var input = PromptGen.$(inputId);
-  var maxSel = PromptGen.$(maxId);
-  if (!input) return;
-  var code = input.value.trim();
-  if (!code) {
-    PromptGen.showToast('请输入密码', '⚠️');
-    return;
-  }
-  var maxVal = maxSel ? parseInt(maxSel.value, 10) : 100;
-  PromptGen.db.passwords[type].push({ code: code, used: 0, max: maxVal, sold: false });
-  PromptGen.saveDB();
-  input.value = '';
-  PromptGen.renderAdmin();
-  PromptGen.showToast('密码添加成功', '✅');
-};
-
-PromptGen.openEditMax = function(type, code) {
-  PromptGen.editMaxTarget = { type: type, code: code };
-  var pool = PromptGen.db.passwords[type];
-  var p = null;
-  for (var i = 0; i < pool.length; i++) {
-    if (pool[i].code === code) {
-      p = pool[i];
-      break;
-    }
-  }
-  if (!p) return;
-  var codeEl = PromptGen.$('editMaxCode');
-  var currentEl = PromptGen.$('editMaxCurrent');
-  var inputEl = PromptGen.$('editMaxInput');
-  if (codeEl) codeEl.textContent = code;
-  if (currentEl) currentEl.textContent = p.max === 0 ? '无限' : p.max;
-  if (inputEl) inputEl.value = p.max === 0 ? '' : p.max;
-  PromptGen.openModal('editMaxModal');
-};
-
-PromptGen.setEditMax = function(val) {
-  var input = PromptGen.$('editMaxInput');
-  if (input) input.value = val;
-};
-
-PromptGen.confirmEditMax = function() {
-  if (!PromptGen.editMaxTarget) return;
-  var input = PromptGen.$('editMaxInput');
-  if (!input) return;
-  var val = parseInt(input.value, 10);
-  if (isNaN(val) || val < 0) {
-    PromptGen.showToast('请输入有效的次数（0表示无限）', '⚠️');
-    return;
-  }
-  var pool = PromptGen.db.passwords[PromptGen.editMaxTarget.type];
-  var p = null;
-  for (var i = 0; i < pool.length; i++) {
-    if (pool[i].code === PromptGen.editMaxTarget.code) {
-      p = pool[i];
-      break;
-    }
-  }
-  if (!p) {
-    PromptGen.showToast('密码不存在', '❌');
-    return;
-  }
-  p.max = val;
-  PromptGen.saveDB();
-  PromptGen.closeEditMax();
-  PromptGen.renderAdmin();
-  PromptGen.showToast('次数上限已更新为 ' + (val === 0 ? '无限' : val + '次'), '✅');
-};
-
-PromptGen.closeEditMax = function() {
-  PromptGen.closeModal('editMaxModal');
-  PromptGen.editMaxTarget = null;
-};
-
-// ---- 平台选项更新 ----
-PromptGen.updatePlatformOptions = function(field) {
-  var sel = PromptGen.$('platformSelect');
-  if (!sel) return;
-  var isEcommerce = (field === '电商AI绘画');
-
-  var html = '';
-  if (isEcommerce) {
-    html = '<optgroup label=\"🎨 绘画专用\">';
-    for (var i = 0; i < PromptGen.PLATFORM_DATA.image.length; i++) {
-      var p = PromptGen.PLATFORM_DATA.image[i];
-      html += '<option value=\"' + p.value + '\">' + p.icon + ' ' + p.label + '</option>';
-    }
-    html += '</optgroup>';
-  } else {
-    var cn = ['文心一言', '通义千问', 'Kimi', '豆包', '讯飞星火', '智谱清言', 'DeepSeek', '百小应'];
-    var cnList = [];
-    var intlList = [];
-    for (var j = 0; j < PromptGen.PLATFORM_DATA.text.length; j++) {
-      var p2 = PromptGen.PLATFORM_DATA.text[j];
-      var isCn = false;
-      for (var k = 0; k < cn.length; k++) {
-        if (cn[k] === p2.value) { isCn = true; break; }
-      }
-      if (isCn) {
-        cnList.push(p2);
-      } else {
-        intlList.push(p2);
-      }
-    }
-    if (cnList.length > 0) {
-      html += '<optgroup label=\"🇨🇳 国内主流\">';
-      for (var l = 0; l < cnList.length; l++) {
-        var p3 = cnList[l];
-        html += '<option value=\"' + p3.value + '\">' + p3.icon + ' ' + p3.label + '</option>';
-      }
+  // ===================== 平台选项更新 =====================
+  function updatePlatformOptions(field) {
+    var sel = $('platformSelect');
+    var isEcom = field === '电商AI绘画';
+    var html = '';
+    if (isEcom) {
+      html = '<optgroup label="🎨 绘画专用">';
+      PLATFORM_DATA.image.forEach(function(p) { html += '<option value="' + p.value + '">' + p.icon + ' ' + p.label + '</option>'; });
       html += '</optgroup>';
-    }
-    if (intlList.length > 0) {
-      html += '<optgroup label=\"🌐 国际主流\">';
-      for (var m = 0; m < intlList.length; m++) {
-        var p4 = intlList[m];
-        html += '<option value=\"' + p4.value + '\">' + p4.icon + ' ' + p4.label + '</option>';
-      }
-      html += '</optgroup>';
-    }
-  }
-  sel.innerHTML = html;
-
-  var key = 'last_platform_' + field;
-  try {
-    var lastVal = localStorage.getItem(key);
-    if (lastVal) {
-      var exists = false;
-      var opts = sel.options;
-      for (var n = 0; n < opts.length; n++) {
-        if (opts[n].value === lastVal) {
-          exists = true;
-          break;
-        }
-      }
-      if (exists) {
-        sel.value = lastVal;
-        return;
-      }
-    }
-  } catch (e) {
-    // 忽略
-  }
-  sel.selectedIndex = 0;
-};
-
-// ---- 复杂度禁用状态更新 ----
-PromptGen.updateComplexityDisabled = function(isEcommerce) {
-  var cards = document.querySelectorAll('.complexity-card');
-  for (var i = 0; i < cards.length; i++) {
-    var card = cards[i];
-    var level = card.getAttribute('data-level');
-    if (isEcommerce && level !== 'expert') {
-      card.classList.add('disabled');
-      card.setAttribute('aria-disabled', 'true');
-      card.setAttribute('tabindex', '-1');
-      // 添加提示
-      var info = card.querySelector('.complexity-info');
-      if (info && !info.querySelector('.ecommerce-hint')) {
-        var hint = document.createElement('div');
-        hint.className = 'ecommerce-hint';
-        hint.style.cssText = 'font-size:11px;color:var(--accent-amber);margin-top:4px;';
-        hint.textContent = '⚠️ 电商绘画场景仅支持专家版';
-        info.appendChild(hint);
-      }
     } else {
-      card.classList.remove('disabled');
-      card.removeAttribute('aria-disabled');
-      card.setAttribute('tabindex', '0');
-      var hint = card.querySelector('.ecommerce-hint');
-      if (hint) hint.remove();
+      var cn = PLATFORM_DATA.text.filter(function(p) { return ['文心一言', '通义千问', 'Kimi', '豆包', '讯飞星火', '智谱清言', 'DeepSeek', '百小应'].indexOf(p.value) !== -1; });
+      var intl = PLATFORM_DATA.text.filter(function(p) { return ['文心一言', '通义千问', 'Kimi', '豆包', '讯飞星火', '智谱清言', 'DeepSeek', '百小应'].indexOf(p.value) === -1; });
+      if (cn.length) { html += '<optgroup label="🇨🇳 国内主流">'; cn.forEach(function(p) { html += '<option value="' + p.value + '">' + p.icon + ' ' + p.label + '</option>'; }); html += '</optgroup>'; }
+      if (intl.length) { html += '<optgroup label="🌐 国际主流">'; intl.forEach(function(p) { html += '<option value="' + p.value + '">' + p.icon + ' ' + p.label + '</option>'; }); html += '</optgroup>'; }
     }
-  }
-};
+    sel.innerHTML = html;
 
-// ---- 弹窗事件绑定 ----
-PromptGen.bindModalEvents = function() {
-  var unlockCancel = PromptGen.$('unlockCancel');
-  if (unlockCancel) {
-    unlockCancel.addEventListener('click', function() {
-      PromptGen.closeModal('unlockModal');
-      PromptGen.pendingUnlockLevel = null;
-    });
-  }
-  var unlockModal = PromptGen.$('unlockModal');
-  if (unlockModal) {
-    unlockModal.addEventListener('click', function(e) {
-      if (e.target === this) {
-        PromptGen.closeModal('unlockModal');
-        PromptGen.pendingUnlockLevel = null;
-      }
-    });
-  }
-  var unlockConfirm = PromptGen.$('unlockConfirm');
-  if (unlockConfirm) {
-    unlockConfirm.addEventListener('click', PromptGen.doUnlock);
-  }
-  var unlockInput = PromptGen.$('unlockInput');
-  if (unlockInput) {
-    unlockInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        PromptGen.doUnlock();
-      }
-    });
-  }
-
-  var editMaxModal = PromptGen.$('editMaxModal');
-  if (editMaxModal) {
-    editMaxModal.addEventListener('click', function(e) {
-      if (e.target === this) {
-        PromptGen.closeEditMax();
-      }
-    });
-  }
-  var editMaxInput = PromptGen.$('editMaxInput');
-  if (editMaxInput) {
-    editMaxInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        PromptGen.confirmEditMax();
-      }
-    });
-  }
-
-  var copyClose = PromptGen.$('copyClose');
-  if (copyClose) {
-    copyClose.addEventListener('click', function() {
-      PromptGen.closeModal('copyModal');
-    });
-  }
-  var copyModal = PromptGen.$('copyModal');
-  if (copyModal) {
-    copyModal.addEventListener('click', function(e) {
-      if (e.target === this) {
-        PromptGen.closeModal('copyModal');
-      }
-    });
-  }
-
-  var guideClose = PromptGen.$('guideCloseBtn');
-  if (guideClose) {
-    guideClose.addEventListener('click', function() {
-      PromptGen.closeModal('guideModal');
-    });
-  }
-  var guideModal = PromptGen.$('guideModal');
-  if (guideModal) {
-    guideModal.addEventListener('click', function(e) {
-      if (e.target === this) {
-        PromptGen.closeModal('guideModal');
-      }
-    });
-  }
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      var openModalEl = document.querySelector('.modal-overlay.active');
-      if (openModalEl) {
-        var id = openModalEl.id;
-        if (id === 'unlockModal') {
-          PromptGen.closeModal('unlockModal');
-          PromptGen.pendingUnlockLevel = null;
-        } else if (id === 'editMaxModal') {
-          PromptGen.closeEditMax();
-        } else if (id === 'copyModal' || id === 'guideModal') {
-          PromptGen.closeModal(id);
-        } else {
-          PromptGen.closeModal(id);
+    var key = 'last_platform_' + field;
+    try {
+      var lastVal = localStorage.getItem(key);
+      if (lastVal) {
+        var opts = sel.options;
+        for (var i = 0; i < opts.length; i++) {
+          if (opts[i].value === lastVal) { sel.value = lastVal; return; }
         }
       }
-    }
-  });
-};
+    } catch(e) {}
+    sel.selectedIndex = 0;
+  }
 
-// ---- 键盘快捷键支持 ----
-PromptGen.bindKeyboardShortcuts = function() {
-  document.addEventListener('keydown', function(e) {
-    // Ctrl/Cmd + Enter 生成
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-      e.preventDefault();
-      if (!PromptGen.isGenerating) PromptGen.doGenerate();
-      return;
-    }
-    // Ctrl/Cmd + K 清空
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-      e.preventDefault();
-      var taskInput = PromptGen.$('taskInput');
-      if (taskInput) {
-        taskInput.value = '';
-        taskInput.focus();
-        PromptGen.showToast('已清空', '🗑️');
+  // ===================== 复杂度禁用 =====================
+  function updateComplexityDisabled(isEcom) {
+    document.querySelectorAll('.complexity-card').forEach(function(card) {
+      var level = card.getAttribute('data-level');
+      if (isEcom && level !== 'expert') {
+        card.classList.add('disabled');
+        card.setAttribute('aria-disabled', 'true');
+        card.setAttribute('tabindex', '-1');
+        if (!card.querySelector('.ecommerce-hint')) {
+          var hint = document.createElement('div');
+          hint.className = 'ecommerce-hint';
+          hint.style.cssText = 'font-size:11px;color:var(--accent-amber);margin-top:4px;';
+          hint.textContent = '⚠️ 电商绘画场景仅支持专家版';
+          card.querySelector('.complexity-info').appendChild(hint);
+        }
+      } else {
+        card.classList.remove('disabled');
+        card.removeAttribute('aria-disabled');
+        card.setAttribute('tabindex', '0');
+        var hint = card.querySelector('.ecommerce-hint');
+        if (hint) hint.remove();
       }
-      return;
+    });
+  }
+
+  // ===================== 初始化 =====================
+  function initApp() {
+    db = getDB();
+
+    // ---- 事件绑定 ----
+    function bindModal() {
+      $('unlockCancel').addEventListener('click', function() { closeModal('unlockModal'); pendingUnlockLevel = null; });
+      $('unlockModal').addEventListener('click', function(e) { if (e.target === this) { closeModal('unlockModal'); pendingUnlockLevel = null; } });
+      $('unlockConfirm').addEventListener('click', doUnlock);
+      $('unlockInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') doUnlock(); });
+      $('editMaxModal').addEventListener('click', function(e) { if (e.target === this) closeEditMax(); });
+      $('editMaxInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') confirmEditMax(); });
+      $('copyClose').addEventListener('click', function() { closeModal('copyModal'); });
+      $('copyModal').addEventListener('click', function(e) { if (e.target === this) closeModal('copyModal'); });
+      $('guideCloseBtn').addEventListener('click', function() { closeModal('guideModal'); });
+      $('guideModal').addEventListener('click', function(e) { if (e.target === this) closeModal('guideModal'); });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          var openM = document.querySelector('.modal-overlay.active');
+          if (openM) {
+            var id = openM.id;
+            if (id === 'unlockModal') { closeModal('unlockModal'); pendingUnlockLevel = null; }
+            else if (id === 'editMaxModal') closeEditMax();
+            else closeModal(id);
+          }
+        }
+      });
     }
-    // Ctrl/Cmd + O 优化（专家版）
-    if ((e.ctrlKey || e.metaKey) && e.key === 'o') {
-      e.preventDefault();
-      if (!PromptGen.isGenerating) PromptGen.doOptimize();
-      return;
-    }
-    // Ctrl/Cmd + B 批量生成（专家版）
-    if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
-      e.preventDefault();
-      if (!PromptGen.isGenerating) PromptGen.doBatchGenerate();
-      return;
-    }
-  });
-  
-  // 显示快捷键提示
-  var hint = PromptGen.$('keyboardHint');
-  if (hint) {
-    setTimeout(function() {
-      hint.classList.add('visible');
+
+    function bindKeyboard() {
+      document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); if (!isGenerating) doGenerate(); }
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); $('taskInput').value = ''; $('taskInput').focus(); showToast('已清空', '🗑️'); }
+        if ((e.ctrlKey || e.metaKey) && e.key === 'o') { e.preventDefault(); if (!isGenerating) doOptimize(); }
+        if ((e.ctrlKey || e.metaKey) && e.key === 'b') { e.preventDefault(); if (!isGenerating) doBatchGenerate(); }
+      });
       setTimeout(function() {
-        hint.classList.remove('visible');
-      }, 8000); // 延长到8秒
-    }, 2000);
-  }
-  
-  // 关闭快捷键提示
-  var hintClose = PromptGen.$('keyboardHintClose');
-  if (hintClose) {
-    hintClose.addEventListener('click', function() {
-      var hint = PromptGen.$('keyboardHint');
-      if (hint) hint.classList.remove('visible');
-    });
-  }
-};
-
-// ---- 离线检测 ----
-PromptGen.bindOfflineDetection = function() {
-  var indicator = PromptGen.$('offlineIndicator');
-  if (!indicator) return;
-  
-  function updateOnlineStatus() {
-    if (navigator.onLine) {
-      indicator.classList.remove('show');
-    } else {
-      indicator.classList.add('show');
+        var hint = $('keyboardHint');
+        if (hint) {
+          hint.classList.add('visible');
+          setTimeout(function() { hint.classList.remove('visible'); }, 8000);
+        }
+      }, 2000);
+      $('keyboardHintClose').addEventListener('click', function() { $('keyboardHint').classList.remove('visible'); });
     }
-  }
-  
-  window.addEventListener('online', function() {
-    updateOnlineStatus();
-    PromptGen.showToast('已恢复网络连接', '🌐');
-  });
-  
-  window.addEventListener('offline', function() {
-    updateOnlineStatus();
-    PromptGen.showToast('已进入离线模式，数据将保存在本地', '✈️');
-  });
-  
-  // 初始状态
-  updateOnlineStatus();
-};
 
-// ---- 主初始化 ----
-PromptGen.initApp = function() {
-  console.log('🔵 初始化开始...');
+    function bindOffline() {
+      var indicator = $('offlineIndicator');
+      function update() {
+        indicator.classList.toggle('show', !navigator.onLine);
+      }
+      window.addEventListener('online', function() { update(); showToast('已恢复网络连接', '🌐'); });
+      window.addEventListener('offline', function() { update(); showToast('已进入离线模式，数据将保存在本地', '✈️'); });
+      update();
+    }
 
-  // 初始化数据库
-  PromptGen.db = PromptGen.getDB();
+    // 主按钮
+    $('generateBtn').addEventListener('click', doGenerate);
+    $('optimizeBtn').addEventListener('click', doOptimize);
+    $('batchBtn').addEventListener('click', doBatchGenerate);
 
-  PromptGen.bindModalEvents();
-  PromptGen.bindKeyboardShortcuts();
-  PromptGen.bindOfflineDetection();
-
-  var genBtn = PromptGen.$('generateBtn');
-  if (genBtn) {
-    genBtn.addEventListener('click', PromptGen.doGenerate);
-    console.log('✅ 生成按钮绑定成功');
-  }
-
-  var optBtn = PromptGen.$('optimizeBtn');
-  if (optBtn) {
-    optBtn.addEventListener('click', PromptGen.doOptimize);
-  }
-
-  var batBtn = PromptGen.$('batchBtn');
-  if (batBtn) {
-    batBtn.addEventListener('click', PromptGen.doBatchGenerate);
-  }
-
-  var mobileBtn = PromptGen.$('mobileMenuBtn');
-  if (mobileBtn) {
-    mobileBtn.addEventListener('click', function(e) {
+    // 移动端
+    $('mobileMenuBtn').addEventListener('click', function(e) {
       e.stopPropagation();
-      var panel = PromptGen.$('mobileNavPanel');
-      var overlay = PromptGen.$('mobileNavOverlay');
-      if (panel && overlay) {
-        var isOpen = panel.classList.toggle('open');
-        overlay.classList.toggle('active');
-        this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      var panel = $('mobileNavPanel');
+      var overlay = $('mobileNavOverlay');
+      var open = panel.classList.toggle('open');
+      overlay.classList.toggle('active');
+      this.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    $('mobileNavClose').addEventListener('click', function() {
+      $('mobileNavPanel').classList.remove('open');
+      $('mobileNavOverlay').classList.remove('active');
+      $('mobileMenuBtn').setAttribute('aria-expanded', 'false');
+    });
+    $('mobileNavOverlay').addEventListener('click', function() {
+      $('mobileNavPanel').classList.remove('open');
+      $('mobileNavOverlay').classList.remove('active');
+      $('mobileMenuBtn').setAttribute('aria-expanded', 'false');
+    });
+    $('overlay').addEventListener('click', function() {
+      $('configPanel').classList.remove('open');
+      this.classList.remove('active');
+    });
+    $('mobileConfigTrigger').addEventListener('click', function() {
+      $('configPanel').classList.add('open');
+      $('overlay').classList.add('active');
+    });
+    $('resultPanel').addEventListener('click', function(e) {
+      if (window.innerWidth <= 768 && $('configPanel').classList.contains('open') && !e.target.closest('.config-panel')) {
+        $('configPanel').classList.remove('open');
+        $('overlay').classList.remove('active');
       }
     });
-  }
 
-  var mobileNavClose = PromptGen.$('mobileNavClose');
-  if (mobileNavClose) {
-    mobileNavClose.addEventListener('click', function() {
-      var panel = PromptGen.$('mobileNavPanel');
-      var overlay = PromptGen.$('mobileNavOverlay');
-      var menuBtn = PromptGen.$('mobileMenuBtn');
-      if (panel) panel.classList.remove('open');
-      if (overlay) overlay.classList.remove('active');
-      if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
-    });
-  }
-
-  var overlayEl = PromptGen.$('overlay');
-  if (overlayEl) {
-    overlayEl.addEventListener('click', function() {
-      var panel = PromptGen.$('configPanel');
-      if (panel) panel.classList.remove('open');
-      if (overlayEl) overlayEl.classList.remove('active');
-    });
-  }
-
-  // 修复：移动端配置面板触发按钮
-  var mobileConfigTrigger = PromptGen.$('mobileConfigTrigger');
-  if (mobileConfigTrigger) {
-    mobileConfigTrigger.addEventListener('click', function() {
-      var panel = PromptGen.$('configPanel');
-      var overlay = PromptGen.$('overlay');
-      if (panel) {
-        panel.classList.add('open');
-      }
-      if (overlay) {
-        overlay.classList.add('active');
-      }
-    });
-  }
-
-  var resultPanel = PromptGen.$('resultPanel');
-  if (resultPanel) {
-    resultPanel.addEventListener('click', function(e) {
-      if (window.innerWidth <= 768) {
-        var panel = PromptGen.$('configPanel');
-        var overlay = PromptGen.$('overlay');
-        if (panel && panel.classList.contains('open')) {
-          if (!e.target.closest('.config-panel')) {
-            panel.classList.remove('open');
-            if (overlay) overlay.classList.remove('active');
-          }
-        }
-      }
-    });
-  }
-
-  var mobileNavOverlay = PromptGen.$('mobileNavOverlay');
-  if (mobileNavOverlay) {
-    mobileNavOverlay.addEventListener('click', function() {
-      var panel = PromptGen.$('mobileNavPanel');
-      var menuBtn = PromptGen.$('mobileMenuBtn');
-      if (panel) panel.classList.remove('open');
-      if (mobileNavOverlay) mobileNavOverlay.classList.remove('active');
-      if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
-    });
-  }
-
-  var navBtns = document.querySelectorAll('.nav-btn');
-  for (var i = 0; i < navBtns.length; i++) {
-    (function(btn) {
+    // 导航
+    document.querySelectorAll('.nav-btn, .mobile-nav-item').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        PromptGen.showPage(this.getAttribute('data-page'));
+        showPage(this.getAttribute('data-page'));
         if (window.innerWidth <= 768) {
-          var panel = PromptGen.$('configPanel');
-          var ov = PromptGen.$('overlay');
-          if (panel) panel.classList.remove('open');
-          if (ov) ov.classList.remove('active');
-          var mPanel = PromptGen.$('mobileNavPanel');
-          var mOverlay = PromptGen.$('mobileNavOverlay');
-          var menuBtn = PromptGen.$('mobileMenuBtn');
-          if (mPanel) mPanel.classList.remove('open');
-          if (mOverlay) mOverlay.classList.remove('active');
-          if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+          $('configPanel').classList.remove('open');
+          $('overlay').classList.remove('active');
+          $('mobileNavPanel').classList.remove('open');
+          $('mobileNavOverlay').classList.remove('active');
+          $('mobileMenuBtn').setAttribute('aria-expanded', 'false');
         }
       });
-    })(navBtns[i]);
-  }
-
-  var mobileNavItems = document.querySelectorAll('.mobile-nav-item');
-  for (var j = 0; j < mobileNavItems.length; j++) {
-    (function(item) {
-      item.addEventListener('click', function() {
-        PromptGen.showPage(this.getAttribute('data-page'));
-        var panel = PromptGen.$('mobileNavPanel');
-        var overlay = PromptGen.$('mobileNavOverlay');
-        var menuBtn = PromptGen.$('mobileMenuBtn');
-        if (panel) panel.classList.remove('open');
-        if (overlay) overlay.classList.remove('active');
-        if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
-      });
-    })(mobileNavItems[j]);
-  }
-
-  // 领域卡片
-  var fieldCards = document.querySelectorAll('.field-card');
-  for (var k = 0; k < fieldCards.length; k++) {
-    (function(card) {
-      function selectField() {
-        var allCards = document.querySelectorAll('.field-card');
-        for (var c = 0; c < allCards.length; c++) {
-          allCards[c].classList.remove('active');
-          allCards[c].setAttribute('aria-checked', 'false');
-        }
-        card.classList.add('active');
-        card.setAttribute('aria-checked', 'true');
-        var field = card.getAttribute('data-field');
-        var isEcommerce = (field === '电商AI绘画');
-        PromptGen.updatePlatformOptions(field);
-        var ecomSec = PromptGen.$('ecommerceTagSection');
-        if (ecomSec) {
-          ecomSec.style.display = isEcommerce ? 'block' : 'none';
-        }
-        // 修复：更新复杂度禁用状态
-        PromptGen.updateComplexityDisabled(isEcommerce);
-        if (isEcommerce) {
-          PromptGen.currentLevel = 'expert';
-          var cCards = document.querySelectorAll('.complexity-card');
-          for (var cc = 0; cc < cCards.length; cc++) {
-            if (cCards[cc].getAttribute('data-level') === 'expert') {
-              cCards[cc].classList.add('selected');
-              cCards[cc].setAttribute('aria-checked', 'true');
-            } else {
-              cCards[cc].classList.remove('selected');
-              cCards[cc].setAttribute('aria-checked', 'false');
-            }
-          }
-        }
-      }
-      card.addEventListener('click', selectField);
-      card.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          selectField();
-        }
-      });
-    })(fieldCards[k]);
-  }
-
-  var platSel = PromptGen.$('platformSelect');
-  if (platSel) {
-    platSel.addEventListener('change', function() {
-      var field = PromptGen.getCurrentField();
-      var key = 'last_platform_' + field;
-      try {
-        localStorage.setItem(key, this.value);
-      } catch (e) {
-        // 忽略
-      }
     });
-  }
 
-  // 复杂度卡片
-  var complexityCards = document.querySelectorAll('.complexity-card');
-  for (var d = 0; d < complexityCards.length; d++) {
-    (function(card) {
-      function selectComplexity() {
-        // 修复：如果卡片被禁用，不响应点击
-        if (card.classList.contains('disabled')) {
-          PromptGen.showToast('电商绘画场景仅支持专家版', '⚠️');
-          return;
-        }
-        var allCards = document.querySelectorAll('.complexity-card');
-        for (var c = 0; c < allCards.length; c++) {
-          allCards[c].classList.remove('selected');
-          allCards[c].setAttribute('aria-checked', 'false');
-        }
-        card.classList.add('selected');
-        card.setAttribute('aria-checked', 'true');
-        PromptGen.currentLevel = card.getAttribute('data-level');
-      }
-      card.addEventListener('click', selectComplexity);
-      card.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          selectComplexity();
+    // 领域选择
+    document.querySelectorAll('.field-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        document.querySelectorAll('.field-card').forEach(function(fc) { fc.classList.remove('active'); fc.setAttribute('aria-checked', 'false'); });
+        this.classList.add('active'); this.setAttribute('aria-checked', 'true');
+        var field = this.getAttribute('data-field');
+        var isEcom = field === '电商AI绘画';
+        updatePlatformOptions(field);
+        $('ecommerceTagSection').style.display = isEcom ? 'block' : 'none';
+        updateComplexityDisabled(isEcom);
+        if (isEcom) {
+          currentLevel = 'expert';
+          document.querySelectorAll('.complexity-card').forEach(function(cc) {
+            cc.classList.toggle('selected', cc.getAttribute('data-level') === 'expert');
+            cc.setAttribute('aria-checked', cc.getAttribute('data-level') === 'expert' ? 'true' : 'false');
+          });
         }
       });
-    })(complexityCards[d]);
-  }
-
-  // 热门标签
-  var tagContainer = PromptGen.$('tagContainer');
-  if (tagContainer) {
-    tagContainer.addEventListener('click', function(e) {
-      var tag = e.target.closest('.tag');
-      if (!tag) return;
-      var field = tag.getAttribute('data-field') || '内容创作';
-      var fCards = document.querySelectorAll('.field-card');
-      for (var fc = 0; fc < fCards.length; fc++) {
-        if (fCards[fc].getAttribute('data-field') === field) {
-          fCards[fc].classList.add('active');
-          fCards[fc].setAttribute('aria-checked', 'true');
-        } else {
-          fCards[fc].classList.remove('active');
-          fCards[fc].setAttribute('aria-checked', 'false');
-        }
-      }
-      var taskInput = PromptGen.$('taskInput');
-      if (taskInput) {
-        taskInput.value = tag.getAttribute('data-task');
-      }
-      PromptGen.updatePlatformOptions(field);
-      var isEcommerce = (field === '电商AI绘画');
-      var ecomSec = PromptGen.$('ecommerceTagSection');
-      if (ecomSec) {
-        ecomSec.style.display = isEcommerce ? 'block' : 'none';
-      }
-      PromptGen.updateComplexityDisabled(isEcommerce);
-      if (isEcommerce) {
-        PromptGen.currentLevel = 'expert';
-        var cCards = document.querySelectorAll('.complexity-card');
-        for (var cc = 0; cc < cCards.length; cc++) {
-          if (cCards[cc].getAttribute('data-level') === 'expert') {
-            cCards[cc].classList.add('selected');
-            cCards[cc].setAttribute('aria-checked', 'true');
-          } else {
-            cCards[cc].classList.remove('selected');
-            cCards[cc].setAttribute('aria-checked', 'false');
-          }
-        }
-      }
     });
-    
-    tagContainer.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') {
+
+    // 平台变更
+    $('platformSelect').addEventListener('change', function() {
+      var field = getCurrentField();
+      try { localStorage.setItem('last_platform_' + field, this.value); } catch(e) {}
+    });
+
+    // 复杂度
+    document.querySelectorAll('.complexity-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        if (this.classList.contains('disabled')) { showToast('电商绘画场景仅支持专家版', '⚠️'); return; }
+        document.querySelectorAll('.complexity-card').forEach(function(cc) { cc.classList.remove('selected'); cc.setAttribute('aria-checked', 'false'); });
+        this.classList.add('selected'); this.setAttribute('aria-checked', 'true');
+        currentLevel = this.getAttribute('data-level');
+      });
+    });
+
+    // 标签
+    function handleTagClick(containerId) {
+      var container = $(containerId);
+      if (!container) return;
+      container.addEventListener('click', function(e) {
         var tag = e.target.closest('.tag');
-        if (tag) {
-          e.preventDefault();
-          tag.click();
-        }
-      }
-    });
-  }
-
-  // 电商标签
-  var ecomTagContainer = PromptGen.$('ecommerceTagContainer');
-  if (ecomTagContainer) {
-    ecomTagContainer.addEventListener('click', function(e) {
-      var tag = e.target.closest('.tag');
-      if (!tag) return;
-      var taskInput = PromptGen.$('taskInput');
-      if (taskInput) {
-        taskInput.value = tag.getAttribute('data-task');
-      }
-    });
-  }
-
-  var clearBtn = PromptGen.$('clearBtn');
-  if (clearBtn) {
-    clearBtn.addEventListener('click', function() {
-      var taskInput = PromptGen.$('taskInput');
-      if (taskInput) {
-        taskInput.value = '';
-        taskInput.focus();
-      }
-    });
-  }
-
-  var pasteBtn = PromptGen.$('pasteBtn');
-  if (pasteBtn) {
-    pasteBtn.addEventListener('click', function() {
-      if (navigator.clipboard && navigator.clipboard.readText) {
-        navigator.clipboard.readText().then(function(text) {
-          var taskInput = PromptGen.$('taskInput');
-          if (taskInput) {
-            taskInput.value = text;
-          }
-        }).catch(function() {
-          PromptGen.showToast('无法读取剪贴板', '⚠️');
+        if (!tag) return;
+        var field = tag.getAttribute('data-field') || '内容创作';
+        document.querySelectorAll('.field-card').forEach(function(fc) {
+          fc.classList.toggle('active', fc.getAttribute('data-field') === field);
+          fc.setAttribute('aria-checked', fc.getAttribute('data-field') === field ? 'true' : 'false');
         });
-      } else {
-        PromptGen.showToast('无法读取剪贴板', '⚠️');
-      }
-    });
-  }
+        $('taskInput').value = tag.getAttribute('data-task');
+        updatePlatformOptions(field);
+        var isEcom = field === '电商AI绘画';
+        $('ecommerceTagSection').style.display = isEcom ? 'block' : 'none';
+        updateComplexityDisabled(isEcom);
+        if (isEcom) {
+          currentLevel = 'expert';
+          document.querySelectorAll('.complexity-card').forEach(function(cc) {
+            cc.classList.toggle('selected', cc.getAttribute('data-level') === 'expert');
+            cc.setAttribute('aria-checked', cc.getAttribute('data-level') === 'expert' ? 'true' : 'false');
+          });
+        }
+      });
+    }
+    handleTagClick('tagContainer');
+    handleTagClick('ecommerceTagContainer');
 
-  // 模板筛选
-  var templateFilter = PromptGen.$('templateFilter');
-  if (templateFilter) {
-    templateFilter.addEventListener('click', function(e) {
+    // 清空 / 粘贴
+    $('clearBtn').addEventListener('click', function() { $('taskInput').value = ''; $('taskInput').focus(); });
+    $('pasteBtn').addEventListener('click', function() {
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        navigator.clipboard.readText().then(function(text) { $('taskInput').value = text; }).catch(function() { showToast('无法读取剪贴板', '⚠️'); });
+      } else { showToast('无法读取剪贴板', '⚠️'); }
+    });
+
+    // 模板筛选
+    $('templateFilter').addEventListener('click', function(e) {
       var btn = e.target.closest('.filter-btn');
       if (!btn) return;
-      var allBtns = document.querySelectorAll('.filter-btn');
-      for (var b = 0; b < allBtns.length; b++) {
-        allBtns[b].classList.remove('active');
-      }
+      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
-      PromptGen.currentTemplateFilter = btn.getAttribute('data-filter');
-      PromptGen.renderTemplates();
+      currentTemplateFilter = btn.getAttribute('data-filter');
+      renderTemplates();
     });
-  }
 
-  function openInviteModal() {
-    PromptGen.pendingUnlockLevel = 'expert';
-    PromptGen.showUnlockModal('专家版');
-  }
-
-  var navInvite = PromptGen.$('navInviteBtn');
-  if (navInvite) {
-    navInvite.addEventListener('click', openInviteModal);
-  }
-
-  var mobileNavInvite = PromptGen.$('mobileNavInviteBtn');
-  if (mobileNavInvite) {
-    mobileNavInvite.addEventListener('click', function() {
-      var panel = PromptGen.$('mobileNavPanel');
-      var overlay = PromptGen.$('mobileNavOverlay');
-      var menuBtn = PromptGen.$('mobileMenuBtn');
-      if (panel) panel.classList.remove('open');
-      if (overlay) overlay.classList.remove('active');
-      if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+    // 邀请码按钮
+    function openInviteModal() { pendingUnlockLevel = 'expert'; showUnlockModal('专家版'); }
+    $('navInviteBtn').addEventListener('click', openInviteModal);
+    $('mobileNavInviteBtn').addEventListener('click', function() {
+      $('mobileNavPanel').classList.remove('open'); $('mobileNavOverlay').classList.remove('active');
+      $('mobileMenuBtn').setAttribute('aria-expanded', 'false');
       openInviteModal();
     });
+
+    // License
+    $('licenseLink').addEventListener('click', function(e) { e.preventDefault(); window.open('https://opensource.org/licenses/MIT', '_blank'); });
+
+    // 双击缩放阻止
+    var lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e) {
+      var now = Date.now();
+      if (now - lastTouchEnd <= 300) e.preventDefault();
+      lastTouchEnd = now;
+    }, { passive: false });
+
+    // 滑动关闭面板
+    var touchStartX = 0;
+    document.addEventListener('touchstart', function(e) { if (e.touches && e.touches.length > 0) touchStartX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchmove', function(e) {
+      var panel = $('configPanel');
+      if (!panel || !panel.classList.contains('open') || !e.touches) return;
+      var dx = touchStartX - e.touches[0].clientX;
+      if (dx > 40 && touchStartX < 80) { panel.classList.remove('open'); $('overlay').classList.remove('active'); }
+    }, { passive: true });
+
+    // 弹窗事件
+    bindModal();
+    bindKeyboard();
+    bindOffline();
+
+    // 初始化状态
+    var initialField = getCurrentField();
+    updatePlatformOptions(initialField);
+    updateComplexityDisabled(initialField === '电商AI绘画');
+    updateStats();
+    renderTemplates();
+    updateTemplateLocks();
+    updateFeatureButtons();
+
+    // URL 参数
+    try {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('admin') === CONFIG.ADMIN_PASSWORD) showPage('admin');
+    } catch(e) {}
+
+    console.log('✅ AI提示词生成器 v2.2 初始化完成');
   }
 
-  var licenseLink = PromptGen.$('licenseLink');
-  if (licenseLink) {
-    licenseLink.addEventListener('click', function(e) {
-      e.preventDefault();
-      window.open('https://opensource.org/licenses/MIT', '_blank');
-    });
-  }
-
-  // 双击缩放阻止
-  var lastTouchEnd = 0;
-  document.addEventListener('touchend', function(e) {
-    var now = Date.now();
-    if (now - lastTouchEnd <= 300) {
-      e.preventDefault();
-    }
-    lastTouchEnd = now;
-  }, { passive: false });
-
-  // 滑动关闭配置面板
-  var touchStartX = 0;
-  var configPanelEl = PromptGen.$('configPanel');
-  document.addEventListener('touchstart', function(e) {
-    if (e.touches && e.touches.length > 0) {
-      touchStartX = e.touches[0].clientX;
-    }
-  }, { passive: true });
-
-  document.addEventListener('touchmove', function(e) {
-    if (!configPanelEl || !configPanelEl.classList.contains('open')) return;
-    if (!e.touches || e.touches.length === 0) return;
-    var touchX = e.touches[0].clientX;
-    var dx = touchStartX - touchX;
-    if (dx > 40 && touchStartX < 80) {
-      configPanelEl.classList.remove('open');
-      var ov = PromptGen.$('overlay');
-      if (ov) ov.classList.remove('active');
-    }
-  }, { passive: true });
-
-  var initialField = PromptGen.getCurrentField();
-  PromptGen.updatePlatformOptions(initialField);
-  PromptGen.updateComplexityDisabled(initialField === '电商AI绘画');
-  PromptGen.updateStats();
-  PromptGen.renderTemplates();
-  PromptGen.updateTemplateLocks();
-  PromptGen.updateFeatureButtons();
-
-  try {
-    var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('admin') === PromptGen.CONFIG.ADMIN_PASSWORD) {
-      PromptGen.showPage('admin');
-    }
-  } catch (e) {
-    // URLSearchParams 不支持时忽略
-  }
-
-  console.log('✅ 初始化完成，所有事件已绑定');
-  window._initDone = true;
-};
-
-// ---- 启动（兼容所有浏览器）----
-PromptGen.safeInit = function() {
+  // 启动
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    PromptGen.initApp();
+    initApp();
   } else {
-    document.addEventListener('DOMContentLoaded', PromptGen.initApp);
+    document.addEventListener('DOMContentLoaded', initApp);
   }
-};
 
-setTimeout(PromptGen.safeInit, 100);
-window.addEventListener('load', function() {
-  if (typeof window._initDone === 'undefined') {
-    PromptGen.initApp();
-    window._initDone = true;
-  }
-});
+  // 暴露公共API
+  return {
+    copyResult: copyResult,
+    toggleFavorite: toggleFavorite,
+    goHistoryPage: goHistoryPage,
+    doGenerate: doGenerate,
+    doOptimize: doOptimize,
+    doBatchGenerate: doBatchGenerate,
+    // 管理
+    clearPwdSearch: clearPwdSearch,
+    filterPasswords: filterPasswords,
+    toggleCollapse: toggleCollapse,
+    copyPwd: copyPwd,
+    toggleSold: toggleSold,
+    addPwd: addPwd,
+    openEditMax: openEditMax,
+    setEditMax: setEditMax,
+    confirmEditMax: confirmEditMax,
+    closeEditMax: closeEditMax,
+    resetAllData: resetAllData,
+    showToast: showToast
+  };
+})();
 
-console.log('🔵 脚本已加载 (修复版 v2.1)');
+console.log('🔵 脚本已加载 (修复版 v2.2)');
 </script>
 </body>
 </html>
-
