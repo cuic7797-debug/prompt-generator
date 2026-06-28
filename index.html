@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>AI提示词生成器</title>
     <style>
         * {
@@ -23,23 +24,23 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --header-height: 60px;
-            --tab-height: 48px;
-            --action-height: 72px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --header-h: 60px;
+            --tab-h: 48px;
+            --action-h: 72px;
         }
 
         .light {
             --bg: #f8fafc;
-            --card-bg: #ffffff;
+            --card-bg: #fff;
             --text: #1e293b;
             --text-secondary: #64748b;
             --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
@@ -47,8 +48,9 @@
             overflow-x: hidden;
         }
 
+        /* PC端布局 */
         @media (min-width: 769px) {
-            .main-content {
+            .main {
                 display: flex;
                 gap: 24px;
                 padding: 24px;
@@ -82,19 +84,20 @@
             }
         }
 
+        /* 移动端/平板布局 */
         @media (max-width: 768px) {
-            .main-content {
+            .main {
                 padding: 12px;
-                padding-bottom: calc(var(--action-height) + 12px);
+                padding-bottom: calc(var(--action-h) + 12px);
             }
 
             .config-panel {
                 display: none;
                 position: fixed;
-                top: calc(var(--header-height) + var(--tab-height));
+                top: calc(var(--header-h) + var(--tab-h));
                 left: 0;
                 right: 0;
-                bottom: var(--action-height);
+                bottom: var(--action-h);
                 z-index: 100;
                 padding: 16px;
                 overflow-y: auto;
@@ -119,11 +122,7 @@
                 left: 0;
                 right: 0;
                 z-index: 100;
-                height: var(--header-height);
-            }
-
-            .content {
-                margin-top: calc(var(--header-height) + var(--tab-height));
+                height: var(--header-h);
             }
 
             .mobile-tabs {
@@ -131,11 +130,11 @@
                 gap: 8px;
                 padding: 0 12px;
                 position: fixed;
-                top: var(--header-height);
+                top: var(--header-h);
                 left: 0;
                 right: 0;
                 z-index: 99;
-                height: var(--tab-height);
+                height: var(--tab-h);
                 overflow-x: auto;
                 scrollbar-width: none;
                 background: var(--bg);
@@ -172,15 +171,10 @@
                 z-index: 100;
                 background: var(--card-bg);
                 border-top: 1px solid var(--border);
-                box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
             }
 
             .generate-btn {
                 flex: 1;
-            }
-
-            .menu-drawer-btn {
-                padding: 0 20px;
             }
 
             .pc-only {
@@ -274,7 +268,6 @@
 
         .btn-primary:hover {
             background: var(--primary-hover);
-            transform: translateY(-1px);
         }
 
         .btn-secondary {
@@ -283,17 +276,13 @@
             border: 1px solid var(--border);
         }
 
-        .btn-secondary:hover {
-            background: var(--border);
+        .btn-danger {
+            background: var(--danger);
+            color: white;
         }
 
         .btn-success {
             background: var(--success);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
             color: white;
         }
 
@@ -315,7 +304,6 @@
             line-height: 1.6;
             white-space: pre-wrap;
             word-break: break-word;
-            overflow-wrap: anywhere;
         }
 
         .result-card .action-bar {
@@ -331,7 +319,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 200;
             align-items: flex-end;
             justify-content: center;
@@ -351,8 +339,12 @@
         }
 
         @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
         }
 
         .context-menu-item {
@@ -376,7 +368,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 300;
             align-items: center;
             justify-content: center;
@@ -398,8 +390,14 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .modal-header {
@@ -456,7 +454,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
         }
 
         .drawer-content {
@@ -529,26 +527,20 @@
             opacity: 1;
         }
 
-        .toast.success {
-            background: var(--success);
-        }
-
-        .toast.error {
-            background: var(--danger);
-        }
-
         .loading {
             display: inline-block;
             width: 16px;
             height: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top-color: white;
             animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .empty-state {
@@ -609,9 +601,9 @@
             color: var(--primary);
         }
 
-        .alert-success {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
         }
     </style>
 </head>
@@ -619,7 +611,7 @@
     <header class="header">
         <h1>AI提示词生成器</h1>
         <div class="header-actions">
-            <button class="btn btn-secondary pc-only" id="themeToggle">🌙 切换主题</button>
+            <button class="btn btn-secondary" id="themeToggle">🌙 切换主题</button>
             <button class="btn btn-secondary" id="menuBtn">☰ 菜单</button>
         </div>
     </header>
@@ -700,7 +692,7 @@
                 </div>
 
                 <div class="mode-content" id="advanced-mode">
-                    <div class="alert alert-info">💡 进阶版支持更多自定义选项，每日可使用5次</div>
+                    <div class="alert alert-info">💡 进阶版支持风格/语言等更多选项，每日可用5次</div>
                     <div id="advancedForm">
                         <div class="form-group">
                             <label>提示词风格</label>
@@ -712,7 +704,6 @@
                                 <option value="口语化">口语化</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label>输出语言</label>
                             <select class="form-control" id="language">
@@ -724,21 +715,17 @@
                                 <option value="西班牙语">西班牙语</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label>附加指令</label>
-                            <textarea class="form-control" id="extraInstruction" placeholder="比如不要包含的内容、必须遵守的规则等"></textarea>
+                            <textarea class="form-control" id="extraInstruction" placeholder="需要遵守的规则/禁止的内容"></textarea>
                         </div>
-
-                        <div class="form-group">
-                            <button class="btn btn-secondary btn-block" id="unlockAdvancedBtn">🔓 输入密码解锁</button>
-                        </div>
+                        <button class="btn btn-secondary btn-block" id="unlockAdvancedBtn">🔓 输入密码解锁</button>
                     </div>
                     <div id="advancedContent"></div>
                 </div>
 
                 <div class="mode-content" id="expert-mode">
-                    <div class="alert alert-success">🎯 专家版支持思维链推导、多版本方案、质检标准等高级功能</div>
+                    <div class="alert alert-success">🎯 专家版支持思维链、多版本方案、质检等高级功能</div>
                     <div id="expertForm">
                         <div class="form-group">
                             <label>思维链步骤</label>
@@ -748,7 +735,6 @@
                                 <option value="7">7步推导（更详细）</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label>生成方案数量</label>
                             <select class="form-control" id="solutionCount">
@@ -757,10 +743,7 @@
                                 <option value="5">5个备选方案</option>
                             </select>
                         </div>
-
-                        <div class="form-group">
-                            <button class="btn btn-success btn-block" id="unlockExpertBtn">🔐 输入邀请码解锁</button>
-                        </div>
+                        <button class="btn btn-success btn-block" id="unlockExpertBtn">🔐 输入邀请码解锁</button>
                     </div>
                     <div id="expertContent"></div>
                 </div>
@@ -770,11 +753,11 @@
         <div class="result-panel" id="resultPanel">
             <div class="tab-content active" id="generate-content">
                 <div class="card">
-                    <h2 style="margin-bottom: 16px;">生成结果</h2>
+                    <h2 style="margin-bottom:16px;">生成结果</h2>
                     <div id="resultContainer">
                         <div class="empty-state">
                             <div class="icon">📝</div>
-                            <p>配置左侧信息后点击生成按钮，结果会在这里显示</p>
+                            <p>配置完成后点击生成，结果会在这里显示</p>
                         </div>
                     </div>
                 </div>
@@ -782,7 +765,7 @@
 
             <div class="tab-content" id="history-content">
                 <div class="card">
-                    <h2 style="margin-bottom: 16px;">历史记录</h2>
+                    <h2 style="margin-bottom:16px;">历史记录</h2>
                     <div id="historyList">
                         <div class="empty-state">
                             <div class="icon">📚</div>
@@ -794,7 +777,7 @@
 
             <div class="tab-content" id="favorites-content">
                 <div class="card">
-                    <h2 style="margin-bottom: 16px;">收藏夹</h2>
+                    <h2 style="margin-bottom:16px;">收藏夹</h2>
                     <div id="favoritesList">
                         <div class="empty-state">
                             <div class="icon">⭐</div>
@@ -806,7 +789,7 @@
 
             <div class="tab-content" id="template-content">
                 <div class="card">
-                    <h2 style="margin-bottom: 16px;">精品模板库</h2>
+                    <h2 style="margin-bottom:16px;">精品模板库</h2>
                     <div id="templateGrid">
                         <div class="empty-state">
                             <div class="icon">📋</div>
@@ -818,18 +801,18 @@
 
             <div class="tab-content" id="settings-content">
                 <div class="card">
-                    <h2 style="margin-bottom: 16px;">个性化设置</h2>
+                    <h2 style="margin-bottom:16px;">个性化设置</h2>
                     <div class="form-group">
-                        <label style="display:block; margin-bottom:8px;">主题模式</label>
-                        <div style="display:flex; gap:8px;">
+                        <label style="display:block;margin-bottom:8px;">主题模式</label>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
                             <button class="btn btn-secondary" data-theme="light">☀️ 浅色</button>
                             <button class="btn btn-secondary" data-theme="dark">🌙 深色</button>
                             <button class="btn btn-secondary" data-theme="auto">🔄 跟随系统</button>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label style="display:block; margin-bottom:8px;">存储管理</label>
-                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <label style="display:block;margin-bottom:8px;">数据管理</label>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
                             <button class="btn btn-danger" id="clearHistory">清空历史</button>
                             <button class="btn btn-danger" id="clearFavorites">清空收藏</button>
                             <button class="btn btn-primary" id="exportData">导出数据</button>
@@ -842,7 +825,7 @@
 
     <div class="mobile-action-bar mobile-only">
         <button class="btn btn-primary generate-btn" id="mobileGenerateBtn">✨ 立即生成</button>
-        <button class="btn btn-secondary menu-drawer-btn" id="openDrawerBtn">全部功能</button>
+        <button class="btn btn-secondary" id="openDrawerBtn">全部功能</button>
     </div>
 
     <div class="drawer" id="drawer">
@@ -860,7 +843,7 @@
     <div class="modal" id="passwordModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>🔒 解锁进阶版</h3>
+                <h3>🔒 进阶版解锁</h3>
                 <button class="modal-close" id="closePasswordModal">×</button>
             </div>
             <div class="modal-body">
@@ -876,7 +859,7 @@
     <div class="modal" id="inviteModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>🔐 解锁专家版</h3>
+                <h3>🔐 专家版解锁</h3>
                 <button class="modal-close" id="closeInviteModal">×</button>
             </div>
             <div class="modal-body">
@@ -902,11 +885,13 @@
     </div>
 
     <div class="toast" id="toast"></div>
-        <script>
+
+    <script>
         const ADVANCED_PASSWORDS = ['password123', 'abc123', '123456'];
         const EXPERT_PASSWORDS = ['expert2024', 'super123', 'vip666'];
         let currentContextCard = null;
 
+        // 数据存储
         const storage = {
             get(key) {
                 try {
@@ -920,25 +905,31 @@
             }
         };
 
+        // 初始化
         document.addEventListener('DOMContentLoaded', () => {
             initTheme();
             initTabs();
             initButtons();
+            initTouchEvents();
             loadHistory();
             loadFavorites();
-            initTouchEvents();
+            // 加载统计
+            const stats = storage.get('stats')[0] || { total: 0, advanced: 0, expert: 0 };
+            document.getElementById('statTotal').textContent = stats.total;
+            document.getElementById('statAdvanced').textContent = stats.advanced;
+            document.getElementById('statExpert').textContent = stats.expert;
         });
 
+        // 主题切换
         function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'dark';
             document.body.classList.toggle('light', savedTheme === 'light');
-            if (savedTheme === 'auto') {
-                document.body.classList.toggle('light', !window.matchMedia('(prefers-color-scheme: dark)').matches);
-            }
+            document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️ 切换浅色' : '🌙 切换深色';
 
             document.getElementById('themeToggle').addEventListener('click', () => {
                 const isLight = document.body.classList.toggle('light');
                 localStorage.setItem('theme', isLight ? 'light' : 'dark');
+                document.getElementById('themeToggle').textContent = isLight ? '🌙 切换深色' : '☀️ 切换浅色';
             });
 
             document.querySelectorAll('[data-theme]').forEach(btn => {
@@ -946,21 +937,25 @@
                     const theme = btn.dataset.theme;
                     localStorage.setItem('theme', theme);
                     if (theme === 'auto') {
-                        document.body.classList.toggle('light', !window.matchMedia('(prefers-color-scheme: dark)').matches);
+                        const isLight = !window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        document.body.classList.toggle('light', isLight);
+                        document.getElementById('themeToggle').textContent = isLight ? '🌙 切换深色' : '☀️ 切换浅色';
                     } else {
                         document.body.classList.toggle('light', theme === 'light');
+                        document.getElementById('themeToggle').textContent = theme === 'light' ? '🌙 切换深色' : '☀️ 切换浅色';
                     }
                 });
             });
 
             document.getElementById('drawerTheme').addEventListener('click', () => {
-                const isLight = document.body.classList.toggle('light');
-                localStorage.setItem('theme', isLight ? 'light' : 'dark');
+                document.getElementById('themeToggle').click();
                 document.getElementById('drawer').classList.remove('active');
             });
         }
 
+        // Tab切换
         function initTabs() {
+            // 模式切换
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const mode = btn.dataset.mode;
@@ -971,6 +966,7 @@
                 });
             });
 
+            // 移动端导航Tab
             document.querySelectorAll('.mobile-tabs .tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     const tabName = tab.dataset.tab;
@@ -978,11 +974,17 @@
                     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                     tab.classList.add('active');
                     document.getElementById(`${tabName}-content`).classList.add('active');
+                    // 移动端切换到生成Tab时显示配置面板
+                    if (tabName === 'generate' && window.innerWidth <= 768) {
+                        document.getElementById('configPanel').classList.add('active');
+                    }
                 });
             });
         }
 
+        // 按钮事件
         function initButtons() {
+            // 生成按钮
             document.getElementById('generateBtn').addEventListener('click', generatePrompt);
             document.getElementById('mobileGenerateBtn').addEventListener('click', () => {
                 if (window.innerWidth <= 768) {
@@ -992,75 +994,94 @@
                 }
             });
 
+            // 菜单按钮
             document.getElementById('menuBtn').addEventListener('click', () => {
                 document.getElementById('drawer').classList.add('active');
             });
-
             document.getElementById('drawerOverlay').addEventListener('click', () => {
                 document.getElementById('drawer').classList.remove('active');
             });
 
+            // 抽屉菜单项
             document.getElementById('drawerAdvanced').addEventListener('click', () => {
                 document.getElementById('drawer').classList.remove('active');
                 document.getElementById('passwordModal').classList.add('active');
             });
-
             document.getElementById('drawerExpert').addEventListener('click', () => {
                 document.getElementById('drawer').classList.remove('active');
                 document.getElementById('inviteModal').classList.add('active');
             });
+            document.getElementById('drawerFeedback').addEventListener('click', () => {
+                document.getElementById('drawer').classList.remove('active');
+                showToast('反馈邮箱：feedback@example.com');
+            });
+            document.getElementById('drawerInvite').addEventListener('click', () => {
+                document.getElementById('drawer').classList.remove('active');
+                showToast('官方QQ群：123456789');
+            });
+            document.getElementById('drawerStats').addEventListener('click', () => {
+                document.getElementById('drawer').classList.remove('active');
+                const stats = storage.get('stats')[0] || { total: 0, advanced: 0, expert: 0 };
+                alert(`使用统计：\n总生成次数：${stats.total}\n进阶版次数：${stats.advanced}\n专家版次数：${stats.expert}`);
+            });
 
+            // 模态框关闭
             document.getElementById('closePasswordModal').addEventListener('click', () => {
                 document.getElementById('passwordModal').classList.remove('active');
             });
-
             document.getElementById('closeInviteModal').addEventListener('click', () => {
                 document.getElementById('inviteModal').classList.remove('active');
             });
 
+            // 密码提交
             document.getElementById('submitPassword').addEventListener('click', () => {
                 const password = document.getElementById('passwordInput').value;
                 if (ADVANCED_PASSWORDS.includes(password)) {
                     unlockAdvanced();
                     document.getElementById('passwordModal').classList.remove('active');
-                    showToast('进阶版解锁成功，您有5次使用机会', 'success');
+                    showToast('进阶版解锁成功，每日可用5次', 'success');
                 } else {
                     showToast('密码错误，请重试', 'error');
                 }
             });
 
+            // 邀请码提交
             document.getElementById('submitInvite').addEventListener('click', () => {
                 const inviteCode = document.getElementById('inviteInput').value;
                 if (EXPERT_PASSWORDS.includes(inviteCode)) {
                     unlockExpert();
                     document.getElementById('inviteModal').classList.remove('active');
-                    showToast('专家版解锁成功，所有高级功能已开放', 'success');
+                    showToast('专家版解锁成功，所有功能已开放', 'success');
                 } else {
                     showToast('邀请码无效，请重试', 'error');
                 }
             });
 
+            // 底部操作栏打开配置
             document.getElementById('openDrawerBtn').addEventListener('click', () => {
-                document.getElementById('configPanel').classList.remove('active');
-                document.getElementById('drawer').classList.add('active');
+                document.getElementById('drawer').classList.remove('active');
+                document.getElementById('configPanel').classList.add('active');
             });
 
+            // 清空历史
             document.getElementById('clearHistory').addEventListener('click', () => {
-                if (confirm('确定要清空所有历史记录吗？此操作不可恢复。')) {
+                if (confirm('确定清空所有历史记录吗？')) {
                     storage.set('history', []);
                     loadHistory();
                     showToast('历史记录已清空', 'success');
                 }
             });
 
+            // 清空收藏
             document.getElementById('clearFavorites').addEventListener('click', () => {
-                if (confirm('确定要清空所有收藏吗？此操作不可恢复。')) {
+                if (confirm('确定清空所有收藏吗？')) {
                     storage.set('favorites', []);
                     loadFavorites();
                     showToast('收藏夹已清空', 'success');
                 }
             });
 
+            // 导出数据
             document.getElementById('exportData').addEventListener('click', () => {
                 const data = {
                     history: storage.get('history'),
@@ -1071,15 +1092,17 @@
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `ai-prompt-data-${new Date().toISOString().split('T')[0]}.json`;
+                a.download = `提示词数据_${new Date().toISOString().split('T')[0]}.json`;
                 a.click();
                 URL.revokeObjectURL(url);
                 showToast('数据已导出', 'success');
             });
         }
 
+        // 移动端长按菜单
         function initTouchEvents() {
             let longPressTimer;
+            // 全局监听触摸
             document.addEventListener('touchstart', (e) => {
                 const card = e.target.closest('.result-card');
                 if (!card) return;
@@ -1089,14 +1112,10 @@
                 }, 600);
             });
 
-            document.addEventListener('touchend', () => {
-                clearTimeout(longPressTimer);
-            });
+            document.addEventListener('touchend', () => clearTimeout(longPressTimer));
+            document.addEventListener('touchmove', () => clearTimeout(longPressTimer));
 
-            document.addEventListener('touchmove', () => {
-                clearTimeout(longPressTimer);
-            });
-
+            // 菜单项点击
             document.querySelectorAll('.context-menu-item').forEach(item => {
                 item.addEventListener('click', () => {
                     const action = item.dataset.action;
@@ -1104,11 +1123,39 @@
                     document.getElementById('contextMenu').classList.remove('active');
                 });
             });
+
+            // PC端右键菜单
+            document.addEventListener('contextmenu', (e) => {
+                const card = e.target.closest('.result-card');
+                if (!card) return;
+                e.preventDefault();
+                currentContextCard = card;
+                // 调整菜单位置到鼠标处
+                const menu = document.getElementById('contextMenu');
+                menu.style.alignItems = 'flex-start';
+                menu.style.justifyContent = 'flex-start';
+                menu.style.padding = `${e.clientY}px ${e.clientX}px`;
+                menu.classList.add('active');
+                // 还原菜单位置
+                setTimeout(() => {
+                    menu.style.alignItems = '';
+                    menu.style.justifyContent = '';
+                    menu.style.padding = '';
+                }, 100);
+            });
+
+            // 点击空白关闭菜单
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.context-menu') && !e.target.closest('.result-card')) {
+                    document.getElementById('contextMenu').classList.remove('active');
+                }
+            });
         }
 
         function handleContextAction(action) {
             if (!currentContextCard) return;
             const prompt = currentContextCard.querySelector('.prompt-text').textContent;
+
             switch (action) {
                 case 'copy':
                     copyText(prompt);
@@ -1118,13 +1165,7 @@
                     break;
                 case 'regenerate':
                     document.getElementById('task').value = prompt.split('\n')[3] || prompt;
-                    if (window.innerWidth <= 768) {
-                        document.querySelectorAll('.mobile-tabs .tab').forEach(t => t.classList.remove('active'));
-                        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                        document.querySelector('.mobile-tabs .tab[data-tab="generate"]').classList.add('active');
-                        document.getElementById('generate-content').classList.add('active');
-                        document.getElementById('configPanel').classList.add('active');
-                    }
+                    configPanel.classList.add('active');
                     generatePrompt();
                     break;
                 case 'share':
@@ -1145,9 +1186,7 @@
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(text).then(() => {
                     showToast('已复制到剪贴板', 'success');
-                }).catch(() => {
-                    fallbackCopy(text);
-                });
+                }).catch(() => fallbackCopy(text));
             } else {
                 fallbackCopy(text);
             }
@@ -1174,15 +1213,22 @@
                 navigator.share({
                     title: 'AI生成的提示词',
                     text: text
-                }).catch(() => {
-                    copyText(text);
-                });
+                }).catch(() => copyText(text));
             } else {
                 copyText(text);
             }
         }
 
+        // 生成提示词
         function generatePrompt() {
+            // 判断当前激活的模式
+            const activeMode = document.querySelector('.tab-btn.active').dataset.mode;
+            if (activeMode === 'basic') generateBasic();
+            else if (activeMode === 'advanced') generateAdvanced();
+            else if (activeMode === 'expert') generateExpert();
+        }
+
+        function generateBasic() {
             const scene = document.getElementById('scene').value;
             const platform = document.getElementById('platform').value;
             const task = document.getElementById('task').value;
@@ -1200,26 +1246,22 @@
             btn.disabled = true;
 
             setTimeout(() => {
-                let prompt = `【${scene}场景】\n`;
-                prompt += `针对${platform}，请完成以下任务：\n`;
-                prompt += `${task}\n`;
-                if (requirements) {
-                    prompt += `要求：${requirements}\n`;
-                }
-                if (complexity !== '简单') {
-                    prompt += `请${complexity === '中等' ? '用简洁的语言清晰表达' : '分点详细列出'}，确保内容符合${platform}的使用规范。`;
-                }
+                let prompt = `【${scene}场景】\n针对${platform}完成以下任务：\n${task}\n`;
+                if (requirements) prompt += `要求：${requirements}\n`;
+                if (complexity !== '简单') prompt += complexity === '中等' ? '请简洁清晰输出，符合该平台规范。' : '请分点结构化输出，逻辑清晰，符合该平台使用规则。';
 
                 const result = {
                     id: Date.now().toString(),
                     prompt,
                     scene,
                     platform,
+                    mode: '基础版',
                     time: new Date().toLocaleString()
                 };
 
                 showResult(result);
                 addToHistory(result);
+                updateStats('total');
 
                 btn.textContent = originalText;
                 btn.disabled = false;
@@ -1230,30 +1272,118 @@
             }, 800);
         }
 
+        function generateAdvanced() {
+            const scene = document.getElementById('scene').value;
+            const platform = document.getElementById('platform').value;
+            const task = document.getElementById('task').value;
+            const requirements = document.getElementById('requirements').value;
+            const style = document.getElementById('style') ? document.getElementById('style').value : '专业严谨';
+            const language = document.getElementById('language') ? document.getElementById('language').value : '中文';
+            const extra = document.getElementById('extraInstruction') ? document.getElementById('extraInstruction').value : '';
+
+            if (!task) {
+                showToast('请输入任务描述', 'error');
+                return;
+            }
+
+            const btn = document.querySelector('#advanced-mode .btn-primary');
+            const originalText = btn.textContent;
+            btn.innerHTML = '<span class="loading"></span> 生成中...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                let prompt = `【${scene}场景 | 进阶版】\n目标平台：${platform}\n任务：${task}\n`;
+                if (requirements) prompt += `要求：${requirements}\n`;
+                prompt += `风格：${style}\n输出语言：${language}\n`;
+                if (extra) prompt += `附加规则：${extra}\n`;
+                prompt += `输出需符合${platform}的最新使用规范，无违规内容。`;
+
+                const result = {
+                    id: Date.now().toString(),
+                    prompt,
+                    scene,
+                    platform,
+                    mode: '进阶版',
+                    time: new Date().toLocaleString()
+                };
+
+                showResult(result);
+                addToHistory(result);
+                updateStats('advanced');
+
+                btn.textContent = originalText;
+                btn.disabled = false;
+
+                if (window.innerWidth <= 768) {
+                    document.getElementById('configPanel').classList.remove('active');
+                }
+            }, 1000);
+        }
+
+        function generateExpert() {
+            const scene = document.getElementById('scene').value;
+            const platform = document.getElementById('platform').value;
+            const task = document.getElementById('task').value;
+            const chainSteps = document.getElementById('chainSteps') ? document.getElementById('chainSteps').value : '5';
+            const solutionCount = document.getElementById('solutionCount') ? document.getElementById('solutionCount').value : '1';
+
+            if (!task) {
+                showToast('请输入任务描述', 'error');
+                return;
+            }
+
+            const btn = document.querySelector('#expert-mode .btn-primary');
+            const originalText = btn.textContent;
+            btn.innerHTML = '<span class="loading"></span> 生成中...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                let prompt = `【${scene}场景 | 专家版 | 思维链推导】\n目标平台：${platform}\n\n## 任务描述\n${task}\n\n## 推导步骤（共${chainSteps}步）\n1. 明确任务核心需求与目标受众\n2. 梳理平台特性与输出规则要求\n3. 构建提示词逻辑结构\n4. 优化语言表达，适配平台调性\n5. 校验内容合规性，剔除风险词\n\n## 生成${solutionCount}个备选方案，每个方案附带质检评分（满分10分）\n\n请确保输出符合${platform}最新使用规范，无低俗、违规内容。`;
+
+                const result = {
+                    id: Date.now().toString(),
+                    prompt,
+                    scene,
+                    platform,
+                    mode: '专家版',
+                    time: new Date().toLocaleString()
+                };
+
+                showResult(result);
+                addToHistory(result);
+                updateStats('expert');
+
+                btn.textContent = originalText;
+                btn.disabled = false;
+
+                if (window.innerWidth <= 768) {
+                    document.getElementById('configPanel').classList.remove('active');
+                }
+            }, 1200);
+        }
+
         function showResult(data) {
             const container = document.getElementById('resultContainer');
-            const card = document.createElement('div');
-            card.className = 'result-card';
-            card.dataset.id = data.id;
-            card.innerHTML = `
-                <div class="prompt-text">${data.prompt}</div>
-                <div class="action-bar pc-only">
-                    <button class="btn btn-secondary" onclick="copyText(this.closest('.result-card').querySelector('.prompt-text').textContent)">📋 复制</button>
-                    <button class="btn btn-secondary" onclick="addToFavorites(this.closest('.result-card').querySelector('.prompt-text').textContent)">⭐ 收藏</button>
-                    <button class="btn btn-secondary" onclick="document.getElementById('task').value = this.closest('.result-card').querySelector('.prompt-text').textContent; generatePrompt();">🔄 重新生成</button>
-                    <button class="btn btn-secondary" onclick="shareText(this.closest('.result-card').querySelector('.prompt-text').textContent)">📤 分享</button>
-                </div>
-                <div class="mobile-only" style="font-size:12px;color:var(--text-secondary);margin-top:8px;">
-                    长按卡片查看更多操作
-                </div>
-                <div class="tags" style="margin-top:12px;">
-                    <span class="tag">#${data.scene}</span>
-                    <span class="tag">#${data.platform}</span>
-                    <span class="tag">#${new Date().toLocaleDateString()}</span>
+            container.innerHTML = `
+                <div class="result-card" data-id="${data.id}">
+                    <div class="prompt-text">${data.prompt}</div>
+                    <div class="action-bar pc-only">
+                        <button class="btn btn-secondary" onclick="copyText(this.closest('.result-card').querySelector('.prompt-text').textContent)">📋 复制</button>
+                        <button class="btn btn-secondary" onclick="addToFavorites(this.closest('.result-card').querySelector('.prompt-text').textContent)">⭐ 收藏</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('task').value = this.closest('.result-card').querySelector('.prompt-text').textContent.split('任务：')[1] || ''; generatePrompt()">🔄 重新生成</button>
+                        <button class="btn btn-secondary" onclick="shareText(this.closest('.result-card').querySelector('.prompt-text').textContent)">📤 分享</button>
+                        <div class="score">模式：${data.mode}</div>
+                    </div>
+                    <div class="mobile-only" style="font-size:12px;color:var(--text-secondary);margin-top:8px;">
+                        长按卡片查看更多操作 | 模式：${data.mode}
+                    </div>
+                    <div class="tags" style="margin-top:12px;">
+                        <span class="tag">#${data.scene}</span>
+                        <span class="tag">#${data.platform}</span>
+                        <span class="tag">#${new Date().toLocaleDateString()}</span>
+                    </div>
                 </div>
             `;
-            container.innerHTML = '';
-            container.appendChild(card);
         }
 
         function addToHistory(data) {
@@ -1279,7 +1409,7 @@
             container.innerHTML = history.map(item => `
                 <div class="result-card" data-id="${item.id}">
                     <div class="prompt-text">${item.prompt}</div>
-                    <div style="font-size:12px;color:var(--text-secondary);margin-top:8px;">${item.time}</div>
+                    <div style="font-size:12px;color:var(--text-secondary);margin-top:8px;">${item.time} | ${item.mode}</div>
                     <div class="tags" style="margin-top:8px;">
                         <span class="tag">#${item.scene}</span>
                         <span class="tag">#${item.platform}</span>
@@ -1330,62 +1460,35 @@
             const content = document.getElementById('advancedContent');
             form.style.display = 'none';
             content.style.display = 'block';
-            
-            const styleOptions = ['专业严谨', '生动有趣', '简洁明了', '详细具体', '口语化'];
-            const languageOptions = ['中文', '英文', '中英双语', '日语', '韩语', '西班牙语'];
 
             content.innerHTML = `
                 <div class="form-group">
                     <label>提示词风格</label>
                     <select class="form-control" id="style">
-                        ${styleOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        <option value="专业严谨">专业严谨</option>
+                        <option value="生动有趣">生动有趣</option>
+                        <option value="简洁明了">简洁明了</option>
+                        <option value="详细具体">详细具体</option>
+                        <option value="口语化">口语化</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>输出语言</label>
                     <select class="form-control" id="language">
-                        ${languageOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        <option value="中文">中文</option>
+                        <option value="英文">英文</option>
+                        <option value="中英双语">中英双语</option>
+                        <option value="日语">日语</option>
+                        <option value="韩语">韩语</option>
+                        <option value="西班牙语">西班牙语</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>附加指令</label>
-                    <textarea class="form-control" id="extraInstruction" placeholder="比如不要包含的内容、必须遵守的规则等"></textarea>
+                    <textarea class="form-control" id="extraInstruction" placeholder="需要遵守的规则/禁止的内容"></textarea>
                 </div>
-                <button class="btn btn-primary btn-block" id="advancedGenerateBtn">✨ 进阶生成</button>
+                <button class="btn btn-primary btn-block" onclick="generateAdvanced()">✨ 进阶版生成</button>
             `;
-
-            document.getElementById('advancedGenerateBtn').addEventListener('click', () => {
-                const scene = document.getElementById('scene').value;
-                const platform = document.getElementById('platform').value;
-                const task = document.getElementById('task').value;
-                const requirements = document.getElementById('requirements').value;
-                const complexity = document.getElementById('complexity').value;
-                const style = document.getElementById('style').value;
-                const language = document.getElementById('language').value;
-                const extra = document.getElementById('extraInstruction').value;
-                
-                let prompt = `【${scene}场景 | 进阶版】\n`;
-                prompt += `针对${platform}，请完成以下任务：\n`;
-                prompt += `${task}\n`;
-                if (requirements) prompt += `要求：${requirements}\n`;
-                prompt += `风格：${style}\n`;
-                prompt += `输出语言：${language}\n`;
-                if (extra) prompt += `附加要求：${extra}\n`;
-                if (complexity !== '简单') {
-                    prompt += `请${complexity === '中等' ? '用简洁的语言清晰表达' : '分点详细列出'}，确保内容符合${platform}的使用规范。`;
-                }
-
-                const result = {
-                    id: Date.now().toString(),
-                    prompt,
-                    scene,
-                    platform,
-                    time: new Date().toLocaleString()
-                };
-
-                showResult(result);
-                addToHistory(result);
-            });
         }
 
         function unlockExpert() {
@@ -1394,110 +1497,36 @@
             form.style.display = 'none';
             content.style.display = 'block';
 
-            const sceneOptions = ['通用', '内容创作', 'AI绘画', '编程开发', '学习辅导', '办公效率', '营销文案', '学术研究'];
-            const platformOptions = ['文心一言', '通义千问', '豆包', '讯飞星火', '智谱清言', 'ChatGPT', 'Claude', 'Gemini', 'Copilot', 'Midjourney'];
-            const complexityOptions = ['简单', '中等', '复杂'];
-            const styleOptions = ['专业严谨', '生动有趣', '简洁明了', '详细具体', '口语化'];
-            const languageOptions = ['中文', '英文', '中英双语', '日语', '韩语', '西班牙语'];
-            const chainOptions = ['3步推导', '5步推导', '7步推导'];
-            const solutionOptions = ['1个最优方案', '3个备选方案', '5个备选方案'];
-
             content.innerHTML = `
-                <div class="form-group">
-                    <label>使用场景</label>
-                    <select class="form-control" id="scene">
-                        ${sceneOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>目标平台</label>
-                    <select class="form-control" id="platform">
-                        ${platformOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>任务描述</label>
-                    <textarea class="form-control" id="task" placeholder="请输入你需要AI完成的任务，越详细生成效果越好"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>输出要求</label>
-                    <textarea class="form-control" id="requirements" placeholder="比如格式、长度、语气、受众等要求"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>复杂度</label>
-                    <select class="form-control" id="complexity">
-                        ${complexityOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>提示词风格</label>
-                    <select class="form-control" id="style">
-                        ${styleOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>输出语言</label>
-                    <select class="form-control" id="language">
-                        ${languageOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>附加指令</label>
-                    <textarea class="form-control" id="extraInstruction" placeholder="比如不要包含的内容、必须遵守的规则等"></textarea>
-                </div>
                 <div class="form-group">
                     <label>思维链步骤</label>
                     <select class="form-control" id="chainSteps">
-                        ${chainOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        <option value="3">3步推导</option>
+                        <option value="5">5步推导</option>
+                        <option value="7">7步推导（更详细）</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>生成方案数量</label>
                     <select class="form-control" id="solutionCount">
-                        ${solutionOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        <option value="1">1个最优方案</option>
+                        <option value="3">3个备选方案</option>
+                        <option value="5">5个备选方案</option>
                     </select>
                 </div>
-                <button class="btn btn-success btn-block" id="expertGenerateBtn">✨ 专家版生成</button>
+                <button class="btn btn-success btn-block" onclick="generateExpert()">✨ 专家版生成</button>
             `;
+        }
 
-            document.getElementById('expertGenerateBtn').addEventListener('click', () => {
-                const scene = document.getElementById('scene').value;
-                const platform = document.getElementById('platform').value;
-                const task = document.getElementById('task').value;
-                const requirements = document.getElementById('requirements').value;
-                const complexity = document.getElementById('complexity').value;
-                const style = document.getElementById('style').value;
-                const language = document.getElementById('language').value;
-                const extra = document.getElementById('extraInstruction').value;
-                const chain = document.getElementById('chainSteps').value;
-                const count = document.getElementById('solutionCount').value.split('个')[0];
-
-                if (!task) {
-                    showToast('请输入任务描述', 'error');
-                    return;
-                }
-
-                let prompt = `【${scene}场景 | 专家版】\n`;
-                prompt += `针对${platform}，请完成以下任务：\n`;
-                prompt += `### 任务描述\n${task}\n`;
-                if (requirements) prompt += `### 输出要求\n${requirements}\n`;
-                prompt += `### 风格与语言\n风格：${style} | 语言：${language}\n`;
-                if (extra) prompt += `### 附加指令\n${extra}\n`;
-                prompt += `### 推导步骤\n请按照以下${chain}进行思考：\n1. 明确任务目标\n2. 分析用户需求\n3. 构建提示词结构\n4. 优化表达方式\n5. 验证输出效果\n6. 调整细节\n7. 生成最终结果\n`;
-                prompt += `请生成${count}个备选方案，每个方案附带质检评分。`;
-
-                const result = {
-                    id: Date.now().toString(),
-                    prompt,
-                    scene,
-                    platform,
-                    time: new Date().toLocaleString()
-                };
-
-                showResult(result);
-                addToHistory(result);
-                showToast('专家版提示词生成成功', 'success');
-            });
+        function updateStats(type) {
+            const stats = storage.get('stats')[0] || { total: 0, advanced: 0, expert: 0 };
+            if (type === 'total') stats.total++;
+            if (type === 'advanced') stats.advanced++;
+            if (type === 'expert') stats.expert++;
+            storage.set('stats', [stats]);
+            document.getElementById('statTotal').textContent = stats.total;
+            document.getElementById('statAdvanced').textContent = stats.advanced;
+            document.getElementById('statExpert').textContent = stats.expert;
         }
 
         function showToast(message, type = 'info') {
@@ -1509,15 +1538,15 @@
             }, 2000);
         }
 
+        // 快捷键
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.key === 'Enter') {
                 generatePrompt();
             }
             if (e.key === 'Escape') {
-                document.getElementById('contextMenu').classList.remove('active');
-                document.getElementById('drawer').classList.remove('active');
-                document.getElementById('configPanel').classList.remove('active');
-                document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+                document.querySelectorAll('.modal, .drawer, .context-menu, .config-panel').forEach(el => {
+                    el.classList.remove('active');
+                });
             }
         });
     </script>
