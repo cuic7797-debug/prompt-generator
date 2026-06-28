@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+
+<meta name="description" content="专业AI提示词生成器 - 支持多行业、多模型适配，智能质量评分，助力高效AI创作">
+<meta name="keywords" content="AI提示词,提示词生成器,ChatGPT提示词,AI写作,提示词优化">
+<meta name="author" content="AI Prompt Generator">
+<meta name="version" content="2.0.0">
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>AI提示词生成器 - 专业版</title>
+<title>AI提示词生成器 Pro v2.0 - 行业专属·智能优化·质量评分</title>
 <style>
 /* ===== CSS变量 ===== */
 :root {
@@ -1284,6 +1290,191 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ===== 质量评分样式 ===== */
+.quality-badge {
+  animation: fadeInUp 0.4s ease;
+}
+.quality-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+.quality-grade {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+.quality-score {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.quality-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.quality-feedback {
+  font-size: 12px;
+  color: var(--accent-amber);
+  padding-top: 8px;
+  border-top: 1px solid var(--border-glass);
+  margin-top: 8px;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== 行业选择器增强 ===== */
+.industry-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+.industry-card {
+  padding: 14px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-align: center;
+}
+.industry-card:hover {
+  background: rgba(124,92,252,0.1);
+  border-color: var(--accent-purple);
+  transform: translateY(-2px);
+}
+.industry-card.selected {
+  background: rgba(124,92,252,0.15);
+  border-color: var(--accent-purple);
+}
+.industry-card .icon {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+.industry-card .name {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+/* ===== AI模型选择器增强 ===== */
+.model-selector-enhanced {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+.model-chip {
+  padding: 8px 16px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.model-chip:hover {
+  background: rgba(124,92,252,0.1);
+}
+.model-chip.selected {
+  background: var(--accent-purple);
+  color: white;
+  border-color: var(--accent-purple);
+}
+
+/* ===== 分析面板样式 ===== */
+.analytics-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: 14px;
+  padding: 20px;
+  margin: 16px 0;
+}
+.analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.analytics-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.analytics-item {
+  text-align: center;
+  padding: 16px;
+  background: var(--bg-glass);
+  border-radius: 10px;
+}
+.analytics-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent-purple-light);
+  margin-bottom: 4px;
+}
+.analytics-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ===== 移动端优化 ===== */
+@media (max-width: 768px) {
+  .industry-selector {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+  .quality-badge {
+    margin: 8px 0;
+    padding: 12px 14px;
+  }
+}
+
+/* ===== 加载状态优化 ===== */
+.generating-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(8px);
+}
+.generating-content {
+  background: var(--bg-card);
+  padding: 30px 50px;
+  border-radius: 16px;
+  text-align: center;
+}
+.generating-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-glass);
+  border-top-color: var(--accent-purple);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+.generating-text {
+  color: var(--text-primary);
+  font-size: 15px;
+}
 </style>
 </head>
 <body>
@@ -1717,13 +1908,645 @@ body {
 
 // ---- 配置管理（生产环境建议从后端获取） ----
 const CONFIG = {
-  ADMIN_PASSWORD: 'c123456888',     // 管理员密码
-  SPECIAL_PASSWORD: '123456888',    // 万能解锁码
+  // 安全配置 - 生产环境建议修改
+  ADMIN_PASSWORD: window.LOCAL_CONFIG?.ADMIN_PASSWORD || 'c123456888',
+  SPECIAL_PASSWORD: window.LOCAL_CONFIG?.SPECIAL_PASSWORD || '123456888',
   MAX_BASIC_DAILY: 5,
   MAX_PASSWORD_USES: 100,
   DAILY_INVITE_LIMIT: 20,
-  QQ_NUMBER: '704451222'
+  QQ_NUMBER: '704451222',
+  // 新增安全配置
+  SESSION_TIMEOUT: 30 * 60 * 1000,
+  MAX_LOGIN_ATTEMPTS: 5,
+  LOCKOUT_DURATION: 15 * 60 * 1000,
+  // 版本信息
+  VERSION: '2.0.0',
+  BUILD_DATE: '2024-01-15'
+}
+
+// ===== 第一阶段：工具函数库 =====
+const utils = {
+  debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+  },
+
+  throttle(func, limit) {
+    let inThrottle;
+    return function(...args) {
+      if (!inThrottle) {
+        func.apply(this, args);
+        inThrottle = true;
+        setTimeout(() => inThrottle = false, limit);
+      }
+    };
+  },
+
+  encrypt(data) {
+    try {
+      return btoa(encodeURIComponent(JSON.stringify(data)));
+    } catch (e) {
+      return JSON.stringify(data);
+    }
+  },
+
+  decrypt(str) {
+    try {
+      return JSON.parse(decodeURIComponent(atob(str)));
+    } catch (e) {
+      try { return JSON.parse(str); } catch (e2) { return null; }
+    }
+  },
+
+  safeStorage: {
+    get(key) {
+      try {
+        const item = localStorage.getItem(key);
+        return item ? utils.decrypt(item) : null;
+      } catch (e) { return null; }
+    },
+    set(key, value) {
+      try {
+        localStorage.setItem(key, utils.encrypt(value));
+        return true;
+      } catch (e) { return false; }
+    },
+    remove(key) {
+      try { localStorage.removeItem(key); return true; } catch (e) { return false; }
+    }
+  },
+
+  generateId() {
+    return 'id_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+  },
+
+  formatDate(date) {
+    const d = new Date(date);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  },
+
+  showToast(message, icon = '✓', duration = 3000) {
+    const existing = document.querySelector('.toast-notification');
+    if (existing) existing.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `<span style="font-size:18px">${icon}</span><span>${message}</span>`;
+    toast.style.cssText = `
+      position: fixed; top: 80px; right: 20px; z-index: 10000;
+      background: var(--bg-card); border: 1px solid var(--border-glass);
+      padding: 14px 22px; border-radius: 12px;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      animation: toastIn 0.35s cubic-bezier(0.4,0,0.2,1);
+      color: var(--text-primary); font-size: 14px;
+      backdrop-filter: blur(12px);
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.style.animation = 'toastOut 0.35s cubic-bezier(0.4,0,0.2,1)';
+      setTimeout(() => toast.remove(), 350);
+    }, duration);
+  }
 };
+
+// Toast动画样式
+(function() {
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes toastIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes toastOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
+  `;
+  document.head.appendChild(style);
+})();
+
+// ===== 第二阶段：行业专属提示词引擎 =====
+const IndustryEngine = {
+  industries: {
+    '电商营销': {
+      icon: '🛒',
+      color: '#ff6b6b',
+      templates: [
+        { name: '爆款商品标题', prompt: '生成吸引人的电商商品标题，商品：{product}，卖点：{features}，目标人群：{audience}', keywords: ['限时特惠', '爆款热卖', '品质保证', '顺丰包邮'] },
+        { name: '详情页文案', prompt: '生成高转化率的商品详情页文案，产品：{product}，核心优势：{advantages}，使用场景：{scenarios}', structure: ['痛点引入', '解决方案', '产品优势', '用户见证', '促销信息'] },
+        { name: '促销活动文案', prompt: '生成电商促销活动文案，活动类型：{type}，优惠力度：{discount}，活动时间：{time}', keywords: ['限时', '限量', '先到先得', '错过再等一年'] }
+      ]
+    },
+    '新媒体运营': {
+      icon: '📱',
+      color: '#4ecdc4',
+      templates: [
+        { name: '短视频脚本', prompt: '生成{platform}短视频脚本，时长{duration}秒，主题：{theme}，风格：{style}', structure: ['3秒黄金开头', '内容主体', '互动引导', '结尾CTA'] },
+        { name: '公众号文章', prompt: '生成公众号文章大纲，主题：{topic}，目标读者：{audience}，文章类型：{type}', sections: ['引人入胜的标题', '痛点共鸣的开头', '干货满满的中段', '升华主题的结尾'] },
+        { name: '朋友圈文案', prompt: '生成吸引互动的朋友圈文案，产品/服务：{product}，场景：{scenario}，风格：{style}', styles: ['故事型', '幽默型', '专业型', '情感型'] }
+      ]
+    },
+    '内容创作': {
+      icon: '✍️',
+      color: '#a58aff',
+      templates: [
+        { name: '文章大纲', prompt: '生成专业文章大纲，主题：{topic}，字数要求：{words}，目标读者：{audience}', structure: ['引言', '核心观点', '论证部分', '案例分析', '总结升华'] },
+        { name: '故事创作', prompt: '创作{genre}类型的故事，主题：{theme}，主角：{protagonist}，冲突：{conflict}', elements: ['人物设定', '环境描写', '情节发展', '高潮转折', '结局'] },
+        { name: '文案优化', prompt: '优化以下文案，使其更具吸引力和转化力：{original}', aspects: ['语言精炼', '情感共鸣', '行动号召', '记忆点'] }
+      ]
+    },
+    '职场办公': {
+      icon: '💼',
+      color: '#45b7d1',
+      templates: [
+        { name: '工作汇报', prompt: '生成工作汇报，汇报周期：{period}，主要工作：{tasks}，成果数据：{results}', structure: ['工作概述', '重点项目', '数据成果', '问题与改进', '下期计划'] },
+        { name: '会议纪要', prompt: '整理会议纪要，会议主题：{topic}，参会人员：{attendees}，讨论要点：{points}', sections: ['会议信息', '讨论内容', '决议事项', '待办任务'] },
+        { name: '邮件撰写', prompt: '撰写商务邮件，邮件类型：{type}，收件人：{recipient}，主要内容：{content}', tone: '专业、礼貌、简洁' }
+      ]
+    },
+    'AI绘画': {
+      icon: '🎨',
+      color: '#f9ca24',
+      templates: [
+        { name: '写实风格', prompt: '生成写实风格AI绘画提示词，主题：{subject}，场景：{scene}，光影：{lighting}', keywords: ['8K resolution', 'photorealistic', 'highly detailed', 'professional photography', 'cinematic lighting'] },
+        { name: '动漫风格', prompt: '生成动漫风格AI绘画提示词，角色：{character}，场景：{scene}，氛围：{mood}', keywords: ['anime style', 'vibrant colors', 'detailed background', 'studio ghibli inspired'] },
+        { name: '概念设计', prompt: '生成概念设计提示词，类型：{type}，风格：{style}，细节要求：{details}', keywords: ['concept art', 'digital painting', 'trending on artstation', 'highly imaginative'] }
+      ]
+    }
+  },
+
+  getIndustries() {
+    return Object.keys(this.industries);
+  },
+
+  getTemplates(industry) {
+    return this.industries[industry]?.templates || [];
+  },
+
+  generatePrompt(industry, templateIndex, variables) {
+    const industryData = this.industries[industry];
+    if (!industryData) return null;
+    
+    const template = industryData.templates[templateIndex];
+    if (!template) return null;
+    
+    let prompt = template.prompt;
+    for (const [key, value] of Object.entries(variables)) {
+      prompt = prompt.replace(`{${key}}`, value);
+    }
+    
+    // 添加关键词增强
+    if (template.keywords) {
+      prompt += '\n关键词参考：' + template.keywords.slice(0, 3).join('、');
+    }
+    
+    return {
+      prompt,
+      structure: template.structure || template.sections,
+      industry: industry,
+      templateName: template.name
+    };
+  }
+};
+
+// ===== 第二阶段：AI模型适配系统 =====
+const AIAdapter = {
+  models: {
+    'ChatGPT': {
+      contextWindow: 128000,
+      bestFor: ['通用对话', '创意写作', '代码生成'],
+      promptStyle: '结构化、详细的指令',
+      format: 'markdown',
+      optimize(prompt) {
+        return prompt + '\n\n请使用Markdown格式输出，结构清晰，重点突出。';
+      }
+    },
+    'Claude': {
+      contextWindow: 200000,
+      bestFor: ['长文本处理', '深度分析', '学术写作'],
+      promptStyle: '详细、全面的描述',
+      format: 'text',
+      optimize(prompt) {
+        return prompt + '\n\n请提供详细、深入的分析，使用结构化格式输出。';
+      }
+    },
+    '文心一言': {
+      contextWindow: 8000,
+      bestFor: ['中文创作', '本土化内容', '商业文案'],
+      promptStyle: '简洁明了的中文表达',
+      format: 'text',
+      optimize(prompt) {
+        return prompt + '\n\n请用简洁流畅的中文表达，注重可读性和实用性。';
+      }
+    },
+    '通义千问': {
+      contextWindow: 32000,
+      bestFor: ['多模态理解', '知识问答', '文档处理'],
+      promptStyle: '清晰的问答格式',
+      format: 'markdown',
+      optimize(prompt) {
+        return prompt + '\n\n请条理清晰地回答，必要时使用列表和分点说明。';
+      }
+    },
+    'Midjourney': {
+      contextWindow: 2000,
+      bestFor: ['AI绘画', '图像生成'],
+      promptStyle: '关键词组合',
+      format: 'keywords',
+      optimize(prompt) {
+        // 转換為繪畫關鍵詞格式
+        const keywords = prompt.replace(/[，。！？、]/g, ', ')
+          .split(/[\s,]+/)
+          .filter(k => k.length > 1)
+          .slice(0, 15);
+        return keywords.join(', ') + ', high quality, detailed, 8K';
+      }
+    },
+    'Stable Diffusion': {
+      contextWindow: 2000,
+      bestFor: ['AI绘画', '图像生成'],
+      promptStyle: '标签式关键词',
+      format: 'tags',
+      optimize(prompt) {
+        const tags = prompt.replace(/[，。！？、]/g, ', ')
+          .split(/[\s,]+/)
+          .filter(t => t.length > 1);
+        return tags.join(', ') + ', masterpiece, best quality, highly detailed';
+      }
+    }
+  },
+
+  getModels() {
+    return Object.keys(this.models);
+  },
+
+  getModelInfo(model) {
+    return this.models[model];
+  },
+
+  adapt(prompt, model) {
+    const modelConfig = this.models[model];
+    if (!modelConfig) return prompt;
+    
+    // 检查长度限制
+    if (prompt.length > modelConfig.contextWindow * 0.8) {
+      prompt = prompt.substring(0, Math.floor(modelConfig.contextWindow * 0.7)) + '...';
+    }
+    
+    // 应用模型特定优化
+    return modelConfig.optimize ? modelConfig.optimize(prompt) : prompt;
+  },
+
+  getRecommendation(task) {
+    const taskMap = {
+      '写作': ['ChatGPT', 'Claude', '文心一言'],
+      '绘画': ['Midjourney', 'Stable Diffusion'],
+      '分析': ['Claude', 'ChatGPT', '通义千问'],
+      '代码': ['ChatGPT', 'Claude'],
+      '翻译': ['ChatGPT', '文心一言', '通义千问']
+    };
+    return taskMap[task] || Object.keys(this.models);
+  }
+};
+
+// ===== 第二阶段：提示词质量评分系统 =====
+const QualityScorer = {
+  criteria: {
+    clarity: { name: '清晰度', weight: 0.25, maxScore: 100 },
+    specificity: { name: '具体性', weight: 0.20, maxScore: 100 },
+    structure: { name: '结构性', weight: 0.20, maxScore: 100 },
+    completeness: { name: '完整性', weight: 0.15, maxScore: 100 },
+    actionability: { name: '可执行性', weight: 0.20, maxScore: 100 }
+  },
+
+  score(prompt) {
+    const scores = {};
+    let totalScore = 0;
+    const feedback = [];
+
+    // 1. 清晰度评分
+    scores.clarity = this.evaluateClarity(prompt);
+    if (scores.clarity < 70) {
+      feedback.push('建议：使用更明确的语言，避免模糊表述');
+    }
+
+    // 2. 具体性评分
+    scores.specificity = this.evaluateSpecificity(prompt);
+    if (scores.specificity < 70) {
+      feedback.push('建议：添加更多具体细节和参数要求');
+    }
+
+    // 3. 结构性评分
+    scores.structure = this.evaluateStructure(prompt);
+    if (scores.structure < 70) {
+      feedback.push('建议：使用分点、分段来组织内容');
+    }
+
+    // 4. 完整性评分
+    scores.completeness = this.evaluateCompleteness(prompt);
+    if (scores.completeness < 70) {
+      feedback.push('建议：补充背景信息、输出格式要求等');
+    }
+
+    // 5. 可执行性评分
+    scores.actionability = this.evaluateActionability(prompt);
+    if (scores.actionability < 70) {
+      feedback.push('建议：明确指定输出格式、长度、风格等');
+    }
+
+    // 计算加权总分
+    for (const [key, criterion] of Object.entries(this.criteria)) {
+      totalScore += scores[key] * criterion.weight;
+    }
+
+    // 确定等级
+    const grade = this.getGrade(totalScore);
+
+    return {
+      totalScore: Math.round(totalScore),
+      grade: grade.level,
+      gradeLabel: grade.label,
+      scores: scores,
+      feedback: feedback,
+      timestamp: Date.now()
+    };
+  },
+
+  evaluateClarity(prompt) {
+    let score = 100;
+    // 检查模糊词汇
+    const vagueWords = ['一些', '很多', '可能', '大概', '稍微', '比较'];
+    const vagueCount = vagueWords.filter(w => prompt.includes(w)).length;
+    score -= vagueCount * 8;
+    // 检查句子长度
+    const sentences = prompt.split(/[。！？\n]/);
+    const avgLength = sentences.reduce((a, s) => a + s.length, 0) / sentences.length;
+    if (avgLength > 50) score -= 10;
+    return Math.max(0, Math.min(100, score));
+  },
+
+  evaluateSpecificity(prompt) {
+    let score = 60;
+    // 检查具体指标
+    if (/\d+/.test(prompt)) score += 10; // 包含数字
+    if (prompt.includes('例如') || prompt.includes('比如')) score += 10;
+    if (prompt.includes('要求') || prompt.includes('需要')) score += 10;
+    if (/格式|风格|调性/.test(prompt)) score += 10;
+    return Math.min(100, score);
+  },
+
+  evaluateStructure(prompt) {
+    let score = 50;
+    // 检查结构化元素
+    if (prompt.includes('\n')) score += 15;
+    if (/[一二三四五六七八九十]、/.test(prompt)) score += 15;
+    if (/[1-9]\.|\([1-9]\)/.test(prompt)) score += 15;
+    if (prompt.includes('：') && prompt.split('：').length > 2) score += 5;
+    return Math.min(100, score);
+  },
+
+  evaluateCompleteness(prompt) {
+    let score = 50;
+    const elements = {
+      hasGoal: /生成|创作|写|设计/.test(prompt),
+      hasContext: /背景|场景|情况/.test(prompt),
+      hasFormat: /格式|结构|要求/.test(prompt),
+      hasExample: /例如|参考|示例/.test(prompt),
+      hasConstraint: /字数|长度|时间/.test(prompt)
+    };
+    for (const has of Object.values(elements)) {
+      if (has) score += 10;
+    }
+    return Math.min(100, score);
+  },
+
+  evaluateActionability(prompt) {
+    let score = 60;
+    if (/请|要求|需要/.test(prompt)) score += 15;
+    if (/输出|结果|生成/.test(prompt)) score += 10;
+    if (/包含|包括|涵盖/.test(prompt)) score += 10;
+    if (/避免|不要|禁止/.test(prompt)) score += 5;
+    return Math.min(100, score);
+  },
+
+  getGrade(score) {
+    if (score >= 90) return { level: 'S', label: '完美提示词！可直接使用', color: '#1cd4a8' };
+    if (score >= 80) return { level: 'A', label: '优秀提示词', color: '#7c5cfc' };
+    if (score >= 70) return { level: 'B', label: '良好提示词', color: '#4ecdc4' };
+    if (score >= 60) return { level: 'C', label: '一般提示词，建议优化', color: '#f5b342' };
+    return { level: 'D', label: '需要重新生成', color: '#f56b6b' };
+  }
+};
+
+// ===== 第二阶段：用户行为分析系统 =====
+const Analytics = {
+  data: {
+    generations: [],
+    industries: {},
+    models: {},
+    dailyStats: {}
+  },
+
+  init() {
+    const saved = utils.safeStorage.get('analytics_data');
+    if (saved) {
+      this.data = saved;
+    }
+  },
+
+  track(event, data) {
+    const timestamp = Date.now();
+    const date = new Date().toISOString().split('T')[0];
+    
+    switch(event) {
+      case 'generate':
+        this.data.generations.push({
+          timestamp,
+          industry: data.industry,
+          model: data.model,
+          score: data.score,
+          promptLength: data.promptLength
+        });
+        
+        // 更新行业统计
+        if (data.industry) {
+          this.data.industries[data.industry] = (this.data.industries[data.industry] || 0) + 1;
+        }
+        
+        // 更新模型统计
+        if (data.model) {
+          this.data.models[data.model] = (this.data.models[data.model] || 0) + 1;
+        }
+        
+        // 更新日统计
+        if (!this.data.dailyStats[date]) {
+          this.data.dailyStats[date] = { count: 0, avgScore: 0 };
+        }
+        this.data.dailyStats[date].count++;
+        break;
+        
+      case 'copy':
+        // 追踪复制行为
+        break;
+        
+      case 'export':
+        // 追踪导出行为
+        break;
+    }
+    
+    // 只保留最近100条记录
+    if (this.data.generations.length > 100) {
+      this.data.generations = this.data.generations.slice(-100);
+    }
+    
+    // 保存
+    utils.safeStorage.set('analytics_data', this.data);
+  },
+
+  getReport() {
+    const total = this.data.generations.length;
+    const avgScore = total > 0 
+      ? this.data.generations.reduce((a, g) => a + (g.score || 0), 0) / total 
+      : 0;
+    
+    const topIndustry = Object.entries(this.data.industries)
+      .sort((a, b) => b[1] - a[1])[0];
+    
+    const topModel = Object.entries(this.data.models)
+      .sort((a, b) => b[1] - a[1])[0];
+    
+    return {
+      totalGenerations: total,
+      averageScore: Math.round(avgScore),
+      topIndustry: topIndustry ? topIndustry[0] : '未使用',
+      topModel: topModel ? topModel[0] : '未使用',
+      recentActivity: this.data.generations.slice(-10)
+    };
+  },
+
+  getRecommendations() {
+    const report = this.getReport();
+    const recommendations = [];
+    
+    // 基于使用历史推荐
+    if (report.topIndustry && report.topIndustry !== '未使用') {
+      recommendations.push({
+        type: 'industry',
+        message: `您常用${report.topIndustry}场景，试试相关新模板？`,
+        target: report.topIndustry
+      });
+    }
+    
+    // 基于质量评分推荐
+    if (report.averageScore < 70) {
+      recommendations.push({
+        type: 'quality',
+        message: '您的提示词平均分较低，建议使用结构化模板'
+      });
+    }
+    
+    return recommendations;
+  }
+};
+
+// 初始化分析系统
+Analytics.init();
+
+// ===== 增强的生成函数包装器 =====
+const originalDoGenerate = typeof doGenerate === 'function' ? doGenerate : null;
+
+function enhancedGenerate() {
+  // 获取当前选中的场景和模型
+  const sceneSelect = document.getElementById('sceneSelect');
+  const modelSelect = document.getElementById('modelSelect');
+  const promptOutput = document.getElementById('promptOutput');
+  
+  const scene = sceneSelect?.value || '通用';
+  const model = modelSelect?.value || 'ChatGPT';
+  
+  // 调用原始生成函数
+  if (originalDoGenerate) {
+    originalDoGenerate();
+  }
+  
+  // 获取生成的提示词
+  setTimeout(() => {
+    const prompt = promptOutput?.value || '';
+    if (prompt) {
+      // 质量评分
+      const scoreResult = QualityScorer.score(prompt);
+      
+      // 显示评分
+      showQualityScore(scoreResult);
+      
+      // 追踪分析
+      Analytics.track('generate', {
+        industry: scene,
+        model: model,
+        score: scoreResult.totalScore,
+        promptLength: prompt.length
+      });
+      
+      // AI模型适配提示
+      const adaptedPrompt = AIAdapter.adapt(prompt, model);
+      if (adaptedPrompt !== prompt && adaptedPrompt.length > prompt.length) {
+        showAdaptationNotice(model);
+      }
+    }
+  }, 500);
+}
+
+// 显示质量评分UI
+function showQualityScore(result) {
+  const existingBadge = document.querySelector('.quality-badge');
+  if (existingBadge) existingBadge.remove();
+  
+  const badge = document.createElement('div');
+  badge.className = 'quality-badge';
+  badge.innerHTML = `
+    <div class="quality-header">
+      <span class="quality-grade" style="color: ${result.grade === 'S' ? '#1cd4a8' : result.grade === 'A' ? '#7c5cfc' : result.grade === 'B' ? '#4ecdc4' : '#f5b342'}">${result.grade}</span>
+      <span class="quality-score">质量评分: ${result.totalScore}分</span>
+    </div>
+    <div class="quality-label">${result.gradeLabel}</div>
+    ${result.feedback.length > 0 ? `<div class="quality-feedback">${result.feedback[0]}</div>` : ''}
+  `;
+  badge.style.cssText = `
+    margin: 12px 0; padding: 14px 18px;
+    background: var(--bg-card); border: 1px solid var(--border-glass);
+    border-radius: 12px; font-size: 13px;
+  `;
+  
+  const outputArea = document.getElementById('resultPanel') || document.querySelector('.result-panel');
+  if (outputArea) {
+    outputArea.insertBefore(badge, outputArea.firstChild.nextSibling);
+  }
+}
+
+// 显示AI适配提示
+function showAdaptationNotice(model) {
+  utils.showToast(`已为${model}优化提示词格式`, '🤖');
+}
+
+// ===== 全局错误处理 =====
+window.addEventListener('error', (e) => {
+  console.error('全局错误:', e.message);
+  utils.showToast('发生错误，请刷新页面重试', '⚠️');
+});
+
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('Promise错误:', e.reason);
+});
+
+// ===== 导出增强功能到全局 =====
+window.IndustryEngine = IndustryEngine;
+window.AIAdapter = AIAdapter;
+window.QualityScorer = QualityScorer;
+window.Analytics = Analytics;
+window.utils = utils;
+
+console.log('✓ AI提示词生成器 v2.0 已加载');
+console.log('✓ 行业引擎:', IndustryEngine.getIndustries().length, '个行业');
+console.log('✓ AI适配器:', AIAdapter.getModels().length, '个模型');
+;
 
 // ---- 平台数据 ----
 const PLATFORM_DATA = {
@@ -4123,4 +4946,4 @@ window.app = {
 };
 </script>
 </body>
-</html>
+  </html>
